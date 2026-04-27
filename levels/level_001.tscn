@@ -6,12 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://c3ffql15mo0aj" path="res://controllers/fps_controller.tscn" id="4_liofc"]
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
 [ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="5_po88e"]
+[ext_resource type="PackedScene" uid="uid://c3gbexxyter6w" path="res://fps-ak/fps-ak.tscn" id="5_wtxts"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_io8uw"]
 radius = 0.3
 height = 1.8
-
-[sub_resource type="BoxMesh" id="BoxMesh_y34ju"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_po88e"]
 data = PackedVector3Array(10, 0, 10, -10, 0, -10, 10, 0, -10, -10, 0, -10, 10, 0, 10, -10, 0, 10)
@@ -36,18 +35,18 @@ current = true
 near = 0.001
 
 [node name="WeaponHolder" type="Node3D" parent="CharacterBody3D2/Camera3D" unique_id=1163159748]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, -0.15, -0.45)
+transform = Transform3D(-0.87011015, -0.0732702, 0.4873805, 0.49240378, -0.0868241, 0.86602545, -0.021137506, 0.99352556, 0.11162506, 0.15, -0.15, -0.45)
 script = ExtResource("3_po88e")
+hip_offset = Vector3(0.43, 0.27, -0.6)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D2/Camera3D/WeaponHolder" unique_id=552097326]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.4, 0, 0, 0)
-mesh = SubResource("BoxMesh_y34ju")
+[node name="fps-ak" parent="CharacterBody3D2/Camera3D/WeaponHolder" unique_id=785405610 instance=ExtResource("5_wtxts")]
+transform = Transform3D(-0.0064688604, -9.280085e-05, 0.013533115, 0.007572998, 0.012406562, 0.003704986, -0.011216218, 0.008430219, -0.005303569, 0.015, -0.4, 0.215)
 
 [node name="Map_v12" parent="." unique_id=1708034802 instance=ExtResource("5_po88e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1099821, -0.29482675, -1.2630119)
 script = ExtResource("4_y34ju")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor" parent_id_path=PackedInt32Array(1708034802, 1940172828) index="0" unique_id=972347735]
+[node name="StaticBody3D" type="StaticBody3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor" parent_id_path=PackedInt32Array(1708034802, 1694769640) index="0" unique_id=972347735]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor/StaticBody3D" unique_id=1526372537]
 shape = SubResource("ConcavePolygonShape3D_po88e")
