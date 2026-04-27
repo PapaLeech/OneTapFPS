@@ -9,8 +9,9 @@ extends Node3D
 @export var bob_amount := 0.02
 @export var bob_speed := 12.0
 @export var cam_bob_amount := 0.05
+
 @export_group("FX")
-@onready var fire_sound = $AudioStreamPlayer3D
+@export var fire_sound: AudioStreamPlayer3D
 
 @export_group("Offsets")
 @export var hip_offset := Vector3(0.15, -0.15, -0.45)
@@ -43,7 +44,7 @@ extends Node3D
 # INTERNAL STATE
 # -----------------------------
 var sway_offset := Vector3.ZERO
-var bob_offset := Vector3.ZERO   # NEW: Separated to stop "Sway Drift"
+var bob_offset := Vector3.ZERO
 var bob_time := 0.0
 var recoil_offset := Vector3.ZERO
 var recoil_rotation := Vector3.ZERO
@@ -60,16 +61,18 @@ func _input(event: InputEvent) -> void:
 		mouse_input = event.relative
 
 func _process(delta: float) -> void:
-	# SAFETY CHECK: Ensure player exists before doing anything
-	var player = get_parent().get_parent() 
+	# AK (1) -> Holder (2) -> Camera (3) -> Player
+	var player = get_parent().get_parent().get_parent()
+	
 	if not player or not player is CharacterBody3D:
 		return
-# TEMPORARY TEST:
-	if Input.is_action_just_pressed("fire"):
-		print("Left Click Detected!")
-		if fire_sound:
-			fire_sound.play()
 
+	# Handle Firing Input
+	var can_fire_state = sprint_weight < 0.5 and melee_weight < 0.5
+	if Input.is_action_pressed("fire") and can_shoot and can_fire_state:
+		shoot()
+
+	# Run Handlers
 	_handle_ads(delta)
 	_handle_sprint(delta, player)
 	_handle_crouch(delta, player)
@@ -78,13 +81,8 @@ func _process(delta: float) -> void:
 	_handle_sway(delta)
 	_handle_bob(delta, player)
 	_handle_camera_bob(delta, player)
-	_handle_recoil(delta)
-	
+	_handle_recoil(delta) # This now has a function to run!
 	_apply_final_offset(delta)
-
-	var can_fire_state = sprint_weight < 0.5 and melee_weight < 0.5
-	if Input.is_action_pressed("fire") and can_shoot and can_fire_state:
-		shoot()
 
 # -----------------------------
 # STATE HANDLERS
@@ -120,9 +118,7 @@ func _handle_sway(delta: float) -> void:
 	mouse_input = Vector2.ZERO
 
 func _handle_bob(delta: float, player: CharacterBody3D) -> void:
-	var is_sprinting = player.get("sprinting") == true
-	
-	if is_sprinting and player.velocity.length() > 0.1 and player.is_on_floor():
+	if player.velocity.length() > 0.1 and player.is_on_floor():
 		bob_time += delta * bob_speed
 		var y = sin(bob_time) * bob_amount
 		var x = cos(bob_time * 0.5) * bob_amount * 0.5
@@ -135,14 +131,14 @@ func _handle_camera_bob(delta: float, player: Node) -> void:
 	var cam = player.get("CAMERA_CONTROLLER")
 	if not cam: return
 	
-	var is_sprinting = player.get("sprinting") == true
-	if is_sprinting and player.is_on_floor() and player.velocity.length() > 0.1:
+	if player.is_on_floor() and player.velocity.length() > 0.1:
 		cam.h_offset = lerp(cam.h_offset, cos(bob_time * 0.5) * cam_bob_amount * 0.5, delta * 10.0)
 		cam.v_offset = lerp(cam.v_offset, sin(bob_time) * cam_bob_amount, delta * 10.0)
 	else:
 		cam.h_offset = lerp(cam.h_offset, 0.0, delta * 10.0)
 		cam.v_offset = lerp(cam.v_offset, 0.0, delta * 10.0)
 
+# MISSING FUNCTION: Fixed the recoil crash
 func _handle_recoil(delta: float) -> void:
 	recoil_offset = recoil_offset.lerp(Vector3.ZERO, delta * recoil_recover)
 	recoil_rotation = recoil_rotation.lerp(Vector3.ZERO, delta * recoil_recover)
@@ -153,7 +149,6 @@ func _apply_final_offset(delta: float) -> void:
 	base = base.lerp(crouch_offset, crouch_weight)
 	base = base.lerp(melee_offset, melee_weight)
 
-	# COMBINE ALL OFFSETS
 	var final_pos = base + sway_offset + bob_offset + recoil_offset
 	transform.origin = transform.origin.lerp(final_pos, delta * ads_speed)
 
@@ -161,29 +156,22 @@ func _apply_final_offset(delta: float) -> void:
 	rotation = rotation.lerp(final_rot + recoil_rotation, delta * 10.0)
 
 func shoot() -> void:
+	if not can_shoot: return
+	
 	print("shoot called")
 	if fire_sound:
-		print("playing sound")
 		fire_sound.play()
-	else:
-			print("fire_sound is NULL")
-							 #   near the top of the existing function
 	
-	# ... rest of your existing shoot code stays as-is
 	can_shoot = false
-	# raycast, muzzle flash, recoil, etc.
-	await get_tree().create_timer(fire_rate).timeout
-	can_shoot = true
-
-	if raycast and raycast.is_colliding():
-		print("Hit:", raycast.get_collider().name)
-
+	
+	# Recoil Logic
 	var is_ads = ads_weight > 0.5
 	var applied_recoil = ads_recoil if is_ads else hip_recoil
 	recoil_offset += Vector3(randf_range(-applied_recoil.x, applied_recoil.x), applied_recoil.y, applied_recoil.z)
 	recoil_rotation += Vector3(recoil_rotation_amount.x, randf_range(-recoil_rotation_amount.y, recoil_rotation_amount.y), 0)
 
-
+	if raycast and raycast.is_colliding():
+		print("Hit:", raycast.get_collider().name)
 
 	await get_tree().create_timer(fire_rate).timeout
 	can_shoot = true
