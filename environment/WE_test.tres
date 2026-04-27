@@ -14,3 +14,7 @@ sky = SubResource("Sky_0poj2")
 ambient_light_source = 3
 reflected_light_source = 2
 volumetric_fog_density = 0.017
+adjustment_enabled = true
+adjustment_brightness = 0.93
+adjustment_contrast = 1.07
+adjustment_saturation = 1.19
