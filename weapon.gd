@@ -186,7 +186,7 @@ func shoot() -> void:
 		for muzzle in [muzzle_front, muzzle_side]:
 			if muzzle and spawn_parent:
 				var b := bullet_scene.instantiate() as Node3D
-				b.collision_mask = 0   # TEMP DIAG: don't despawn on contact
+				b.collision_mask = ~1 & 0xFFFFFFFF   # all layers except 1 (player)
 				spawn_parent.add_child(b)
 				b.global_transform = muzzle.global_transform
 				b.scale = Vector3(20, 20, 20)   # TEMP DIAG: make bullets visible
