@@ -179,13 +179,18 @@ func shoot() -> void:
 		print("Hit:", raycast.get_collider().name)
 
 	# --- Bullet spawn (additive) ---
+	print("[diag] bullet_scene=", bullet_scene, " muzzle_front=", muzzle_front, " muzzle_side=", muzzle_side)
 	if bullet_scene:
 		var spawn_parent := get_tree().current_scene
+		print("[diag] spawn_parent=", spawn_parent, " name=", spawn_parent.name if spawn_parent else "<null>")
 		for muzzle in [muzzle_front, muzzle_side]:
 			if muzzle and spawn_parent:
 				var b := bullet_scene.instantiate() as Node3D
+				b.collision_mask = 0   # TEMP DIAG: don't despawn on contact
 				spawn_parent.add_child(b)
 				b.global_transform = muzzle.global_transform
+				b.scale = Vector3(20, 20, 20)   # TEMP DIAG: make bullets visible
+				print("[diag] spawned bullet at ", b.global_position, " from muzzle=", muzzle.name, " in_tree=", b.is_inside_tree())
 	# --- end bullet spawn ---
 
 	await get_tree().create_timer(fire_rate).timeout
