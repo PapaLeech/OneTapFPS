@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
 [ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="5_po88e"]
 [ext_resource type="PackedScene" uid="uid://c3gbexxyter6w" path="res://fps-ak/fps-ak.tscn" id="5_wtxts"]
+[ext_resource type="AudioStream" uid="uid://cy7b8rsigqr28" path="res://fps-ak/resources/sounds/fire.wav" id="6_jrmpr"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_io8uw"]
 radius = 0.3
@@ -35,15 +36,19 @@ current = true
 near = 0.001
 
 [node name="WeaponHolder" type="Node3D" parent="CharacterBody3D2/Camera3D" unique_id=1163159748]
-transform = Transform3D(-0.60046935, 0.015669927, 0.7994942, 0.20598806, 0.9690976, 0.13571559, -0.7726613, 0.24617931, -0.58514124, 0.15, -0.15, -0.45)
+transform = Transform3D(-0.6435244, -0.18688822, 0.7422595, 0.19124165, 0.8997212, 0.3923371, -0.7411498, 0.39442945, -0.54325175, 0.15, -0.15, -0.45)
 script = ExtResource("3_po88e")
 hip_offset = Vector3(0.43, 0.27, -0.6)
-ads_offset = Vector3(0.405, 0.5, -0.905)
+ads_offset = Vector3(0.365, 0.5, -0.83)
 
 [node name="fps-ak" parent="CharacterBody3D2/Camera3D/WeaponHolder" unique_id=785405610 instance=ExtResource("5_wtxts")]
 transform = Transform3D(-0.008308775, 0.0015137568, 0.012396483, 0.004905976, 0.014088045, 0.001567927, -0.011484582, 0.00492296, -0.008298724, -0.095, -0.555, 0.21)
 hip_offset = Vector3(0.1, -0.35, -0.5)
-ads_offset = Vector3(1.545, 1.03, 1.42)
+ads_offset = Vector3(0.9, 1.03, 1.42)
+
+[node name="AudioStreamPlayer3D2" type="AudioStreamPlayer" parent="CharacterBody3D2/Camera3D/WeaponHolder/fps-ak" unique_id=328016895]
+stream = ExtResource("6_jrmpr")
+volume_db = 4.952
 
 [node name="Map_v12" parent="." unique_id=1708034802 instance=ExtResource("5_po88e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1099821, -0.29482675, -1.2630119)

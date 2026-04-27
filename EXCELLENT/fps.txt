@@ -1,0 +1,122 @@
+extends CharacterBody3D
+@export var SPEED : float = 5.0
+@export var JUMP_VELOCITY : float = 4.5
+@export var MOUSE_SENSITIVITY : float = 0.5
+@export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
+@export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
+@export var CAMERA_CONTROLLER : Camera3D
+@export var STEP_HEIGHT : float = 0.6
+@export var STEP_SMOOTH : float = 12.0
+var _rotation_input : float
+var _tilt_input : float
+var _mouse_rotation : Vector3
+var _target_y : float = 0.0
+var adsing := false
+var sprinting := false
+var crouching := false
+var meleeing := false
+var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
+		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+
+func _input(event):
+	if event.is_action_pressed("exit"):
+		get_tree().quit()
+
+func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_target_y = global_transform.origin.y
+
+func _process(delta):
+	adsing    = Input.is_action_pressed("aim")
+	sprinting = Input.is_action_pressed("sprint")
+	crouching = Input.is_action_pressed("crouch")
+	meleeing  = Input.is_action_pressed("melee")
+
+func _get_floor_y(offset: Vector3) -> float:
+	var space_state = get_world_3d().direct_space_state
+	var from = global_transform.origin + offset + Vector3(0, STEP_HEIGHT, 0)
+	var to = from + Vector3(0, -STEP_HEIGHT * 2.5, 0)
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.exclude = [self]
+	var result = space_state.intersect_ray(query)
+	if result:
+		return result.position.y
+	return -999.0
+
+func _physics_process(delta):
+	# ---------------------------------------------------------
+	# CAMERA LOOK
+	# ---------------------------------------------------------
+	_mouse_rotation.x = clamp(
+		_mouse_rotation.x + _tilt_input * delta,
+		TILT_LOWER_LIMIT,
+		TILT_UPPER_LIMIT
+	)
+	_mouse_rotation.y += _rotation_input * delta
+	CAMERA_CONTROLLER.rotation.x = _mouse_rotation.x
+	rotation.y = _mouse_rotation.y
+	_rotation_input = 0.0
+	_tilt_input = 0.0
+
+	# ---------------------------------------------------------
+	# MOVEMENT SPEED (slower when crouching, faster when sprinting)
+	# ---------------------------------------------------------
+	var current_speed = SPEED
+	if sprinting:
+		current_speed = SPEED * 1.6
+	elif crouching:
+		current_speed = SPEED * 0.5
+
+	# ---------------------------------------------------------
+	# MOVEMENT
+	# ---------------------------------------------------------
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+
+	# Smooth stair/pavement stepping
+	if is_on_floor() and direction:
+		var ahead_y = _get_floor_y(direction * 0.4)
+		var below_y = _get_floor_y(Vector3.ZERO)
+		var best_y = max(ahead_y, below_y)
+		var height_diff = best_y - global_transform.origin.y
+		if height_diff > 0.01 and height_diff <= STEP_HEIGHT:
+			_target_y = best_y
+		elif height_diff < -0.01 and height_diff >= -STEP_HEIGHT:
+			_target_y = best_y
+
+	# Gravity
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+		_target_y = global_transform.origin.y
+	else:
+		velocity.y = 0.0
+
+	# Jump (disable while crouching)
+	if Input.is_action_just_pressed("jump") and is_on_floor() and not crouching:
+		velocity.y = JUMP_VELOCITY
+		_target_y = global_transform.origin.y
+
+	# Smooth vertical movement
+	if is_on_floor():
+		global_transform.origin.y = lerp(
+			global_transform.origin.y,
+			_target_y + 0.9,
+			STEP_SMOOTH * delta
+		)
+
+	if direction:
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
+
+	if Input.is_key_pressed(KEY_P):
+		print("Position:", global_transform.origin)
+
+	move_and_slide()
+

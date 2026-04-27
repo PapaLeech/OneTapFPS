@@ -9,8 +9,6 @@ extends Node3D
 @export var bob_amount := 0.02
 @export var bob_speed := 12.0
 @export var cam_bob_amount := 0.05
-@export_group("FX")
-@onready var fire_sound = $AudioStreamPlayer3D
 
 @export_group("Offsets")
 @export var hip_offset := Vector3(0.15, -0.15, -0.45)
@@ -64,11 +62,6 @@ func _process(delta: float) -> void:
 	var player = get_parent().get_parent() 
 	if not player or not player is CharacterBody3D:
 		return
-# TEMPORARY TEST:
-	if Input.is_action_just_pressed("fire"):
-		print("Left Click Detected!")
-		if fire_sound:
-			fire_sound.play()
 
 	_handle_ads(delta)
 	_handle_sprint(delta, player)
@@ -161,19 +154,11 @@ func _apply_final_offset(delta: float) -> void:
 	rotation = rotation.lerp(final_rot + recoil_rotation, delta * 10.0)
 
 func shoot() -> void:
-	print("shoot called")
-	if fire_sound:
-		print("playing sound")
-		fire_sound.play()
-	else:
-			print("fire_sound is NULL")
-							 #   near the top of the existing function
-	
-	# ... rest of your existing shoot code stays as-is
 	can_shoot = false
-	# raycast, muzzle flash, recoil, etc.
-	await get_tree().create_timer(fire_rate).timeout
-	can_shoot = true
+	if muzzle_flash:
+		muzzle_flash.visible = true
+		await get_tree().create_timer(0.05).timeout
+		muzzle_flash.visible = false
 
 	if raycast and raycast.is_colliding():
 		print("Hit:", raycast.get_collider().name)
@@ -183,7 +168,6 @@ func shoot() -> void:
 	recoil_offset += Vector3(randf_range(-applied_recoil.x, applied_recoil.x), applied_recoil.y, applied_recoil.z)
 	recoil_rotation += Vector3(recoil_rotation_amount.x, randf_range(-recoil_rotation_amount.y, recoil_rotation_amount.y), 0)
 
-
-
 	await get_tree().create_timer(fire_rate).timeout
 	can_shoot = true
+
