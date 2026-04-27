@@ -42,7 +42,8 @@ transform = Transform3D(0.010220996, -0.010436379, -0.003407812, 0.009185728, 0.
 fire_sound = NodePath("AudioStreamPlayer3D2")
 hip_offset = Vector3(0.1, -0.35, -0.5)
 ads_offset = Vector3(0.205, -0.325, -0.575)
-sprint_offset = Vector3(-0.205, -0.615, -0.1)
+sprint_offset = Vector3(0.22, -0.8, -0.505)
+sprint_tilt = Vector3(-0.062, 0.77, -0.225)
 
 [node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="CharacterBody3D2/Camera3D/WeaponHolder/fps-ak" unique_id=1696070497]
 stream = ExtResource("6_jrmpr")
