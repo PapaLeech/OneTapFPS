@@ -50,6 +50,7 @@ stream = ExtResource("6_jrmpr")
 volume_db = 4.952
 max_db = 6.0
 max_distance = 100.0
+bus = &"New Bus"
 
 [node name="Map_v12" parent="." unique_id=1708034802 instance=ExtResource("5_po88e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1099821, -0.29482675, -1.2630119)
