@@ -4,7 +4,6 @@
 resource_name = "EQ10"
 band_db/31_hz = 2.0
 band_db/62_hz = 5.0
-band_db/125_hz = 4.0
 
 [sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_j3pel"]
 resource_name = "Compressor"

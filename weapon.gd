@@ -122,7 +122,7 @@ func _handle_bob(delta: float, player: CharacterBody3D) -> void:
 		bob_time += delta * bob_speed
 		var y = sin(bob_time) * bob_amount
 		var x = cos(bob_time * 0.5) * bob_amount * 0.5
-		bob_offset = Vector3(x, y, 0) * (1.0 - ads_weight)
+		bob_offset = Vector3(x, y, 0)
 	else:
 		bob_time = 0.0
 		bob_offset = bob_offset.lerp(Vector3.ZERO, delta * 10.0)
