@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cwkoirwemn582" path="res://fps-ak/resources/fps_ak_animated.glb" id="1_d63oo"]
 [ext_resource type="Script" uid="uid://b1ptf8n3s0r7s" path="res://weapon.gd" id="2_gl88b"]
+[ext_resource type="PackedScene" uid="uid://dmrlept8ecgxg" path="res://bullet/bullet.tscn" id="3_xh3l3"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vpbhs"]
 animation = &"fire"
@@ -92,9 +93,12 @@ states/take/position = Vector2(258, 100)
 transitions = ["Start", "take", SubResource("AnimationNodeStateMachineTransition_huuvx"), "take", "idle", SubResource("AnimationNodeStateMachineTransition_6rtwo"), "idle", "fire", SubResource("AnimationNodeStateMachineTransition_k7km3"), "idle", "melee", SubResource("AnimationNodeStateMachineTransition_ngokh"), "idle", "reload", SubResource("AnimationNodeStateMachineTransition_itmc3"), "idle", "reload_full", SubResource("AnimationNodeStateMachineTransition_wqsm7"), "idle", "hide", SubResource("AnimationNodeStateMachineTransition_mdrg8"), "fire", "idle", SubResource("AnimationNodeStateMachineTransition_b3mfr"), "melee", "idle", SubResource("AnimationNodeStateMachineTransition_aeqy0"), "reload", "idle", SubResource("AnimationNodeStateMachineTransition_eooys"), "reload_full", "idle", SubResource("AnimationNodeStateMachineTransition_rhhcn"), "hide", "End", SubResource("AnimationNodeStateMachineTransition_k44j8")]
 graph_offset = Vector2(-262.841, -22.6944)
 
-[node name="fps-ak" unique_id=528291710 instance=ExtResource("1_d63oo")]
+[node name="fps-ak" unique_id=528291710 node_paths=PackedStringArray("muzzle_front", "muzzle_side") instance=ExtResource("1_d63oo")]
 transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, -0.1, -0.4, 0.3)
 script = ExtResource("2_gl88b")
+bullet_scene = ExtResource("3_xh3l3")
+muzzle_front = NodePath("MuzzleFront")
+muzzle_side = NodePath("MuzzleSide")
 metadata/ads_pos = Vector3(0, -0.282, 0)
 metadata/max_magazine = 30
 metadata/auto = true
@@ -218,6 +222,12 @@ tree_root = SubResource("AnimationNodeStateMachine_d6lpy")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="3" unique_id=187435898]
+
+[node name="MuzzleFront" type="Node3D" parent="." index="4" unique_id=1113993143]
+transform = Transform3D(0.97407126, -0.22624332, 0, 0.22624332, 0.97407126, 0, 0, 0, 1, 53.34082, -35.640137, 33.547165)
+
+[node name="MuzzleSide" type="Node3D" parent="." index="5" unique_id=1050808239]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.264278, -17.36452, 2.7828903)
 
 [connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="animation_started" from="AnimationTree" to="." method="_on_animation_tree_animation_started"]

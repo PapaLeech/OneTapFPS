@@ -19,9 +19,21 @@ run/main_scene="res://levels/level_001.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://ylfjg8opqmon"
+
+[autoload]
+
+MCPRuntime="*uid://m3xa2t1ns13w"
+
 [display]
 
 window/size/always_on_top=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [input]
 

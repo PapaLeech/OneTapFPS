@@ -40,6 +40,11 @@ extends Node3D
 @export var ads_fov := 55.0
 @export var fov_speed := 12.0
 
+@export_group("Bullets")
+@export var bullet_scene: PackedScene
+@export var muzzle_front: Node3D
+@export var muzzle_side: Node3D
+
 # -----------------------------
 # INTERNAL STATE
 # -----------------------------
@@ -172,6 +177,16 @@ func shoot() -> void:
 
 	if raycast and raycast.is_colliding():
 		print("Hit:", raycast.get_collider().name)
+
+	# --- Bullet spawn (additive) ---
+	if bullet_scene:
+		var spawn_parent := get_tree().current_scene
+		for muzzle in [muzzle_front, muzzle_side]:
+			if muzzle and spawn_parent:
+				var b := bullet_scene.instantiate() as Node3D
+				spawn_parent.add_child(b)
+				b.global_transform = muzzle.global_transform
+	# --- end bullet spawn ---
 
 	await get_tree().create_timer(fire_rate).timeout
 	can_shoot = true
