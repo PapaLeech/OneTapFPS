@@ -44,6 +44,7 @@ extends Node3D
 @export var bullet_scene: PackedScene
 @export var muzzle_front: Node3D
 @export var muzzle_side: Node3D
+@export var bullet_angle_offset := Vector3(0, 0, 0)
 
 # -----------------------------
 # INTERNAL STATE
@@ -64,6 +65,11 @@ var can_shoot := true
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse_input = event.relative
+
+func _ready() -> void:
+	# Auto-find MuzzleFront if not assigned in Inspector
+	if not muzzle_front:
+		muzzle_front = find_child("MuzzleFront", true, false)
 
 func _process(delta: float) -> void:
 	# AK (1) -> Holder (2) -> Camera (3) -> Player
@@ -186,7 +192,7 @@ func shoot() -> void:
 			var cam : Camera3D = get_viewport().get_camera_3d()
 			var t := muzzle_front.global_transform
 			if cam:
-				t.basis = cam.global_transform.basis
+				t.basis = cam.global_transform.basis * Basis.from_euler(bullet_angle_offset)
 			b.global_transform = t
 	await get_tree().create_timer(fire_rate).timeout
 	can_shoot = true

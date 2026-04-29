@@ -188,7 +188,7 @@ cast_shadow = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513291, 8.64982, 72.6111)
 
 [node name="MuzzleFront" type="Node3D" parent="Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak/base/MuzzlePoint" index="0" unique_id=1113993143]
-transform = Transform3D(1.0000004, 0, 0, 0, 1.0000004, 0, 0, 0, 1, 53.34082, -35.640137, 33.547165)
+transform = Transform3D(1.0000004, -3.874302e-07, -1.013279e-06, 5.9604645e-07, 1.0000004, 4.917383e-07, -2.9802322e-08, 1.1920929e-07, 1.0000006, 0, 0, 0)
 
 [node name="bolt" parent="Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak" index="1" unique_id=1104196018]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4308e-16, 9.24579, 21.932)
