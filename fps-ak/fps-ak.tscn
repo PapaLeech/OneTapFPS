@@ -97,7 +97,7 @@ graph_offset = Vector2(-262.841, -22.6944)
 transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, -0.1, -0.4, 0.3)
 script = ExtResource("2_gl88b")
 bullet_scene = ExtResource("3_xh3l3")
-muzzle_front = NodePath("MuzzleFront")
+muzzle_front = NodePath("Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak/base/MuzzlePoint/MuzzleFront")
 muzzle_side = NodePath("MuzzleSide")
 metadata/ads_pos = Vector3(0, -0.282, 0)
 metadata/max_magazine = 30
@@ -187,6 +187,9 @@ cast_shadow = 0
 [node name="MuzzlePoint" type="Node3D" parent="Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak/base" parent_id_path=PackedInt32Array(223432765) index="1" unique_id=598729539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513291, 8.64982, 72.6111)
 
+[node name="MuzzleFront" type="Node3D" parent="Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak/base/MuzzlePoint" index="0" unique_id=1113993143]
+transform = Transform3D(1.0000004, 0, 0, 0, 1.0000004, 0, 0, 0, 1, 53.34082, -35.640137, 33.547165)
+
 [node name="bolt" parent="Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak" index="1" unique_id=1104196018]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4308e-16, 9.24579, 21.932)
 
@@ -223,10 +226,7 @@ anim_player = NodePath("../AnimationPlayer")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="3" unique_id=187435898]
 
-[node name="MuzzleFront" type="Node3D" parent="." index="4" unique_id=1113993143]
-transform = Transform3D(0.97407126, -0.22624332, 0, 0.22624332, 0.97407126, 0, 0, 0, 1, 53.34082, -35.640137, 33.547165)
-
-[node name="MuzzleSide" type="Node3D" parent="." index="5" unique_id=1050808239]
+[node name="MuzzleSide" type="Node3D" parent="." index="4" unique_id=1050808239]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.020782, -20.550722, -22.881187)
 
 [connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]

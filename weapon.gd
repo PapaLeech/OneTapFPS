@@ -162,8 +162,6 @@ func _apply_final_offset(delta: float) -> void:
 
 func shoot() -> void:
 	if not can_shoot: return
-	
-	print("shoot called")
 	if fire_sound:
 		fire_sound.play()
 	
@@ -178,20 +176,17 @@ func shoot() -> void:
 	if raycast and raycast.is_colliding():
 		print("Hit:", raycast.get_collider().name)
 
-	# --- Bullet spawn (additive) ---
-	print("[diag] bullet_scene=", bullet_scene, " muzzle_front=", muzzle_front, " muzzle_side=", muzzle_side)
 	if bullet_scene:
 		var spawn_parent := get_tree().current_scene
-		print("[diag] spawn_parent=", spawn_parent, " name=", spawn_parent.name if spawn_parent else "<null>")
-		for muzzle in [muzzle_front, muzzle_side]:
-			if muzzle and spawn_parent:
-				var b := bullet_scene.instantiate() as Node3D
-				b.collision_mask = ~1 & 0xFFFFFFFF   # all layers except 1 (player)
-				spawn_parent.add_child(b)
-				b.global_transform = muzzle.global_transform
-				b.scale = Vector3(20, 20, 20)   # TEMP DIAG: make bullets visible
-				print("[diag] spawned bullet at ", b.global_position, " from muzzle=", muzzle.name, " in_tree=", b.is_inside_tree())
-	# --- end bullet spawn ---
-
+		if muzzle_front and spawn_parent:
+			var b := bullet_scene.instantiate() as Node3D
+			b.collision_mask = ~1 & 0xFFFFFFFF
+			spawn_parent.add_child(b)
+			# Use muzzle position but camera orientation so bullet flies where you aim
+			var cam : Camera3D = get_viewport().get_camera_3d()
+			var t := muzzle_front.global_transform
+			if cam:
+				t.basis = cam.global_transform.basis
+			b.global_transform = t
 	await get_tree().create_timer(fire_rate).timeout
 	can_shoot = true

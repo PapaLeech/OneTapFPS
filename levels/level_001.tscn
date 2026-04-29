@@ -41,7 +41,7 @@ transform = Transform3D(-0.6435244, -0.18688822, 0.7422595, 0.19124165, 0.899721
 transform = Transform3D(0.010220996, -0.010436379, -0.003407812, 0.009185728, 0.010679393, -0.0051548956, 0.006012787, 0.0014256624, 0.013667987, 1.075, -0.505, 0.21)
 fire_sound = NodePath("AudioStreamPlayer3D2")
 hip_offset = Vector3(0.115, -0.32, -0.555)
-ads_offset = Vector3(0.245, -0.28, -0.54)
+ads_offset = Vector3(0.27, -0.33, -0.52)
 sprint_offset = Vector3(0.205, -0.44, -0.51)
 sprint_tilt = Vector3(0.178, 0.69, 0.01)
 
