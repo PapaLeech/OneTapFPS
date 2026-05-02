@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cnt1jo4c60kdy" path="res://controllers/fps_controller.gd" id="1_gf80s"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
+[ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1254856328 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
+floor_max_angle = 1.0471976
 script = ExtResource("1_gf80s")
 CAMERA_CONTROLLER = NodePath("CameraController/Camera3D")
 
@@ -26,5 +28,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, -0.17)
 cull_mask = 1048573
 near = 0.1
+
+[node name="Components" type="Node" parent="." unique_id=586904632]
+
+[node name="StepHandlerComponent" type="Node" parent="Components" unique_id=1919541782 node_paths=PackedStringArray("player")]
+script = ExtResource("3_xc2pf")
+player = NodePath("../..")
 
 [editable path="CollisionShape3D/Terrorist"]
