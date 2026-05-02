@@ -8,7 +8,6 @@ const MOUSE_SENSITIVITY = 0.003
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	$Terrorist.visible = false
 
 func _input(event):
 	# Quit

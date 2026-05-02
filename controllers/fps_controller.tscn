@@ -15,8 +15,15 @@ shape = SubResource("CapsuleShape3D_j0767")
 [node name="Terrorist" parent="CollisionShape3D" unique_id=1589091963 instance=ExtResource("2_ca8e7")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.695, 0)
 
+[node name="Object_6" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 1167017965) index="0" unique_id=1699947257]
+layers = 2
+
 [node name="CameraController" type="Node3D" parent="." unique_id=1035603513]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraController" unique_id=1719719607]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, -0.17)
+cull_mask = 1048573
+near = 0.1
+
+[editable path="CollisionShape3D/Terrorist"]
