@@ -30,6 +30,8 @@ func process_smoothing(delta: float):
 			_step_smoothing = false
 
 func handle_step_climbing():
+	if not player:
+		return
 	print("handle called, collisions: ", player.get_slide_collision_count())
 	step_status = "No vertical collision detected"
 	for i in player.get_slide_collision_count():

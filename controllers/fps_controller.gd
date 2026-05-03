@@ -6,6 +6,7 @@ extends CharacterBody3D
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
+@export var ANIMATIONPLAYER : AnimationPlayer
 
 var _mouse_input : bool = false
 var _rotation_input : float
@@ -15,6 +16,10 @@ var _player_rotation : Vector3
 var _camera_rotation : Vector3
 
 var _is_crouching : bool = false
+var crouching : bool = false
+var _crouch_target_height : float = 1.5
+var _crouch_target_shape : float = 2.0
+const CROUCH_SPEED : float = 10.0
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -29,8 +34,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func _input(event):
 	if event.is_action_pressed("exit"):
 		get_tree().quit()
-	if event.is_action_pressed("CROUCH"):
-		toggle_crouch()
 
 func _update_camera(delta):
 	_mouse_rotation.x += _tilt_input * delta
@@ -68,12 +71,25 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+	var want_crouch = Input.is_action_pressed("CROUCH")
+	if want_crouch != _is_crouching:
+		toggle_crouch()
+
+	# Smoothly lerp camera and collision shape to crouch targets
+	var t = CROUCH_SPEED * delta
+	CAMERA_CONTROLLER.position.y = lerp(CAMERA_CONTROLLER.position.y, _crouch_target_height, t)
+	$CollisionShape3D.position.y = lerp($CollisionShape3D.position.y, _crouch_target_height, t)
+	$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, _crouch_target_shape, t)
+
 	if is_on_floor():
 		step_handler.handle_step_climbing()
 
 func toggle_crouch():
-	if _is_crouching == true:
-		print("UNCROUCH")
-	elif _is_crouching == false:
-		print("CROUCH")
+	if _is_crouching:
+		_crouch_target_height = 1.5
+		_crouch_target_shape = 2.0
+	else:
+		_crouch_target_height = 0.9
+		_crouch_target_shape = 1.0
 	_is_crouching = !_is_crouching
+	crouching = _is_crouching

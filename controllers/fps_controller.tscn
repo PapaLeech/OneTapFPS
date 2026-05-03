@@ -9,10 +9,96 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
-[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1254856328 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
+[sub_resource type="Animation" id="Animation_co0pi"]
+resource_name = "Crouch"
+length = 1.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CameraController:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_gshig"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CameraController:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jmoha"]
+_data = {
+&"Crouch": SubResource("Animation_co0pi"),
+&"RESET": SubResource("Animation_gshig")
+}
+
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1254856328 node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATIONPLAYER")]
 floor_max_angle = 1.0471976
 script = ExtResource("1_gf80s")
 CAMERA_CONTROLLER = NodePath("CameraController/Camera3D")
+ANIMATIONPLAYER = NodePath("AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2118348457]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -69,13 +155,15 @@ visible = false
 
 [node name="Components" type="Node" parent="." unique_id=586904632]
 
-[node name="StepHandlerComponent" type="Node" parent="Components" unique_id=1919541782 node_paths=PackedStringArray("player")]
+[node name="StepHandlerComponent" type="Node" parent="Components" unique_id=1919541782]
 script = ExtResource("3_xc2pf")
-player = NodePath("../..")
 
 [node name="WeaponController" type="Node" parent="Components" unique_id=852578435 node_paths=PackedStringArray("weapon_model_parent")]
 script = ExtResource("4_y677r")
 current_weapon = ExtResource("5_co0pi")
 weapon_model_parent = NodePath("../../CameraController/Camera3D/WeaponHolder")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1916915474]
+libraries/ = SubResource("AnimationLibrary_jmoha")
 
 [editable path="CollisionShape3D/Terrorist"]
