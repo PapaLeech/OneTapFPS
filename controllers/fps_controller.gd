@@ -14,6 +14,8 @@ var _mouse_rotation : Vector3
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
 
+var _is_crouching : bool = false
+
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var step_handler = $Components/StepHandlerComponent
@@ -27,6 +29,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _input(event):
 	if event.is_action_pressed("exit"):
 		get_tree().quit()
+	if event.is_action_pressed("CROUCH"):
+		toggle_crouch()
 
 func _update_camera(delta):
 	_mouse_rotation.x += _tilt_input * delta
@@ -66,3 +70,10 @@ func _physics_process(delta):
 
 	if is_on_floor():
 		step_handler.handle_step_climbing()
+
+func toggle_crouch():
+	if _is_crouching == true:
+		print("UNCROUCH")
+	elif _is_crouching == false:
+		print("CROUCH")
+	_is_crouching = !_is_crouching
