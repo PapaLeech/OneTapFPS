@@ -90,9 +90,9 @@ weapon_controller.gd::GDScript::4776619364154183538::1777801606::0::1::::WeaponC
 ::res://Characters/::1777720970
 terrorist_1_rig.glb::PackedScene::757528666157290489::1777720647::1777720969::1::::<><><>0<>0<>7319d4485109fb0c957b5ddd7363faf8<>res://.godot/imported/terrorist_1_rig.glb-512f060693800c9bb61330fb2e75a69a.scn::uid://bf8o2immm1f11::::res://Characters/terrorist_1_rig_0.png
 terrorist_1_rig_0.png::CompressedTexture2D::2806388061388142130::1777720969::1777720970::1::::<><><>0<>0<>720690cfc989278b39a7f58542ed8895<>res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex::
-::res://controllers/::1777841303
-fps_controller.gd::GDScript::5726115006224352606::1777841303::0::1::::<>CharacterBody3D<><>0<>0<><>::
-fps_controller.tscn::PackedScene::717624600198808168::1777841241::0::1::::<><><>0<>0<><>::uid://cnt1jo4c60kdy::::res://controllers/fps_controller.gd<>uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://q6i6b2d624f8::::res://assets/weapons/resources/DJMaesen-deagle.glb<>uid://cb6aep6qplm38::::res://controllers/scripts/player/components/step_climber.gd<>uid://cab3ht37firty::::res://assets/weapons/scripts/weapon_controller.gd<>uid://dtlgtirigux24::::res://assets/weapons/resources/pistol.tres
+::res://controllers/::1777843212
+fps_controller.gd::GDScript::5726115006224352606::1777843212::0::1::::<>CharacterBody3D<><>0<>0<><>::
+fps_controller.tscn::PackedScene::717624600198808168::1777843154::0::1::::<><><>0<>0<><>::uid://cnt1jo4c60kdy::::res://controllers/fps_controller.gd<>uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://q6i6b2d624f8::::res://assets/weapons/resources/DJMaesen-deagle.glb<>uid://cb6aep6qplm38::::res://controllers/scripts/player/components/step_climber.gd<>uid://cab3ht37firty::::res://assets/weapons/scripts/weapon_controller.gd<>uid://dtlgtirigux24::::res://assets/weapons/resources/pistol.tres
 ::res://controllers/scripts/::1777751451
 ::res://controllers/scripts/player/::1777751477
 ::res://controllers/scripts/player/components/::1777841222
