@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cnt1jo4c60kdy" path="res://controllers/fps_controller.gd" id="1_gf80s"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
+[ext_resource type="PackedScene" uid="uid://q6i6b2d624f8" path="res://assets/weapons/resources/DJMaesen-deagle.glb" id="3_co0pi"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
@@ -61,6 +62,10 @@ cull_mask = 1048573
 near = 0.1
 
 [node name="WeaponHolder" type="Node3D" parent="CameraController/Camera3D" unique_id=582013294]
+
+[node name="Sketchfab_Scene" parent="CameraController/Camera3D" unique_id=2047352540 instance=ExtResource("3_co0pi")]
+transform = Transform3D(-0.014991753, 0, -0.0004973276, 0, 0.015, 0, 0.0004973276, 0, -0.014991753, 0.195, -0.325, -0.475)
+visible = false
 
 [node name="Components" type="Node" parent="." unique_id=586904632]
 

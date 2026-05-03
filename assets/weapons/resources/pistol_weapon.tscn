@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dhbsnu46b0br8"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_y28us"]
-size = Vector3(0.055, 0.055, 0.3)
+[ext_resource type="PackedScene" uid="uid://q6i6b2d624f8" path="res://assets/weapons/resources/DJMaesen-deagle.glb" id="1_bm3e5"]
 
-[node name="pistol_weapon" type="MeshInstance3D" unique_id=1674419460]
-mesh = SubResource("BoxMesh_y28us")
+[node name="pistol_weapon" type="Node3D" unique_id=699993530]
+
+[node name="Sketchfab_Scene" parent="." unique_id=2047352540 instance=ExtResource("1_bm3e5")]
+transform = Transform3D(-0.019989004, 0, -0.0006631034, 0, 0.02, 0, 0.0006631034, 0, -0.019989004, 0.195, -0.325, -0.475)
