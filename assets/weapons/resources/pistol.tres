@@ -6,3 +6,4 @@
 [resource]
 script = ExtResource("1_580d7")
 weapon_model = ExtResource("2_wt4ci")
+weapon_position = Vector3(0.11, -0.155, -0.265)
