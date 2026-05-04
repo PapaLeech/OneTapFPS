@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cnt1jo4c60kdy" path="res://controllers/fps_controller.gd" id="1_gf80s"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
 [ext_resource type="PackedScene" uid="uid://q6i6b2d624f8" path="res://assets/weapons/resources/DJMaesen-deagle.glb" id="3_co0pi"]
+[ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
@@ -148,6 +149,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, -0.17)
 cull_mask = 1048573
 near = 0.1
+script = ExtResource("3_gshig")
 
 [node name="WeaponHolder" type="Node3D" parent="CameraController/Camera3D" unique_id=582013294]
 
