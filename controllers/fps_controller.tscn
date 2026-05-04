@@ -158,8 +158,8 @@ script = ExtResource("3_gshig")
 [node name="WeaponHolder" type="Node3D" parent="CameraController/Camera3D" unique_id=582013294]
 script = ExtResource("4_bneyr")
 
-[node name="Sketchfab_Scene" parent="CameraController/Camera3D" unique_id=2047352540 instance=ExtResource("3_co0pi")]
-transform = Transform3D(-0.014991753, 0, -0.0004973276, 0, 0.015, 0, 0.0004973276, 0, -0.014991753, 0.195, -0.325, -0.475)
+[node name="Sketchfab_Scene" parent="CameraController/Camera3D/WeaponHolder" unique_id=2047352540 instance=ExtResource("3_co0pi")]
+transform = Transform3D(-0.014991753, 0, -0.0004973276, 0, 0.015, 0, 0.0004973276, 0, -0.014991753, 0.195, -0.32500005, -0.47499996)
 visible = false
 
 [node name="CameraShake" type="Node3D" parent="CameraController/Camera3D" unique_id=1042758431]
