@@ -5,10 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://q6i6b2d624f8" path="res://assets/weapons/resources/DJMaesen-deagle.glb" id="3_co0pi"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
+[ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
+[ext_resource type="Script" uid="uid://bve28odj66ql" path="res://controllers/camera_shake.gd" id="6_jdr2h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bneyr"]
 
 [sub_resource type="Animation" id="Animation_co0pi"]
 resource_name = "Crouch"
@@ -152,10 +156,15 @@ near = 0.1
 script = ExtResource("3_gshig")
 
 [node name="WeaponHolder" type="Node3D" parent="CameraController/Camera3D" unique_id=582013294]
+script = ExtResource("4_bneyr")
 
 [node name="Sketchfab_Scene" parent="CameraController/Camera3D" unique_id=2047352540 instance=ExtResource("3_co0pi")]
 transform = Transform3D(-0.014991753, 0, -0.0004973276, 0, 0.015, 0, 0.0004973276, 0, -0.014991753, 0.195, -0.325, -0.475)
 visible = false
+
+[node name="CameraShake" type="Node3D" parent="CameraController/Camera3D" unique_id=1042758431]
+script = ExtResource("6_jdr2h")
+noise = SubResource("FastNoiseLite_bneyr")
 
 [node name="Components" type="Node" parent="." unique_id=586904632]
 
