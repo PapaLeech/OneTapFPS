@@ -27,6 +27,10 @@ buses/default_bus_layout="uid://ylfjg8opqmon"
 
 MCPRuntime="*uid://m3xa2t1ns13w"
 
+[debug]
+
+gdscript/warnings/inference_on_variant=0.0
+
 [display]
 
 window/size/always_on_top=true

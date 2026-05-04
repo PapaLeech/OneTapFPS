@@ -11,6 +11,12 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
+[sub_resource type="Curve" id="Curve_jmoha"]
+
+[sub_resource type="Curve" id="Curve_bneyr"]
+
+[sub_resource type="Curve" id="Curve_jdr2h"]
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_bneyr"]
 
 [sub_resource type="Animation" id="Animation_co0pi"]
@@ -156,6 +162,9 @@ script = ExtResource("3_gshig")
 
 [node name="WeaponHolder" type="Node3D" parent="CameraController/Camera3D" unique_id=582013294]
 script = ExtResource("4_bneyr")
+recoil_rotation_x = SubResource("Curve_jmoha")
+recoil_rotation_z = SubResource("Curve_bneyr")
+recoil_position_z = SubResource("Curve_jdr2h")
 
 [node name="CameraShake" type="Node3D" parent="CameraController/Camera3D" unique_id=1042758431]
 script = ExtResource("6_jdr2h")
@@ -166,10 +175,11 @@ noise = SubResource("FastNoiseLite_bneyr")
 [node name="StepHandlerComponent" type="Node" parent="Components" unique_id=1919541782]
 script = ExtResource("3_xc2pf")
 
-[node name="WeaponController" type="Node" parent="Components" unique_id=852578435 node_paths=PackedStringArray("weapon_model_parent")]
+[node name="WeaponController" type="Node" parent="Components" unique_id=852578435 node_paths=PackedStringArray("weapon_model_parent", "gun")]
 script = ExtResource("4_y677r")
 current_weapon = ExtResource("5_co0pi")
 weapon_model_parent = NodePath("../../CameraController/Camera3D/WeaponHolder")
+gun = NodePath("../../CameraController/Camera3D/WeaponHolder")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1916915474]
 libraries/ = SubResource("AnimationLibrary_jmoha")

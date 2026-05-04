@@ -14,7 +14,6 @@ class_name WeaponController extends Node
 @export var sway_speed: float = 1.2
 
 var current_weapon_model: Node3D
-var _anim_player: AnimationPlayer
 var _is_aiming: bool = false
 var _mouse_movement: Vector2
 var _random_sway_x: float
@@ -48,44 +47,16 @@ func spawn_weapon_model():
 		current_weapon_model = current_weapon.weapon_model.instantiate()
 		weapon_model_parent.add_child(current_weapon_model)
 		current_weapon_model.position = current_weapon.weapon_position
-		_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
-		if _anim_player:
-			_create_fire_animation()
 
 func fire():
 	if not gun:
 		return
-	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
-		_anim_player.stop()
-		_anim_player.play("fire_lib/fire")
 	if _is_aiming:
 		gun.recoil_amplitude *= ads_recoil_multiplier
 		gun.apply_recoil()
 		gun.recoil_amplitude /= ads_recoil_multiplier
 	else:
 		gun.apply_recoil()
-
-func _create_fire_animation() -> void:
-	var source := _anim_player.get_animation("allanims")
-	if not source:
-		return
-	var fire_anim := Animation.new()
-	fire_anim.length = 0.5
-	for i in source.get_track_count():
-		var track_type := source.track_get_type(i)
-		var track_path := source.track_get_path(i)
-		var new_track := fire_anim.add_track(track_type)
-		fire_anim.track_set_path(new_track, track_path)
-		for j in source.track_get_key_count(i):
-			var key_time := source.track_get_key_time(i, j)
-			if key_time > 0.5:
-				break
-			var key_value: Variant = source.track_get_key_value(i, j) as Variant
-			var key_transition := source.track_get_key_transition(i, j)
-			fire_anim.track_insert_key(new_track, key_time, key_value, key_transition)
-	var lib := AnimationLibrary.new()
-	lib.add_animation("fire", fire_anim)
-	_anim_player.add_animation_library("fire_lib", lib)
 
 func _sway_weapon(delta: float) -> void:
 	if not weapon_model_parent:
