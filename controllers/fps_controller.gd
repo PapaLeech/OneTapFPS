@@ -71,6 +71,8 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var current_speed = SPEED * 0.6 if _is_crouching else SPEED
+	if Input.is_action_pressed("sprint") and not _is_crouching:
+		current_speed = SPEED * 1.6
 
 	if direction:
 		velocity.x = direction.x * current_speed
@@ -107,7 +109,7 @@ func toggle_crouch():
 		_crouch_target_height = 1.5
 		_crouch_target_shape = 2.0
 	else:
-		_crouch_target_height = 0.9
+		_crouch_target_height = 0.7
 		_crouch_target_shape = 1.0
 	_is_crouching = !_is_crouching
 	crouching = _is_crouching
