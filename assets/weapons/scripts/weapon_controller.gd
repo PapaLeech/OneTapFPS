@@ -9,15 +9,31 @@ class_name WeaponController extends Node
 # ADS recoil multiplier — lower = less recoil when aiming
 @export var ads_recoil_multiplier: float = 0.5
 
+# Sway
+@export var sway_noise: NoiseTexture2D
+@export var sway_speed: float = 1.2
+
 var current_weapon_model: Node3D
 var _is_aiming: bool = false
+var _mouse_movement: Vector2
+var _random_sway_x: float
+var _random_sway_y: float
+var _sway_time: float = 0.0
 
 func _ready() -> void:
 	if current_weapon:
 		spawn_weapon_model()
 
-func _physics_process(_delta):
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		_mouse_movement = event.relative
+
+func _physics_process(delta):
 	_is_aiming = Input.is_action_pressed("aim")
+	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
+	
+	if not _is_aiming and current_weapon:
+		_sway_weapon(delta)
 	
 	if Input.is_action_just_pressed("fire"):
 		fire()
@@ -41,3 +57,47 @@ func fire():
 		gun.recoil_amplitude /= ads_recoil_multiplier
 	else:
 		gun.apply_recoil()
+
+func _sway_weapon(delta: float) -> void:
+	if not weapon_model_parent:
+		return
+	var sway_random: float = _get_sway_noise()
+	var sway_random_adjusted: float = sway_random * current_weapon.idle_sway_adjustment
+
+	_sway_time += delta * (sway_speed + sway_random)
+	_random_sway_x = sin(_sway_time * 1.5 + sway_random_adjusted) / current_weapon.random_sway_amount
+	_random_sway_y = sin(_sway_time - sway_random_adjusted) / current_weapon.random_sway_amount
+
+	var clamped := _mouse_movement.clamp(current_weapon.sway_min, current_weapon.sway_max)
+	var base_pos := current_weapon.weapon_position
+
+	weapon_model_parent.position.x = lerp(
+		weapon_model_parent.position.x,
+		base_pos.x - (clamped.x * current_weapon.sway_amount_position + _random_sway_x) * delta,
+		current_weapon.sway_speed_position * delta
+	)
+	weapon_model_parent.position.y = lerp(
+		weapon_model_parent.position.y,
+		base_pos.y + (clamped.y * current_weapon.sway_amount_position + _random_sway_y) * delta,
+		current_weapon.sway_speed_position * delta
+	)
+	weapon_model_parent.rotation_degrees.y = lerp(
+		weapon_model_parent.rotation_degrees.y,
+		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta,
+		current_weapon.sway_speed_rotation * delta
+	)
+	weapon_model_parent.rotation_degrees.x = lerp(
+		weapon_model_parent.rotation_degrees.x,
+		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta,
+		current_weapon.sway_speed_rotation * delta
+	)
+
+func _get_sway_noise() -> float:
+	if not sway_noise or not sway_noise.noise:
+		return 0.0
+	var pos := Vector3.ZERO
+	if not Engine.is_editor_hint():
+		var player = get_tree().get_first_node_in_group("player")
+		if player:
+			pos = player.global_position
+	return sway_noise.noise.get_noise_2d(pos.x, pos.y)

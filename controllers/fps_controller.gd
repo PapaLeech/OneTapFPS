@@ -14,10 +14,6 @@ extends CharacterBody3D
 @export var lean_tilt : float = 0.08
 @export var lean_speed : float = 10.0
 
-# Sway exports
-@export var weapon_sway_amount : float = 0.01
-@export var weapon_rotation_amount : float = 0.003
-
 var _mouse_input : bool = false
 var _rotation_input : float
 var _tilt_input : float
@@ -104,7 +100,6 @@ func _physics_process(delta):
 	move_and_slide()
 
 	handle_lean(delta)
-	weapon_sway(delta)
 	weapon_bob(velocity.length(), delta)
 
 	var want_crouch = Input.is_action_pressed("CROUCH")
@@ -153,20 +148,6 @@ func handle_lean(delta):
 			CAMERA_CONTROLLER.rotation.z,
 			lean_dir * lean_tilt,
 			lean_speed * delta
-		)
-
-func weapon_sway(delta):
-	mouse_input = lerp(mouse_input, Vector2.ZERO, 10 * delta)
-	if _weapon_holder:
-		_weapon_holder.rotation.x = lerp(
-			_weapon_holder.rotation.x,
-			mouse_input.y * weapon_rotation_amount,
-			10 * delta
-		)
-		_weapon_holder.rotation.y = lerp(
-			_weapon_holder.rotation.y,
-			mouse_input.x * weapon_rotation_amount,
-			10 * delta
 		)
 
 func weapon_bob(vel : float, delta):

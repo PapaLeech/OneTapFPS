@@ -4,5 +4,5 @@
 
 [node name="pistol_weapon" type="Node3D" unique_id=699993530]
 
-[node name="Sketchfab_Scene" parent="." unique_id=2047352540 instance=ExtResource("1_bm3e5")]
+[node name="PistolModel" parent="." unique_id=2047352540 instance=ExtResource("1_bm3e5")]
 transform = Transform3D(-0.019989004, 0, -0.0006631034, 0, 0.02, 0, 0.0006631034, 0, -0.019989004, 0.195, -0.325, -0.475)
