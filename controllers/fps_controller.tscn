@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
+[ext_resource type="AudioStream" uid="uid://cg5ugsvg1wtw6" path="res://assets/audio/weapons/desert-eagle-free.mp3" id="5_bneyr"]
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
 [ext_resource type="Script" uid="uid://bve28odj66ql" path="res://controllers/camera_shake.gd" id="6_jdr2h"]
 
@@ -165,6 +166,10 @@ script = ExtResource("4_bneyr")
 recoil_rotation_x = SubResource("Curve_jmoha")
 recoil_rotation_z = SubResource("Curve_bneyr")
 recoil_position_z = SubResource("Curve_jdr2h")
+
+[node name="GunShotSound" type="AudioStreamPlayer3D" parent="CameraController/Camera3D/WeaponHolder" unique_id=1095277582]
+stream = ExtResource("5_bneyr")
+max_distance = 10.0
 
 [node name="CameraShake" type="Node3D" parent="CameraController/Camera3D" unique_id=1042758431]
 script = ExtResource("6_jdr2h")

@@ -15,6 +15,7 @@ class_name WeaponController extends Node
 
 var current_weapon_model: Node3D
 var _anim_player: AnimationPlayer
+var _gun_sound: AudioStreamPlayer3D
 var _is_aiming: bool = false
 var _mouse_movement: Vector2
 var _random_sway_x: float
@@ -22,6 +23,7 @@ var _random_sway_y: float
 var _sway_time: float = 0.0
 
 func _ready() -> void:
+	_gun_sound = get_node_or_null("../../CameraController/Camera3D/WeaponHolder/GunShotSound")
 	if current_weapon:
 		spawn_weapon_model()
 
@@ -58,6 +60,8 @@ func fire():
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
+	if _gun_sound:
+		_gun_sound.play()
 	if _is_aiming:
 		gun.recoil_amplitude *= ads_recoil_multiplier
 		gun.apply_recoil()
