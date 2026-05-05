@@ -5,6 +5,14 @@ class_name Weapon extends Resource
 @export var max_ammo: int = 12
 @export var weapon_model: PackedScene
 @export var weapon_position: Vector3 = Vector3(0.2, -0.2, -0.3)
+@export var weapon_scale: Vector3 = Vector3(1.0, 1.0, 1.0)
+
+# Fire settings
+@export_group("Fire")
+@export var full_auto: bool = false
+@export var fire_rate: float = 0.1
+@export var anim_fire_start: float = 0.0
+@export var anim_fire_end: float = 0.5
 
 # Sway settings
 @export_group("Sway")

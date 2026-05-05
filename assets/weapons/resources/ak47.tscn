@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://clcmvbqlvlag0"]
+
+[ext_resource type="PackedScene" uid="uid://cfdsrp3tivcss" path="res://assets/weapons/resources/ak47_animation.glb" id="1_y3opf"]
+
+[node name="Node3D" type="Node3D" unique_id=650313047]
+
+[node name="Sketchfab_Scene" parent="." unique_id=1494824836 instance=ExtResource("1_y3opf")]
