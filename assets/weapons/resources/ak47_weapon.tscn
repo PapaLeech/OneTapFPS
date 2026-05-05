@@ -5,6 +5,6 @@
 [node name="ak47_weapon" type="Node3D" unique_id=1563079407]
 
 [node name="AK47Model" parent="." unique_id=1735292326 instance=ExtResource("1_5ollx")]
-transform = Transform3D(-0.30882037, 0, 0.027018135, 0, 0.31, 0, -0.027018135, 0, -0.30882037, 0.08, -0.4, -0.28)
+transform = Transform3D(-0.4482876, 0, 0.03921993, 0, 0.45, 0, -0.03921993, 0, -0.4482876, 0.08, -0.4, -0.28)
 
 [editable path="AK47Model"]

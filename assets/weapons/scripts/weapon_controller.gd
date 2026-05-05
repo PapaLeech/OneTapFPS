@@ -96,6 +96,10 @@ func spawn_weapon_model():
 		_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
 		if _anim_player:
 			_create_fire_animation()
+			if _anim_player.has_animation("fire_lib/fire"):
+				_anim_player.play("fire_lib/fire")
+				_anim_player.seek(0.0, true)
+				_anim_player.pause()
 
 func fire():
 	if not gun:

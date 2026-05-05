@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cnt1jo4c60kdy" path="res://controllers/fps_controller.gd" id="1_gf80s"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
-[ext_resource type="PackedScene" uid="uid://boiet82pw4u84" path="res://assets/weapons/resources/ak47_weapon.tscn" id="3_uovkr"]
+[ext_resource type="PackedScene" uid="uid://boiet82pw4u84" path="res://assets/weapons/resources/ak47_weapon_DJ_backup.tscn" id="3_uovkr"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]

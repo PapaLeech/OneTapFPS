@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://boiet82pw4u84"]
+
+[ext_resource type="PackedScene" uid="uid://d2qhkmmw56m1s" path="res://assets/weapons/resources/DJ-ak_animated.glb" id="1_5ollx"]
+
+[node name="ak47_weapon" type="Node3D" unique_id=1563079407]
+
+[node name="AK47Model" parent="." unique_id=1735292326 instance=ExtResource("1_5ollx")]
+transform = Transform3D(-0.30882037, 0, 0.027018135, 0, 0.31, 0, -0.027018135, 0, -0.30882037, 0.08, -0.4, -0.28)
+
+[editable path="AK47Model"]
