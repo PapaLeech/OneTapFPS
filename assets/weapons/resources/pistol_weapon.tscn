@@ -7,7 +7,7 @@
 [node name="PistolModel" parent="." unique_id=2047352540 instance=ExtResource("1_bm3e5")]
 transform = Transform3D(-0.019989004, 0, -0.0006631034, 0, 0.02, 0, 0.0006631034, 0, -0.019989004, 0.195, -0.325, -0.475)
 
-[node name="Skeleton3D" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5" parent_id_path=PackedInt32Array(2047352540, 1404370329) index="0" unique_id=222029901]
+[node name="Skeleton3D" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5" parent_id_path=PackedInt32Array(2047352540, 1532546976) index="0" unique_id=634565285]
 bones/2/rotation = Quaternion(0.10221632, 0.91169524, 0.2928014, -0.26950142)
 bones/3/rotation = Quaternion(0.19593464, -0.33687603, -0.26765567, 0.8811837)
 bones/4/rotation = Quaternion(-0.058258794, -0.062026475, -0.03268438, 0.99583656)
@@ -40,13 +40,13 @@ bones/44/rotation = Quaternion(-0.39165607, 0.033243295, 0.050965816, 0.91809744
 bones/47/rotation = Quaternion(-0.42861938, -0.0146338325, 0.10732338, 0.8969689)
 bones/48/rotation = Quaternion(-0.46410644, -0.0034373722, -0.016153209, 0.8856255)
 
-[node name="hammer" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5/talon" parent_id_path=PackedInt32Array(2047352540, 1888236376) index="2" unique_id=563724827]
+[node name="hammer" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5/talon" parent_id_path=PackedInt32Array(2047352540, 582722373) index="2" unique_id=895290444]
 transform = Transform3D(1, 2.0062453e-18, 3.3789395e-18, -2.0062453e-18, 1, -2.1118372e-19, -3.3789395e-18, 2.1118372e-19, 1, 0, 3.68568, -4.0636106)
 
-[node name="mag" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5/talon" parent_id_path=PackedInt32Array(2047352540, 1888236376) index="4" unique_id=1331007331]
+[node name="mag" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5/talon" parent_id_path=PackedInt32Array(2047352540, 582722373) index="4" unique_id=1232936359]
 transform = Transform3D(1, -1.1150032e-17, 5.050327e-17, 2.3129649e-17, 0.9698078, -0.24387056, -4.62593e-17, 0.24387056, 0.9698078, -1.3625464e-15, -4.130994, -0.6512612)
 
-[node name="bullet" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5/talon/mag" index="2" unique_id=1241287560]
+[node name="bullet" parent="PistolModel/Sketchfab_model/bfcd572855204829b824f69bdcec0d15_fbx/Object_2/RootNode/Main/Object_5/talon/mag" index="2" unique_id=45010124]
 transform = Transform3D(1, -1.1346902e-18, 9.254557e-18, -1.1564824e-18, 0.9698078, 0.24387053, -9.25186e-18, -0.24387053, 0.9698078, 4.9966654e-16, 8.203207, -0.19120352)
 
 [editable path="PistolModel"]
