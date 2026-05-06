@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://d2qhkmmw56m1s"
-path="res://.godot/imported/DJ-ak_animated.glb-546e3a1fdd4aa739b7cdac2c803a6061.scn"
+uid="uid://7gsbbr7jrdoq"
+path="res://.godot/imported/fps_ak_animated.glb-9c0464d5b3d7d6eb79e2f9d4f5ea45e5.scn"
 
 [deps]
 
-source_file="res://assets/weapons/resources/DJ-ak_animated.glb"
-dest_files=["res://.godot/imported/DJ-ak_animated.glb-546e3a1fdd4aa739b7cdac2c803a6061.scn"]
+source_file="res://addons/fps-hands/fps-ak/resources/fps_ak_animated.glb"
+dest_files=["res://.godot/imported/fps_ak_animated.glb-9c0464d5b3d7d6eb79e2f9d4f5ea45e5.scn"]
 
 [params]
 

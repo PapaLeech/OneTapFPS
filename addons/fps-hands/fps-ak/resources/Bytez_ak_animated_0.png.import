@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bexq0obrlb4qt"
-path.s3tc="res://.godot/imported/ak47_animation_3.png-5482cf6c214126902bbb41c223a7e697.s3tc.ctex"
+uid="uid://4m0ab667pf21"
+path.s3tc="res://.godot/imported/Bytez_ak_animated_0.png-2d13aa1f6f81d2102b78bb310160f1b8.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "6b9e1a0f13e6ce44b7647441fcc317e8"
+"md5": "77866195acee68f4c5d25bd64c065105"
 }
 
 [deps]
 
-source_file="res://assets/weapons/resources/ak47_animation_3.png"
-dest_files=["res://.godot/imported/ak47_animation_3.png-5482cf6c214126902bbb41c223a7e697.s3tc.ctex"]
+source_file="res://addons/fps-hands/fps-ak/resources/Bytez_ak_animated_0.png"
+dest_files=["res://.godot/imported/Bytez_ak_animated_0.png-2d13aa1f6f81d2102b78bb310160f1b8.s3tc.ctex"]
 
 [params]
 

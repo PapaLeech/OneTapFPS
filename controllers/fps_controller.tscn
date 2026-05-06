@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cnt1jo4c60kdy" path="res://controllers/fps_controller.gd" id="1_gf80s"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
-[ext_resource type="PackedScene" uid="uid://boiet82pw4u84" path="res://assets/weapons/resources/ak47_weapon_DJ_backup.tscn" id="3_uovkr"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
@@ -123,7 +122,7 @@ shape = SubResource("CapsuleShape3D_j0767")
 [node name="Terrorist" parent="CollisionShape3D" unique_id=1589091963 instance=ExtResource("2_ca8e7")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.695, 0)
 
-[node name="Skeleton3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(1589091963, 1572670509) index="0" unique_id=1167017965]
+[node name="Skeleton3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(1589091963, 970069315) index="0" unique_id=1121168737]
 bones/1/position = Vector3(-1.138277e-07, 0.0016576052, -0.01461814)
 bones/3/rotation = Quaternion(-0.018634832, -4.8080274e-05, -0.0025793852, 0.99982303)
 bones/4/rotation = Quaternion(0.00012064662, 1.0061988e-06, 3.3512055e-08, 1)
@@ -152,7 +151,7 @@ bones/39/rotation = Quaternion(-0.075712055, 0.027120186, -0.16165437, 0.983565)
 bones/41/rotation = Quaternion(0.072531626, -0.19164601, -0.2957674, 0.9330234)
 bones/42/rotation = Quaternion(-0.1051671, 0.022258727, 0.038904585, 0.99344397)
 
-[node name="Object_6" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="0" unique_id=1699947257]
+[node name="Object_6" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="0" unique_id=921392250]
 layers = 2
 
 [node name="CameraController" type="Node3D" parent="." unique_id=1035603513]
@@ -173,10 +172,6 @@ recoil_position_z = SubResource("Curve_jdr2h")
 [node name="GunShotSound" type="AudioStreamPlayer3D" parent="CameraController/Camera3D/WeaponHolder" unique_id=1095277582]
 stream = ExtResource("5_bneyr")
 max_distance = 10.0
-
-[node name="AK47Preview" parent="CameraController/Camera3D/WeaponHolder" unique_id=1613335623 instance=ExtResource("3_uovkr")]
-transform = Transform3D(0.044916067, 0, -0.0027471767, 0, 0.045, 0, 0.0027471767, 0, 0.044916067, 0.08, -0.4, -0.28)
-visible = false
 
 [node name="CameraShake" type="Node3D" parent="CameraController/Camera3D" unique_id=1042758431]
 script = ExtResource("6_jdr2h")

@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7gag4y1sxavy"
-path.s3tc="res://.godot/imported/DJ-ak_animated_2.png-3f1acd74781ac394e709449fd57bde7d.s3tc.ctex"
+uid="uid://b277hfnvkkhx6"
+path.s3tc="res://.godot/imported/Bytez_ak_animated_5.png-a3e6b68651d2cf5df6813499c627501d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "a0c9291376cc1cbed0935222383c64ed"
+"md5": "8b90798fe028f916232c5b44e3710620"
 }
 
 [deps]
 
-source_file="res://assets/weapons/resources/DJ-ak_animated_2.png"
-dest_files=["res://.godot/imported/DJ-ak_animated_2.png-3f1acd74781ac394e709449fd57bde7d.s3tc.ctex"]
+source_file="res://addons/fps-hands/fps-ak/resources/Bytez_ak_animated_5.png"
+dest_files=["res://.godot/imported/Bytez_ak_animated_5.png-a3e6b68651d2cf5df6813499c627501d.s3tc.ctex"]
 
 [params]
 
@@ -30,7 +30,7 @@ compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=1
-roughness/src_normal="res://assets/weapons/resources/DJ-ak_animated_2.png"
+roughness/src_normal="res://assets/weapons/resources/fps-ak/reasources/Bytez_ak_animated_5.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

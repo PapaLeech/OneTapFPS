@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4c02s2omnv0"
-path.s3tc="res://.godot/imported/DJ-ak_animated_3.png-cea579cc829d9f0b127e821fc5f1898a.s3tc.ctex"
+uid="uid://c8lyee7m0mn0l"
+path.s3tc="res://.godot/imported/fps_ak_animated_3.png-f35a873aac9e03f77aad5cb75df8b21b.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "4802ed633c3d3386c36fee574eaad756"
-}
 
 [deps]
 
-source_file="res://assets/weapons/resources/DJ-ak_animated_3.png"
-dest_files=["res://.godot/imported/DJ-ak_animated_3.png-cea579cc829d9f0b127e821fc5f1898a.s3tc.ctex"]
+source_file="res://addons/fps-hands/fps-ak/resources/fps_ak_animated_3.png"
+dest_files=["res://.godot/imported/fps_ak_animated_3.png-f35a873aac9e03f77aad5cb75df8b21b.s3tc.ctex"]
 
 [params]
 

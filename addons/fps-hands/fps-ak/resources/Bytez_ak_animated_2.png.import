@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bexq0obrlb4qt"
-path.s3tc="res://.godot/imported/ak47_animation_3.png-5482cf6c214126902bbb41c223a7e697.s3tc.ctex"
+uid="uid://bijtl70452hi1"
+path.s3tc="res://.godot/imported/Bytez_ak_animated_2.png-82b74966707c4068d461a2bd5fbe31d8.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "6b9e1a0f13e6ce44b7647441fcc317e8"
+"md5": "a0c9291376cc1cbed0935222383c64ed"
 }
 
 [deps]
 
-source_file="res://assets/weapons/resources/ak47_animation_3.png"
-dest_files=["res://.godot/imported/ak47_animation_3.png-5482cf6c214126902bbb41c223a7e697.s3tc.ctex"]
+source_file="res://addons/fps-hands/fps-ak/resources/Bytez_ak_animated_2.png"
+dest_files=["res://.godot/imported/Bytez_ak_animated_2.png-82b74966707c4068d461a2bd5fbe31d8.s3tc.ctex"]
 
 [params]
 
@@ -25,12 +25,12 @@ compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://assets/weapons/resources/fps-ak/reasources/Bytez_ak_animated_2.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

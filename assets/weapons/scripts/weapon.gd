@@ -9,10 +9,16 @@ class_name Weapon extends Resource
 
 # Fire settings
 @export_group("Fire")
+@export var fire_sound: AudioStream
 @export var full_auto: bool = false
 @export var fire_rate: float = 0.1
 @export var anim_fire_start: float = 0.0
 @export var anim_fire_end: float = 0.5
+
+# Reload settings
+@export_group("Reload")
+@export var anim_reload_start: float = 0.0
+@export var anim_reload_end: float = 3.0
 
 # Sway settings
 @export_group("Sway")

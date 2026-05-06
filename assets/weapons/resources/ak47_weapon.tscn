@@ -1,10 +1,65 @@
-[gd_scene format=3 uid="uid://boiet82pw4u84"]
+[gd_scene format=3 uid="uid://jov1iiovtcha"]
 
-[ext_resource type="PackedScene" uid="uid://d2qhkmmw56m1s" path="res://assets/weapons/resources/DJ-ak_animated.glb" id="1_5ollx"]
+[ext_resource type="PackedScene" uid="uid://7gsbbr7jrdoq" path="res://addons/fps-hands/fps-ak/resources/fps_ak_animated.glb" id="1_5ollx"]
+[ext_resource type="AudioStream" uid="uid://ckmsx6n124sth" path="res://assets/weapons/resources/sounds/akFire.wav" id="2_bqego"]
 
-[node name="ak47_weapon" type="Node3D" unique_id=1563079407]
+[node name="ak47_weapon" type="Node3D" unique_id=1731719387]
 
-[node name="AK47Model" parent="." unique_id=1735292326 instance=ExtResource("1_5ollx")]
-transform = Transform3D(-0.4482876, 0, 0.03921993, 0, 0.45, 0, -0.03921993, 0, -0.4482876, 0.08, -0.4, -0.28)
+[node name="AK47Model" parent="." unique_id=368018127 instance=ExtResource("1_5ollx")]
+transform = Transform3D(-0.98685575, 0.040462337, 0.15645626, 0, 0.9681476, -0.25038, -0.16160372, -0.24708894, -0.95542204, 6.43, -19.236, 0.57)
+
+[node name="Skeleton3D" parent="AK47Model/Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(368018127, 1048753300) index="0" unique_id=1833584170]
+bones/1/rotation = Quaternion(-0.60638005, 0.78482014, 0.12194959, 0.03858542)
+bones/2/rotation = Quaternion(0.4764219, -0.205567, 0.72308165, 0.45597968)
+bones/3/rotation = Quaternion(-0.09207759, 0.11671062, -5.2386895e-10, 0.9888885)
+bones/4/rotation = Quaternion(0.19452514, 0.033852953, -0.3515838, 0.9150971)
+bones/5/rotation = Quaternion(-0.15914485, 0.0566305, -0.088847116, 0.9816171)
+bones/6/rotation = Quaternion(-0.06363394, 0.079125665, -0.049001217, 0.99362403)
+bones/8/rotation = Quaternion(-0.18637499, -0.07589024, 0.4332171, 0.8785374)
+bones/9/rotation = Quaternion(-0.050839044, -0.4861735, 0.0028994668, 0.8723774)
+bones/10/rotation = Quaternion(-0.031755514, -0.22170027, -0.0019570081, 0.9745957)
+bones/12/rotation = Quaternion(0.028942853, -0.469105, 0.4451798, 0.7621796)
+bones/13/rotation = Quaternion(0.022278978, -0.19479023, 0.0044256654, 0.9805819)
+bones/14/rotation = Quaternion(-0.011774766, -0.31745258, 0.0005356667, 0.94820094)
+bones/16/rotation = Quaternion(-0.4615759, 0.88279706, -0.052115414, 0.070007704)
+bones/17/rotation = Quaternion(0.09634478, 0.8498901, 0.12786384, 0.50205123)
+bones/18/rotation = Quaternion(0.051936112, -0.30777052, 0.009478354, 0.9499948)
+bones/19/rotation = Quaternion(-0.004405945, 0.0068433466, 0.065538846, 0.99781686)
+bones/21/rotation = Quaternion(0.22728369, 0.7610719, 0.11770086, 0.5960355)
+bones/22/rotation = Quaternion(-0.021351662, -0.1864429, -0.0031038667, 0.9822289)
+bones/23/rotation = Quaternion(0.022712896, -0.0389607, 0.012462582, 0.99890494)
+bones/25/rotation = Quaternion(0.67775303, 0.5026602, 0.53101236, 0.07751985)
+bones/26/rotation = Quaternion(0.68443376, -0.18034887, -0.23770022, 0.6652243)
+bones/27/rotation = Quaternion(-0.09541285, -0.11887322, -1.8626451e-09, 0.9883145)
+bones/28/rotation = Quaternion(0.32776043, -0.11932429, 0.28255272, 0.89358765)
+bones/29/rotation = Quaternion(-0.28229487, 0.15391895, 0.094840884, 0.9421379)
+bones/30/rotation = Quaternion(-0.04537896, 0.41600665, 0.18045603, 0.89012074)
+bones/32/rotation = Quaternion(-0.033115502, -0.008586555, -0.40904212, 0.9118741)
+bones/33/rotation = Quaternion(-0.0027827758, 0.44091424, -0.04905469, 0.8962034)
+bones/34/rotation = Quaternion(0.08076179, 0.49746245, 0.02664127, 0.86330694)
+bones/36/rotation = Quaternion(0.1405538, 0.56057465, -0.4479737, 0.68214387)
+bones/37/rotation = Quaternion(-0.018074667, 0.39502582, -0.012109866, 0.9184124)
+bones/38/rotation = Quaternion(-0.011518641, 0.47180817, -0.0025005927, 0.8816225)
+bones/40/rotation = Quaternion(0.5074354, 0.8500051, 0.045222733, -0.13399847)
+bones/41/rotation = Quaternion(-0.017183322, 0.87300885, 0.12479332, -0.4711549)
+bones/42/rotation = Quaternion(0.026335629, 0.62397575, -0.005257915, 0.78098214)
+bones/43/rotation = Quaternion(0.003174791, 0.18011823, -0.00016105661, 0.98363984)
+bones/45/rotation = Quaternion(0.017044978, -0.7977884, -0.15271309, 0.5830282)
+bones/46/rotation = Quaternion(0.023583764, 0.49840373, -0.029828453, 0.8661108)
+
+[node name="bolt" parent="AK47Model/Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak" parent_id_path=PackedInt32Array(368018127, 1390521833) index="1" unique_id=641698946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9847472e-16, 9.2457905, 21.931976)
+
+[node name="release" parent="AK47Model/Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak" parent_id_path=PackedInt32Array(368018127, 1390521833) index="2" unique_id=1569013604]
+transform = Transform3D(1, 9.867753e-18, -4.828179e-17, -9.867752e-18, 1, 1.1116193e-08, 4.828179e-17, -1.1116193e-08, 1, 0, 1.7731917, 11.636199)
+
+[node name="mag" parent="AK47Model/Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4/ak" parent_id_path=PackedInt32Array(368018127, 1390521833) index="4" unique_id=2026153794]
+transform = Transform3D(1, -3.6074255e-09, -5.2093313e-10, 3.6074255e-09, 1, 6.7961845e-09, 5.2093313e-10, -6.7961845e-09, 1, 1.8239021e-08, 0.9816843, 16.611622)
+
+[node name="L_arm_Pole" parent="AK47Model/Sketchfab_model/a5167d948e6a4ec8bd09a04312151f71_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(368018127, 1048753300) index="3" unique_id=45551273]
+transform = Transform3D(-0.21366332, -0.93753725, 0.27453905, -0.9702683, 0.23636648, 0.05205659, -0.11369686, -0.2552541, -0.9601653, 24.212257, -11.878561, 7.412502)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="AK47Model" unique_id=558320215]
+stream = ExtResource("2_bqego")
 
 [editable path="AK47Model"]

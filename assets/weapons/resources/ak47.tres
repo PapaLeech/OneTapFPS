@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="1_580d7"]
 [ext_resource type="PackedScene" path="res://assets/weapons/resources/ak47_weapon.tscn" id="2_ak47"]
+[ext_resource type="AudioStream" path="res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3" id="3_akfire"]
 
 [resource]
 script = ExtResource("1_580d7")
@@ -15,3 +16,4 @@ full_auto = true
 fire_rate = 0.1
 anim_fire_start = 0.0
 anim_fire_end = 0.26
+fire_sound = ExtResource("3_akfire")
