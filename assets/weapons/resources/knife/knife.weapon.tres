@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="Weapon" format=3]
+
+[ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="1_580d7"]
+[ext_resource type="PackedScene" uid="uid://txjn4ru0yomn" path="res://assets/weapons/resources/knife/DJknife_animated.glb" id="2_knife"]
+[ext_resource type="AudioStream" path="res://addons/fps-hands/fps-knife/knifeFire.wav" id="3_knifefire"]
+
+[resource]
+script = ExtResource("1_580d7")
+weapon_name = "Knife"
+damage = 100.0
+max_ammo = 0
+weapon_model = ExtResource("2_knife")
+weapon_position = Vector3(0.1, -0.3, -0.4)
+weapon_scale = Vector3(1.0, 1.0, 1.0)
+full_auto = false
+fire_rate = 0.7
+anim_fire_start = 0.0
+anim_fire_end = 0.67
+fire_sound = ExtResource("3_knifefire")
+is_melee = true
+melee_sound = ExtResource("3_knifefire")
+anim_melee_start = 0.0
+anim_melee_end = 0.7

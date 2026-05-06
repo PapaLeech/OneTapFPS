@@ -17,8 +17,16 @@ class_name Weapon extends Resource
 
 # Reload settings
 @export_group("Reload")
+@export var reload_sound: AudioStream
 @export var anim_reload_start: float = 0.0
 @export var anim_reload_end: float = 3.0
+
+# Melee settings
+@export_group("Melee")
+@export var is_melee: bool = false
+@export var melee_sound: AudioStream
+@export var anim_melee_start: float = 0.0
+@export var anim_melee_end: float = 0.7
 
 # Sway settings
 @export_group("Sway")

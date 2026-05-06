@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://bve28odj66ql" path="res://controllers/camera_shake.gd" id="6_jdr2h"]
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="9_rk4xh"]
 [ext_resource type="Resource" path="res://assets/weapons/resources/ak47.tres" id="10_uovkr"]
+[ext_resource type="Resource" path="res://assets/weapons/resources/knife/knife.weapon.tres" id="11_knife"]
+[ext_resource type="PackedScene" uid="uid://cn01a4w7ehcf5" path="res://addons/fps-hands/fps-knife/fps-knife.tscn" id="12_fpknife"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -173,6 +175,10 @@ recoil_position_z = SubResource("Curve_jdr2h")
 stream = ExtResource("5_bneyr")
 max_distance = 10.0
 
+[node name="fps-knife" parent="CameraController/Camera3D/WeaponHolder" unique_id=1351292833 instance=ExtResource("12_fpknife")]
+transform = Transform3D(-0.0148313455, 0, -0.002243029, 0, 0.015, 0, 0.002243029, 0, -0.0148313455, 0, -0.3, -0.21)
+visible = false
+
 [node name="CameraShake" type="Node3D" parent="CameraController/Camera3D" unique_id=1042758431]
 script = ExtResource("6_jdr2h")
 noise = SubResource("FastNoiseLite_bneyr")
@@ -185,7 +191,7 @@ script = ExtResource("3_xc2pf")
 [node name="WeaponController" type="Node" parent="Components" unique_id=852578435 node_paths=PackedStringArray("weapon_model_parent", "gun")]
 script = ExtResource("4_y677r")
 weapon_model_parent = NodePath("../../CameraController/Camera3D/WeaponHolder")
-weapons = Array[ExtResource("9_rk4xh")]([ExtResource("10_uovkr"), ExtResource("5_co0pi")])
+weapons = Array[ExtResource("9_rk4xh")]([ExtResource("10_uovkr"), ExtResource("5_co0pi"), ExtResource("11_knife")])
 gun = NodePath("../../CameraController/Camera3D/WeaponHolder")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1916915474]

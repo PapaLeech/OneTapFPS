@@ -17,10 +17,12 @@ class_name WeaponController extends Node
 var current_weapon_model: Node3D
 var _anim_player: AnimationPlayer
 var _gun_sound: AudioStreamPlayer3D
+var _reload_sound: AudioStreamPlayer3D
 var _sound_tween: Tween
 var _is_aiming: bool = false
 var _is_firing: bool = false
 var _is_reloading: bool = false
+var _is_meleeing: bool = false
 var _fire_timer: float = 0.0
 var _current_index: int = 0
 var _mouse_movement: Vector2
@@ -71,6 +73,13 @@ func _physics_process(delta):
 	if _is_reloading:
 		return
 
+	if Input.is_action_just_pressed("melee") and not _is_meleeing:
+		_start_melee()
+		return
+
+	if _is_meleeing:
+		return
+
 	if current_weapon and current_weapon.full_auto:
 		if Input.is_action_pressed("fire"):
 			_fire_timer -= delta
@@ -81,11 +90,16 @@ func _physics_process(delta):
 				_is_firing = true
 				if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 					_anim_player.play("fire_lib/fire")
-			if _gun_sound and not _gun_sound.playing:
-				if _sound_tween:
-					_sound_tween.kill()
-				_gun_sound.volume_db = 0.0
-				_gun_sound.play()
+				if _gun_sound and not _gun_sound.playing:
+					if _sound_tween:
+						_sound_tween.kill()
+					_gun_sound.volume_db = 0.0
+					_gun_sound.play()
+					var clip_length: float = _gun_sound.stream.get_length()
+					var fade_duration: float = 0.3
+					get_tree().create_timer(clip_length - fade_duration).timeout.connect(
+						func(): _fade_out_fire_sound(fade_duration)
+					)
 		else:
 			if _is_firing:
 				_is_firing = false
@@ -114,6 +128,8 @@ func spawn_weapon_model():
 		_gun_sound = current_weapon_model.find_child("AudioStreamPlayer3D", true, false)
 		if _gun_sound and current_weapon.fire_sound:
 			_gun_sound.stream = current_weapon.fire_sound
+			if not _gun_sound.finished.is_connected(_on_fire_sound_finished):
+				_gun_sound.finished.connect(_on_fire_sound_finished)
 		if _anim_player:
 			_create_fire_animation()
 			if _anim_player.has_animation("fire_lib/fire"):
@@ -143,6 +159,10 @@ func _start_reload() -> void:
 		if _sound_tween:
 			_sound_tween.kill()
 		_gun_sound.stop()
+	if _gun_sound and current_weapon.reload_sound:
+		_gun_sound.volume_db = 0.0
+		_gun_sound.stream = current_weapon.reload_sound
+		_gun_sound.play()
 	_create_reload_animation()
 	if _anim_player.has_animation("reload_lib/reload"):
 		_anim_player.stop()
@@ -152,6 +172,80 @@ func _start_reload() -> void:
 
 func _on_reload_finished() -> void:
 	_is_reloading = false
+	if _gun_sound and current_weapon.fire_sound:
+		_gun_sound.stream = current_weapon.fire_sound
+
+func _start_melee() -> void:
+	if not _anim_player or not current_weapon:
+		return
+	_is_meleeing = true
+	_is_firing = false
+	if _gun_sound and _gun_sound.playing:
+		if _sound_tween:
+			_sound_tween.kill()
+		_gun_sound.stop()
+	_create_melee_animation()
+	if _anim_player.has_animation("melee_lib/melee"):
+		_anim_player.stop()
+		_anim_player.play("melee_lib/melee")
+		if _gun_sound and current_weapon.melee_sound:
+			_gun_sound.volume_db = 0.0
+			_gun_sound.stream = current_weapon.melee_sound
+			_gun_sound.play()
+		var melee_length: float = _anim_player.get_animation("melee_lib/melee").length
+		get_tree().create_timer(melee_length).timeout.connect(_on_melee_finished)
+
+func _on_melee_finished() -> void:
+	_is_meleeing = false
+	if _gun_sound and current_weapon.fire_sound:
+		_gun_sound.stream = current_weapon.fire_sound
+
+func _create_melee_animation() -> void:
+	if _anim_player.has_animation_library("melee_lib"):
+		_anim_player.remove_animation_library("melee_lib")
+	var anim_name := _anim_player.get_animation_list()[0] if _anim_player.get_animation_list().size() > 0 else ""
+	if anim_name == "":
+		return
+	var source := _anim_player.get_animation(anim_name)
+	if not source:
+		return
+	var start := current_weapon.anim_melee_start
+	var end := current_weapon.anim_melee_end
+	var melee_anim := Animation.new()
+	melee_anim.length = end - start
+	melee_anim.loop_mode = Animation.LOOP_NONE
+	for i in source.get_track_count():
+		var track_type := source.track_get_type(i)
+		var track_path := source.track_get_path(i)
+		var new_track := melee_anim.add_track(track_type)
+		melee_anim.track_set_path(new_track, track_path)
+		for j in source.track_get_key_count(i):
+			var key_time := source.track_get_key_time(i, j)
+			if key_time < start:
+				continue
+			if key_time > end:
+				break
+			var key_value: Variant = source.track_get_key_value(i, j) as Variant
+			var key_transition := source.track_get_key_transition(i, j)
+			melee_anim.track_insert_key(new_track, key_time - start, key_value, key_transition)
+	var lib := AnimationLibrary.new()
+	lib.add_animation("melee", melee_anim)
+	_anim_player.add_animation_library("melee_lib", lib)
+
+func _on_fire_sound_finished() -> void:
+	pass
+
+func _fade_out_fire_sound(duration: float) -> void:
+	if _gun_sound and _gun_sound.playing:
+		if _sound_tween:
+			_sound_tween.kill()
+		_sound_tween = create_tween()
+		_sound_tween.tween_property(_gun_sound, "volume_db", -40.0, duration)
+		_sound_tween.tween_callback(func():
+			_gun_sound.stop()
+			if not _is_reloading:
+				_start_reload()
+		)
 
 func _create_reload_animation() -> void:
 	if _anim_player.has_animation_library("reload_lib"):
