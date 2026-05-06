@@ -16,4 +16,6 @@ full_auto = true
 fire_rate = 0.1
 anim_fire_start = 0.0
 anim_fire_end = 0.26
+anim_reload_start = 0.733
+anim_reload_end = 3.283
 fire_sound = ExtResource("3_akfire")

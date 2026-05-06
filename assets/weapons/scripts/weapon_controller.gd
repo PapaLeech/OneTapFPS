@@ -155,7 +155,7 @@ func _on_reload_finished() -> void:
 
 func _create_reload_animation() -> void:
 	if _anim_player.has_animation_library("reload_lib"):
-		return
+		_anim_player.remove_animation_library("reload_lib")
 	var anim_name := _anim_player.get_animation_list()[0] if _anim_player.get_animation_list().size() > 0 else ""
 	if anim_name == "":
 		return

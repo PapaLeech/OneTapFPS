@@ -101,8 +101,8 @@ desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::17780148
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
 ::res://assets/weapons/::1777755727
-::res://assets/weapons/resources/::1778090806
-ak47.tres::Resource/Weapon::-1::1778089015::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>res://assets/weapons/resources/ak47_weapon.tscn<>res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3
+::res://assets/weapons/resources/::1778091740
+ak47.tres::Resource/Weapon::-1::1778091740::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>res://assets/weapons/resources/ak47_weapon.tscn<>res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3
 ak47_animation.glb::PackedScene::2633954157507458332::1778014062::1778017689::1::::<><><>0<>0<>5e0749b6fcc988b5e920a97d6cb0541e<>res://.godot/imported/ak47_animation.glb-70ceaf1f0605b9b2c0f89e34efc46d2d.scn::uid://dqbitcxary1wx::::res://assets/weapons/resources/ak47_animation_0.png<>uid://cdd2fup8guind::::res://assets/weapons/resources/ak47_animation_1.png<>uid://jj2sqi7v33h0::::res://assets/weapons/resources/ak47_animation_2.png<>uid://bexq0obrlb4qt::::res://assets/weapons/resources/ak47_animation_3.png<>uid://c8sbf0wlr0bus::::res://assets/weapons/resources/ak47_animation_4.png<>uid://72idfmfhr11w::::res://assets/weapons/resources/ak47_animation_5.png<>uid://dpqsax28r70i6::::res://assets/weapons/resources/ak47_animation_6.png
 ak47_animation_0.png::CompressedTexture2D::8284867733669099515::1778017681::1778017690::1::::<><><>0<>0<>d126361e68b5752cc26e4030869c2c73<>res://.godot/imported/ak47_animation_0.png-2e62bf534e61ad3bb2cde8ae8b57f06a.s3tc.ctex::
 ak47_animation_1.png::CompressedTexture2D::4991250394483949501::1778017683::1778017689::1::::<><><>0<>0<>94cf42ab671d203947a629a94d375a44<>res://.godot/imported/ak47_animation_1.png-0204887db50a6a6b4aa854cc70b7fa85.s3tc.ctex::
@@ -236,9 +236,9 @@ talonready.wav::AudioStreamWAV::5372452078962888389::1778015563::1778014846::1::
 talonreload.wav::AudioStreamWAV::1882140375152205545::1778015563::1778014846::1::::<><><>0<>0<>59b768a454d20a383cd9be88daeb6490<>res://.godot/imported/talonreload.wav-008d0dde53a0d31c7a057d555ea3c548.sample::
 talonreloadB.wav::AudioStreamWAV::7846069846915531353::1778015563::1778014846::1::::<><><>0<>0<>048330cc6f2667fd56926ac1e90eed9c<>res://.godot/imported/talonreloadB.wav-3f2c06ae7ef0c2da295a94f4920766ca.sample::
 throw.wav::AudioStreamWAV::6368331766183314654::1778015563::1778014846::1::::<><><>0<>0<>d4ffd032413399ad9ed42d3512313e1b<>res://.godot/imported/throw.wav-c180d60693917f3bf8fec5441d17fa7e.sample::
-::res://assets/weapons/scripts/::1778090826
+::res://assets/weapons/scripts/::1778091596
 weapon.gd::GDScript::3182779461567556417::1778090792::0::1::::Weapon<>Resource<><>0<>0<><>::
-weapon_controller.gd::GDScript::4776619364154183538::1778090826::0::1::::WeaponController<>Node<><>0<>0<><>::
+weapon_controller.gd::GDScript::4776619364154183538::1778091596::0::1::::WeaponController<>Node<><>0<>0<><>::
 ::res://Characters/::1778014853
 terrorist_1_rig.glb::PackedScene::757528666157290489::1778014062::1778014853::1::::<><><>0<>0<>7319d4485109fb0c957b5ddd7363faf8<>res://.godot/imported/terrorist_1_rig.glb-512f060693800c9bb61330fb2e75a69a.scn::uid://bf8o2immm1f11::::res://Characters/terrorist_1_rig_0.png
 terrorist_1_rig_0.png::CompressedTexture2D::2806388061388142130::1778015563::1778014846::1::::<><><>0<>0<>720690cfc989278b39a7f58542ed8895<>res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex::
