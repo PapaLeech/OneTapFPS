@@ -5,6 +5,7 @@ class_name Weapon extends Resource
 @export var max_ammo: int = 12
 @export var weapon_model: PackedScene
 @export var weapon_position: Vector3 = Vector3(0.2, -0.2, -0.3)
+@export var weapon_rotation: Vector3 = Vector3(0.0, 0.0, 0.0)
 @export var weapon_scale: Vector3 = Vector3(1.0, 1.0, 1.0)
 
 # Fire settings

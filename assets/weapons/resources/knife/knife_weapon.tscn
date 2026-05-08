@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://bkbvigom7mfye"]
 
-[ext_resource type="PackedScene" path="res://assets/weapons/resources/knife/knife_animated.glb" id="1_knife"]
+[ext_resource type="PackedScene" uid="uid://bgn3dg616dvb4" path="res://assets/weapons/resources/knife/DJ-knife.glb" id="1_move2"]
 
-[node name="knife_weapon" type="Node3D"]
+[node name="knife_weapon" type="Node3D" unique_id=1054611780]
 
-[node name="KnifeModel" parent="." instance=ExtResource("1_knife")]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1554250740]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="KnifeModel" parent="." unique_id=547008241 instance=ExtResource("1_move2")]
+transform = Transform3D(-0.29969692, 0, 0.05662833, 0, 0.305, 0, -0.05662833, 0, -0.29969692, 9.96, -8.065, -16.21)

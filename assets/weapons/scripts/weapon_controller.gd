@@ -17,7 +17,6 @@ class_name WeaponController extends Node
 var current_weapon_model: Node3D
 var _anim_player: AnimationPlayer
 var _gun_sound: AudioStreamPlayer3D
-var _reload_sound: AudioStreamPlayer3D
 var _sound_tween: Tween
 var _is_aiming: bool = false
 var _is_firing: bool = false
@@ -25,6 +24,7 @@ var _is_reloading: bool = false
 var _is_meleeing: bool = false
 var _fire_timer: float = 0.0
 var _current_index: int = 0
+var _current_ammo: int = 0
 var _mouse_movement: Vector2
 var _random_sway_x: float
 var _random_sway_y: float
@@ -73,7 +73,7 @@ func _physics_process(delta):
 	if _is_reloading:
 		return
 
-	if Input.is_action_just_pressed("melee") and not _is_meleeing:
+	if (Input.is_action_just_pressed("melee") or (Input.is_action_just_pressed("fire") and current_weapon and current_weapon.is_melee)) and not _is_meleeing and current_weapon:
 		_start_melee()
 		return
 
@@ -123,7 +123,9 @@ func spawn_weapon_model():
 		current_weapon_model = current_weapon.weapon_model.instantiate()
 		weapon_model_parent.add_child(current_weapon_model)
 		current_weapon_model.position = current_weapon.weapon_position
+		current_weapon_model.rotation_degrees = current_weapon.weapon_rotation
 		current_weapon_model.scale = current_weapon.weapon_scale
+		_current_ammo = current_weapon.max_ammo
 		_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
 		_gun_sound = current_weapon_model.find_child("AudioStreamPlayer3D", true, false)
 		if _gun_sound and current_weapon.fire_sound:
@@ -143,12 +145,23 @@ func fire():
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
+	if _gun_sound and current_weapon.fire_sound and not current_weapon.full_auto:
+		if _sound_tween:
+			_sound_tween.kill()
+		_gun_sound.stop()
+		_gun_sound.stream = current_weapon.fire_sound
+		_gun_sound.volume_db = 0.0
+		_gun_sound.play()
 	if _is_aiming:
 		gun.recoil_amplitude *= ads_recoil_multiplier
 		gun.apply_recoil()
 		gun.recoil_amplitude /= ads_recoil_multiplier
 	else:
 		gun.apply_recoil()
+	if current_weapon and not current_weapon.is_melee:
+		_current_ammo -= 1
+		if _current_ammo <= 0 and not current_weapon.full_auto:
+			_start_reload()
 
 func _start_reload() -> void:
 	if not _anim_player or not current_weapon:
@@ -172,8 +185,13 @@ func _start_reload() -> void:
 
 func _on_reload_finished() -> void:
 	_is_reloading = false
+	_current_ammo = current_weapon.max_ammo if current_weapon else 0
 	if _gun_sound and current_weapon.fire_sound:
 		_gun_sound.stream = current_weapon.fire_sound
+	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
+		_anim_player.play("fire_lib/fire")
+		_anim_player.seek(0.0, true)
+		_anim_player.pause()
 
 func _start_melee() -> void:
 	if not _anim_player or not current_weapon:
@@ -233,7 +251,8 @@ func _create_melee_animation() -> void:
 	_anim_player.add_animation_library("melee_lib", lib)
 
 func _on_fire_sound_finished() -> void:
-	pass
+	if current_weapon and current_weapon.fire_sound and _gun_sound and not current_weapon.full_auto:
+		_gun_sound.stream = current_weapon.fire_sound
 
 func _fade_out_fire_sound(duration: float) -> void:
 	if _gun_sound and _gun_sound.playing:
@@ -243,7 +262,7 @@ func _fade_out_fire_sound(duration: float) -> void:
 		_sound_tween.tween_property(_gun_sound, "volume_db", -40.0, duration)
 		_sound_tween.tween_callback(func():
 			_gun_sound.stop()
-			if not _is_reloading:
+			if not _is_reloading and current_weapon and current_weapon.full_auto:
 				_start_reload()
 		)
 

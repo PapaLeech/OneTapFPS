@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://d4m4hkyjek2k8"]
+
+[ext_resource type="PackedScene" uid="uid://cw2kq3lx4ruwo" path="res://assets/weapons/resources/DJ-knife2.glb" id="1_k1x4p"]
+
+[node name="djknife" type="Node3D" unique_id=699993530]
+transform = Transform3D(-0.13827637, 0, 0.021900823, 0, 0.14, 0, -0.021900823, 0, -0.13827637, 0.14, -0.375, -0.425)
+top_level = true
+
+[node name="djknife" parent="." unique_id=634517426 instance=ExtResource("1_k1x4p")]
+transform = Transform3D(1.16, 0, 0, 0, 1.16, 0, 0, 0, 1.16, 0, 0, 0)

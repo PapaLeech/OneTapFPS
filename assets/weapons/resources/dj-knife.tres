@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://1dsy5sun6twx"]
+
+[ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="1_gwkhb"]
+[ext_resource type="PackedScene" uid="uid://bkbvigom7mfye" path="res://assets/weapons/resources/knife/knife_weapon.tscn" id="2_gwkhb"]
+[ext_resource type="AudioStream" path="res://assets/weapons/resources/knife/fps-knife/resources/sounds/melee.wav" id="3_gwkhb"]
+
+[resource]
+script = ExtResource("1_gwkhb")
+weapon_name = "Knife"
+weapon_model = ExtResource("2_gwkhb")
+weapon_position = Vector3(0.0, 0.0, 0.0)
+weapon_rotation = Vector3(0.0, 0.0, 0.0)
+weapon_scale = Vector3(0.01, 0.01, 0.01)
+is_melee = true
+melee_sound = ExtResource("3_gwkhb")
+damage = 100.0
+fire_rate = 0.5
+anim_melee_start = 2.5
+anim_melee_end = 5.1
