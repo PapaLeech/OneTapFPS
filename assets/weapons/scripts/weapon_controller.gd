@@ -90,9 +90,10 @@ func _physics_process(delta):
 		var target_pos := current_weapon.weapon_position
 		if _is_sprinting:
 			var bob_time := Time.get_ticks_msec() / 1000.0
-			var bob_y := sin(bob_time * current_weapon.sprint_bob_speed * 2.0) * current_weapon.sprint_bob_y
-			var bob_x := sin(bob_time * current_weapon.sprint_bob_speed) * current_weapon.sprint_bob_x
-			target_pos += current_weapon.sprint_position_offset + Vector3(bob_x, bob_y, 0.0)
+			var bob_y := sin(bob_time * current_weapon.sprint_bob_speed) * current_weapon.sprint_bob_y
+			var bob_x := sin(bob_time * current_weapon.sprint_bob_speed * 0.5) * current_weapon.sprint_bob_x
+			var bob_z := sin(bob_time * current_weapon.sprint_bob_speed * 0.5 + current_weapon.sprint_bob_direction) * current_weapon.sprint_bob_y
+			target_pos += current_weapon.sprint_position_offset + Vector3(bob_x, bob_y, bob_z)
 		# Gentle idle sway side to side
 		var sway_time := Time.get_ticks_msec() / 1000.0
 		var sway_x := sin(sway_time * 0.8) * 0.004
@@ -232,7 +233,7 @@ func _on_reload_finished() -> void:
 		_anim_player.pause()
 
 func _start_melee() -> void:
-	if not _anim_player or not current_weapon:
+	if not current_weapon:
 		return
 	_is_meleeing = true
 	_is_firing = false
@@ -240,15 +241,45 @@ func _start_melee() -> void:
 		if _sound_tween:
 			_sound_tween.kill()
 		_gun_sound.stop()
-	_create_melee_animation()
-	if _anim_player.has_animation("melee_lib/melee"):
-		_anim_player.stop()
-		_anim_player.play("melee_lib/melee")
-		if _gun_sound and current_weapon.melee_sound:
+	# Find knife weapon
+	var melee_weapon := current_weapon
+	for w in weapons:
+		if w.is_melee:
+			melee_weapon = w
+			break
+	var melee_length: float = melee_weapon.anim_melee_end - melee_weapon.anim_melee_start
+	if melee_weapon != current_weapon:
+		# Swap to knife temporarily
+		var saved_weapon := current_weapon
+		var saved_index := _current_index
+		current_weapon = melee_weapon
+		spawn_weapon_model()
+		if _anim_player:
+			_create_melee_animation_from(melee_weapon, _anim_player)
+		if _anim_player and _anim_player.has_animation("melee_lib/melee"):
+			_anim_player.stop()
+			_anim_player.play("melee_lib/melee")
+		if _gun_sound and melee_weapon.melee_sound:
 			_gun_sound.volume_db = 0.0
-			_gun_sound.stream = current_weapon.melee_sound
+			_gun_sound.stream = melee_weapon.melee_sound
 			_gun_sound.play()
-		var melee_length: float = _anim_player.get_animation("melee_lib/melee").length
+		get_tree().create_timer(melee_length).timeout.connect(func():
+			current_weapon = saved_weapon
+			_current_index = saved_index
+			spawn_weapon_model()
+			_on_melee_finished()
+		)
+	else:
+		# Already on knife
+		if _anim_player:
+			_create_melee_animation_from(melee_weapon, _anim_player)
+		if _anim_player and _anim_player.has_animation("melee_lib/melee"):
+			_anim_player.stop()
+			_anim_player.play("melee_lib/melee")
+		if _gun_sound and melee_weapon.melee_sound:
+			_gun_sound.volume_db = 0.0
+			_gun_sound.stream = melee_weapon.melee_sound
+			_gun_sound.play()
 		get_tree().create_timer(melee_length).timeout.connect(_on_melee_finished)
 
 func _on_melee_finished() -> void:
@@ -256,17 +287,17 @@ func _on_melee_finished() -> void:
 	if _gun_sound and current_weapon.fire_sound:
 		_gun_sound.stream = current_weapon.fire_sound
 
-func _create_melee_animation() -> void:
-	if _anim_player.has_animation_library("melee_lib"):
-		_anim_player.remove_animation_library("melee_lib")
-	var anim_name := _anim_player.get_animation_list()[0] if _anim_player.get_animation_list().size() > 0 else ""
+func _create_melee_animation_from(melee_weapon: Weapon, anim_player: AnimationPlayer) -> void:
+	if anim_player.has_animation_library("melee_lib"):
+		anim_player.remove_animation_library("melee_lib")
+	var anim_name := anim_player.get_animation_list()[0] if anim_player.get_animation_list().size() > 0 else ""
 	if anim_name == "":
 		return
-	var source := _anim_player.get_animation(anim_name)
+	var source := anim_player.get_animation(anim_name)
 	if not source:
 		return
-	var start := current_weapon.anim_melee_start
-	var end := current_weapon.anim_melee_end
+	var start := melee_weapon.anim_melee_start
+	var end := melee_weapon.anim_melee_end
 	var melee_anim := Animation.new()
 	melee_anim.length = end - start
 	melee_anim.loop_mode = Animation.LOOP_NONE

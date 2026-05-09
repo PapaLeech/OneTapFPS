@@ -2,18 +2,17 @@
 
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="1_580d7"]
 [ext_resource type="PackedScene" uid="uid://dhbsnu46b0br8" path="res://assets/weapons/resources/pistol_weapon.tscn" id="2_wt4ci"]
-[ext_resource type="AudioStream" path="res://assets/weapons/resources/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav" id="3_pistol"]
-[ext_resource type="AudioStream" path="res://assets/weapons/resources/sounds/pistolReload.wav" id="4_pistol"]
+[ext_resource type="AudioStream" uid="uid://dp5uds612tbex" path="res://assets/weapons/resources/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav" id="3_pistol"]
+[ext_resource type="AudioStream" uid="uid://de8qyrw2ah8v7" path="res://assets/weapons/resources/sounds/pistolReload.wav" id="4_pistol"]
 
 [resource]
 script = ExtResource("1_580d7")
 weapon_model = ExtResource("2_wt4ci")
 weapon_position = Vector3(0.11, -0.155, -0.265)
-full_auto = false
+fire_sound = ExtResource("3_pistol")
 fire_rate = 0.5
-anim_fire_start = 0.0
-anim_fire_end = 0.5
+reload_sound = ExtResource("4_pistol")
 anim_reload_start = 2.8
 anim_reload_end = 5.4
-fire_sound = ExtResource("3_pistol")
-reload_sound = ExtResource("4_pistol")
+ads_position_offset = Vector3(-1.115, 1.05, -97.285)
+ads_rotation_offset = Vector3(-2.56, -3.58, 0.55)

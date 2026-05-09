@@ -41,6 +41,7 @@ class_name Weapon extends Resource
 @export var sprint_bob_x: float = 0.06
 @export var sprint_bob_y: float = 0.015
 @export var sprint_bob_speed: float = 4.0
+@export var sprint_bob_direction: float = 1.5
 
 # ADS settings
 @export_group("ADS")
