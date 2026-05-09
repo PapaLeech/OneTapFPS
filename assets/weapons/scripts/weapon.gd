@@ -29,6 +29,19 @@ class_name Weapon extends Resource
 @export var anim_melee_start: float = 0.0
 @export var anim_melee_end: float = 0.7
 
+# Sprint settings
+@export_group("Sprint")
+@export var has_sprint_anim: bool = false
+@export var anim_sprint_start: float = 0.0
+@export var anim_sprint_end: float = 1.0
+@export var sprint_position_offset: Vector3 = Vector3(0.0, 0.0, 0.0)
+@export var sprint_tilt_x: float = -50.0
+@export var sprint_tilt_y: float = 0.0
+@export var sprint_tilt_z: float = -20.0
+@export var sprint_bob_x: float = 0.06
+@export var sprint_bob_y: float = 0.015
+@export var sprint_bob_speed: float = 4.0
+
 # Sway settings
 @export_group("Sway")
 @export var sway_min: Vector2 = Vector2(-2.0, -2.0)

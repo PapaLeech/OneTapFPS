@@ -20,7 +20,9 @@ var _gun_sound: AudioStreamPlayer3D
 var _sound_tween: Tween
 var _is_aiming: bool = false
 var _is_firing: bool = false
+var _is_firing_locked: bool = false
 var _is_reloading: bool = false
+var _is_sprinting: bool = false
 var _is_meleeing: bool = false
 var _fire_timer: float = 0.0
 var _current_index: int = 0
@@ -54,6 +56,7 @@ func _switch_weapon(direction: int) -> void:
 	_current_index = wrapi(_current_index + direction, 0, weapons.size())
 	current_weapon = weapons[_current_index]
 	_is_firing = false
+	_is_firing_locked = false
 	_fire_timer = 0.0
 	if _anim_player:
 		_anim_player.stop()
@@ -65,6 +68,37 @@ func _physics_process(delta):
 	
 	if not _is_aiming and current_weapon:
 		_sway_weapon(delta)
+
+	# Sprint animation
+	if current_weapon and not _is_reloading and not _is_firing_locked and not _is_meleeing:
+		var sprinting = Input.is_action_pressed("sprint") and Input.is_action_pressed("move_forward")
+		if sprinting and not _is_sprinting:
+			_is_sprinting = true
+			if current_weapon.has_sprint_anim:
+				_create_sprint_animation()
+				if _anim_player and _anim_player.has_animation("sprint_lib/sprint"):
+					_anim_player.stop()
+					_anim_player.play("sprint_lib/sprint")
+		elif not sprinting and _is_sprinting:
+			_is_sprinting = false
+			if current_weapon.has_sprint_anim and _anim_player and _anim_player.has_animation("fire_lib/fire"):
+				_anim_player.play("fire_lib/fire")
+				_anim_player.seek(0.0, true)
+				_anim_player.pause()
+	# Sprint tilt on weapon_model_parent
+	if weapon_model_parent and current_weapon:
+		var target_pos := current_weapon.weapon_position
+		if _is_sprinting:
+			var bob_time := Time.get_ticks_msec() / 1000.0
+			var bob_y := sin(bob_time * current_weapon.sprint_bob_speed * 2.0) * current_weapon.sprint_bob_y
+			var bob_x := sin(bob_time * current_weapon.sprint_bob_speed) * current_weapon.sprint_bob_x
+			target_pos += current_weapon.sprint_position_offset + Vector3(bob_x, bob_y, 0.0)
+		# Gentle idle sway side to side
+		var sway_time := Time.get_ticks_msec() / 1000.0
+		var sway_x := sin(sway_time * 0.8) * 0.004
+		var sway_y := cos(sway_time * 0.8) * 0.003
+		target_pos += Vector3(sway_x, sway_y, 0.0)
+		weapon_model_parent.position = weapon_model_parent.position.lerp(target_pos, 8.0 * delta)
 
 	if Input.is_action_just_pressed("reload") and not _is_reloading:
 		_start_reload()
@@ -111,7 +145,7 @@ func _physics_process(delta):
 					_sound_tween.tween_property(_gun_sound, "volume_db", -40.0, 0.3)
 					_sound_tween.tween_callback(_gun_sound.stop)
 	else:
-		if Input.is_action_just_pressed("fire"):
+		if Input.is_action_just_pressed("fire") and not _is_firing_locked:
 			fire()
 
 func spawn_weapon_model():
@@ -145,6 +179,10 @@ func fire():
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
+		if current_weapon and not current_weapon.full_auto:
+			_is_firing_locked = true
+			var anim_length: float = _anim_player.get_animation("fire_lib/fire").length
+			get_tree().create_timer(anim_length).timeout.connect(func(): _is_firing_locked = false)
 	if _gun_sound and current_weapon.fire_sound and not current_weapon.full_auto:
 		if _sound_tween:
 			_sound_tween.kill()
@@ -298,6 +336,38 @@ func _create_reload_animation() -> void:
 	lib.add_animation("reload", reload_anim)
 	_anim_player.add_animation_library("reload_lib", lib)
 
+func _create_sprint_animation() -> void:
+	if _anim_player.has_animation_library("sprint_lib"):
+		_anim_player.remove_animation_library("sprint_lib")
+	var anim_name := _anim_player.get_animation_list()[0] if _anim_player.get_animation_list().size() > 0 else ""
+	if anim_name == "":
+		return
+	var source := _anim_player.get_animation(anim_name)
+	if not source:
+		return
+	var start := current_weapon.anim_sprint_start
+	var end := current_weapon.anim_sprint_end
+	var sprint_anim := Animation.new()
+	sprint_anim.length = end - start
+	sprint_anim.loop_mode = Animation.LOOP_LINEAR
+	for i in source.get_track_count():
+		var track_type := source.track_get_type(i)
+		var track_path := source.track_get_path(i)
+		var new_track := sprint_anim.add_track(track_type)
+		sprint_anim.track_set_path(new_track, track_path)
+		for j in source.track_get_key_count(i):
+			var key_time := source.track_get_key_time(i, j)
+			if key_time < start:
+				continue
+			if key_time > end:
+				break
+			var key_value: Variant = source.track_get_key_value(i, j) as Variant
+			var key_transition := source.track_get_key_transition(i, j)
+			sprint_anim.track_insert_key(new_track, key_time - start, key_value, key_transition)
+	var lib := AnimationLibrary.new()
+	lib.add_animation("sprint", sprint_anim)
+	_anim_player.add_animation_library("sprint_lib", lib)
+
 func _create_fire_animation() -> void:
 	var anim_name := _anim_player.get_animation_list()[0] if _anim_player.get_animation_list().size() > 0 else ""
 	if anim_name == "":
@@ -353,12 +423,17 @@ func _sway_weapon(delta: float) -> void:
 	)
 	weapon_model_parent.rotation_degrees.y = lerp(
 		weapon_model_parent.rotation_degrees.y,
-		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta,
+		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_y if _is_sprinting else 0.0),
 		current_weapon.sway_speed_rotation * delta
 	)
 	weapon_model_parent.rotation_degrees.x = lerp(
 		weapon_model_parent.rotation_degrees.x,
-		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta,
+		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_x if _is_sprinting else 0.0),
+		current_weapon.sway_speed_rotation * delta
+	)
+	weapon_model_parent.rotation_degrees.z = lerp(
+		weapon_model_parent.rotation_degrees.z,
+		(clamped.x * current_weapon.sway_amount_rotation * 0.5) * delta + (current_weapon.sprint_tilt_z if _is_sprinting else 0.0),
 		current_weapon.sway_speed_rotation * delta
 	)
 
