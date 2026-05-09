@@ -66,7 +66,7 @@ func _physics_process(delta):
 	_is_aiming = Input.is_action_pressed("aim")
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
 	
-	if not _is_aiming and current_weapon:
+	if current_weapon:
 		_sway_weapon(delta)
 
 	# Sprint animation
@@ -410,6 +410,8 @@ func _sway_weapon(delta: float) -> void:
 
 	var clamped := _mouse_movement.clamp(current_weapon.sway_min, current_weapon.sway_max)
 	var base_pos := current_weapon.weapon_position
+	if _is_aiming:
+		base_pos += current_weapon.ads_position_offset
 
 	weapon_model_parent.position.x = lerp(
 		weapon_model_parent.position.x,
@@ -423,17 +425,17 @@ func _sway_weapon(delta: float) -> void:
 	)
 	weapon_model_parent.rotation_degrees.y = lerp(
 		weapon_model_parent.rotation_degrees.y,
-		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_y if _is_sprinting else 0.0),
+		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_y if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.y if _is_aiming else 0.0),
 		current_weapon.sway_speed_rotation * delta
 	)
 	weapon_model_parent.rotation_degrees.x = lerp(
 		weapon_model_parent.rotation_degrees.x,
-		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_x if _is_sprinting else 0.0),
+		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_x if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.x if _is_aiming else 0.0),
 		current_weapon.sway_speed_rotation * delta
 	)
 	weapon_model_parent.rotation_degrees.z = lerp(
 		weapon_model_parent.rotation_degrees.z,
-		(clamped.x * current_weapon.sway_amount_rotation * 0.5) * delta + (current_weapon.sprint_tilt_z if _is_sprinting else 0.0),
+		(clamped.x * current_weapon.sway_amount_rotation * 0.5) * delta + (current_weapon.sprint_tilt_z if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.z if _is_aiming else 0.0),
 		current_weapon.sway_speed_rotation * delta
 	)
 

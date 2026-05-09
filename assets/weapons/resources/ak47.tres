@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="Weapon" format=3]
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://dtsm03v1tnoso"]
 
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="1_580d7"]
-[ext_resource type="PackedScene" path="res://assets/weapons/resources/ak47_weapon.tscn" id="2_ak47"]
-[ext_resource type="AudioStream" path="res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3" id="3_akfire"]
-[ext_resource type="AudioStream" path="res://assets/weapons/resources/sounds/akreload.wav" id="4_akreload"]
+[ext_resource type="PackedScene" uid="uid://jov1iiovtcha" path="res://assets/weapons/resources/ak47_weapon.tscn" id="2_ak47"]
+[ext_resource type="AudioStream" uid="uid://c5r6rjywwnekw" path="res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3" id="3_akfire"]
+[ext_resource type="AudioStream" uid="uid://d2boptfjk83cg" path="res://assets/weapons/resources/sounds/akreload.wav" id="4_akreload"]
 
 [resource]
 script = ExtResource("1_580d7")
@@ -13,11 +13,11 @@ max_ammo = 30
 weapon_model = ExtResource("2_ak47")
 weapon_position = Vector3(0.11, -0.3, -0.6)
 weapon_scale = Vector3(0.05, 0.05, 0.05)
+fire_sound = ExtResource("3_akfire")
 full_auto = true
-fire_rate = 0.1
-anim_fire_start = 0.0
 anim_fire_end = 0.26
+reload_sound = ExtResource("4_akreload")
 anim_reload_start = 0.733
 anim_reload_end = 3.283
-fire_sound = ExtResource("3_akfire")
-reload_sound = ExtResource("4_akreload")
+ads_position_offset = Vector3(-1.065, 1.28, 22.13)
+ads_rotation_offset = Vector3(5.54, 7.985, -1.565)

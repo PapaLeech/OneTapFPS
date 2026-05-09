@@ -42,6 +42,13 @@ class_name Weapon extends Resource
 @export var sprint_bob_y: float = 0.015
 @export var sprint_bob_speed: float = 4.0
 
+# ADS settings
+@export_group("ADS")
+@export var ads_position_offset: Vector3 = Vector3(0.0, 0.0, 0.0)
+@export var ads_rotation_offset: Vector3 = Vector3(0.0, 0.0, 0.0)
+@export var ads_fov: float = 55.0
+@export var ads_speed: float = 12.0
+
 # Sway settings
 @export_group("Sway")
 @export var sway_min: Vector2 = Vector2(-2.0, -2.0)
