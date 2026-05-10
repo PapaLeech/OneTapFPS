@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://h4nqgj0v8dgb"]
+
+[ext_resource type="Script" uid="uid://delgpd5hg2t40" path="res://assets/scripts/crosshair.gd" id="1_us06u"]
+[ext_resource type="Script" uid="uid://cwgry3rb52kkq" path="res://assets/scripts/crosshair_draw.gd" id="2_j60dd"]
+
+[node name="CrosshairUI" type="CanvasLayer" unique_id=2118782315]
+script = ExtResource("1_us06u")
+
+[node name="Crosshair" type="Control" parent="." unique_id=1902341640]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_j60dd")

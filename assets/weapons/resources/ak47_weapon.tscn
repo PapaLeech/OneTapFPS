@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://7gsbbr7jrdoq" path="res://addons/fps-hands/fps-ak/resources/fps_ak_animated.glb" id="1_5ollx"]
 [ext_resource type="AudioStream" uid="uid://ckmsx6n124sth" path="res://assets/weapons/resources/sounds/akFire.wav" id="2_bqego"]
+[ext_resource type="Script" uid="uid://biob08htyy5df" path="res://assets/scripts/shell_casing.gd" id="3_aysv2"]
 
 [node name="ak47_weapon" type="Node3D" unique_id=1731719387]
 
@@ -61,5 +62,9 @@ transform = Transform3D(-0.21366332, -0.93753725, 0.27453905, -0.9702683, 0.2363
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="AK47Model" unique_id=558320215]
 stream = ExtResource("2_bqego")
+
+[node name="ShellEjector" type="GPUParticles3D" parent="." unique_id=804356010]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.02, -0.1)
+script = ExtResource("3_aysv2")
 
 [editable path="AK47Model"]

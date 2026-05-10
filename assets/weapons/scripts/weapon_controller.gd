@@ -39,6 +39,7 @@ var _ads_weight: float = 0.0
 var _sway_time: float = 0.0
 
 var _camera: Camera3D
+var _crosshair: CanvasLayer
 
 func _ready() -> void:
 	if weapons.size() > 0:
@@ -50,6 +51,12 @@ func _ready() -> void:
 	_camera = get_tree().get_first_node_in_group("camera")
 	if not _camera:
 		_camera = get_parent().get_parent().find_child("Camera3D", true, false)
+
+	# Add crosshair
+	var crosshair_scene := load("res://assets/scripts/crosshair.tscn") as PackedScene
+	if crosshair_scene:
+		_crosshair = crosshair_scene.instantiate()
+		get_parent().get_parent().add_child.call_deferred(_crosshair)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -87,6 +94,13 @@ func _physics_process(delta):
 	if _camera and current_weapon:
 		var target_fov := current_weapon.ads_fov if (_is_aiming and not _is_bolt_cycling) else 75.0
 		_camera.fov = lerp(_camera.fov, target_fov, current_weapon.ads_speed * delta)
+
+	# Crosshair — hide on ADS or knife
+	if _crosshair and current_weapon:
+		if _is_aiming or current_weapon.is_melee:
+			_crosshair.hide_crosshair()
+		else:
+			_crosshair.show_crosshair()
 
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
 
@@ -222,6 +236,14 @@ func spawn_weapon_model():
 func fire():
 	if not gun:
 		return
+
+	# Eject shell casing
+	if current_weapon_model and not current_weapon.is_melee:
+		var ejector = current_weapon_model.find_child("ShellEjector", true, false)
+		print("ejector found: ", ejector)
+		if ejector:
+			ejector.eject()
+			print("eject called")
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
