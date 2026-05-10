@@ -9,6 +9,7 @@
 script = ExtResource("1_580d7")
 weapon_model = ExtResource("2_wt4ci")
 weapon_position = Vector3(0.11, -0.155, -0.265)
+damage = 45.0
 fire_sound = ExtResource("3_pistol")
 fire_rate = 0.5
 reload_sound = ExtResource("4_pistol")

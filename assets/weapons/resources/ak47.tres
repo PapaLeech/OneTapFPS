@@ -8,7 +8,7 @@
 [resource]
 script = ExtResource("1_580d7")
 weapon_name = "AK47"
-damage = 35.0
+damage = 30.0
 max_ammo = 30
 weapon_model = ExtResource("2_ak47")
 weapon_position = Vector3(0.11, -0.3, -0.6)

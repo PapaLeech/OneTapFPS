@@ -8,7 +8,7 @@
 [resource]
 script = ExtResource("1_sniper")
 weapon_name = "Sniper"
-damage = 200.0
+damage = 100.0
 max_ammo = 5
 weapon_model = ExtResource("2_sniper")
 weapon_position = Vector3(0, -0.32, -0.31)

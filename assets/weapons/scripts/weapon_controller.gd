@@ -272,6 +272,11 @@ func fire():
 		var result := space.intersect_ray(query)
 		if result:
 			_bullet_hole.spawn(result.position, result.normal, get_tree().current_scene)
+			var hit := result.collider as Node
+			if hit.is_in_group("enemy"):
+				var health := hit.get_node_or_null("Health")
+				if health:
+					health.take_damage(current_weapon.damage)
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
