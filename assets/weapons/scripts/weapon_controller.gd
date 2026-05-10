@@ -17,6 +17,7 @@ class_name WeaponController extends Node
 var current_weapon_model: Node3D
 var _anim_player: AnimationPlayer
 var _gun_sound: AudioStreamPlayer3D
+var _bolt_sound: AudioStreamPlayer3D
 var _sound_tween: Tween
 var _is_aiming: bool = false
 var _is_firing: bool = false
@@ -163,6 +164,9 @@ func spawn_weapon_model():
 		_current_ammo = current_weapon.max_ammo
 		_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
 		_gun_sound = current_weapon_model.find_child("AudioStreamPlayer3D", true, false)
+		_bolt_sound = current_weapon_model.find_child("BoltSoundPlayer", true, false)
+		if _bolt_sound and current_weapon.bolt_sound:
+			_bolt_sound.stream = current_weapon.bolt_sound
 		if _gun_sound and current_weapon.fire_sound:
 			_gun_sound.stream = current_weapon.fire_sound
 			if not _gun_sound.finished.is_connected(_on_fire_sound_finished):
@@ -191,6 +195,12 @@ func fire():
 		_gun_sound.stream = current_weapon.fire_sound
 		_gun_sound.volume_db = 0.0
 		_gun_sound.play()
+		if _bolt_sound and current_weapon.bolt_sound:
+			var fire_length: float = current_weapon.fire_sound.get_length() - 2.0
+			get_tree().create_timer(fire_length).timeout.connect(func():
+				if _bolt_sound and not _bolt_sound.playing:
+					_bolt_sound.play()
+			)
 	if _is_aiming:
 		gun.recoil_amplitude *= ads_recoil_multiplier
 		gun.apply_recoil()

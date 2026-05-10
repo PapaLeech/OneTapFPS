@@ -49,4 +49,6 @@ bones/46/rotation = Quaternion(-0.45414495, 0.53264195, 0.5444483, -0.4621916)
 bones/47/rotation = Quaternion(-0.2341249, -0.03689477, 0.10803213, 0.965481)
 bones/48/rotation = Quaternion(-0.46410644, -0.0034373722, -0.016153209, 0.8856255)
 
+[node name="BoltSoundPlayer" type="AudioStreamPlayer3D" parent="." unique_id=1903954896]
+
 [editable path="SniperModel"]

@@ -1,6 +1,6 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1778357874
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778357874::0::1::::<><><>0<>0<><>::
+::res://::1778392049
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778392049::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
 README.md::TextFile::-1::1777239470::0::1::::<><><>0<>0<><>::
@@ -101,7 +101,7 @@ desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::17780148
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
 ::res://assets/weapons/::1777755727
-::res://assets/weapons/resources/::1778362929
+::res://assets/weapons/resources/::1778364038
 ak47.tres::Resource/Weapon::8530783632837750338::1778361753::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://jov1iiovtcha::::res://assets/weapons/resources/ak47_weapon.tscn<>uid://c5r6rjywwnekw::::res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3<>uid://d2boptfjk83cg::::res://assets/weapons/resources/sounds/akreload.wav
 ak47_animation.glb::PackedScene::2633954157507458332::1778014062::1778017689::1::::<><><>0<>0<>5e0749b6fcc988b5e920a97d6cb0541e<>res://.godot/imported/ak47_animation.glb-70ceaf1f0605b9b2c0f89e34efc46d2d.scn::uid://dqbitcxary1wx::::res://assets/weapons/resources/ak47_animation_0.png<>uid://cdd2fup8guind::::res://assets/weapons/resources/ak47_animation_1.png<>uid://jj2sqi7v33h0::::res://assets/weapons/resources/ak47_animation_2.png<>uid://bexq0obrlb4qt::::res://assets/weapons/resources/ak47_animation_3.png<>uid://c8sbf0wlr0bus::::res://assets/weapons/resources/ak47_animation_4.png<>uid://72idfmfhr11w::::res://assets/weapons/resources/ak47_animation_5.png<>uid://dpqsax28r70i6::::res://assets/weapons/resources/ak47_animation_6.png
 ak47_animation_0.png::CompressedTexture2D::8284867733669099515::1778017681::1778017690::1::::<><><>0<>0<>d126361e68b5752cc26e4030869c2c73<>res://.godot/imported/ak47_animation_0.png-2e62bf534e61ad3bb2cde8ae8b57f06a.s3tc.ctex::
@@ -146,8 +146,8 @@ fps_pistol_animated_3.png::CompressedTexture2D::6525620166603315503::1778015563:
 fps_pistol_animated_4.png::CompressedTexture2D::4016206795783425411::1778015563::1778014846::1::::<><><>0<>0<>b1d336390f4f15319386380a953ea377<>res://.godot/imported/fps_pistol_animated_4.png-e4cf87b797379845833901e9f0bc8080.s3tc.ctex::
 fps_pistol_animated_5.png::CompressedTexture2D::1579814809890807119::1778015563::1778014846::1::::<><><>0<>0<>26dcf0bc951405f4125c18b8bb113950<>res://.godot/imported/fps_pistol_animated_5.png-eb8c1c0cdfd08124ade93055bc592099.s3tc.ctex::
 JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav::AudioStreamWAV::8275246730036015851::1778015563::1778014846::1::::<><><>0<>0<>a0bcc3de9da293ca786901c806ee7538<>res://.godot/imported/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav-ab1554233c2125ff5ee012ec9526b60c.sample::
-pistol.tres::Resource/Weapon::8515956914358159055::1778362929::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://dhbsnu46b0br8::::res://assets/weapons/resources/pistol_weapon.tscn<>uid://dp5uds612tbex::::res://assets/weapons/resources/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav<>uid://de8qyrw2ah8v7::::res://assets/weapons/resources/sounds/pistolReload.wav
-pistol_weapon.tscn::PackedScene::7653765552167299423::1778362884::0::1::::<><><>0<>0<><>::uid://q6i6b2d624f8::::res://assets/weapons/resources/DJMaesen-deagle.glb
+pistol.tres::Resource/Weapon::8515956914358159055::1778364038::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://dhbsnu46b0br8::::res://assets/weapons/resources/pistol_weapon.tscn<>uid://dp5uds612tbex::::res://assets/weapons/resources/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav<>uid://de8qyrw2ah8v7::::res://assets/weapons/resources/sounds/pistolReload.wav
+pistol_weapon.tscn::PackedScene::7653765552167299423::1778364038::0::1::::<><><>0<>0<><>::uid://q6i6b2d624f8::::res://assets/weapons/resources/DJMaesen-deagle.glb
 recoil_position_z.tres::Curve::-1::1777919846::0::1::::<><><>0<>0<><>::
 recoil_rotation_x.tres::Curve::-1::1777919839::0::1::::<><><>0<>0<><>::
 recoil_rotation_z.tres::Curve::-1::1777919843::0::1::::<><><>0<>0<><>::
@@ -173,8 +173,12 @@ take.res::Animation::4041995609125468541::1778137379::0::1::::<><><>0<>0<><>::ui
 fire.wav::AudioStreamWAV::4006656394015731685::1778137379::1778138350::1::::<><><>0<>0<>7ae95b5b50afb10e26b207323b12b42f<>res://.godot/imported/fire.wav-62d5b9a9600a1b16fb1bdb0bd5af0f3e.sample::
 melee.wav::AudioStreamWAV::1475848047457365467::1778137379::1778138350::1::::<><><>0<>0<>2cafd0ff49f08f820a0f520182cd0a3e<>res://.godot/imported/melee.wav-2abecf972a2591fe29c1c8f333ede2d8.sample::
 ready.wav::AudioStreamWAV::8727949331877673915::1778137379::1778138350::1::::<><><>0<>0<>7d9efc81db7767d137495e05abeae2a3<>res://.godot/imported/ready.wav-bbe51587c6f30d2eddf6f12d51bbeccd.sample::
-::res://assets/weapons/resources/sniper/::1778361574
-sniper.tres::Resource/Weapon::2008648085100961892::1778300539::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://c4f20qtdtq7ns::::res://assets/weapons/resources/sniper/sniper_weapon.tscn
+::res://assets/weapons/resources/sniper/::1778393047
+scope.gdshader::Shader::7566875117162933765::1778393047::0::1::::<><><>0<>0<><>::
+scope_overlay.tscn::PackedScene::4498086173010527428::1778393035::0::1::::<><><>0<>0<><>::
+sniper-rifle-fire.mp3::AudioStreamMP3::120158192269310456::1778392255::1778392263::1::::<><><>0<>0<>8e41f81f2be6493e4245489663793775<>res://.godot/imported/sniper-rifle-fire.mp3-e36577b5704b461f6058b90e83bcc48e.mp3str::
+sniper.tres::Resource/Weapon::2008648085100961892::1778392341::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://c4f20qtdtq7ns::::res://assets/weapons/resources/sniper/sniper_weapon.tscn<>uid://byg8t8kbmtnc::::res://assets/weapons/resources/sniper/sniper-rifle-fire.mp3<>uid://3t3d622mvpt::::res://assets/weapons/resources/sniper/sniperBolt.wav
+sniperBolt.wav::AudioStreamWAV::59006408927894933::1778392255::1778392263::1::::<><><>0<>0<>7d5f421ce2efddd6372947ee272568c9<>res://.godot/imported/sniperBolt.wav-997485580ea263e2520553daee11003d.sample::
 sniper_animated.glb::PackedScene::5549821345621545252::1777803624::1778223082::1::::<><><>0<>0<>e135ea1e462489ce6011af10f8b2cab9<>res://.godot/imported/sniper_animated.glb-7006e08578c6ad986dfa5c36081d3b6a.scn::uid://dxoipaqnyyjio::::res://assets/weapons/resources/sniper/sniper_animated_4.png<>uid://ca316glu423y::::res://assets/weapons/resources/sniper/sniper_animated_5.png<>uid://ct8t577vwb5t0::::res://assets/weapons/resources/sniper/sniper_animated_6.png<>uid://kun7rip8jmir::::res://assets/weapons/resources/sniper/sniper_animated_0.png<>uid://ckp0rjr3qvidm::::res://assets/weapons/resources/sniper/sniper_animated_1.png<>uid://bhd1056vuin2n::::res://assets/weapons/resources/sniper/sniper_animated_2.png<>uid://lj6rwgmkr3l8::::res://assets/weapons/resources/sniper/sniper_animated_3.png
 sniper_animated_0.png::CompressedTexture2D::744023363753826185::1778223070::1778223083::1::::<><><>0<>0<>953f957f3cada9c98e137f14e8b6c1bb<>res://.godot/imported/sniper_animated_0.png-08ac990d9213b84e137e09e860706efe.s3tc.ctex::
 sniper_animated_1.png::CompressedTexture2D::5507244253659201786::1778223072::1778223083::1::::<><><>0<>0<>ab243815695154182a33b0bbf087f660<>res://.godot/imported/sniper_animated_1.png-334e1f3ca50a248aba2bff6c0bf19028.s3tc.ctex::
@@ -183,8 +187,8 @@ sniper_animated_3.png::CompressedTexture2D::792570430418856879::1778223076::1778
 sniper_animated_4.png::CompressedTexture2D::8803019291502147234::1778223076::1778223083::1::::<><><>0<>0<>b8c3aabfe7a2faf0b405c7fa19f78a72<>res://.godot/imported/sniper_animated_4.png-15e0e6bf8ed9ae2ace04c953a6b47880.s3tc.ctex::
 sniper_animated_5.png::CompressedTexture2D::142125831735422404::1778223078::1778223083::1::::<><><>0<>0<>31219cfd912ff60ae9bdd6459af759ab<>res://.godot/imported/sniper_animated_5.png-ace9b6321442510e5958b98cf55aeaf1.s3tc.ctex::
 sniper_animated_6.png::CompressedTexture2D::6175762790237063583::1778223080::1778223083::1::::<><><>0<>0<>8cf0f29b3e8b111afd171ed9e0b4e614<>res://.godot/imported/sniper_animated_6.png-cab29f1db915100769dcb56bbe8ec6e7.s3tc.ctex::
-sniper_weapon.tscn::PackedScene::6820324595199006236::1778361574::0::1::::<><><>0<>0<><>::uid://clcm0nhhjudce::::res://assets/weapons/resources/sniper/sniper_animated.glb
-::res://assets/weapons/resources/sounds/::1778090585
+sniper_weapon.tscn::PackedScene::6820324595199006236::1778392636::0::1::::<><><>0<>0<><>::uid://clcm0nhhjudce::::res://assets/weapons/resources/sniper/sniper_animated.glb
+::res://assets/weapons/resources/sounds/::1778392049
 ak-74-auto-inside.mp3::AudioStreamMP3::6915514194433285378::1778090233::1778090585::1::::<><><>0<>0<>d4085473f3e8a5517df79071463c05d3<>res://.godot/imported/ak-74-auto-inside.mp3-ad0c56a1fabf1394c41640c61953ec49.mp3str::
 ak-74-auto-insideold.mp3::AudioStreamMP3::5041892894379970181::1778088740::1778090585::1::::<><><>0<>0<>580df1abb13f5e54e156391832c9f908<>res://.godot/imported/ak-74-auto-insideold.mp3-f15bf23745c9443b272cad3d26b01a1e.mp3str::
 akFire.wav::AudioStreamWAV::5500637965469727469::1778015563::1778014846::1::::<><><>0<>0<>772146554cb83302279576bf8ff37a04<>res://.godot/imported/akFire.wav-130f02a654898100b7c6befca682dc47.sample::
@@ -262,6 +266,7 @@ smgFire 1.wav::AudioStreamWAV::654604763593568946::1778015563::1778014846::1::::
 smgReady2.wav::AudioStreamWAV::8713190993116561152::1778015563::1778014846::1::::<><><>0<>0<>498a3470008dce9c50fb99fe38d5c9b4<>res://.godot/imported/smgReady2.wav-abb361e655d0bb12d52f8a6def764f24.sample::
 smgReload.wav::AudioStreamWAV::114909354750769659::1778015563::1778014846::1::::<><><>0<>0<>eee483e36a9729cff50cbfc4080818bb<>res://.godot/imported/smgReload.wav-3c62bb7cfe292e73cafafa57eb901449.sample::
 smgReloadClip.wav::AudioStreamWAV::5404757370653450773::1778015563::1778014846::1::::<><><>0<>0<>399d6f5446730219af1aefbb3e48f962<>res://.godot/imported/smgReloadClip.wav-e61eee62a5aa6efdbc3a8b91bb159789.sample::
+sniper-rifle-fire.mp3::AudioStreamMP3::8724056504951495921::1778391851::1778392049::1::::<><><>0<>0<>e17e410ea34ad29773be64fe9936f538<>res://.godot/imported/sniper-rifle-fire.mp3-3b11f7ed9634d95b7b41579df59205ed.mp3str::
 sniperBolt.wav::AudioStreamWAV::8738872553069755646::1778015563::1778014846::1::::<><><>0<>0<>a2c999bbead33c497f9f38df74b63033<>res://.godot/imported/sniperBolt.wav-b85d5ec16b999fa2cbadd8473fa39f8d.sample::
 sniperFire.wav::AudioStreamWAV::4536690697642967251::1778015563::1778014846::1::::<><><>0<>0<>51820bd472ec807d68c53e21d53a7b7f<>res://.godot/imported/sniperFire.wav-509d8bb5fb4bb54d6ad5cdd1957018b2.sample::
 sniperReload.wav::AudioStreamWAV::8594073723123071364::1778015563::1778014846::1::::<><><>0<>0<>0876da2e63f25a1cd44eea6cc66c643a<>res://.godot/imported/sniperReload.wav-91ace1b375c1167830c279c5fa6e001c.sample::
@@ -270,9 +275,9 @@ talonready.wav::AudioStreamWAV::5372452078962888389::1778015563::1778014846::1::
 talonreload.wav::AudioStreamWAV::1882140375152205545::1778015563::1778014846::1::::<><><>0<>0<>59b768a454d20a383cd9be88daeb6490<>res://.godot/imported/talonreload.wav-008d0dde53a0d31c7a057d555ea3c548.sample::
 talonreloadB.wav::AudioStreamWAV::7846069846915531353::1778015563::1778014846::1::::<><><>0<>0<>048330cc6f2667fd56926ac1e90eed9c<>res://.godot/imported/talonreloadB.wav-3f2c06ae7ef0c2da295a94f4920766ca.sample::
 throw.wav::AudioStreamWAV::6368331766183314654::1778015563::1778014846::1::::<><><>0<>0<>d4ffd032413399ad9ed42d3512313e1b<>res://.godot/imported/throw.wav-c180d60693917f3bf8fec5441d17fa7e.sample::
-::res://assets/weapons/scripts/::1778361490
-weapon.gd::GDScript::3182779461567556417::1778358855::0::1::::Weapon<>Resource<><>0<>0<><>::
-weapon_controller.gd::GDScript::4776619364154183538::1778361490::0::1::::WeaponController<>Node<><>0<>0<><>::
+::res://assets/weapons/scripts/::1778392428
+weapon.gd::GDScript::3182779461567556417::1778392274::0::1::::Weapon<>Resource<><>0<>0<><>::
+weapon_controller.gd::GDScript::4776619364154183538::1778392428::0::1::::WeaponController<>Node<><>0<>0<><>::
 ::res://Characters/::1778014853
 terrorist_1_rig.glb::PackedScene::757528666157290489::1778014062::1778014853::1::::<><><>0<>0<>7319d4485109fb0c957b5ddd7363faf8<>res://.godot/imported/terrorist_1_rig.glb-512f060693800c9bb61330fb2e75a69a.scn::uid://bf8o2immm1f11::::res://Characters/terrorist_1_rig_0.png
 terrorist_1_rig_0.png::CompressedTexture2D::2806388061388142130::1778015563::1778014846::1::::<><><>0<>0<>720690cfc989278b39a7f58542ed8895<>res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex::
@@ -287,7 +292,7 @@ gun.gd::GDScript::8779464083066060231::1777919708::0::1::::<>Node3D<><>0<>0<><>:
 ::res://controllers/scripts/player/::1777751477
 ::res://controllers/scripts/player/components/::1777903674
 step_climber.gd::GDScript::4907033901062355217::1777903674::0::1::::StepHandlerComponent<>Node<><>0<>0<><>::
-::res://environment/::1778358073
+::res://environment/::1778392636
 Map_v1.glb::PackedScene::1986801885685758115::1778014062::1778014852::1::::<><><>0<>0<>15e0768e44328892aaf9ffe26ded475e<>res://.godot/imported/Map_v1.glb-63d61b0e2a849e6344b19ac1db9988c7.scn::uid://c3yesvv685euf::::res://environment/Map_v1_Seamless_asphalt_v1.jpg<>uid://4fcxsdloyl3m::::res://environment/Map_v1_Road_with_pavements_v1.jpg<>uid://2o8xj37oq1kk::::res://environment/Map_v1_Hangar_v4.jpg<>uid://cuimamweffrbt::::res://environment/Map_v1_Hangar_v3.jpg<>uid://ot5782xlocff::::res://environment/Map_v1_Concrete_fence_v1.jpg<>uid://d1lv5kfk1a5gv::::res://environment/Map_v1_UNIConcrete_wall_v1.jpg<>uid://vbobryilwa8s::::res://environment/Map_v1_Hangar_v2.jpg<>uid://cxnt67hsk3o3i::::res://environment/Map_v1_Lattice_v1.png<>uid://43kl8ai30ph3::::res://environment/Map_v1_Concrete_fence_v2.jpg<>uid://cmw1pbltdo0c0::::res://environment/Map_v1_Oil_tank_v2.jpg<>uid://76ncdnbny5ju::::res://environment/Map_v1_Oil_tank_v1.jpg<>uid://bhw0uinbxiy1c::::res://environment/Map_v1_Hangar_v1.jpg<>uid://cy2alx0sgrgck::::res://environment/Map_v1_Road_block_v1.jpg<>uid://cd1si5hgvxs0m::::res://environment/Map_v1_Wooden_box_v1.jpg<>uid://c2vi0eotdja4d::::res://environment/Map_v1_Barrel_v3.jpg<>uid://264ik7qh77du::::res://environment/Map_v1_Palet_v1.jpg<>uid://cryexwvlaysrk::::res://environment/Map_v1_Conditioner_v1.jpg<>uid://dayq6aumx7v1j::::res://environment/Map_v1_Industrial_pipe_v1.jpg<>uid://ckelf53phhc5x::::res://environment/Map_v1_Cargo_container_v1.jpg<>uid://bj54f2t7bahfw::::res://environment/Map_v1_Dumpsters_v1.jpg<>uid://w82xm7o7r3dq::::res://environment/Map_v1_Electric_box_v1.jpg<>uid://b8hhbo7phxh0b::::res://environment/Map_v1_Generator_v1.jpg<>uid://ckol0uteypcy0::::res://environment/Map_v1_Electric_box_v3.jpg<>uid://csgudbdsdktv::::res://environment/Map_v1_Electric_box_v2.jpg<>uid://c8gdsxqm1hbed::::res://environment/Map_v1_Pipes_set_v1.jpg<>uid://kxem2r8akcsy::::res://environment/Map_v1_Barrel_v2.jpg<>uid://b0ks562d2lgkx::::res://environment/Map_v1_Barrel_v1.jpg
 Map_v1_Barrel_v1.jpg::CompressedTexture2D::4162933701977852331::1778015563::1778014851::1::::<><><>0<>0<>3f3c2326fa56ca7eb6fd9317535e3038<>res://.godot/imported/Map_v1_Barrel_v1.jpg-8c5a371835f962a47cdf99e71c7a3e72.s3tc.ctex::
 Map_v1_Barrel_v2.jpg::CompressedTexture2D::749634868113517236::1778015563::1778014851::1::::<><><>0<>0<>1ce9fa03e267afca3b26e4a1c159f73c<>res://.godot/imported/Map_v1_Barrel_v2.jpg-ac9badb55e7cbc861683fa2a48002255.s3tc.ctex::
@@ -317,7 +322,7 @@ Map_v1_Seamless_asphalt_v1.jpg::CompressedTexture2D::6787950204494924893::177801
 Map_v1_UNIConcrete_wall_v1.jpg::CompressedTexture2D::9008209305074702713::1778015563::1778014851::1::::<><><>0<>0<>939f1ad8df0e40f0cc52ad5b49be3d73<>res://.godot/imported/Map_v1_UNIConcrete_wall_v1.jpg-6f954d4b4e907fa0859d65d20320f102.s3tc.ctex::
 Map_v1_Wooden_box_v1.jpg::CompressedTexture2D::5038190498942625454::1778015563::1778014851::1::::<><><>0<>0<>39e6d8e0442e5c8fab06fa5dafd67970<>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.s3tc.ctex::
 map_v_1.gd::GDScript::6714484322957040553::1776709126::0::1::::<>Node3D<><>0<>0<><>::
-WE_test.tres::Environment::8424170553004968181::1778358073::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
+WE_test.tres::Environment::8424170553004968181::1778392636::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
 ::res://levels/::1777920061
 level_001.gd::GDScript::612782810600861443::1778014466::0::1::::<>RefCounted<><>0<>0<><>::
 level_001.tscn::PackedScene::4261551556484119783::1777920061::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://khvf4g3dgyqi::::res://controllers/fps_controller.tscn<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://3kolpk4youf0::::res://environment/Map_v1.glb

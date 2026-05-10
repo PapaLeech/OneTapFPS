@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://b5c527lpvgwj1"]
+
+[node name="ScopeUI" type="CanvasLayer" unique_id=1200081777]
+
+[node name="ScopeOverlay" type="ColorRect" parent="." unique_id=1971776682]
