@@ -14,7 +14,6 @@
 [ext_resource type="Resource" uid="uid://1dsy5sun6twx" path="res://assets/weapons/resources/dj-knife.tres" id="13_l8yvu"]
 [ext_resource type="Resource" uid="uid://3vae1n82ekh5" path="res://assets/weapons/resources/sniper/sniper.tres" id="14_3og01"]
 [ext_resource type="PackedScene" uid="uid://b5c527lpvgwj1" path="res://assets/weapons/resources/sniper/scope_overlay.tscn" id="14_fyafc"]
-[ext_resource type="Script" uid="uid://pnwtas34a4ga" path="res://assets/weapons/resources/sniper/scope_overlay.gd" id="15_tg6sc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -184,16 +183,16 @@ noise = SubResource("FastNoiseLite_bneyr")
 [node name="StepHandlerComponent" type="Node" parent="Components" unique_id=1919541782]
 script = ExtResource("3_xc2pf")
 
-[node name="WeaponController" type="Node" parent="Components" unique_id=852578435 node_paths=PackedStringArray("weapon_model_parent", "gun")]
+[node name="WeaponController" type="Node" parent="Components" unique_id=852578435 node_paths=PackedStringArray("weapon_model_parent", "gun", "scope_overlay")]
 script = ExtResource("4_y677r")
 weapon_model_parent = NodePath("../../CameraController/Camera3D/WeaponHolder")
 weapons = Array[ExtResource("9_rk4xh")]([ExtResource("10_uovkr"), ExtResource("5_co0pi"), ExtResource("13_l8yvu"), ExtResource("14_3og01")])
 gun = NodePath("../../CameraController/Camera3D/WeaponHolder")
+scope_overlay = NodePath("../../ScopeUI")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1916915474]
 libraries/ = SubResource("AnimationLibrary_jmoha")
 
 [node name="ScopeUI" parent="." unique_id=1200081777 groups=["scope_overlay"] instance=ExtResource("14_fyafc")]
-script = ExtResource("15_tg6sc")
 
 [editable path="CollisionShape3D/Terrorist"]

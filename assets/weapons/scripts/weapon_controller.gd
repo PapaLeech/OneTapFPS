@@ -14,6 +14,8 @@ class_name WeaponController extends Node
 @export var sway_noise: NoiseTexture2D
 @export var sway_speed: float = 1.2
 
+@export var scope_overlay: Node
+
 var current_weapon_model: Node3D
 var _anim_player: AnimationPlayer
 var _gun_sound: AudioStreamPlayer3D
@@ -39,12 +41,8 @@ func _ready() -> void:
 		current_weapon = weapons[0]
 	if current_weapon:
 		spawn_weapon_model()
-	await get_tree().process_frame
-	var root = get_tree().current_scene
-	_scope_overlay = root.find_child("ScopeUI", true, false)
-	if not _scope_overlay:
-		_scope_overlay = get_parent().get_parent().find_child("ScopeUI", true, false)
-	print("scope overlay found: ", _scope_overlay)
+	_scope_overlay = get_parent().get_parent().get_node_or_null("ScopeUI")
+	print("scope overlay: ", _scope_overlay)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -71,7 +69,12 @@ func _switch_weapon(direction: int) -> void:
 	spawn_weapon_model()
 
 func _physics_process(delta):
+	if not _scope_overlay:
+		_scope_overlay = scope_overlay
+		print("scope overlay assigned: ", _scope_overlay)
 	_is_aiming = Input.is_action_pressed("aim")
+	if _is_aiming:
+		print("aiming, scope overlay: ", _scope_overlay, " current weapon: ", current_weapon.weapon_name if current_weapon else "none", " has_scope: ", current_weapon.has_scope if current_weapon else "none")
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
 
 	# Scope overlay for sniper
