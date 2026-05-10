@@ -40,6 +40,8 @@ var _sway_time: float = 0.0
 
 var _camera: Camera3D
 var _crosshair: CanvasLayer
+var _bullet_hole: Node
+var _spread: float = 0.0
 
 func _ready() -> void:
 	if weapons.size() > 0:
@@ -57,6 +59,13 @@ func _ready() -> void:
 	if crosshair_scene:
 		_crosshair = crosshair_scene.instantiate()
 		get_parent().get_parent().add_child.call_deferred(_crosshair)
+
+	# Bullet hole spawner
+	var bh_script := load("res://assets/scripts/bullet_hole.gd")
+	if bh_script:
+		_bullet_hole = Node.new()
+		_bullet_hole.set_script(bh_script)
+		add_child(_bullet_hole)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -167,6 +176,7 @@ func _physics_process(delta):
 	if current_weapon and current_weapon.full_auto:
 		if Input.is_action_pressed("fire"):
 			_fire_timer -= delta
+			_spread = min(_spread + delta * 0.04, 0.06)
 			if _fire_timer <= 0.0:
 				fire()
 				_fire_timer = current_weapon.fire_rate
@@ -188,6 +198,7 @@ func _physics_process(delta):
 			if _is_firing:
 				_is_firing = false
 				_fire_timer = 0.0
+				_spread = 0.0
 				if _anim_player:
 					_anim_player.stop()
 				if _gun_sound and _gun_sound.playing:
@@ -242,6 +253,25 @@ func fire():
 		var ejector = current_weapon_model.find_child("ShellEjector", true, false)
 		if ejector:
 			ejector.eject()
+
+	# Bullet hole raycast
+	if _camera and not current_weapon.is_melee and _bullet_hole:
+		var space := _camera.get_world_3d().direct_space_state
+		var ray_origin := _camera.global_position
+		var aim_dir := -_camera.global_transform.basis.z
+		if _spread > 0.0:
+			aim_dir += Vector3(
+				randf_range(-_spread, _spread),
+				randf_range(-_spread, _spread),
+				randf_range(-_spread, _spread)
+			)
+			aim_dir = aim_dir.normalized()
+		var ray_end := ray_origin + aim_dir * 500.0
+		var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+		query.collision_mask = 1
+		var result := space.intersect_ray(query)
+		if result:
+			_bullet_hole.spawn(result.position, result.normal, get_tree().current_scene)
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
