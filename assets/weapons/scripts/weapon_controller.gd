@@ -35,7 +35,10 @@ var _current_ammo: int = 0
 var _mouse_movement: Vector2
 var _random_sway_x: float
 var _random_sway_y: float
+var _ads_weight: float = 0.0
 var _sway_time: float = 0.0
+
+var _camera: Camera3D
 
 func _ready() -> void:
 	if weapons.size() > 0:
@@ -44,6 +47,9 @@ func _ready() -> void:
 		spawn_weapon_model()
 	_scope_overlay = get_parent().get_parent().get_node_or_null("ScopeUI")
 	print("scope overlay: ", _scope_overlay)
+	_camera = get_tree().get_first_node_in_group("camera")
+	if not _camera:
+		_camera = get_parent().get_parent().find_child("Camera3D", true, false)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -65,6 +71,7 @@ func _switch_weapon(direction: int) -> void:
 	_is_firing = false
 	_is_firing_locked = false
 	_is_bolt_cycling = false
+	_ads_weight = 0.0
 	_fire_timer = 0.0
 	if _anim_player:
 		_anim_player.stop()
@@ -74,7 +81,12 @@ func _physics_process(delta):
 	if not _scope_overlay:
 		_scope_overlay = scope_overlay
 		print("scope overlay assigned: ", _scope_overlay)
-	_is_aiming = Input.is_action_pressed("aim")
+	_is_aiming = Input.is_action_pressed("aim") and not (current_weapon and current_weapon.is_melee)
+
+	# FOV zoom for ADS
+	if _camera and current_weapon:
+		var target_fov := current_weapon.ads_fov if (_is_aiming and not _is_bolt_cycling) else 75.0
+		_camera.fov = lerp(_camera.fov, target_fov, current_weapon.ads_speed * delta)
 
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
 
@@ -475,6 +487,11 @@ func _create_fire_animation() -> void:
 func _sway_weapon(delta: float) -> void:
 	if not weapon_model_parent:
 		return
+
+	# Smoothly blend ADS weight (0 = hip, 1 = ADS)
+	var ads_target := 1.0 if (_is_aiming and not _is_bolt_cycling) else 0.0
+	_ads_weight = lerp(_ads_weight, ads_target, current_weapon.ads_speed * delta)
+
 	var sway_random: float = _get_sway_noise()
 	var sway_random_adjusted: float = sway_random * current_weapon.idle_sway_adjustment
 
@@ -484,8 +501,7 @@ func _sway_weapon(delta: float) -> void:
 
 	var clamped := _mouse_movement.clamp(current_weapon.sway_min, current_weapon.sway_max)
 	var base_pos := current_weapon.weapon_position
-	if _is_aiming:
-		base_pos += current_weapon.ads_position_offset
+	base_pos += current_weapon.ads_position_offset * _ads_weight
 
 	weapon_model_parent.position.x = lerp(
 		weapon_model_parent.position.x,
@@ -499,17 +515,17 @@ func _sway_weapon(delta: float) -> void:
 	)
 	weapon_model_parent.rotation_degrees.y = lerp(
 		weapon_model_parent.rotation_degrees.y,
-		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_y if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.y if _is_aiming else 0.0),
+		(clamped.x * current_weapon.sway_amount_rotation + (_random_sway_y * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_y if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.y * _ads_weight),
 		current_weapon.sway_speed_rotation * delta
 	)
 	weapon_model_parent.rotation_degrees.x = lerp(
 		weapon_model_parent.rotation_degrees.x,
-		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_x if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.x if _is_aiming else 0.0),
+		-(clamped.y * current_weapon.sway_amount_rotation + (_random_sway_x * current_weapon.idle_sway_rotation_strength)) * delta + (current_weapon.sprint_tilt_x if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.x * _ads_weight),
 		current_weapon.sway_speed_rotation * delta
 	)
 	weapon_model_parent.rotation_degrees.z = lerp(
 		weapon_model_parent.rotation_degrees.z,
-		(clamped.x * current_weapon.sway_amount_rotation * 0.5) * delta + (current_weapon.sprint_tilt_z if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.z if _is_aiming else 0.0),
+		(clamped.x * current_weapon.sway_amount_rotation * 0.5) * delta + (current_weapon.sprint_tilt_z if _is_sprinting else 0.0) + (current_weapon.ads_rotation_offset.z * _ads_weight),
 		current_weapon.sway_speed_rotation * delta
 	)
 
