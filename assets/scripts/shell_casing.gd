@@ -4,6 +4,8 @@ func eject() -> void:
 	var shell := RigidBody3D.new()
 	shell.gravity_scale = 1.0
 	shell.linear_damp = 0.2
+	shell.collision_layer = 2
+	shell.collision_mask = 2
 
 	var col := CollisionShape3D.new()
 	var shape := SphereShape3D.new()
@@ -34,6 +36,6 @@ func eject() -> void:
 	# Apply impulse on next frame so RigidBody is fully in the scene tree
 	await get_tree().process_frame
 	shell.apply_central_impulse((right * 3.0 + up * 1.0) * randf_range(1.0, 1.5))
-	shell.apply_torque_impulse(Vector3(randf(), randf(), randf()) * 0.05)
+	shell.apply_torque_impulse(global_transform.basis.z * randf_range(0.08, 0.12))
 
 	get_tree().create_timer(3.0).timeout.connect(func(): if is_instance_valid(shell): shell.queue_free())
