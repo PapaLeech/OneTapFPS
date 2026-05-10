@@ -10,9 +10,11 @@
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
 [ext_resource type="Script" uid="uid://bve28odj66ql" path="res://controllers/camera_shake.gd" id="6_jdr2h"]
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="9_rk4xh"]
-[ext_resource type="Resource" path="res://assets/weapons/resources/ak47.tres" id="10_uovkr"]
+[ext_resource type="Resource" uid="uid://dtsm03v1tnoso" path="res://assets/weapons/resources/ak47.tres" id="10_uovkr"]
 [ext_resource type="Resource" uid="uid://1dsy5sun6twx" path="res://assets/weapons/resources/dj-knife.tres" id="13_l8yvu"]
-[ext_resource type="Resource" path="res://assets/weapons/resources/sniper/sniper.tres" id="14_3og01"]
+[ext_resource type="Resource" uid="uid://3vae1n82ekh5" path="res://assets/weapons/resources/sniper/sniper.tres" id="14_3og01"]
+[ext_resource type="PackedScene" uid="uid://b5c527lpvgwj1" path="res://assets/weapons/resources/sniper/scope_overlay.tscn" id="14_fyafc"]
+[ext_resource type="Script" uid="uid://pnwtas34a4ga" path="res://assets/weapons/resources/sniper/scope_overlay.gd" id="15_tg6sc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -113,9 +115,7 @@ _data = {
 floor_max_angle = 1.0471976
 script = ExtResource("1_gf80s")
 CAMERA_CONTROLLER = NodePath("CameraController/Camera3D")
-ANIMATIONPLAYER = NodePath("AnimationPlayer")
-weapon_hip_pos = Vector3(-0.09, 0.05, 0.03)
-weapon_ads_pos = Vector3(-0.33, 0.25, 0.015)
+ANIMATIONPLAYER = NodePath("CollisionShape3D/Terrorist/AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2118348457]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -192,5 +192,8 @@ gun = NodePath("../../CameraController/Camera3D/WeaponHolder")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1916915474]
 libraries/ = SubResource("AnimationLibrary_jmoha")
+
+[node name="ScopeUI" parent="." unique_id=1200081777 groups=["scope_overlay"] instance=ExtResource("14_fyafc")]
+script = ExtResource("15_tg6sc")
 
 [editable path="CollisionShape3D/Terrorist"]

@@ -46,6 +46,7 @@ class_name Weapon extends Resource
 
 # ADS settings
 @export_group("ADS")
+@export var has_scope: bool = false
 @export var ads_position_offset: Vector3 = Vector3(0.0, 0.0, 0.0)
 @export var ads_rotation_offset: Vector3 = Vector3(0.0, 0.0, 0.0)
 @export var ads_fov: float = 55.0

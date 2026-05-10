@@ -100,7 +100,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 	handle_lean(delta)
-	weapon_bob(velocity.length(), delta)
+	#weapon_bob(velocity.length(), delta)
 
 	var want_crouch = Input.is_action_pressed("CROUCH")
 	if want_crouch != _is_crouching:
@@ -113,10 +113,7 @@ func _physics_process(delta):
 
 	_is_aiming = Input.is_action_pressed("aim")
 	var target_fov = fov_ads if _is_aiming else fov_default
-	var target_weapon_pos = weapon_ads_pos if _is_aiming else weapon_hip_pos
 	CAMERA_CONTROLLER.fov = lerp(CAMERA_CONTROLLER.fov, target_fov, ads_speed * delta)
-	if _weapon_holder:
-		_weapon_holder.position = _weapon_holder.position.lerp(target_weapon_pos, ads_speed * delta)
 
 	if is_on_floor():
 		step_handler.handle_step_climbing()

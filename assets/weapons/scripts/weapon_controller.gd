@@ -18,6 +18,7 @@ var current_weapon_model: Node3D
 var _anim_player: AnimationPlayer
 var _gun_sound: AudioStreamPlayer3D
 var _bolt_sound: AudioStreamPlayer3D
+var _scope_overlay: Node
 var _sound_tween: Tween
 var _is_aiming: bool = false
 var _is_firing: bool = false
@@ -38,6 +39,12 @@ func _ready() -> void:
 		current_weapon = weapons[0]
 	if current_weapon:
 		spawn_weapon_model()
+	await get_tree().process_frame
+	var root = get_tree().current_scene
+	_scope_overlay = root.find_child("ScopeUI", true, false)
+	if not _scope_overlay:
+		_scope_overlay = get_parent().get_parent().find_child("ScopeUI", true, false)
+	print("scope overlay found: ", _scope_overlay)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -66,6 +73,17 @@ func _switch_weapon(direction: int) -> void:
 func _physics_process(delta):
 	_is_aiming = Input.is_action_pressed("aim")
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
+
+	# Scope overlay for sniper
+	if _scope_overlay and current_weapon:
+		if _is_aiming and current_weapon.has_scope:
+			_scope_overlay.show_scope()
+			if current_weapon_model:
+				current_weapon_model.visible = false
+		else:
+			_scope_overlay.hide_scope()
+			if current_weapon_model:
+				current_weapon_model.visible = true
 	
 	if current_weapon:
 		_sway_weapon(delta)
