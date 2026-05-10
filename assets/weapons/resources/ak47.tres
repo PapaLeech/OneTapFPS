@@ -27,5 +27,5 @@ sprint_bob_x = -0.37
 sprint_bob_y = -0.45
 sprint_bob_speed = 10.05
 sprint_bob_direction = -3.93
-ads_position_offset = Vector3(-1.065, 1.02, 22.13)
-ads_rotation_offset = Vector3(5.54, 7.985, -1.565)
+ads_position_offset = Vector3(-1.145, 1.36, 1.27)
+ads_rotation_offset = Vector3(12.165, 8.9, 1.035)
