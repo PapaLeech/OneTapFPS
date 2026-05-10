@@ -227,7 +227,7 @@ func fire():
 		_anim_player.play("fire_lib/fire")
 		if current_weapon and not current_weapon.full_auto:
 			_is_firing_locked = true
-			_is_bolt_cycling = true
+			_is_bolt_cycling = true if current_weapon.has_scope else false
 			var anim_length: float = _anim_player.get_animation("fire_lib/fire").length
 			get_tree().create_timer(anim_length).timeout.connect(func():
 				_is_firing_locked = false
