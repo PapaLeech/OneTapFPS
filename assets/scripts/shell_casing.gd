@@ -1,29 +1,39 @@
 extends Node3D
 
 func eject() -> void:
-	var shell := MeshInstance3D.new()
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.015
-	mesh.height = 0.03
-	shell.mesh = mesh
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(1.0, 0.7, 0.0)
-	mat.metallic = 0.8
-	shell.material_override = mat
+	var shell := RigidBody3D.new()
+	shell.gravity_scale = 1.0
+	shell.linear_damp = 0.2
 
-	# Spawn in world space at ejector position
+	var col := CollisionShape3D.new()
+	var shape := SphereShape3D.new()
+	shape.radius = 0.008
+	col.shape = shape
+	shell.add_child(col)
+
+	var casing_packed = ResourceLoader.load("res://assets/weapons/resources/ak47/realistic_ak-47_bullet_3d_model.glb")
+	print("casing loaded: ", casing_packed)
+	if casing_packed:
+		var casing: Node3D = (casing_packed as PackedScene).instantiate()
+		casing.scale = Vector3(0.05, 0.05, 0.05)
+		shell.add_child(casing)
+	else:
+		var mesh_inst := MeshInstance3D.new()
+		var mesh := SphereMesh.new()
+		mesh.radius = 0.008
+		mesh_inst.mesh = mesh
+		shell.add_child(mesh_inst)
+
+	var spawn_pos := global_position
+	var right := global_transform.basis.x
+	var up := global_transform.basis.y
+
 	get_tree().current_scene.add_child(shell)
-	shell.global_position = global_position
+	shell.global_position = spawn_pos
 
-	# Fly right and up then fall
-	var direction := global_transform.basis * Vector3(1.0, 0.8, -0.3)
-	var speed := randf_range(2.0, 3.5)
-	var velocity := direction * speed
+	# Apply impulse on next frame so RigidBody is fully in the scene tree
+	await get_tree().process_frame
+	shell.apply_central_impulse((right * 3.0 + up * 1.0) * randf_range(1.0, 1.5))
+	shell.apply_torque_impulse(Vector3(randf(), randf(), randf()) * 0.05)
 
-	var tween := shell.create_tween()
-	var gravity := Vector3(0, -9.8, 0)
-	for i in 30:
-		var dt := 0.05
-		velocity += gravity * dt
-		tween.tween_property(shell, "global_position", shell.global_position + velocity * dt, dt)
-	tween.tween_callback(shell.queue_free)
+	get_tree().create_timer(3.0).timeout.connect(func(): if is_instance_valid(shell): shell.queue_free())

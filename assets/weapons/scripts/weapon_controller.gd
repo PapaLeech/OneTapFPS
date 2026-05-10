@@ -240,10 +240,8 @@ func fire():
 	# Eject shell casing
 	if current_weapon_model and not current_weapon.is_melee:
 		var ejector = current_weapon_model.find_child("ShellEjector", true, false)
-		print("ejector found: ", ejector)
 		if ejector:
 			ejector.eject()
-			print("eject called")
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")

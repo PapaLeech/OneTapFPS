@@ -63,4 +63,8 @@ transform = Transform3D(1, -7.0577705e-18, 5.756334e-17, -7.19332e-18, 0.9698078
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.01, -0.05)
 script = ExtResource("2_7807r")
 
+[node name="ShellEjector2" type="Node3D" parent="." unique_id=1560788178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.01, -0.05)
+script = ExtResource("2_7807r")
+
 [editable path="PistolModel"]
