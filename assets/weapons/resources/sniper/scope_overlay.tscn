@@ -6,3 +6,4 @@
 script = ExtResource("1_6bcta")
 
 [node name="ScopeOverlay" type="ColorRect" parent="." unique_id=1971776682]
+mouse_filter = 2

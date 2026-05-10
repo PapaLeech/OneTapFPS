@@ -28,6 +28,7 @@ var _is_firing_locked: bool = false
 var _is_reloading: bool = false
 var _is_sprinting: bool = false
 var _is_meleeing: bool = false
+var _is_bolt_cycling: bool = false
 var _fire_timer: float = 0.0
 var _current_index: int = 0
 var _current_ammo: int = 0
@@ -63,6 +64,7 @@ func _switch_weapon(direction: int) -> void:
 	current_weapon = weapons[_current_index]
 	_is_firing = false
 	_is_firing_locked = false
+	_is_bolt_cycling = false
 	_fire_timer = 0.0
 	if _anim_player:
 		_anim_player.stop()
@@ -73,20 +75,19 @@ func _physics_process(delta):
 		_scope_overlay = scope_overlay
 		print("scope overlay assigned: ", _scope_overlay)
 	_is_aiming = Input.is_action_pressed("aim")
-	if _is_aiming:
-		print("aiming, scope overlay: ", _scope_overlay, " current weapon: ", current_weapon.weapon_name if current_weapon else "none", " has_scope: ", current_weapon.has_scope if current_weapon else "none")
+
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
 
 	# Scope overlay for sniper
 	if _scope_overlay and current_weapon:
-		if _is_aiming and current_weapon.has_scope:
+		if _is_aiming and current_weapon.has_scope and not _is_bolt_cycling:
 			_scope_overlay.show_scope()
-			if current_weapon_model:
-				current_weapon_model.visible = false
+			for child in current_weapon_model.find_children("*", "MeshInstance3D", true, false):
+				child.visible = false
 		else:
 			_scope_overlay.hide_scope()
-			if current_weapon_model:
-				current_weapon_model.visible = true
+			for child in current_weapon_model.find_children("*", "MeshInstance3D", true, false):
+				child.visible = true
 	
 	if current_weapon:
 		_sway_weapon(delta)
@@ -183,7 +184,14 @@ func spawn_weapon_model():
 		current_weapon_model.rotation_degrees = current_weapon.weapon_rotation
 		current_weapon_model.scale = current_weapon.weapon_scale
 		_current_ammo = current_weapon.max_ammo
-		_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
+		# Find the AnimationPlayer that actually has animations (skip empty root ones)
+		_anim_player = null
+		for ap in current_weapon_model.find_children("AnimationPlayer", "AnimationPlayer", true, false):
+			if ap.get_animation_list().size() > 0:
+				_anim_player = ap
+				break
+		if not _anim_player:
+			_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
 		_gun_sound = current_weapon_model.find_child("AudioStreamPlayer3D", true, false)
 		_bolt_sound = current_weapon_model.find_child("BoltSoundPlayer", true, false)
 		if _bolt_sound and current_weapon.bolt_sound:
@@ -207,8 +215,12 @@ func fire():
 		_anim_player.play("fire_lib/fire")
 		if current_weapon and not current_weapon.full_auto:
 			_is_firing_locked = true
+			_is_bolt_cycling = true
 			var anim_length: float = _anim_player.get_animation("fire_lib/fire").length
-			get_tree().create_timer(anim_length).timeout.connect(func(): _is_firing_locked = false)
+			get_tree().create_timer(anim_length).timeout.connect(func():
+				_is_firing_locked = false
+				_is_bolt_cycling = false
+			)
 	if _gun_sound and current_weapon.fire_sound and not current_weapon.full_auto:
 		if _sound_tween:
 			_sound_tween.kill()

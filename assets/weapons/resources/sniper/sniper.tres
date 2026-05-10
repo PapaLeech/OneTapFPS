@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="1_sniper"]
 [ext_resource type="PackedScene" uid="uid://c4f20qtdtq7ns" path="res://assets/weapons/resources/sniper/sniper_weapon.tscn" id="2_sniper"]
+[ext_resource type="AudioStreamMP3" uid="uid://byg8t8kbmtnc" path="res://assets/weapons/resources/sniper/sniper-rifle-fire.mp3" id="3_sniper"]
+[ext_resource type="AudioStreamWAV" uid="uid://3t3d622mvpt" path="res://assets/weapons/resources/sniper/sniperBolt.wav" id="4_sniper"]
 
 [resource]
 script = ExtResource("1_sniper")
@@ -24,3 +26,6 @@ sprint_tilt_y = 18.775
 sprint_tilt_z = 12.41
 sprint_bob_speed = 8.655
 ads_position_offset = Vector3(-0.245, 0.555, 6.465)
+fire_sound = ExtResource("3_sniper")
+bolt_sound = ExtResource("4_sniper")
+has_scope = true
