@@ -104,10 +104,9 @@ func _physics_process(delta):
 		var target_fov := current_weapon.ads_fov if (_is_aiming and not _is_bolt_cycling) else 75.0
 		_camera.fov = lerp(_camera.fov, target_fov, current_weapon.ads_speed * delta)
 
-	# Crosshair — hide on ADS or knife (except AK47 ADS for sight alignment)
+	# Crosshair — hide on ADS or knife
 	if _crosshair and current_weapon:
-		var ak47_ads := _is_aiming and current_weapon.weapon_name == "AK47"
-		if (_is_aiming and not ak47_ads) or current_weapon.is_melee:
+		if _is_aiming or current_weapon.is_melee:
 			_crosshair.hide_crosshair()
 		else:
 			_crosshair.show_crosshair()

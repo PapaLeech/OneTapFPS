@@ -18,5 +18,5 @@ sprint_position_offset = Vector3(-0.1, -0.1, 0.5)
 sprint_tilt_x = -2.0
 sprint_tilt_y = 18.0
 sprint_tilt_z = -3.0
-ads_position_offset = Vector3(-1.115, 1.05, -97.285)
-ads_rotation_offset = Vector3(-2.56, -3.58, 0.55)
+ads_position_offset = Vector3(-0.94, 1.21, 1.235)
+ads_rotation_offset = Vector3(2.92, 1.09, -5.055)
