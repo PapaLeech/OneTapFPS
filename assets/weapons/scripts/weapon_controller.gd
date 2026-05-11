@@ -104,12 +104,14 @@ func _physics_process(delta):
 		var target_fov := current_weapon.ads_fov if (_is_aiming and not _is_bolt_cycling) else 75.0
 		_camera.fov = lerp(_camera.fov, target_fov, current_weapon.ads_speed * delta)
 
-	# Crosshair — hide on ADS or knife
+	# Crosshair — hide on ADS or knife, otherwise feed spread
 	if _crosshair and current_weapon:
 		if _is_aiming or current_weapon.is_melee:
 			_crosshair.hide_crosshair()
 		else:
 			_crosshair.show_crosshair()
+			if _crosshair.has_method("set_spread"):
+				_crosshair.set_spread(_spread)
 
 	_mouse_movement = _mouse_movement.lerp(Vector2.ZERO, 10 * delta)
 
@@ -275,10 +277,14 @@ func fire():
 			var hit := result.collider as Node
 			if hit is Hitbox:
 				hit.take_damage(current_weapon.damage)
+				if _crosshair and _crosshair.has_method("hit_flash"):
+					_crosshair.hit_flash()
 			elif hit.is_in_group("enemy"):
 				var health := hit.get_node_or_null("Health")
 				if health:
 					health.take_damage(current_weapon.damage)
+					if _crosshair and _crosshair.has_method("hit_flash"):
+						_crosshair.hit_flash()
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
