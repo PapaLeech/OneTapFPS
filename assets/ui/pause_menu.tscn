@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://lfhkmtp0cmn8"]
+
+[ext_resource type="Script" uid="uid://ca6wuao3xuvd1" path="res://assets/scripts/pause_menu.gd" id="1_u2vh8"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=1412426954]
+script = ExtResource("1_u2vh8")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=821407612]
+visible = false
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -130.0
+offset_right = 120.0
+offset_bottom = 130.0
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1536067707]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Title" type="Label" parent="Panel/VBox" unique_id=1292597248]
+layout_mode = 2
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeBtn" type="Button" parent="Panel/VBox" unique_id=941117137]
+layout_mode = 2
+text = "Resume"
+
+[node name="MenuBtn" type="Button" parent="Panel/VBox" unique_id=1734767233]
+layout_mode = 2
+text = "Return to Main Menu"
+
+[node name="QuitBtn" type="Button" parent="Panel/VBox" unique_id=2144926009]
+layout_mode = 2
+text = "Exit Game"

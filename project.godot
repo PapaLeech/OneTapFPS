@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="001 - Basic Setup"
-run/main_scene="res://levels/level_001.tscn"
+run/main_scene="res://assets/ui/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -33,6 +33,9 @@ gdscript/warnings/inference_on_variant=0.0
 
 [display]
 
+window/size/viewport_width=1920.0
+window/size/viewport_height=1080.0
+window/size/mode=3.0
 window/size/always_on_top=true
 
 [editor_plugins]

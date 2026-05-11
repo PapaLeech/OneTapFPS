@@ -1,0 +1,359 @@
+[gd_scene format=3 uid="uid://dhi8yaxm4thnq"]
+
+[ext_resource type="Script" uid="uid://r0aeeoc01nka" path="res://assets/scripts/main_menu.gd" id="1_mkuvw"]
+[ext_resource type="Texture2D" uid="uid://bkunv8ury2gr7" path="res://assets/ui/OneFPS-1920x1080.png" id="2_hskgt"]
+
+[node name="MainMenu" type="Control" unique_id=25391598]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mkuvw")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1210248805]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_hskgt")
+stretch_mode = 6
+
+[node name="CaseInner" type="HBoxContainer" parent="." unique_id=1540800177]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 28.0
+offset_right = -32.0
+offset_bottom = -28.0
+theme_override_constants/separation = 18
+
+[node name="Left" type="VBoxContainer" parent="CaseInner" unique_id=243737314]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MissionPanel" type="PanelContainer" parent="CaseInner/Left" unique_id=726956671]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="CaseInner/Left/MissionPanel" unique_id=1245178213]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="CaseInner/Left/MissionPanel/VBox" unique_id=108018]
+layout_mode = 2
+text = "MISSION BRIEFING"
+
+[node name="MapThumb" type="ColorRect" parent="CaseInner/Left/MissionPanel/VBox" unique_id=345389981]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+color = Color(0.13, 0.13, 0.13, 1)
+
+[node name="InfoGrid" type="VBoxContainer" parent="CaseInner/Left/MissionPanel/VBox" unique_id=610596000]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Row1" type="HBoxContainer" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid" unique_id=2022765738]
+layout_mode = 2
+
+[node name="K" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row1" unique_id=1959142724]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "STATUS"
+
+[node name="V" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row1" unique_id=633812139]
+layout_mode = 2
+text = "STANDBY"
+
+[node name="Row2" type="HBoxContainer" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid" unique_id=2010366693]
+layout_mode = 2
+
+[node name="K" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row2" unique_id=1471200913]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "PLAYERS"
+
+[node name="V" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row2" unique_id=1867337468]
+layout_mode = 2
+text = "0 / 10"
+
+[node name="Row3" type="HBoxContainer" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid" unique_id=373186269]
+layout_mode = 2
+
+[node name="K" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row3" unique_id=1469238457]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "REGION"
+
+[node name="V" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row3" unique_id=1580266607]
+layout_mode = 2
+text = "EU WEST"
+
+[node name="Row4" type="HBoxContainer" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid" unique_id=971636784]
+layout_mode = 2
+
+[node name="K" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row4" unique_id=945727988]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "PING"
+
+[node name="V" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row4" unique_id=1293364520]
+layout_mode = 2
+text = "— ms"
+
+[node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Title" type="Label" parent="CaseInner/Middle" unique_id=159884526]
+layout_mode = 2
+text = "ONEDEAG"
+horizontal_alignment = 1
+
+[node name="DeathmatchBtn" type="PanelContainer" parent="CaseInner/Middle" unique_id=286485341]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CaseInner/Middle/DeathmatchBtn" unique_id=1263660762]
+layout_mode = 2
+
+[node name="ModeHeader" type="HBoxContainer" parent="CaseInner/Middle/DeathmatchBtn/VBox" unique_id=108317346]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/ModeHeader" unique_id=1512561653]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DEATHMATCH"
+
+[node name="Badge" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/ModeHeader" unique_id=2142290407]
+layout_mode = 2
+text = "FREE FOR ALL"
+
+[node name="Body" type="HBoxContainer" parent="CaseInner/Middle/DeathmatchBtn/VBox" unique_id=1524436294]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body" unique_id=2115010720]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Eliminate all enemies. Most kills wins."
+
+[node name="Countdown" type="HBoxContainer" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body" unique_id=1288738756]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoadingLabel" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown" unique_id=1737972837]
+layout_mode = 2
+text = "Loading map..."
+
+[node name="Num" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown" unique_id=873786601]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3"
+
+[node name="CancelBtn" type="Button" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown" unique_id=1446671629]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SearchDestroyBtn" type="PanelContainer" parent="CaseInner/Middle" unique_id=1902304804]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn" unique_id=843823911]
+layout_mode = 2
+
+[node name="ModeHeader" type="HBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn/VBox" unique_id=70359531]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/ModeHeader" unique_id=1656497283]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SEARCH AND DESTROY"
+
+[node name="Badge" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/ModeHeader" unique_id=357851220]
+layout_mode = 2
+text = "TACTICAL"
+
+[node name="Body" type="HBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn/VBox" unique_id=915330557]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body" unique_id=924930804]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Plant or defuse the bomb. One life per round."
+
+[node name="Countdown" type="HBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body" unique_id=2079945520]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoadingLabel" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown" unique_id=716196139]
+layout_mode = 2
+text = "Loading map..."
+
+[node name="Num" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown" unique_id=1933040924]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3"
+
+[node name="CancelBtn" type="Button" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown" unique_id=2036182276]
+layout_mode = 2
+text = "Cancel"
+
+[node name="PlayBtn" type="Button" parent="CaseInner/Middle" unique_id=670294308]
+layout_mode = 2
+text = "PLAY"
+
+[node name="Right" type="VBoxContainer" parent="CaseInner" unique_id=702800717]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LobbyPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=1298519292]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CaseInner/Right/LobbyPanel" unique_id=1350978065]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=2075645176]
+layout_mode = 2
+text = "LOBBY"
+
+[node name="BtnRow" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=1322479798]
+layout_mode = 2
+
+[node name="JoinBtn" type="Button" parent="CaseInner/Right/LobbyPanel/VBox/BtnRow" unique_id=1746170335]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Join Lobby"
+
+[node name="LeaveBtn" type="Button" parent="CaseInner/Right/LobbyPanel/VBox/BtnRow" unique_id=674607963]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Leave"
+
+[node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=389797138]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Tag1" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=744756188]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag1" unique_id=2062420657]
+layout_mode = 2
+text = "Slot 1"
+horizontal_alignment = 1
+
+[node name="Tag2" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=1502570180]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag2" unique_id=1118661731]
+layout_mode = 2
+text = "Slot 2"
+horizontal_alignment = 1
+
+[node name="Tag3" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=744687626]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag3" unique_id=1492155595]
+layout_mode = 2
+text = "Slot 3"
+horizontal_alignment = 1
+
+[node name="Tag4" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=717905515]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag4" unique_id=1212000060]
+layout_mode = 2
+text = "Slot 4"
+horizontal_alignment = 1
+
+[node name="Tag5" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=1324815273]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag5" unique_id=292514317]
+layout_mode = 2
+text = "Slot 5"
+horizontal_alignment = 1
+
+[node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="CaseInner/Right/FriendsPanel" unique_id=1721889990]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=1665192970]
+layout_mode = 2
+text = "FRIENDS - ITCH.IO"
+
+[node name="Friend1" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=337158477]
+layout_mode = 2
+
+[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend1" unique_id=1826613906]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Shadow Strike"
+
+[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend1" unique_id=885492012]
+layout_mode = 2
+text = "Invite"
+
+[node name="Friend2" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=1014698933]
+layout_mode = 2
+
+[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend2" unique_id=1587471596]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Friend 2"
+
+[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend2" unique_id=1755939832]
+layout_mode = 2
+text = "Invite"
+
+[node name="Friend3" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=344999889]
+layout_mode = 2
+
+[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend3" unique_id=616354415]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Friend 3"
+
+[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend3" unique_id=1510601057]
+layout_mode = 2
+text = "Invite"
+
+[node name="Friend4" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=129415043]
+layout_mode = 2
+
+[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend4" unique_id=1614586965]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Friend 4"
+
+[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend4" unique_id=543737536]
+layout_mode = 2
+text = "Invite"
+
+[node name="Friend5" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=119135471]
+layout_mode = 2
+
+[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=945344076]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Friend 5"
+
+[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=138733101]
+layout_mode = 2
+text = "Invite"
