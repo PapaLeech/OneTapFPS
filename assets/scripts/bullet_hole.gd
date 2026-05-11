@@ -9,6 +9,9 @@ func spawn(hit_position: Vector3, hit_normal: Vector3, parent: Node) -> void:
 	# Size of the hole — tweak to taste
 	decal.size = Vector3(0.06, 0.06, 0.12)
 
+	# Add to scene first so global_position and look_at work
+	parent.add_child(decal)
+
 	# Offset slightly off the surface so it doesn't z-fight
 	decal.global_position = hit_position + hit_normal * 0.005
 
@@ -26,7 +29,6 @@ func spawn(hit_position: Vector3, hit_normal: Vector3, parent: Node) -> void:
 	decal.albedo_mix = 1.0
 	decal.cull_mask = 1
 
-	parent.add_child(decal)
 
 func _make_hole_texture() -> ImageTexture:
 	var size := 64

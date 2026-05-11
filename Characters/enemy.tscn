@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dh3j6u1fklhvr"]
+
+[ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="1_04wy3"]
+[ext_resource type="Script" uid="uid://db7slb5llo5yb" path="res://assets/scripts/health.gd" id="2_rtu5t"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p6t1j"]
+radius = 0.4
+height = 1.8
+
+[node name="Enemy" type="StaticBody3D" unique_id=1033289565]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1490161411]
+shape = SubResource("CapsuleShape3D_p6t1j")
+
+[node name="Terrorist" parent="." unique_id=855698938 instance=ExtResource("1_04wy3")]
+transform = Transform3D(-1, 0, 2.5351817e-06, 0, 1, 0, -2.5351817e-06, 0, -1, 0, -1.695, 0)
+
+[node name="Health" type="Node" parent="." unique_id=984528474]
+script = ExtResource("2_rtu5t")

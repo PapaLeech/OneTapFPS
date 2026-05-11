@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="PackedScene" uid="uid://khvf4g3dgyqi" path="res://controllers/fps_controller.tscn" id="4_po88e"]
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
+[ext_resource type="PackedScene" uid="uid://dh3j6u1fklhvr" path="res://Characters/enemy.tscn" id="5_44t5x"]
 [ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="5_po88e"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_po88e"]
@@ -16,7 +17,7 @@ data = PackedVector3Array(10, 0, 10, -10, 0, -10, 10, 0, -10, -10, 0, -10, 10, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1099821, -0.29482675, -1.2630119)
 script = ExtResource("4_y34ju")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor" parent_id_path=PackedInt32Array(1708034802, 1694769640) index="0" unique_id=972347735]
+[node name="StaticBody3D" type="StaticBody3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor" parent_id_path=PackedInt32Array(1708034802, 600001590) index="0" unique_id=972347735]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor/StaticBody3D" unique_id=1526372537]
 shape = SubResource("ConcavePolygonShape3D_po88e")
@@ -24,5 +25,8 @@ shape = SubResource("ConcavePolygonShape3D_po88e")
 [node name="map_visual_boost" type="Node3D" parent="." unique_id=217151604]
 
 [node name="CharacterBody3D" parent="." unique_id=1254856328 instance=ExtResource("4_po88e")]
+
+[node name="Enemy" parent="." unique_id=1033289565 instance=ExtResource("5_44t5x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [editable path="Map_v12"]
