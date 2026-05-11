@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cnt1jo4c60kdy" path="res://controllers/fps_controller.gd" id="1_gf80s"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
-[ext_resource type="Script" uid="uid://y2hldlquhrid" path="res://assets/scripts/hitbox.gd" id="3_3og01"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
@@ -17,29 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://b5c527lpvgwj1" path="res://assets/weapons/resources/sniper/scope_overlay.tscn" id="14_fyafc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_3og01"]
-radius = 0.12
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3og01"]
-radius = 0.2
-height = 0.4
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fyafc"]
-radius = 0.08
-height = 0.3
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tg6sc"]
-radius = 0.08
-height = 0.3
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yvtcv"]
-radius = 0.1
-height = 0.4
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h7h5r"]
-radius = 0.1
-height = 0.4
 
 [sub_resource type="Curve" id="Curve_jmoha"]
 
@@ -178,60 +154,6 @@ bones/42/rotation = Quaternion(-0.1051671, 0.022258727, 0.038904585, 0.99344397)
 
 [node name="Object_6" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="0" unique_id=921392250]
 layers = 2
-
-[node name="HitboxHead" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="1" unique_id=762075296]
-bone_name = "head neck upper_015"
-
-[node name="Area3D" type="Area3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxHead" unique_id=590186302 groups=["enemy"]]
-script = ExtResource("3_3og01")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxHead/Area3D" unique_id=1660210420]
-shape = SubResource("SphereShape3D_3og01")
-
-[node name="HitboxSpine" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="2" unique_id=1772629932]
-bone_name = "spine upper_012"
-
-[node name="Area3D" type="Area3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxSpine" unique_id=2086724427 groups=["enemy"]]
-script = ExtResource("3_3og01")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxSpine/Area3D" unique_id=1052779222]
-shape = SubResource("CapsuleShape3D_3og01")
-
-[node name="HitboxLeftArm" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="3" unique_id=802827838]
-bone_name = "arm left shoulder 2_017"
-
-[node name="Area3D" type="Area3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxLeftArm" unique_id=1669897510 groups=["enemy"]]
-script = ExtResource("3_3og01")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxLeftArm/Area3D" unique_id=219803342]
-shape = SubResource("CapsuleShape3D_fyafc")
-
-[node name="HitboxRightArm" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="4" unique_id=1776354051]
-bone_name = "arm right shoulder 2_031"
-
-[node name="Area3D" type="Area3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxRightArm" unique_id=1991057198 groups=["enemy"]]
-script = ExtResource("3_3og01")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxRightArm/Area3D" unique_id=815245665]
-shape = SubResource("CapsuleShape3D_tg6sc")
-
-[node name="HitboxLeftLeg" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="5" unique_id=40099267]
-bone_name = "leg left thigh_03"
-
-[node name="Area3D" type="Area3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxLeftLeg" unique_id=327702318 groups=["enemy"]]
-script = ExtResource("3_3og01")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxLeftLeg/Area3D" unique_id=2127274944]
-shape = SubResource("CapsuleShape3D_yvtcv")
-
-[node name="HitboxRightLeg" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="6" unique_id=2130453702]
-bone_name = "leg right thigh_07"
-
-[node name="Area3D" type="Area3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxRightLeg" unique_id=2121021120 groups=["enemy"]]
-script = ExtResource("3_3og01")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxRightLeg/Area3D" unique_id=1668127758]
-shape = SubResource("CapsuleShape3D_h7h5r")
 
 [node name="CameraController" type="Node3D" parent="." unique_id=1035603513]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

@@ -273,7 +273,9 @@ func fire():
 		if result:
 			_bullet_hole.spawn(result.position, result.normal, get_tree().current_scene)
 			var hit := result.collider as Node
-			if hit.is_in_group("enemy"):
+			if hit is Hitbox:
+				hit.take_damage(current_weapon.damage)
+			elif hit.is_in_group("enemy"):
 				var health := hit.get_node_or_null("Health")
 				if health:
 					health.take_damage(current_weapon.damage)
