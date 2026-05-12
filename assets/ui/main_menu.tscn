@@ -42,12 +42,15 @@ scale = Vector2(1.9541665, 2.3618572)
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="MissionPanel" type="PanelContainer" parent="CaseInner/Left" unique_id=726956671]
+[node name="MissionPanel" type="Control" parent="CaseInner/Left" unique_id=1618975537]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Left/MissionPanel" unique_id=1245178213]
-layout_mode = 2
+layout_mode = 0
+offset_right = 260.0
+offset_bottom = 580.0
+scale = Vector2(0.7192373, 0.5113326)
 
 [node name="Header" type="Label" parent="CaseInner/Left/MissionPanel/VBox" unique_id=108018]
 layout_mode = 2
@@ -55,12 +58,6 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "MISSION BRIEFING"
 horizontal_alignment = 1
-
-[node name="MapThumb" type="ColorRect" parent="CaseInner/Left/MissionPanel/VBox" unique_id=345389981]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-size_flags_vertical = 3
-color = Color(0.15, 0.15, 0.15, 1)
 
 [node name="InfoGrid" type="VBoxContainer" parent="CaseInner/Left/MissionPanel/VBox" unique_id=610596000]
 layout_mode = 2

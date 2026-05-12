@@ -15,8 +15,7 @@ enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 @onready var _sd_cancel    : Button = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
 @onready var _bg_texture    : TextureRect = $Background
-@onready var _left_col      : VBoxContainer = $CaseInner/Left
-@onready var _mission_panel : PanelContainer = $CaseInner/Left/MissionPanel
+@onready var _mission_panel : Control = $CaseInner/Left/MissionPanel
 @onready var _mission_frame : TextureRect = $MissionFrame
 
 var _active_mode : Mode = Mode.NONE
