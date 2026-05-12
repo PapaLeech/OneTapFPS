@@ -47,12 +47,16 @@ layout_mode = 2
 
 [node name="Header" type="Label" parent="CaseInner/Left/MissionPanel/VBox" unique_id=108018]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
 text = "MISSION BRIEFING"
+horizontal_alignment = 1
 
 [node name="MapThumb" type="ColorRect" parent="CaseInner/Left/MissionPanel/VBox" unique_id=345389981]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-color = Color(0.13, 0.13, 0.13, 1)
+size_flags_vertical = 3
+color = Color(0.15, 0.15, 0.15, 1)
 
 [node name="InfoGrid" type="VBoxContainer" parent="CaseInner/Left/MissionPanel/VBox" unique_id=610596000]
 layout_mode = 2
@@ -358,3 +362,8 @@ text = "Friend 5"
 [node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=138733101]
 layout_mode = 2
 text = "Invite"
+
+[node name="MissionFrame" type="TextureRect" parent="." unique_id=1924392332]
+layout_mode = 0
+mouse_filter = 2
+stretch_mode = 1

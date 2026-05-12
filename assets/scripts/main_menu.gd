@@ -14,7 +14,10 @@ enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 @onready var _dm_cancel    : Button = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/CancelBtn
 @onready var _sd_cancel    : Button = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
-@onready var _bg_texture   : TextureRect = $Background
+@onready var _bg_texture    : TextureRect = $Background
+@onready var _left_col      : VBoxContainer = $CaseInner/Left
+@onready var _mission_panel : PanelContainer = $CaseInner/Left/MissionPanel
+@onready var _mission_frame : TextureRect = $MissionFrame
 
 var _active_mode : Mode = Mode.NONE
 var _timer       : SceneTreeTimer = null
@@ -31,24 +34,48 @@ func _ready() -> void:
 	_play_btn.pressed.connect(func(): get_tree().change_scene_to_file(GAME_SCENE))
 	_dm_countdown.visible = false
 	_sd_countdown.visible = false
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_resize_frame()
+
+func _resize_frame() -> void:
+	_mission_frame.texture = load("res://assets/ui/MISSION_FRAME_FINAL.png")
+	_mission_frame.stretch_mode = TextureRect.STRETCH_SCALE
+	_mission_frame.global_position = _mission_panel.global_position
+	_mission_frame.size = _mission_panel.size
+	_mission_frame.z_index = 10
+
+func _style_mission_panel() -> void:
+	pass
+
+func _old_resize_frame() -> void:
+	pass
+
+var _quit_dialog_open : bool = false
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
+		if _quit_dialog_open:
+			return
 		if _active_mode != Mode.NONE:
 			_cancel_countdown()
 		else:
 			_show_quit_dialog()
 
 func _show_quit_dialog() -> void:
+	_quit_dialog_open = true
 	var dialog := ConfirmationDialog.new()
 	dialog.title = "Leave Game"
 	dialog.dialog_text = "Are you sure you want to quit?"
 	dialog.ok_button_text = "Cancel"
 	dialog.cancel_button_text = "OK"
-	dialog.confirmed.connect(func(): dialog.queue_free())
-	dialog.canceled.connect(func(): get_tree().quit())
-	dialog.close_requested.connect(func(): dialog.queue_free())
+	dialog.confirmed.connect(func(): _quit_dialog_open = false; dialog.queue_free())
+	dialog.canceled.connect(func(): _quit_dialog_open = false; dialog.queue_free())
+	dialog.close_requested.connect(func(): _quit_dialog_open = false; dialog.queue_free())
+	# Wire the OK (quit) button manually
+	dialog.get_cancel_button().pressed.connect(func(): get_tree().quit())
 	add_child(dialog)
 	dialog.popup_centered()
 	await get_tree().process_frame
