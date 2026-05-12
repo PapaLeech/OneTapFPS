@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1778598104
+::res://::1778612246
 default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778598104::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -95,7 +95,7 @@ metadata_editor.gd::GDScript::4810375839038594439::1776657068::0::1::::MetadataE
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1778606361
+::res://assets/scripts/::1778612687
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -103,16 +103,16 @@ crosshair_draw.gd::GDScript::6330458738880098340::1778514242::0::1::::<>Control<
 health.gd::GDScript::7296623631832556329::1778445466::0::1::::<>Node<><>0<>0<><>::
 hitbox.gd::GDScript::1740715284671597839::1778506723::0::1::::Hitbox<>Area3D<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
-main_menu.gd::GDScript::1244827160719643432::1778606361::0::1::::<>Control<><>0<>0<><>::
+main_menu.gd::GDScript::1244827160719643432::1778612687::0::1::::<>Control<><>0<>0<><>::
 pause_menu.gd::GDScript::4838208590412015204::1778574399::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
-::res://assets/ui/::1778606245
+::res://assets/ui/::1778612635
 hud_health.tscn::PackedScene::2532620883247856202::1778517854::0::1::::<><><>0<>0<><>::uid://c56dk6kta8w5n::::res://assets/scripts/hud_health.gd
-main_menu.tscn::PackedScene::7669145534508254606::1778606245::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png
+main_menu.tscn::PackedScene::7669145534508254606::1778612694::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png
 MB1.png::CompressedTexture2D::5556174736054106412::1778587514::1778587619::1::::<><><>0<>0<>7a36cd3aa2d3b4c0c2d36669f8cf9aa3<>res://.godot/imported/MB1.png-785fd0f44b8893b209d2c5c55096f797.ctex::
 MISSION_BRIEF2.png::CompressedTexture2D::6422798321044018236::1778582198::1778582291::1::::<><><>0<>0<>2d5cd623a821ddd0d782927f68cc632b<>res://.godot/imported/MISSION_BRIEF2.png-a8bb817ce66c910d3575df3bfd683168.ctex::
 MISSION_BRIEFING.png::CompressedTexture2D::4214836228548885584::1778581700::1778581842::1::::<><><>0<>0<>4d185f04902e032970799a6806a8a79a<>res://.godot/imported/MISSION_BRIEFING.png-64620aff40111e6e5fac4ed2796ea2c3.ctex::

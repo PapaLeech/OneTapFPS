@@ -15,16 +15,15 @@ enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 @onready var _sd_cancel    : Button = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
 @onready var _bg_texture    : TextureRect = $Background
-@onready var _mission_panel : Control = $CaseInner/Left/MissionPanel
-@onready var _mission_frame : TextureRect = $MissionFrame
+@onready var _mission_panel : PanelContainer = $CaseInner/Left/MissionPanel
 
 var _active_mode : Mode = Mode.NONE
 var _timer       : SceneTreeTimer = null
 var _count       : int = 3
 
 func _ready() -> void:
+	get_window().mode = Window.MODE_FULLSCREEN
 	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-	_style_mission_panel()
 	_dm_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_sd_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_dm_btn.gui_input.connect(func(e): _on_mode_clicked(e, Mode.DEATHMATCH))
@@ -34,26 +33,8 @@ func _ready() -> void:
 	_play_btn.pressed.connect(func(): get_tree().change_scene_to_file(GAME_SCENE))
 	_dm_countdown.visible = false
 	_sd_countdown.visible = false
-	await get_tree().process_frame
-	await get_tree().process_frame
-	await get_tree().process_frame
-	_resize_frame()
-
-func _resize_frame() -> void:
-	_mission_frame.texture = load("res://assets/ui/MISSION_FRAME_FINAL.png")
-	_mission_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_mission_frame.global_position = _mission_panel.global_position
-	_mission_frame.size = _mission_panel.size
-	_mission_frame.z_index = 10
 
 func _style_mission_panel() -> void:
-	# Fix info grid font sizes
-	for row in $CaseInner/Left/MissionPanel/VBox/InfoGrid.get_children():
-		for label in row.get_children():
-			if label is Label:
-				label.add_theme_font_size_override("font_size", 11)
-
-func _old_resize_frame() -> void:
 	pass
 
 var _quit_dialog_open : bool = false

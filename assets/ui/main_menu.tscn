@@ -23,41 +23,36 @@ texture = ExtResource("2_hskgt")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="CaseInner" type="Control" parent="." unique_id=1313911001]
-layout_mode = 1
-anchors_preset = 15
+[node name="CaseInner" type="HBoxContainer" parent="." unique_id=1540800177]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 32.0
+offset_top = 28.0
+offset_right = -32.0
+offset_bottom = -28.0
+theme_override_constants/separation = 18
 
 [node name="Left" type="VBoxContainer" parent="CaseInner" unique_id=243737314]
 custom_minimum_size = Vector2(260, 0)
-layout_mode = 0
-offset_left = 160.0
-offset_top = 126.0
-offset_right = 420.0
-offset_bottom = 706.0
-scale = Vector2(1.9541665, 2.3618572)
-size_flags_horizontal = 0
-size_flags_vertical = 0
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="MissionPanel" type="Control" parent="CaseInner/Left" unique_id=1618975537]
+[node name="MissionPanel" type="PanelContainer" parent="CaseInner/Left" unique_id=726956671]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Left/MissionPanel" unique_id=1245178213]
-layout_mode = 0
-offset_right = 260.0
-offset_bottom = 580.0
-scale = Vector2(0.7192373, 0.5113326)
+layout_mode = 2
 
 [node name="Header" type="Label" parent="CaseInner/Left/MissionPanel/VBox" unique_id=108018]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
 text = "MISSION BRIEFING"
-horizontal_alignment = 1
+
+[node name="MapThumb" type="ColorRect" parent="CaseInner/Left/MissionPanel/VBox" unique_id=345389981]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+color = Color(0.13, 0.13, 0.13, 1)
 
 [node name="InfoGrid" type="VBoxContainer" parent="CaseInner/Left/MissionPanel/VBox" unique_id=610596000]
 layout_mode = 2
@@ -69,7 +64,6 @@ layout_mode = 2
 [node name="K" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row1" unique_id=1959142724]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 11
 text = "STATUS"
 
 [node name="V" type="Label" parent="CaseInner/Left/MissionPanel/VBox/InfoGrid/Row1" unique_id=633812139]
@@ -113,21 +107,13 @@ layout_mode = 2
 text = "— ms"
 
 [node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
-custom_minimum_size = Vector2(547, 0)
-layout_mode = 0
-offset_left = 746.0
-offset_top = 122.99999
-offset_right = 1293.0
-offset_bottom = 345.0
-scale = Vector2(0.89795536, 3.304865)
-size_flags_horizontal = 0
-size_flags_vertical = 0
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 14
 alignment = 1
 
 [node name="Title" type="Label" parent="CaseInner/Middle" unique_id=159884526]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "ONEDEAG"
 horizontal_alignment = 1
 
@@ -143,12 +129,10 @@ layout_mode = 2
 [node name="Title" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/ModeHeader" unique_id=1512561653]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 13
 text = "DEATHMATCH"
 
 [node name="Badge" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/ModeHeader" unique_id=2142290407]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
 text = "FREE FOR ALL"
 
 [node name="Body" type="HBoxContainer" parent="CaseInner/Middle/DeathmatchBtn/VBox" unique_id=1524436294]
@@ -158,7 +142,6 @@ layout_mode = 2
 [node name="Desc" type="Label" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body" unique_id=2115010720]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 11
 text = "Eliminate all enemies. Most kills wins."
 
 [node name="Countdown" type="HBoxContainer" parent="CaseInner/Middle/DeathmatchBtn/VBox/Body" unique_id=1288738756]
@@ -191,12 +174,10 @@ layout_mode = 2
 [node name="Title" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/ModeHeader" unique_id=1656497283]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 13
 text = "SEARCH AND DESTROY"
 
 [node name="Badge" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/ModeHeader" unique_id=357851220]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
 text = "TACTICAL"
 
 [node name="Body" type="HBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn/VBox" unique_id=915330557]
@@ -206,7 +187,6 @@ layout_mode = 2
 [node name="Desc" type="Label" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body" unique_id=924930804]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 11
 text = "Plant or defuse the bomb. One life per round."
 
 [node name="Countdown" type="HBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn/VBox/Body" unique_id=2079945520]
@@ -229,19 +209,11 @@ text = "Cancel"
 
 [node name="PlayBtn" type="Button" parent="CaseInner/Middle" unique_id=670294308]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
 text = "PLAY"
 
 [node name="Right" type="VBoxContainer" parent="CaseInner" unique_id=702800717]
 custom_minimum_size = Vector2(300, 0)
-layout_mode = 0
-offset_left = 1309.9999
-offset_top = 120.0
-offset_right = 1677.9999
-offset_bottom = 620.0
-scale = Vector2(1.2042607, 0.972307)
-size_flags_horizontal = 0
-size_flags_vertical = 0
+layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="LobbyPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=1298519292]
@@ -252,7 +224,6 @@ layout_mode = 2
 
 [node name="Header" type="Label" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=2075645176]
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
 text = "LOBBY"
 
 [node name="BtnRow" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=1322479798]
@@ -387,9 +358,3 @@ text = "Friend 5"
 [node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=138733101]
 layout_mode = 2
 text = "Invite"
-
-[node name="MissionFrame" type="TextureRect" parent="." unique_id=1924392332]
-visible = false
-layout_mode = 0
-mouse_filter = 2
-stretch_mode = 1
