@@ -24,6 +24,7 @@ var _count       : int = 3
 func _ready() -> void:
 	get_window().mode = Window.MODE_FULLSCREEN
 	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	_style_mission_panel()
 	_dm_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_sd_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_dm_btn.gui_input.connect(func(e): _on_mode_clicked(e, Mode.DEATHMATCH))
@@ -36,7 +37,40 @@ func _ready() -> void:
 	_sd_countdown.visible = false
 
 func _style_mission_panel() -> void:
-	pass
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.12, 0.12, 0.12, 0.97)
+	style.border_color = Color(0.4, 0.4, 0.4, 1.0)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	style.shadow_color = Color(0, 0, 0, 0.8)
+	style.shadow_size = 8
+	for path in [
+		"CaseInner/Left/MissionPanel",
+		"CaseInner/Right/LobbyPanel",
+		"CaseInner/Right/FriendsPanel",
+		"CaseInner/Middle/DeathmatchBtn",
+		"CaseInner/Middle/SearchDestroyBtn",
+	]:
+		var node := get_node_or_null(path)
+		if node:
+			node.add_theme_stylebox_override("panel", style.duplicate())
+	# Style Settings and Play buttons
+	var btn_style := StyleBoxFlat.new()
+	btn_style.bg_color = Color(0.12, 0.12, 0.12, 0.97)
+	btn_style.border_color = Color(0.4, 0.4, 0.4, 1.0)
+	btn_style.set_border_width_all(1)
+	btn_style.set_corner_radius_all(4)
+	btn_style.shadow_color = Color(0, 0, 0, 0.8)
+	btn_style.shadow_size = 8
+	var btn_hover := btn_style.duplicate()
+	btn_hover.bg_color = Color(0.2, 0.2, 0.2, 0.97)
+	for path in ["SettingsBtn", "CaseInner/Middle/PlayBtn"]:
+		var btn := get_node_or_null(path)
+		if btn:
+			btn.add_theme_stylebox_override("normal", btn_style.duplicate())
+			btn.add_theme_stylebox_override("hover", btn_hover.duplicate())
+			btn.add_theme_stylebox_override("pressed", btn_hover.duplicate())
+			btn.add_theme_color_override("font_color", Color.WHITE)
 
 func _show_settings() -> void:
 	var dialog := Window.new()
