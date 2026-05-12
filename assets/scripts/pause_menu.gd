@@ -14,7 +14,8 @@ func _ready() -> void:
 	_quit_btn.pressed.connect(_exit_game)
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_F1:
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
 		if _panel.visible:
 			_close()
 		else:
@@ -23,6 +24,13 @@ func _input(event: InputEvent) -> void:
 func _open() -> void:
 	_panel.visible = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_resume_btn.focus_neighbor_top = _resume_btn.get_path_to(_quit_btn)
+	_resume_btn.focus_neighbor_bottom = _resume_btn.get_path_to(_menu_btn)
+	_menu_btn.focus_neighbor_top = _menu_btn.get_path_to(_resume_btn)
+	_menu_btn.focus_neighbor_bottom = _menu_btn.get_path_to(_quit_btn)
+	_quit_btn.focus_neighbor_top = _quit_btn.get_path_to(_menu_btn)
+	_quit_btn.focus_neighbor_bottom = _quit_btn.get_path_to(_resume_btn)
+	_resume_btn.grab_focus()
 
 func _close() -> void:
 	_panel.visible = false

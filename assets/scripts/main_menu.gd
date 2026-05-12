@@ -32,9 +32,27 @@ func _ready() -> void:
 	_sd_countdown.visible = false
 
 func _input(event: InputEvent) -> void:
-	# Consume ESC on the main menu so it doesn't close the game
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
+		if _active_mode != Mode.NONE:
+			_cancel_countdown()
+		else:
+			_show_quit_dialog()
+
+func _show_quit_dialog() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = "Leave Game"
+	dialog.dialog_text = "Are you sure you want to quit?"
+	dialog.ok_button_text = "Cancel"
+	dialog.cancel_button_text = "OK"
+	dialog.confirmed.connect(func(): dialog.queue_free())
+	dialog.canceled.connect(func(): get_tree().quit())
+	dialog.close_requested.connect(func(): dialog.queue_free())
+	add_child(dialog)
+	dialog.popup_centered()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	dialog.get_cancel_button().grab_focus()
 
 func _on_mode_clicked(event: InputEvent, mode: Mode) -> void:
 	if not event is InputEventMouseButton: return
