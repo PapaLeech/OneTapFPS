@@ -25,6 +25,7 @@ var _count       : int = 3
 
 func _ready() -> void:
 	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	_style_mission_panel()
 	_dm_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_sd_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_dm_btn.gui_input.connect(func(e): _on_mode_clicked(e, Mode.DEATHMATCH))
@@ -41,13 +42,17 @@ func _ready() -> void:
 
 func _resize_frame() -> void:
 	_mission_frame.texture = load("res://assets/ui/MISSION_FRAME_FINAL.png")
-	_mission_frame.stretch_mode = TextureRect.STRETCH_SCALE
+	_mission_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_mission_frame.global_position = _mission_panel.global_position
 	_mission_frame.size = _mission_panel.size
 	_mission_frame.z_index = 10
 
 func _style_mission_panel() -> void:
-	pass
+	# Fix info grid font sizes
+	for row in $CaseInner/Left/MissionPanel/VBox/InfoGrid.get_children():
+		for label in row.get_children():
+			if label is Label:
+				label.add_theme_font_size_override("font_size", 11)
 
 func _old_resize_frame() -> void:
 	pass
