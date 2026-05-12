@@ -21,6 +21,7 @@ var _timer       : SceneTreeTimer = null
 var _count       : int = 3
 
 func _ready() -> void:
+	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_dm_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_sd_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_dm_btn.gui_input.connect(func(e): _on_mode_clicked(e, Mode.DEATHMATCH))
