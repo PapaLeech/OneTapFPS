@@ -15,8 +15,7 @@ enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 @onready var _sd_cancel    : Button = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
 @onready var _bg_texture    : TextureRect = $Background
-@onready var _mission_panel : PanelContainer = $CaseInner/Left/MissionPanel
-@onready var _settings_btn  : Button = $CaseInner/Middle/SettingsBtn
+@onready var _settings_btn  : Button = $SettingsBtn
 
 var _active_mode : Mode = Mode.NONE
 var _timer       : SceneTreeTimer = null
@@ -45,6 +44,9 @@ func _show_settings() -> void:
 	dialog.size = Vector2i(400, 300)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
+	dialog.window_input.connect(func(e):
+		if e.is_action_pressed("ui_cancel"):
+			dialog.queue_free())
 	var vbox := VBoxContainer.new()
 	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	vbox.add_theme_constant_override("separation", 16)

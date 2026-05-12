@@ -231,10 +231,6 @@ text = "Cancel"
 layout_mode = 2
 text = "PLAY"
 
-[node name="SettingsBtn" type="Button" parent="CaseInner/Middle" unique_id=546935647]
-layout_mode = 2
-text = "Settings"
-
 [node name="Right" type="Control" parent="CaseInner" unique_id=1641042074]
 custom_minimum_size = Vector2(300, 0)
 anchors_preset = 0
@@ -395,3 +391,11 @@ text = "Friend 5"
 [node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=138733101]
 layout_mode = 2
 text = "Invite"
+
+[node name="SettingsBtn" type="Button" parent="." unique_id=234233910]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 950.0
+offset_right = 1060.0
+offset_bottom = 1000.0
+text = "Settings"

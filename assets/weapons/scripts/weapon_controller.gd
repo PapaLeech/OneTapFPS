@@ -168,7 +168,7 @@ func _physics_process(delta):
 	if _is_reloading:
 		return
 
-	if (Input.is_action_just_pressed("melee") or (Input.is_action_just_pressed("fire") and current_weapon and current_weapon.is_melee)) and not _is_meleeing and current_weapon:
+	if (Input.is_action_just_pressed("melee") or (Input.is_action_just_pressed("fire") and current_weapon and current_weapon.is_melee)) and not _is_meleeing and current_weapon and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_start_melee()
 		return
 
@@ -176,7 +176,7 @@ func _physics_process(delta):
 		return
 
 	if current_weapon and current_weapon.full_auto:
-		if Input.is_action_pressed("fire"):
+		if Input.is_action_pressed("fire") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			_fire_timer -= delta
 			_spread = min(_spread + delta * 0.04, 0.06)
 			if _fire_timer <= 0.0:
@@ -208,7 +208,7 @@ func _physics_process(delta):
 					_sound_tween.tween_property(_gun_sound, "volume_db", -40.0, 0.3)
 					_sound_tween.tween_callback(_gun_sound.stop)
 	else:
-		if Input.is_action_just_pressed("fire") and not _is_firing_locked:
+		if Input.is_action_just_pressed("fire") and not _is_firing_locked and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			fire()
 
 func spawn_weapon_model():

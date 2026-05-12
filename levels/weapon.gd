@@ -61,7 +61,7 @@ func _process(delta):
 
 	_apply_final_offset(delta)
 
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and can_shoot:
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and can_shoot and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		shoot()
 
 # -----------------------------

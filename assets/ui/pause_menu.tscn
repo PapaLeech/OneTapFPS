@@ -35,9 +35,10 @@ text = "Resume"
 layout_mode = 2
 text = "Return to Main Menu"
 
+[node name="SettingsBtn" type="Button" parent="Panel/VBox" unique_id=576189086]
+layout_mode = 2
+text = "Settings"
+
 [node name="QuitBtn" type="Button" parent="Panel/VBox" unique_id=2144926009]
 layout_mode = 2
 text = "Exit Game"
-
-[node name="SettingsPanel" type="PanelContainer" parent="." unique_id=965191370]
-visible = false

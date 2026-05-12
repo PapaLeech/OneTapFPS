@@ -14,12 +14,14 @@ func _ready() -> void:
 	_panel.visible = false
 	_resume_btn.pressed.connect(_close)
 	_menu_btn.pressed.connect(_go_to_menu)
-	_quit_btn.pressed.connect(_exit_game)
 	_settings_btn.pressed.connect(_show_settings)
+	_quit_btn.pressed.connect(_exit_game)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
+		if _settings_open:
+			return
 		if _panel.visible:
 			_close()
 		else:
@@ -40,17 +42,25 @@ func _open() -> void:
 
 func _show_settings() -> void:
 	_settings_open = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var dialog := Window.new()
 	dialog.title = "Settings"
 	dialog.size = Vector2i(400, 300)
 	dialog.unresizable = true
-	dialog.close_requested.connect(func(): _settings_open = false; dialog.queue_free())
-	
+	dialog.exclusive = true
+	dialog.close_requested.connect(func(): _settings_open = false; if not _panel.visible: Input.mouse_mode = Input.MOUSE_MODE_CAPTURED; dialog.queue_free())
+	dialog.window_input.connect(func(e):
+		if e is InputEventMouseButton:
+			dialog.get_viewport().set_input_as_handled()
+		if e.is_action_pressed("ui_cancel"):
+			get_viewport().set_input_as_handled()
+			_settings_open = false
+			if not _panel.visible: Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			dialog.queue_free()
+			_resume_btn.grab_focus())
 	var vbox := VBoxContainer.new()
 	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	vbox.add_theme_constant_override("separation", 16)
-	
-	# Mouse Sensitivity
 	var sens_label := Label.new()
 	sens_label.text = "Mouse Sensitivity"
 	vbox.add_child(sens_label)
@@ -61,8 +71,6 @@ func _show_settings() -> void:
 	sens_slider.value = ProjectSettings.get_setting("game/mouse_sensitivity", 1.0)
 	sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/mouse_sensitivity", v))
 	vbox.add_child(sens_slider)
-	
-	# Keybindings placeholder
 	var keys_label := Label.new()
 	keys_label.text = "Keybindings"
 	vbox.add_child(keys_label)
@@ -70,16 +78,15 @@ func _show_settings() -> void:
 	keys_btn.text = "Coming Soon"
 	keys_btn.disabled = true
 	vbox.add_child(keys_btn)
-	
-	# Close button
 	var close_btn := Button.new()
 	close_btn.text = "Close"
-	close_btn.pressed.connect(func(): _settings_open = false; dialog.queue_free())
+	close_btn.pressed.connect(func(): _settings_open = false; if not _panel.visible: Input.mouse_mode = Input.MOUSE_MODE_CAPTURED; dialog.queue_free())
 	vbox.add_child(close_btn)
-	
 	dialog.add_child(vbox)
+	dialog.focus_exited.connect(func(): dialog.grab_focus())
 	add_child(dialog)
 	dialog.popup_centered()
+	dialog.grab_focus()
 
 func _close() -> void:
 	_panel.visible = false
