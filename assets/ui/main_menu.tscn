@@ -2,6 +2,14 @@
 
 [ext_resource type="Script" uid="uid://r0aeeoc01nka" path="res://assets/scripts/main_menu.gd" id="1_mkuvw"]
 [ext_resource type="Texture2D" uid="uid://b8s6nw8kgf8ru" path="res://assets/ui/OneTap-Background.png" id="2_hskgt"]
+[ext_resource type="Texture2D" uid="uid://d2oxj2avimvmv" path="res://assets/ui/MB3.png" id="3_1obgd"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y0ntp"]
+texture = ExtResource("3_1obgd")
+expand_margin_left = 185.0
+expand_margin_top = 45.0
+expand_margin_right = 185.0
+expand_margin_bottom = 40.0
 
 [node name="MainMenu" type="Control" unique_id=25391598]
 layout_mode = 3
@@ -23,31 +31,38 @@ texture = ExtResource("2_hskgt")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="CaseInner" type="HBoxContainer" parent="." unique_id=1540800177]
-layout_mode = 0
+[node name="CaseInner" type="Control" parent="." unique_id=546133323]
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
 offset_top = 28.0
 offset_right = -32.0
 offset_bottom = -28.0
-theme_override_constants/separation = 18
 
 [node name="Left" type="VBoxContainer" parent="CaseInner" unique_id=243737314]
 custom_minimum_size = Vector2(260, 0)
-layout_mode = 2
-size_flags_vertical = 3
+layout_mode = 0
+offset_left = 147.0
+offset_top = 168.0
+offset_right = 635.0
+offset_bottom = 797.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
 [node name="MissionPanel" type="PanelContainer" parent="CaseInner/Left" unique_id=726956671]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_y0ntp")
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Left/MissionPanel" unique_id=1245178213]
 layout_mode = 2
 
 [node name="Header" type="Label" parent="CaseInner/Left/MissionPanel/VBox" unique_id=108018]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "MISSION BRIEFING"
+horizontal_alignment = 1
 
 [node name="MapThumb" type="ColorRect" parent="CaseInner/Left/MissionPanel/VBox" unique_id=345389981]
 custom_minimum_size = Vector2(0, 200)
@@ -107,14 +122,19 @@ layout_mode = 2
 text = "— ms"
 
 [node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
-layout_mode = 2
-size_flags_horizontal = 3
+layout_mode = 0
+offset_left = 698.0
+offset_top = 63.0
+offset_right = 1291.0
+offset_bottom = 438.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_constants/separation = 14
 alignment = 1
 
 [node name="Title" type="Label" parent="CaseInner/Middle" unique_id=159884526]
 layout_mode = 2
-text = "ONEDEAG"
+text = "ONETAP"
 horizontal_alignment = 1
 
 [node name="DeathmatchBtn" type="PanelContainer" parent="CaseInner/Middle" unique_id=286485341]
@@ -211,13 +231,26 @@ text = "Cancel"
 layout_mode = 2
 text = "PLAY"
 
-[node name="Right" type="VBoxContainer" parent="CaseInner" unique_id=702800717]
-custom_minimum_size = Vector2(300, 0)
+[node name="SettingsBtn" type="Button" parent="CaseInner/Middle" unique_id=546935647]
 layout_mode = 2
-theme_override_constants/separation = 12
+text = "Settings"
+
+[node name="Right" type="Control" parent="CaseInner" unique_id=1641042074]
+custom_minimum_size = Vector2(300, 0)
+anchors_preset = 0
+offset_left = 1343.0
+offset_top = 624.0
+offset_right = 1963.0
+offset_bottom = 1037.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
 [node name="LobbyPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=1298519292]
-layout_mode = 2
+layout_mode = 0
+offset_left = 33.0
+offset_top = -441.0
+offset_right = 333.0
+offset_bottom = -356.0
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/LobbyPanel" unique_id=1350978065]
 layout_mode = 2
@@ -289,7 +322,11 @@ text = "Slot 5"
 horizontal_alignment = 1
 
 [node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]
-layout_mode = 2
+layout_mode = 0
+offset_left = 33.0
+offset_top = -45.0
+offset_right = 333.0
+offset_bottom = 153.0
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/FriendsPanel" unique_id=1721889990]

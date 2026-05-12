@@ -16,6 +16,7 @@ enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
 @onready var _bg_texture    : TextureRect = $Background
 @onready var _mission_panel : PanelContainer = $CaseInner/Left/MissionPanel
+@onready var _settings_btn  : Button = $CaseInner/Middle/SettingsBtn
 
 var _active_mode : Mode = Mode.NONE
 var _timer       : SceneTreeTimer = null
@@ -31,11 +32,46 @@ func _ready() -> void:
 	_dm_cancel.pressed.connect(_cancel_countdown)
 	_sd_cancel.pressed.connect(_cancel_countdown)
 	_play_btn.pressed.connect(func(): get_tree().change_scene_to_file(GAME_SCENE))
+	_settings_btn.pressed.connect(_show_settings)
 	_dm_countdown.visible = false
 	_sd_countdown.visible = false
 
 func _style_mission_panel() -> void:
 	pass
+
+func _show_settings() -> void:
+	var dialog := Window.new()
+	dialog.title = "Settings"
+	dialog.size = Vector2i(400, 300)
+	dialog.unresizable = true
+	dialog.close_requested.connect(func(): dialog.queue_free())
+	var vbox := VBoxContainer.new()
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.add_theme_constant_override("separation", 16)
+	var sens_label := Label.new()
+	sens_label.text = "Mouse Sensitivity"
+	vbox.add_child(sens_label)
+	var sens_slider := HSlider.new()
+	sens_slider.min_value = 0.1
+	sens_slider.max_value = 5.0
+	sens_slider.step = 0.1
+	sens_slider.value = ProjectSettings.get_setting("game/mouse_sensitivity", 1.0)
+	sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/mouse_sensitivity", v))
+	vbox.add_child(sens_slider)
+	var keys_label := Label.new()
+	keys_label.text = "Keybindings"
+	vbox.add_child(keys_label)
+	var keys_btn := Button.new()
+	keys_btn.text = "Coming Soon"
+	keys_btn.disabled = true
+	vbox.add_child(keys_btn)
+	var close_btn := Button.new()
+	close_btn.text = "Close"
+	close_btn.pressed.connect(func(): dialog.queue_free())
+	vbox.add_child(close_btn)
+	dialog.add_child(vbox)
+	add_child(dialog)
+	dialog.popup_centered()
 
 var _quit_dialog_open : bool = false
 

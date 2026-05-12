@@ -38,3 +38,6 @@ text = "Return to Main Menu"
 [node name="QuitBtn" type="Button" parent="Panel/VBox" unique_id=2144926009]
 layout_mode = 2
 text = "Exit Game"
+
+[node name="SettingsPanel" type="PanelContainer" parent="." unique_id=965191370]
+visible = false
