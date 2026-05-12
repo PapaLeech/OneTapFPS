@@ -11,7 +11,7 @@ anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 offset_left = -120.0
 offset_top = -130.0
 offset_right = 120.0
@@ -24,6 +24,8 @@ alignment = 1
 
 [node name="Title" type="Label" parent="Panel/VBox" unique_id=1292597248]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
 text = "PAUSED"
 horizontal_alignment = 1
 
@@ -42,3 +44,49 @@ text = "Settings"
 [node name="QuitBtn" type="Button" parent="Panel/VBox" unique_id=2144926009]
 layout_mode = 2
 text = "Exit Game"
+
+[node name="SettingsPanel" type="PanelContainer" parent="." unique_id=2106983897]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -160.0
+offset_right = 120.0
+offset_bottom = 160.0
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel" unique_id=855090895]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SettingsPanel/VBox" unique_id=1405642086]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="SensLabel" type="Label" parent="SettingsPanel/VBox" unique_id=494175027]
+layout_mode = 2
+text = "Mouse Sensitivity"
+
+[node name="SensSlider" type="HSlider" parent="SettingsPanel/VBox" unique_id=787719451]
+layout_mode = 2
+min_value = 0.1
+max_value = 5.0
+step = 0.1
+value = 1.0
+
+[node name="KeysLabel" type="Label" parent="SettingsPanel/VBox" unique_id=1483889177]
+layout_mode = 2
+text = "Keybindings"
+
+[node name="KeysBtn" type="Button" parent="SettingsPanel/VBox" unique_id=1474733494]
+layout_mode = 2
+disabled = true
+text = "Coming Soon"
+
+[node name="BackBtn" type="Button" parent="SettingsPanel/VBox" unique_id=167573595]
+layout_mode = 2
+text = "Back"
