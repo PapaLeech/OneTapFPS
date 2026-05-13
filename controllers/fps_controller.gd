@@ -56,6 +56,10 @@ func _unhandled_input(event: InputEvent) -> void:
 func _input(event):
 	if event.is_action_pressed("exit"):
 		get_tree().quit()
+	if event.is_action_pressed("kill"):
+		var health := get_node_or_null("Health")
+		if health:
+			health.take_damage(health.max_health)
 
 func _update_camera(delta):
 	_mouse_rotation.x += _tilt_input * delta
@@ -74,6 +78,22 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if _weapon_holder:
 		def_weapon_holder_pos = _weapon_holder.position
+	var health := get_node_or_null("Health")
+	if health:
+		health.died.connect(_on_died)
+
+func _on_died() -> void:
+	# Disable movement
+	set_physics_process(false)
+	# Tilt camera to the side and drop it down like falling
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(CAMERA_CONTROLLER, "rotation_degrees", Vector3(CAMERA_CONTROLLER.rotation_degrees.x, CAMERA_CONTROLLER.rotation_degrees.y, 80.0), 0.8).set_ease(Tween.EASE_IN)
+	tween.tween_property(CAMERA_CONTROLLER, "position", Vector3(CAMERA_CONTROLLER.position.x, -0.5, CAMERA_CONTROLLER.position.z), 0.8).set_ease(Tween.EASE_IN)
+	await get_tree().create_timer(0.9).timeout
+	var pause_menu := get_node_or_null("PauseMenu")
+	if pause_menu:
+		pause_menu.open_death_menu()
 
 func _physics_process(delta):
 	_update_camera(delta)

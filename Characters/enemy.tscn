@@ -1,13 +1,15 @@
 [gd_scene format=3 uid="uid://dh3j6u1fklhvr"]
 
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="1_04wy3"]
+[ext_resource type="Script" uid="uid://bw34e3kuld0ww" path="res://assets/scripts/enemy_simple.gd" id="1_sdfay"]
 [ext_resource type="Script" uid="uid://db7slb5llo5yb" path="res://assets/scripts/health.gd" id="2_rtu5t"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p6t1j"]
 radius = 0.4
 height = 1.8
 
-[node name="Enemy" type="StaticBody3D" unique_id=1033289565]
+[node name="Enemy" type="StaticBody3D" unique_id=1033289565 groups=["enemy"]]
+script = ExtResource("1_sdfay")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1490161411]
 shape = SubResource("CapsuleShape3D_p6t1j")
