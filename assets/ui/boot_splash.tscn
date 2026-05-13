@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://oqjm25qu726w"]
+
+[ext_resource type="Script" uid="uid://c4etvrg7sxfyd" path="res://assets/ui/boot_splash.gd" id="1_2mltg"]
+[ext_resource type="Texture2D" uid="uid://bmntl4x3gyuq8" path="res://assets/ui/OneTapBootsplash.png" id="2_lumdv"]
+
+[node name="BootSplash" type="CanvasLayer" unique_id=1889851915]
+script = ExtResource("1_2mltg")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1438724857]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SplashImage" type="TextureRect" parent="." unique_id=1685386019]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_lumdv")
+stretch_mode = 6
+
+[node name="SkipLabel" type="Label" parent="." unique_id=461733118]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Press any key to skip"
+horizontal_alignment = 1
+
+[node name="FadeOverlay" type="ColorRect" parent="." unique_id=266615789]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
