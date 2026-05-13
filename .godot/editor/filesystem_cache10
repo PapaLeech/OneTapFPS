@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1778652562
+::res://::1778656796
 default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778650525::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -62,7 +62,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -95,7 +95,7 @@ metadata_editor.gd::GDScript::4810375839038594439::1776657068::0::1::::MetadataE
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1778653289
+::res://assets/scripts/::1778654475
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -105,15 +105,15 @@ health.gd::GDScript::7296623631832556329::1778445466::0::1::::<>Node<><>0<>0<><>
 hitbox.gd::GDScript::1740715284671597839::1778506723::0::1::::Hitbox<>Area3D<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
 main_menu.gd::GDScript::1244827160719643432::1778622552::0::1::::<>Control<><>0<>0<><>::
-pause_menu.gd::GDScript::4838208590412015204::1778654350::0::1::::<>CanvasLayer<><>0<>0<><>::
+pause_menu.gd::GDScript::4838208590412015204::1778654475::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
-::res://assets/ui/::1778654047
+::res://assets/ui/::1778654577
 hud_health.tscn::PackedScene::2532620883247856202::1778517854::0::1::::<><><>0<>0<><>::uid://c56dk6kta8w5n::::res://assets/scripts/hud_health.gd
-main_menu.tscn::PackedScene::7669145534508254606::1778623897::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png
+main_menu.tscn::PackedScene::7669145534508254606::1778654577::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png
 map_thumbnail.png::CompressedTexture2D::5185872156021561553::1778623382::1778623414::1::::<><><>0<>0<>2f5259cb433fe42978aa2307fc5c8e06<>res://.godot/imported/map_thumbnail.png-173196fba12c8588d3b0533f6cb739c6.ctex::
 MB1.png::CompressedTexture2D::5556174736054106412::1778587514::1778587619::1::::<><><>0<>0<>7a36cd3aa2d3b4c0c2d36669f8cf9aa3<>res://.godot/imported/MB1.png-785fd0f44b8893b209d2c5c55096f797.ctex::
 MB2.png::CompressedTexture2D::8077313815722129273::1778614666::1778614694::1::::<><><>0<>0<>c457980244abff5dd55652be15e7590c<>res://.godot/imported/MB2.png-02e4eff44676e644d01b495baaa640ec.ctex::
