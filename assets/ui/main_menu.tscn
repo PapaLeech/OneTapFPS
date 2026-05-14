@@ -361,3 +361,11 @@ offset_top = 775.0
 offset_right = 1060.0
 offset_bottom = 825.0
 text = "Settings"
+
+[node name="ExitBtn" type="Button" parent="." unique_id=910262781]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 827.0
+offset_right = 1060.0
+offset_bottom = 877.0
+text = "Exit"

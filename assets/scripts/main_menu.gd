@@ -21,6 +21,7 @@ var _dog_tag_nodes : Array = []
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
 @onready var _bg_texture           : TextureRect    = $Background
 @onready var _settings_btn         : Button          = $SettingsBtn
+@onready var _exit_btn             : Button          = $ExitBtn
 @onready var _dog_tags_container   : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
 @onready var _join_btn             : Button          = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
 @onready var _leave_btn            : Button          = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
@@ -41,6 +42,7 @@ func _ready() -> void:
 	_sd_cancel.pressed.connect(_cancel_countdown)
 	_play_btn.pressed.connect(func(): get_tree().change_scene_to_file(GAME_SCENE))
 	_settings_btn.pressed.connect(_show_settings)
+	_exit_btn.pressed.connect(func(): get_tree().quit())
 	_dm_countdown.visible = false
 	_sd_countdown.visible = false
 	_style_lobby_buttons()
@@ -76,7 +78,7 @@ func _style_mission_panel() -> void:
 	btn_style.shadow_size = 8
 	var btn_hover := btn_style.duplicate()
 	btn_hover.bg_color = Color(0.2, 0.2, 0.2, 0.97)
-	for path in ["SettingsBtn", "CaseInner/Middle/PlayBtn"]:
+	for path in ["SettingsBtn", "ExitBtn", "CaseInner/Middle/PlayBtn"]:
 		var btn := get_node_or_null(path)
 		if btn:
 			btn.add_theme_stylebox_override("normal", btn_style.duplicate())
