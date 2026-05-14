@@ -44,10 +44,10 @@ offset_bottom = -28.0
 [node name="Left" type="VBoxContainer" parent="CaseInner" unique_id=243737314]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 0
-offset_left = 147.0
-offset_top = 168.0
-offset_right = 635.0
-offset_bottom = 797.0
+offset_left = 100.0
+offset_top = 97.0
+offset_right = 588.0
+offset_bottom = 726.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
@@ -128,10 +128,10 @@ text = "— ms"
 
 [node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
 layout_mode = 0
-offset_left = 697.0
-offset_top = 55.0
-offset_right = 1290.0
-offset_bottom = 430.0
+offset_left = 643.0
+offset_top = 57.0
+offset_right = 1236.0
+offset_bottom = 432.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 14
@@ -239,19 +239,20 @@ text = "PLAY"
 [node name="Right" type="Control" parent="CaseInner" unique_id=1641042074]
 custom_minimum_size = Vector2(300, 0)
 anchors_preset = 0
-offset_left = 1343.0
-offset_top = 624.0
-offset_right = 1963.0
-offset_bottom = 1037.0
+offset_left = 1300.0
+offset_top = 55.0
+offset_right = 1630.0
+offset_bottom = 797.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="LobbyPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=1298519292]
+custom_minimum_size = Vector2(480, 320)
 layout_mode = 0
-offset_left = 32.0
-offset_top = -453.0
-offset_right = 332.0
-offset_bottom = -368.0
+offset_left = -22.0
+offset_top = 56.0
+offset_right = 458.0
+offset_bottom = 376.0
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/LobbyPanel" unique_id=1350978065]
 layout_mode = 2
@@ -273,61 +274,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Leave"
 
-[node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=389797138]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="Tag1" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=744756188]
+[node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=217371637]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag1" unique_id=2062420657]
-layout_mode = 2
-text = "Slot 1"
-horizontal_alignment = 1
-
-[node name="Tag2" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=1502570180]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag2" unique_id=1118661731]
-layout_mode = 2
-text = "Slot 2"
-horizontal_alignment = 1
-
-[node name="Tag3" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=744687626]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag3" unique_id=1492155595]
-layout_mode = 2
-text = "Slot 3"
-horizontal_alignment = 1
-
-[node name="Tag4" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=717905515]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag4" unique_id=1212000060]
-layout_mode = 2
-text = "Slot 4"
-horizontal_alignment = 1
-
-[node name="Tag5" type="PanelContainer" parent="CaseInner/Right/LobbyPanel/VBox/DogTags" unique_id=1324815273]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="L" type="Label" parent="CaseInner/Right/LobbyPanel/VBox/DogTags/Tag5" unique_id=292514317]
-layout_mode = 2
-text = "Slot 5"
-horizontal_alignment = 1
+alignment = 1
 
 [node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]
 layout_mode = 0
-offset_left = 33.0
-offset_top = -45.0
-offset_right = 333.0
-offset_bottom = 153.0
+offset_left = 6.0
+offset_top = 540.0
+offset_right = 306.0
+offset_bottom = 750.0
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/FriendsPanel" unique_id=1721889990]

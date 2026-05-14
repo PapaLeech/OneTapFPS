@@ -1,0 +1,25 @@
+extends Control
+
+const TAG_TEXTURE := preload("res://assets/ui/OneTapDogTag.png")
+
+@onready var name_label: Label = $TagTexture/NameLabel
+@onready var tag_texture: TextureRect = $TagTexture
+
+func _ready() -> void:
+	tag_texture.texture = TAG_TEXTURE
+	tag_texture.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	tag_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tag_texture.show_behind_parent = false
+	pivot_offset = Vector2(27, 0)
+	name_label.add_theme_color_override("font_color", Color.WHITE)
+	name_label.add_theme_font_size_override("font_size", 9)
+
+func set_player_name(player_name: String) -> void:
+	name_label.text = player_name
+
+func swing_in() -> void:
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_ELASTIC)
+	tween.set_ease(Tween.EASE_OUT)
+	rotation_degrees = -25.0
+	tween.tween_property(self, "rotation_degrees", 0.0, 1.2)

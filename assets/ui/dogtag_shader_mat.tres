@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dlemmod6egwo2"]
+
+[ext_resource type="Shader" uid="uid://b2ww311bx6iuw" path="res://assets/ui/dogtag_black_remove.gdshader" id="1_7ltqi"]
+
+[resource]
+shader = ExtResource("1_7ltqi")
+shader_parameter/threshold = 0.18

@@ -1,7 +1,12 @@
 extends Control
 
 const GAME_SCENE := "res://levels/level_001.tscn"
+const DOG_TAG_SCENE := preload("res://assets/ui/DogTag.tscn")
+const MAX_LOBBY := 5
 enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
+
+var _lobby_players : Array[String] = []
+var _dog_tag_nodes : Array = []
 
 @onready var _dm_btn       : PanelContainer = $CaseInner/Middle/DeathmatchBtn
 @onready var _sd_btn       : PanelContainer = $CaseInner/Middle/SearchDestroyBtn
@@ -14,8 +19,11 @@ enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 @onready var _dm_cancel    : Button = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/CancelBtn
 @onready var _sd_cancel    : Button = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
 @onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
-@onready var _bg_texture    : TextureRect = $Background
-@onready var _settings_btn  : Button = $SettingsBtn
+@onready var _bg_texture           : TextureRect    = $Background
+@onready var _settings_btn         : Button          = $SettingsBtn
+@onready var _dog_tags_container   : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
+@onready var _join_btn             : Button          = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
+@onready var _leave_btn            : Button          = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
 
 var _active_mode : Mode = Mode.NONE
 var _timer       : SceneTreeTimer = null
@@ -35,6 +43,10 @@ func _ready() -> void:
 	_settings_btn.pressed.connect(_show_settings)
 	_dm_countdown.visible = false
 	_sd_countdown.visible = false
+	_style_lobby_buttons()
+	_join_btn.pressed.connect(_on_join_pressed)
+	_leave_btn.pressed.connect(_on_leave_pressed)
+	_clear_placeholder_tags()
 
 func _style_mission_panel() -> void:
 	var style := StyleBoxFlat.new()
@@ -186,3 +198,78 @@ func _reset() -> void:
 
 func _load_mode() -> void:
 	get_tree().change_scene_to_file(GAME_SCENE)
+
+# ─── Lobby / Dog Tags ────────────────────────────────────────────────────────
+
+func _style_lobby_buttons() -> void:
+	var join_style := StyleBoxFlat.new()
+	join_style.bg_color = Color(0.1, 0.45, 0.1, 1.0)
+	join_style.border_color = Color(0.15, 0.6, 0.15, 1.0)
+	join_style.set_border_width_all(1)
+	join_style.set_corner_radius_all(4)
+	var join_hover := join_style.duplicate()
+	join_hover.bg_color = Color(0.15, 0.55, 0.15, 1.0)
+	_join_btn.add_theme_stylebox_override("normal", join_style)
+	_join_btn.add_theme_stylebox_override("hover", join_hover)
+	_join_btn.add_theme_stylebox_override("pressed", join_hover)
+	_join_btn.add_theme_color_override("font_color", Color.WHITE)
+
+	var leave_style := StyleBoxFlat.new()
+	leave_style.bg_color = Color(0.45, 0.1, 0.1, 1.0)
+	leave_style.border_color = Color(0.6, 0.15, 0.15, 1.0)
+	leave_style.set_border_width_all(1)
+	leave_style.set_corner_radius_all(4)
+	var leave_hover := leave_style.duplicate()
+	leave_hover.bg_color = Color(0.55, 0.15, 0.15, 1.0)
+	_leave_btn.add_theme_stylebox_override("normal", leave_style)
+	_leave_btn.add_theme_stylebox_override("hover", leave_hover)
+	_leave_btn.add_theme_stylebox_override("pressed", leave_hover)
+	_leave_btn.add_theme_color_override("font_color", Color.WHITE)
+
+func _clear_placeholder_tags() -> void:
+	for child in _dog_tags_container.get_children():
+		child.queue_free()
+	_lobby_players.clear()
+	_dog_tag_nodes.clear()
+
+func _on_join_pressed() -> void:
+	if _lobby_players.size() >= MAX_LOBBY:
+		return
+	var player_name := "Player %d" % (_lobby_players.size() + 1)
+	_add_player_tag(player_name, true)
+
+func _on_leave_pressed() -> void:
+	if _lobby_players.is_empty():
+		return
+	_lobby_players.pop_back()
+	var last_tag := _dog_tag_nodes.pop_back()
+	if last_tag:
+		last_tag.queue_free()
+
+func _add_player_tag(player_name: String, swing: bool = false) -> void:
+	_lobby_players.append(player_name)
+	var tag : Control = DOG_TAG_SCENE.instantiate()
+	_dog_tags_container.add_child(tag)
+	tag.set_player_name(player_name)
+	# Manually position — HBoxContainer won't auto-layout a plain Control
+	var tag_w := 60
+	var idx := _dog_tag_nodes.size()
+	tag.position = Vector2(idx * (tag_w + 1), 0)
+	_dog_tag_nodes.append(tag)
+	if swing:
+		tag.swing_in()
+
+func add_network_player(player_name: String) -> void:
+	if _lobby_players.size() >= MAX_LOBBY:
+		return
+	_add_player_tag(player_name, true)
+
+func remove_network_player(player_name: String) -> void:
+	var idx := _lobby_players.find(player_name)
+	if idx == -1:
+		return
+	_lobby_players.remove_at(idx)
+	var tag : Control = _dog_tag_nodes[idx]
+	_dog_tag_nodes.remove_at(idx)
+	if tag:
+		tag.queue_free()
