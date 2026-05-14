@@ -277,8 +277,7 @@ text = "Leave"
 [node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=1021169146]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 2
-alignment = 1
+theme_override_constants/separation = 0
 
 [node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]
 layout_mode = 0

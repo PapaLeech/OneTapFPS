@@ -253,7 +253,7 @@ func _on_leave_pressed() -> void:
 	_lobby_players.pop_back()
 	var last_tag := _dog_tag_nodes.pop_back()
 	if last_tag:
-		last_tag.queue_free()
+		last_tag.swing_out(func(): last_tag.queue_free())
 
 func _add_player_tag(player_name: String, swing: bool = false) -> void:
 	_lobby_players.append(player_name)
@@ -262,7 +262,7 @@ func _add_player_tag(player_name: String, swing: bool = false) -> void:
 	tag.set_player_name(player_name)
 	_dog_tag_nodes.append(tag)
 	if swing:
-		tag.swing_in()
+		tag.call_deferred("swing_in")
 
 func add_network_player(player_name: String) -> void:
 	if _lobby_players.size() >= MAX_LOBBY:
