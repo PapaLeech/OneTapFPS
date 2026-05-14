@@ -278,7 +278,6 @@ text = "Leave"
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
-alignment = 1
 
 [node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]
 layout_mode = 0
