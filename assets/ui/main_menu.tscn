@@ -241,17 +241,17 @@ custom_minimum_size = Vector2(300, 0)
 anchors_preset = 0
 offset_left = 1300.0
 offset_top = 55.0
-offset_right = 1630.0
+offset_right = 1780.0
 offset_bottom = 797.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="LobbyPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=1298519292]
+clip_contents = true
 custom_minimum_size = Vector2(480, 320)
 layout_mode = 0
-offset_left = -22.0
 offset_top = 56.0
-offset_right = 458.0
+offset_right = 480.0
 offset_bottom = 376.0
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/LobbyPanel" unique_id=1350978065]
@@ -274,9 +274,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Leave"
 
-[node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=217371637]
+[node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=1021169146]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 2
 alignment = 1
 
 [node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]

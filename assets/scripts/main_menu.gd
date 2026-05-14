@@ -124,6 +124,15 @@ func _show_settings() -> void:
 var _quit_dialog_open : bool = false
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_ENTER and event.alt_pressed:
+			var win := get_window()
+			if win.mode == Window.MODE_FULLSCREEN:
+				win.mode = Window.MODE_WINDOWED
+			else:
+				win.mode = Window.MODE_FULLSCREEN
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		if _quit_dialog_open:
@@ -251,10 +260,6 @@ func _add_player_tag(player_name: String, swing: bool = false) -> void:
 	var tag : Control = DOG_TAG_SCENE.instantiate()
 	_dog_tags_container.add_child(tag)
 	tag.set_player_name(player_name)
-	# Manually position — HBoxContainer won't auto-layout a plain Control
-	var tag_w := 60
-	var idx := _dog_tag_nodes.size()
-	tag.position = Vector2(idx * (tag_w + 1), 0)
 	_dog_tag_nodes.append(tag)
 	if swing:
 		tag.swing_in()
