@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://btxoy6f5ws3e8"
 path.s3tc="res://.godot/imported/desert_eagle_1.png-40b6a68d63b71f4c0cb060b78d21bc8f.s3tc.ctex"
+path.etc2="res://.godot/imported/desert_eagle_1.png-40b6a68d63b71f4c0cb060b78d21bc8f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/weapons/resources/desert_eagle_1.png"
-dest_files=["res://.godot/imported/desert_eagle_1.png-40b6a68d63b71f4c0cb060b78d21bc8f.s3tc.ctex"]
+dest_files=["res://.godot/imported/desert_eagle_1.png-40b6a68d63b71f4c0cb060b78d21bc8f.s3tc.ctex", "res://.godot/imported/desert_eagle_1.png-40b6a68d63b71f4c0cb060b78d21bc8f.etc2.ctex"]
 
 [params]
 

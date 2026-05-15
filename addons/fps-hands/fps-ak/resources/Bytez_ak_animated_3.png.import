@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b7tefp2ai0gyb"
 path.s3tc="res://.godot/imported/Bytez_ak_animated_3.png-a4b9b0c78b7e2788b4c15b329f50ebe9.s3tc.ctex"
+path.etc2="res://.godot/imported/Bytez_ak_animated_3.png-a4b9b0c78b7e2788b4c15b329f50ebe9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://addons/fps-hands/fps-ak/resources/Bytez_ak_animated_3.png"
-dest_files=["res://.godot/imported/Bytez_ak_animated_3.png-a4b9b0c78b7e2788b4c15b329f50ebe9.s3tc.ctex"]
+dest_files=["res://.godot/imported/Bytez_ak_animated_3.png-a4b9b0c78b7e2788b4c15b329f50ebe9.s3tc.ctex", "res://.godot/imported/Bytez_ak_animated_3.png-a4b9b0c78b7e2788b4c15b329f50ebe9.etc2.ctex"]
 
 [params]
 

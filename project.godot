@@ -142,6 +142,7 @@ kill={
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 textures/default_filters/anisotropic_filtering_level=4
 anti_aliasing/quality/msaa_3d=3
 textures/default_filters/texture_mipmap_bias=-1.0

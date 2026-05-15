@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8hhbo7phxh0b"
 path.s3tc="res://.godot/imported/Map_v1_Generator_v1.jpg-88f9fcf6738fecb99101006ccacbde7e.s3tc.ctex"
+path.etc2="res://.godot/imported/Map_v1_Generator_v1.jpg-88f9fcf6738fecb99101006ccacbde7e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://environment/Map_v1_Generator_v1.jpg"
-dest_files=["res://.godot/imported/Map_v1_Generator_v1.jpg-88f9fcf6738fecb99101006ccacbde7e.s3tc.ctex"]
+dest_files=["res://.godot/imported/Map_v1_Generator_v1.jpg-88f9fcf6738fecb99101006ccacbde7e.s3tc.ctex", "res://.godot/imported/Map_v1_Generator_v1.jpg-88f9fcf6738fecb99101006ccacbde7e.etc2.ctex"]
 
 [params]
 

@@ -70,13 +70,10 @@ func _ready() -> void:
 	_leave_btn.pressed.connect(_on_leave_pressed)
 	_clear_placeholder_tags()
 	_setup_chat_terminal()
-	PresenceManager.go_online("char")
-	PresenceManager.get_friends_status(["char"], func(data: Dictionary):
-		var friends_array: Array = []
-		for name in data.keys():
-			friends_array.append({"name": name, "online": data[name]})
-		populate_friends(friends_array)
-	)
+	if not PresenceManager.has_username():
+		_show_username_prompt()
+	else:
+		_go_online_and_fetch_friends()
 
 
 # ─── Styling ─────────────────────────────────────────────────────────────────
@@ -373,6 +370,8 @@ func populate_friends(friends: Array) -> void:
 	for child in _bullet_list.get_children():
 		child.queue_free()
 	for f in friends:
+		if f.get("name", "") == PresenceManager.username:
+			continue
 		var slot := BULLET_SLOT_SCENE.instantiate()
 		_bullet_list.add_child(slot)
 		slot.friend_name = f.get("name", "Player")
@@ -427,6 +426,46 @@ func remove_network_player(player_name: String) -> void:
 	_dog_tag_nodes.remove_at(idx)
 	if tag:
 		tag.queue_free()
+func _show_username_prompt() -> void:
+	var dialog := Window.new()
+	dialog.title = "Welcome to OneTap"
+	dialog.size = Vector2i(400, 180)
+	dialog.unresizable = true
+	dialog.close_requested.connect(func(): pass)
+	var vbox := VBoxContainer.new()
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.add_theme_constant_override("separation", 16)
+	var label := Label.new()
+	label.text = "Enter your username:"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(label)
+	var input := LineEdit.new()
+	input.placeholder_text = "Username"
+	input.max_length = 20
+	vbox.add_child(input)
+	var btn := Button.new()
+	btn.text = "Confirm"
+	btn.pressed.connect(func():
+		var name := input.text.strip_edges()
+		if name == "":
+			return
+		PresenceManager.save_username(name)
+		dialog.queue_free()
+		_go_online_and_fetch_friends()
+	)
+	vbox.add_child(btn)
+	dialog.add_child(vbox)
+	add_child(dialog)
+	dialog.popup_centered()
+
+func _go_online_and_fetch_friends() -> void:
+	PresenceManager.go_online(PresenceManager.username)
+	PresenceManager.get_friends_status([PresenceManager.username], func(data: Dictionary):
+		var friends_array: Array = []
+		for name in data.keys():
+			friends_array.append({"name": name, "online": data[name]})
+		populate_friends(friends_array)
+	)
 
 # ─── Chat / Console ──────────────────────────────────────────────────────────
 

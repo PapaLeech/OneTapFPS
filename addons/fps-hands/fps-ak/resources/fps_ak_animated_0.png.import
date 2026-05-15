@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cpbq5lco1t7rs"
 path.s3tc="res://.godot/imported/fps_ak_animated_0.png-13c1dee7e7165c38b832b9da784d1cfc.s3tc.ctex"
+path.etc2="res://.godot/imported/fps_ak_animated_0.png-13c1dee7e7165c38b832b9da784d1cfc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/fps-hands/fps-ak/resources/fps_ak_animated_0.png"
-dest_files=["res://.godot/imported/fps_ak_animated_0.png-13c1dee7e7165c38b832b9da784d1cfc.s3tc.ctex"]
+dest_files=["res://.godot/imported/fps_ak_animated_0.png-13c1dee7e7165c38b832b9da784d1cfc.s3tc.ctex", "res://.godot/imported/fps_ak_animated_0.png-13c1dee7e7165c38b832b9da784d1cfc.etc2.ctex"]
 
 [params]
 

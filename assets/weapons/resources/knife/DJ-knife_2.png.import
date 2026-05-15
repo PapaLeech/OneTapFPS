@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b0l5ifxy1v62n"
 path.s3tc="res://.godot/imported/DJ-knife_2.png-cd02b7ae83ba9800373c0e4bea76111b.s3tc.ctex"
+path.etc2="res://.godot/imported/DJ-knife_2.png-cd02b7ae83ba9800373c0e4bea76111b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/weapons/resources/knife/DJ-knife_2.png"
-dest_files=["res://.godot/imported/DJ-knife_2.png-cd02b7ae83ba9800373c0e4bea76111b.s3tc.ctex"]
+dest_files=["res://.godot/imported/DJ-knife_2.png-cd02b7ae83ba9800373c0e4bea76111b.s3tc.ctex", "res://.godot/imported/DJ-knife_2.png-cd02b7ae83ba9800373c0e4bea76111b.etc2.ctex"]
 
 [params]
 

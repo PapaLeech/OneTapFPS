@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://76ncdnbny5ju"
 path.s3tc="res://.godot/imported/Map_v1_Oil_tank_v1.jpg-de41960cd621ec752cd9da1fef1a89ed.s3tc.ctex"
+path.etc2="res://.godot/imported/Map_v1_Oil_tank_v1.jpg-de41960cd621ec752cd9da1fef1a89ed.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://environment/Map_v1_Oil_tank_v1.jpg"
-dest_files=["res://.godot/imported/Map_v1_Oil_tank_v1.jpg-de41960cd621ec752cd9da1fef1a89ed.s3tc.ctex"]
+dest_files=["res://.godot/imported/Map_v1_Oil_tank_v1.jpg-de41960cd621ec752cd9da1fef1a89ed.s3tc.ctex", "res://.godot/imported/Map_v1_Oil_tank_v1.jpg-de41960cd621ec752cd9da1fef1a89ed.etc2.ctex"]
 
 [params]
 

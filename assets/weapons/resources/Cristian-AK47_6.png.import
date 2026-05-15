@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8d4qiwhd8wms"
 path.s3tc="res://.godot/imported/Cristian-AK47_6.png-f1df59a2b0cc251f2626b914523bf9bd.s3tc.ctex"
+path.etc2="res://.godot/imported/Cristian-AK47_6.png-f1df59a2b0cc251f2626b914523bf9bd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/weapons/resources/Cristian-AK47_6.png"
-dest_files=["res://.godot/imported/Cristian-AK47_6.png-f1df59a2b0cc251f2626b914523bf9bd.s3tc.ctex"]
+dest_files=["res://.godot/imported/Cristian-AK47_6.png-f1df59a2b0cc251f2626b914523bf9bd.s3tc.ctex", "res://.godot/imported/Cristian-AK47_6.png-f1df59a2b0cc251f2626b914523bf9bd.etc2.ctex"]
 
 [params]
 

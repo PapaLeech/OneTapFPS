@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://72idfmfhr11w"
 path.s3tc="res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.s3tc.ctex"
+path.etc2="res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/weapons/resources/ak47_animation_5.png"
-dest_files=["res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.s3tc.ctex"]
+dest_files=["res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.s3tc.ctex", "res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.etc2.ctex"]
 
 [params]
 

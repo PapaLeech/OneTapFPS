@@ -1,8 +1,26 @@
 extends Node
 
 const SERVER_URL = "http://161.35.41.206:8000"
+const CONFIG_PATH = "user://config.cfg"
 
 var username: String = ""
+
+func _ready() -> void:
+	_load_username()
+
+func _load_username() -> void:
+	var config := ConfigFile.new()
+	if config.load(CONFIG_PATH) == OK:
+		username = config.get_value("player", "username", "")
+
+func save_username(name: String) -> void:
+	username = name
+	var config := ConfigFile.new()
+	config.set_value("player", "username", name)
+	config.save(CONFIG_PATH)
+
+func has_username() -> bool:
+	return username != ""
 
 func go_online(player_name: String) -> void:
 	username = player_name

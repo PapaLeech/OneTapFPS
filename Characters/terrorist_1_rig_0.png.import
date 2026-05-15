@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bf8o2immm1f11"
 path.s3tc="res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex"
+path.etc2="res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://Characters/terrorist_1_rig_0.png"
-dest_files=["res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex"]
+dest_files=["res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex", "res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.etc2.ctex"]
 
 [params]
 
