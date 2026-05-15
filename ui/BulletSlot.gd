@@ -88,7 +88,7 @@ func _draw() -> void:
 	# ── name label ─────────────────────────────────────────────────────
 	var label_cx: float = seg_extract + (seg_shoulder - seg_extract) * 0.5
 	var font: Font = ThemeDB.fallback_font
-	var font_size: int = 11
+	var font_size: int = 16
 	var ts: float = font.get_string_size(friend_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	draw_string(font, Vector2(label_cx - ts * 0.5, cy + font_size * 0.38),
 		friend_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_col)
