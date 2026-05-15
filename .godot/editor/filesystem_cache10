@@ -98,7 +98,7 @@ PlayerJoinLobby.wav::AudioStreamWAV::7238344369340536428::1778864117::1778864119
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1778878412
+::res://assets/scripts/::1778880013
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -107,7 +107,7 @@ enemy_simple.gd::GDScript::3990147243834738222::1778652441::0::1::::<>StaticBody
 health.gd::GDScript::7296623631832556329::1778445466::0::1::::<>Node<><>0<>0<><>::
 hitbox.gd::GDScript::1740715284671597839::1778506723::0::1::::Hitbox<>Area3D<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
-main_menu.gd::GDScript::1244827160719643432::1778878412::0::1::::<>Control<><>0<>0<><>::
+main_menu.gd::GDScript::1244827160719643432::1778880013::0::1::::<>Control<><>0<>0<><>::
 pause_menu.gd::GDScript::4838208590412015204::1778654475::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
@@ -360,7 +360,7 @@ gun.gd::GDScript::8779464083066060231::1777919708::0::1::::<>Node3D<><>0<>0<><>:
 ::res://controllers/scripts/player/::1777751477
 ::res://controllers/scripts/player/components/::1777903674
 step_climber.gd::GDScript::4907033901062355217::1777903674::0::1::::StepHandlerComponent<>Node<><>0<>0<><>::
-::res://environment/::1778878431
+::res://environment/::1778879860
 Map_v1.glb::PackedScene::1986801885685758115::1778014062::1778014852::1::::<><><>0<>0<>15e0768e44328892aaf9ffe26ded475e<>res://.godot/imported/Map_v1.glb-63d61b0e2a849e6344b19ac1db9988c7.scn::uid://c3yesvv685euf::::res://environment/Map_v1_Seamless_asphalt_v1.jpg<>uid://4fcxsdloyl3m::::res://environment/Map_v1_Road_with_pavements_v1.jpg<>uid://2o8xj37oq1kk::::res://environment/Map_v1_Hangar_v4.jpg<>uid://cuimamweffrbt::::res://environment/Map_v1_Hangar_v3.jpg<>uid://ot5782xlocff::::res://environment/Map_v1_Concrete_fence_v1.jpg<>uid://d1lv5kfk1a5gv::::res://environment/Map_v1_UNIConcrete_wall_v1.jpg<>uid://vbobryilwa8s::::res://environment/Map_v1_Hangar_v2.jpg<>uid://cxnt67hsk3o3i::::res://environment/Map_v1_Lattice_v1.png<>uid://43kl8ai30ph3::::res://environment/Map_v1_Concrete_fence_v2.jpg<>uid://cmw1pbltdo0c0::::res://environment/Map_v1_Oil_tank_v2.jpg<>uid://76ncdnbny5ju::::res://environment/Map_v1_Oil_tank_v1.jpg<>uid://bhw0uinbxiy1c::::res://environment/Map_v1_Hangar_v1.jpg<>uid://cy2alx0sgrgck::::res://environment/Map_v1_Road_block_v1.jpg<>uid://cd1si5hgvxs0m::::res://environment/Map_v1_Wooden_box_v1.jpg<>uid://c2vi0eotdja4d::::res://environment/Map_v1_Barrel_v3.jpg<>uid://264ik7qh77du::::res://environment/Map_v1_Palet_v1.jpg<>uid://cryexwvlaysrk::::res://environment/Map_v1_Conditioner_v1.jpg<>uid://dayq6aumx7v1j::::res://environment/Map_v1_Industrial_pipe_v1.jpg<>uid://ckelf53phhc5x::::res://environment/Map_v1_Cargo_container_v1.jpg<>uid://bj54f2t7bahfw::::res://environment/Map_v1_Dumpsters_v1.jpg<>uid://w82xm7o7r3dq::::res://environment/Map_v1_Electric_box_v1.jpg<>uid://b8hhbo7phxh0b::::res://environment/Map_v1_Generator_v1.jpg<>uid://ckol0uteypcy0::::res://environment/Map_v1_Electric_box_v3.jpg<>uid://csgudbdsdktv::::res://environment/Map_v1_Electric_box_v2.jpg<>uid://c8gdsxqm1hbed::::res://environment/Map_v1_Pipes_set_v1.jpg<>uid://kxem2r8akcsy::::res://environment/Map_v1_Barrel_v2.jpg<>uid://b0ks562d2lgkx::::res://environment/Map_v1_Barrel_v1.jpg
 Map_v1_Barrel_v1.jpg::CompressedTexture2D::4162933701977852331::1778015563::1778878424::1::::<><><>0<>0<>5c4d5dfe1843fa2e0246636394ca5e9b<>res://.godot/imported/Map_v1_Barrel_v1.jpg-8c5a371835f962a47cdf99e71c7a3e72.s3tc.ctex<*>res://.godot/imported/Map_v1_Barrel_v1.jpg-8c5a371835f962a47cdf99e71c7a3e72.etc2.ctex::
 Map_v1_Barrel_v2.jpg::CompressedTexture2D::749634868113517236::1778015563::1778878424::1::::<><><>0<>0<>7bcf50f8f40144178844d47090c663f4<>res://.godot/imported/Map_v1_Barrel_v2.jpg-ac9badb55e7cbc861683fa2a48002255.s3tc.ctex<*>res://.godot/imported/Map_v1_Barrel_v2.jpg-ac9badb55e7cbc861683fa2a48002255.etc2.ctex::
@@ -390,7 +390,7 @@ Map_v1_Seamless_asphalt_v1.jpg::CompressedTexture2D::6787950204494924893::177801
 Map_v1_UNIConcrete_wall_v1.jpg::CompressedTexture2D::9008209305074702713::1778015563::1778878430::1::::<><><>0<>0<>32e54cfd2cb100f1edfce67e3277d87d<>res://.godot/imported/Map_v1_UNIConcrete_wall_v1.jpg-6f954d4b4e907fa0859d65d20320f102.s3tc.ctex<*>res://.godot/imported/Map_v1_UNIConcrete_wall_v1.jpg-6f954d4b4e907fa0859d65d20320f102.etc2.ctex::
 Map_v1_Wooden_box_v1.jpg::CompressedTexture2D::5038190498942625454::1778015563::1778878430::1::::<><><>0<>0<>8e5346ba9173076a355cd90f157c04e3<>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.s3tc.ctex<*>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.etc2.ctex::
 map_v_1.gd::GDScript::6714484322957040553::1776709126::0::1::::<>Node3D<><>0<>0<><>::
-WE_test.tres::Environment::8424170553004968181::1778875840::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
+WE_test.tres::Environment::8424170553004968181::1778879860::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
 ::res://levels/::1778650967
 level_001.gd::GDScript::612782810600861443::1778014466::0::1::::<>RefCounted<><>0<>0<><>::
 level_001.tscn::PackedScene::4261551556484119783::1778650967::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://khvf4g3dgyqi::::res://controllers/fps_controller.tscn<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://dh3j6u1fklhvr::::res://Characters/enemy.tscn<>uid://3kolpk4youf0::::res://environment/Map_v1.glb
@@ -401,9 +401,9 @@ WE_test.tscn::PackedScene::3764880135456822604::1776653496::0::1::::<><><>0<>0<>
 ::res://materials/::1777234919
 grid.tres::ShaderMaterial::5739367904623174735::1776654260::0::1::::<><><>0<>0<><>::uid://ivvpsi314b34::::res://textures/grid.jpg
 player.tres::StandardMaterial3D::4435626134922663587::1776653496::0::1::::<><><>0<>0<><>::
-::res://scripts/::1778875840
+::res://scripts/::1778879126
 boot_splash.gd::GDScript::8887376292968682027::1778697484::0::1::::<>CanvasLayer<><>0<>0<><>::
-PresenceManager.gd::GDScript::3317272715576500429::1778875840::0::1::::<>Node<><>0<>0<><>::
+PresenceManager.gd::GDScript::3317272715576500429::1778879126::0::1::::<>Node<><>0<>0<><>::
 ::res://shaders/::1777234919
 grid.gdshader::Shader::3566797187140224592::1776653496::0::1::::<><><>0<>0<><>::
 ::res://textures/::1778878455

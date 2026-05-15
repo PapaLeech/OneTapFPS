@@ -233,7 +233,7 @@ func _on_invite_declined() -> void:
 func _show_settings() -> void:
 	var dialog := Window.new()
 	dialog.title = "Settings"
-	dialog.size = Vector2i(400, 300)
+	dialog.size = Vector2i(400, 380)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
 	dialog.window_input.connect(func(e):
@@ -259,6 +259,13 @@ func _show_settings() -> void:
 	keys_btn.text = "Coming Soon"
 	keys_btn.disabled = true
 	vbox.add_child(keys_btn)
+	var username_btn := Button.new()
+	username_btn.text = "Change Username (current: %s)" % PresenceManager.username
+	username_btn.pressed.connect(func():
+		dialog.queue_free()
+		_show_username_prompt()
+	)
+	vbox.add_child(username_btn)
 	var close_btn := Button.new()
 	close_btn.text = "Close"
 	close_btn.pressed.connect(func(): dialog.queue_free())
