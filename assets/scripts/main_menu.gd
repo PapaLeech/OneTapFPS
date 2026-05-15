@@ -4,31 +4,40 @@ const GAME_SCENE := "res://levels/level_001.tscn"
 const DOG_TAG_SCENE := preload("res://assets/ui/DogTag.tscn")
 const MAX_LOBBY := 5
 enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
+enum ChatFocus { NONE, CHAT, TERMINAL }
 
 var _lobby_players : Array[String] = []
 var _dog_tag_nodes : Array = []
+var _active_mode   : Mode = Mode.NONE
+var _timer         : SceneTreeTimer = null
+var _count         : int = 3
+var _quit_dialog_open : bool = false
+var _chat_focus    : ChatFocus = ChatFocus.NONE
 
-@onready var _dm_btn       : PanelContainer = $CaseInner/Middle/DeathmatchBtn
-@onready var _sd_btn       : PanelContainer = $CaseInner/Middle/SearchDestroyBtn
-@onready var _dm_desc      : Label = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Desc
-@onready var _sd_desc      : Label = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Desc
-@onready var _dm_countdown : HBoxContainer = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown
-@onready var _sd_countdown : HBoxContainer = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown
-@onready var _dm_num       : Label = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/Num
-@onready var _sd_num       : Label = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/Num
-@onready var _dm_cancel    : Button = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/CancelBtn
-@onready var _sd_cancel    : Button = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
-@onready var _play_btn     : Button = $CaseInner/Middle/PlayBtn
-@onready var _bg_texture           : TextureRect    = $Background
-@onready var _settings_btn         : Button          = $SettingsBtn
-@onready var _exit_btn             : Button          = $ExitBtn
-@onready var _dog_tags_container   : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
-@onready var _join_btn             : Button          = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
-@onready var _leave_btn            : Button          = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
+@onready var _dm_btn           : PanelContainer = $CaseInner/Middle/DeathmatchBtn
+@onready var _sd_btn           : PanelContainer = $CaseInner/Middle/SearchDestroyBtn
+@onready var _dm_desc          : Label          = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Desc
+@onready var _sd_desc          : Label          = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Desc
+@onready var _dm_countdown     : HBoxContainer  = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown
+@onready var _sd_countdown     : HBoxContainer  = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown
+@onready var _dm_num           : Label          = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/Num
+@onready var _sd_num           : Label          = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/Num
+@onready var _dm_cancel        : Button         = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/CancelBtn
+@onready var _sd_cancel        : Button         = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
+@onready var _play_btn         : Button         = $CaseInner/Middle/PlayBtn
+@onready var _bg_texture       : TextureRect    = $Background
+@onready var _settings_btn     : Button         = $SettingsBtn
+@onready var _exit_btn         : Button         = $ExitBtn
+@onready var _dog_tags_container : Control      = $CaseInner/Right/LobbyPanel/VBox/DogTags
+@onready var _join_btn         : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
+@onready var _leave_btn        : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
+@onready var _chat_tab_btn     : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/ChatTab
+@onready var _term_tab_btn     : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/TerminalTab
+@onready var _chat_output      : RichTextLabel  = $CaseInner/Left/ChatTerminalPanel/VBox/ChatOutput
+@onready var _term_output      : RichTextLabel  = $CaseInner/Left/ChatTerminalPanel/VBox/TerminalOutput
+@onready var _input_line       : LineEdit       = $CaseInner/Left/ChatTerminalPanel/VBox/InputLine
 
-var _active_mode : Mode = Mode.NONE
-var _timer       : SceneTreeTimer = null
-var _count       : int = 3
+# ─── Ready ───────────────────────────────────────────────────────────────────
 
 func _ready() -> void:
 	get_window().mode = Window.MODE_FULLSCREEN
@@ -49,6 +58,9 @@ func _ready() -> void:
 	_join_btn.pressed.connect(_on_join_pressed)
 	_leave_btn.pressed.connect(_on_leave_pressed)
 	_clear_placeholder_tags()
+	_setup_chat_terminal()
+
+# ─── Styling ─────────────────────────────────────────────────────────────────
 
 func _style_mission_panel() -> void:
 	var style := StyleBoxFlat.new()
@@ -60,6 +72,7 @@ func _style_mission_panel() -> void:
 	style.shadow_size = 8
 	for path in [
 		"CaseInner/Left/MissionPanel",
+		"CaseInner/Left/ChatTerminalPanel",
 		"CaseInner/Right/LobbyPanel",
 		"CaseInner/Right/FriendsPanel",
 		"CaseInner/Middle/DeathmatchBtn",
@@ -68,7 +81,6 @@ func _style_mission_panel() -> void:
 		var node := get_node_or_null(path)
 		if node:
 			node.add_theme_stylebox_override("panel", style.duplicate())
-	# Style Settings and Play buttons
 	var btn_style := StyleBoxFlat.new()
 	btn_style.bg_color = Color(0.12, 0.12, 0.12, 0.97)
 	btn_style.border_color = Color(0.4, 0.4, 0.4, 1.0)
@@ -85,6 +97,48 @@ func _style_mission_panel() -> void:
 			btn.add_theme_stylebox_override("hover", btn_hover.duplicate())
 			btn.add_theme_stylebox_override("pressed", btn_hover.duplicate())
 			btn.add_theme_color_override("font_color", Color.WHITE)
+
+# ─── Input ───────────────────────────────────────────────────────────────────
+
+func _input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed:
+		return
+	# Alt+Enter: toggle fullscreen — always
+	if event.keycode == KEY_ENTER and event.alt_pressed:
+		var win := get_window()
+		win.mode = Window.MODE_FULLSCREEN if win.mode != Window.MODE_FULLSCREEN else Window.MODE_WINDOWED
+		get_viewport().set_input_as_handled()
+		return
+	# Escape: if chat/terminal focused, release it; else allow quit dialog
+	if event.keycode == KEY_ESCAPE:
+		if _chat_focus != ChatFocus.NONE:
+			_release_chat_focus()
+			get_viewport().set_input_as_handled()
+			return
+		# No chat focus — fall through to quit dialog below
+		get_viewport().set_input_as_handled()
+		if _quit_dialog_open:
+			return
+		if _active_mode != Mode.NONE:
+			_cancel_countdown()
+		else:
+			_show_quit_dialog()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed:
+		return
+	# Backtick: focus terminal tab
+	if event.keycode == KEY_QUOTELEFT:
+		_switch_to_tab(ChatFocus.TERMINAL)
+		get_viewport().set_input_as_handled()
+		return
+	# Enter: focus chat tab (only when nothing else has focus)
+	if event.keycode == KEY_ENTER and not event.alt_pressed:
+		if _chat_focus == ChatFocus.NONE:
+			_switch_to_tab(ChatFocus.CHAT)
+			get_viewport().set_input_as_handled()
+
+# ─── Settings ────────────────────────────────────────────────────────────────
 
 func _show_settings() -> void:
 	var dialog := Window.new()
@@ -123,27 +177,6 @@ func _show_settings() -> void:
 	add_child(dialog)
 	dialog.popup_centered()
 
-var _quit_dialog_open : bool = false
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_ENTER and event.alt_pressed:
-			var win := get_window()
-			if win.mode == Window.MODE_FULLSCREEN:
-				win.mode = Window.MODE_WINDOWED
-			else:
-				win.mode = Window.MODE_FULLSCREEN
-			get_viewport().set_input_as_handled()
-			return
-	if event.is_action_pressed("ui_cancel"):
-		get_viewport().set_input_as_handled()
-		if _quit_dialog_open:
-			return
-		if _active_mode != Mode.NONE:
-			_cancel_countdown()
-		else:
-			_show_quit_dialog()
-
 func _show_quit_dialog() -> void:
 	_quit_dialog_open = true
 	var dialog := ConfirmationDialog.new()
@@ -154,13 +187,14 @@ func _show_quit_dialog() -> void:
 	dialog.confirmed.connect(func(): _quit_dialog_open = false; dialog.queue_free())
 	dialog.canceled.connect(func(): _quit_dialog_open = false; dialog.queue_free())
 	dialog.close_requested.connect(func(): _quit_dialog_open = false; dialog.queue_free())
-	# Wire the OK (quit) button manually
 	dialog.get_cancel_button().pressed.connect(func(): get_tree().quit())
 	add_child(dialog)
 	dialog.popup_centered()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	dialog.get_cancel_button().grab_focus()
+
+# ─── Game Mode / Countdown ───────────────────────────────────────────────────
 
 func _on_mode_clicked(event: InputEvent, mode: Mode) -> void:
 	if not event is InputEventMouseButton: return
@@ -224,7 +258,6 @@ func _style_lobby_buttons() -> void:
 	_join_btn.add_theme_stylebox_override("hover", join_hover)
 	_join_btn.add_theme_stylebox_override("pressed", join_hover)
 	_join_btn.add_theme_color_override("font_color", Color.WHITE)
-
 	var leave_style := StyleBoxFlat.new()
 	leave_style.bg_color = Color(0.45, 0.1, 0.1, 1.0)
 	leave_style.border_color = Color(0.6, 0.15, 0.15, 1.0)
@@ -280,3 +313,62 @@ func remove_network_player(player_name: String) -> void:
 	_dog_tag_nodes.remove_at(idx)
 	if tag:
 		tag.queue_free()
+
+# ─── Chat / Terminal ─────────────────────────────────────────────────────────
+
+func _setup_chat_terminal() -> void:
+	_chat_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.CHAT))
+	_term_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.TERMINAL))
+	_input_line.text_submitted.connect(_on_input_submitted)
+	_chat_output.visible = true
+	_term_output.visible = false
+	_release_chat_focus()
+
+func _switch_to_tab(focus: ChatFocus) -> void:
+	_chat_focus = focus
+	_chat_output.visible = (focus == ChatFocus.CHAT)
+	_term_output.visible = (focus == ChatFocus.TERMINAL)
+	_input_line.editable = true
+	_input_line.grab_focus()
+	if focus == ChatFocus.CHAT:
+		_input_line.placeholder_text = "Type message, Enter to send, Esc to exit..."
+	else:
+		_input_line.placeholder_text = "Type command, Enter to run, Esc to exit..."
+
+func _release_chat_focus() -> void:
+	_chat_focus = ChatFocus.NONE
+	_input_line.editable = false
+	_input_line.release_focus()
+	_input_line.placeholder_text = "Enter = chat    ` = terminal"
+
+func _on_input_submitted(text: String) -> void:
+	if text.strip_edges() == "":
+		_input_line.clear()
+		return
+	if _chat_focus == ChatFocus.CHAT:
+		_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
+	elif _chat_focus == ChatFocus.TERMINAL:
+		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+		_execute_terminal_command(text)
+	_input_line.clear()
+
+func _execute_terminal_command(cmd: String) -> void:
+	var parts := cmd.strip_edges().split(" ", false)
+	if parts.is_empty():
+		return
+	match parts[0].to_lower():
+		"help":
+			_term_output.append_text("Commands: help, clear, version, sensitivity <value>\n")
+		"clear":
+			_term_output.clear()
+		"version":
+			_term_output.append_text("OneTap v0.1-dev\n")
+		"sensitivity":
+			if parts.size() > 1 and parts[1].is_valid_float():
+				var val := float(parts[1])
+				ProjectSettings.set_setting("game/mouse_sensitivity", val)
+				_term_output.append_text("Sensitivity set to " + str(val) + "\n")
+			else:
+				_term_output.append_text("Usage: sensitivity <value>\n")
+		_:
+			_term_output.append_text("Unknown command: " + parts[0] + "\n")

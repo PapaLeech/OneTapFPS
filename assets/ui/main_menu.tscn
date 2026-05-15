@@ -126,6 +126,47 @@ text = "PING"
 layout_mode = 2
 text = "— ms"
 
+[node name="ChatTerminalPanel" type="PanelContainer" parent="CaseInner/Left" unique_id=1741014843]
+custom_minimum_size = Vector2(488, 104)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CaseInner/Left/ChatTerminalPanel" unique_id=1035739336]
+layout_mode = 2
+
+[node name="TabBar" type="HBoxContainer" parent="CaseInner/Left/ChatTerminalPanel/VBox" unique_id=273951231]
+layout_mode = 2
+
+[node name="ChatTab" type="Button" parent="CaseInner/Left/ChatTerminalPanel/VBox/TabBar" unique_id=1133141060]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Chat"
+
+[node name="TerminalTab" type="Button" parent="CaseInner/Left/ChatTerminalPanel/VBox/TabBar" unique_id=25339659]
+layout_mode = 2
+toggle_mode = true
+text = "Terminal  [`]"
+
+[node name="ChatOutput" type="RichTextLabel" parent="CaseInner/Left/ChatTerminalPanel/VBox" unique_id=377182626]
+custom_minimum_size = Vector2(0, 55)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="TerminalOutput" type="RichTextLabel" parent="CaseInner/Left/ChatTerminalPanel/VBox" unique_id=332082522]
+visible = false
+custom_minimum_size = Vector2(0, 55)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="InputLine" type="LineEdit" parent="CaseInner/Left/ChatTerminalPanel/VBox" unique_id=118687919]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Press Enter to chat..."
+
 [node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
 layout_mode = 0
 offset_left = 643.0
