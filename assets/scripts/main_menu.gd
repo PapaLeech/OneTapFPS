@@ -70,7 +70,14 @@ func _ready() -> void:
 	_leave_btn.pressed.connect(_on_leave_pressed)
 	_clear_placeholder_tags()
 	_setup_chat_terminal()
-	populate_friends([])
+	PresenceManager.go_online("char")
+	PresenceManager.get_friends_status(["char"], func(data: Dictionary):
+		var friends_array: Array = []
+		for name in data.keys():
+			friends_array.append({"name": name, "online": data[name]})
+		populate_friends(friends_array)
+	)
+
 
 # ─── Styling ─────────────────────────────────────────────────────────────────
 

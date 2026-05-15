@@ -26,6 +26,7 @@ buses/default_bus_layout="uid://ylfjg8opqmon"
 [autoload]
 
 MCPRuntime="*res://addons/godot_mcp/runtime/mcp_runtime.gd"
+PresenceManager="*uid://bni585q0qacmn"
 
 [debug]
 

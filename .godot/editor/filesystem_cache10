@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1778831433
+::res://::1778870419
 default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778831077::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -62,7 +62,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -113,7 +113,7 @@ shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
-::res://assets/ui/::1778865637
+::res://assets/ui/::1778865876
 Bootsplash2.png::CompressedTexture2D::4677774552408887283::1778702395::1778702809::1::::<><><>0<>0<>3d7743c66d1a9b91790e98844696e272<>res://.godot/imported/Bootsplash2.png-0a44626c522983f38dc53ee7be767d19.ctex::
 Bootsplash3.png::CompressedTexture2D::5417852364192486326::1778702500::1778702809::1::::<><><>0<>0<>58c7b6f431ee13fea9b300db474b2732<>res://.godot/imported/Bootsplash3.png-85c7d6a0428ed5e90e588149db7f244e.ctex::
 Bootsplash.png::CompressedTexture2D::392300744039675099::1778697423::1778697475::1::::<><><>0<>0<>077b4d490737176e796d05fe0b4d169a<>res://.godot/imported/Bootsplash.png-5d0dbb0981e6205594211ae51d6eb32f.ctex::
@@ -128,7 +128,7 @@ dogtag_black_remove.gdshader::Shader::4328322954428907878::1778736645::0::1::::<
 dogtag_shader_mat.tres::ShaderMaterial::7940347616929375327::1778736770::0::1::::<><><>0<>0<><>::uid://b2ww311bx6iuw::::res://assets/ui/dogtag_black_remove.gdshader
 dogtag_slot_style.tres::StyleBoxFlat::1663133261181414353::1778775715::0::1::::<><><>0<>0<><>::
 hud_health.tscn::PackedScene::2532620883247856202::1778517854::0::1::::<><><>0<>0<><>::uid://c56dk6kta8w5n::::res://assets/scripts/hud_health.gd
-main_menu.tscn::PackedScene::7669145534508254606::1778865642::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png<>uid://f3tpr31vaftg::::res://assets/ui/OneTapLogoV3.png<>uid://dbekqehbshtv5::::res://assets/audio/PlayerJoinLobby.wav
+main_menu.tscn::PackedScene::7669145534508254606::1778865876::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png<>uid://f3tpr31vaftg::::res://assets/ui/OneTapLogoV3.png<>uid://dbekqehbshtv5::::res://assets/audio/PlayerJoinLobby.wav
 map_thumbnail.png::CompressedTexture2D::5185872156021561553::1778623382::1778623414::1::::<><><>0<>0<>2f5259cb433fe42978aa2307fc5c8e06<>res://.godot/imported/map_thumbnail.png-173196fba12c8588d3b0533f6cb739c6.ctex::
 MB1.png::CompressedTexture2D::5556174736054106412::1778587514::1778587619::1::::<><><>0<>0<>7a36cd3aa2d3b4c0c2d36669f8cf9aa3<>res://.godot/imported/MB1.png-785fd0f44b8893b209d2c5c55096f797.ctex::
 MB2.png::CompressedTexture2D::8077313815722129273::1778614666::1778614694::1::::<><><>0<>0<>c457980244abff5dd55652be15e7590c<>res://.godot/imported/MB2.png-02e4eff44676e644d01b495baaa640ec.ctex::
@@ -333,10 +333,21 @@ throw.wav::AudioStreamWAV::6368331766183314654::1778015563::1778014846::1::::<><
 ::res://assets/weapons/scripts/::1778620543
 weapon.gd::GDScript::3182779461567556417::1778393181::0::1::::Weapon<>Resource<><>0<>0<><>::
 weapon_controller.gd::GDScript::4776619364154183538::1778620543::0::1::::WeaponController<>Node<><>0<>0<><>::
-::res://Characters/::1778651059
+::res://Characters/::1778869545
 enemy.tscn::PackedScene::7708989437078052879::1778651059::0::1::::<><><>0<>0<><>::uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://bw34e3kuld0ww::::res://assets/scripts/enemy_simple.gd<>uid://db7slb5llo5yb::::res://assets/scripts/health.gd
 terrorist_1_rig.glb::PackedScene::757528666157290489::1778014062::1778014853::1::::<><><>0<>0<>7319d4485109fb0c957b5ddd7363faf8<>res://.godot/imported/terrorist_1_rig.glb-512f060693800c9bb61330fb2e75a69a.scn::uid://bf8o2immm1f11::::res://Characters/terrorist_1_rig_0.png
 terrorist_1_rig_0.png::CompressedTexture2D::2806388061388142130::1778015563::1778014846::1::::<><><>0<>0<>720690cfc989278b39a7f58542ed8895<>res://.godot/imported/terrorist_1_rig_0.png-69800c21407c5d1319215136be1dd5be.s3tc.ctex::
+::res://Characters/Terrorist/::1778869641
+Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin.glb::PackedScene::3913692157920357994::1778865990::1778869606::1::::<><><>0<>0<>63b4a39906d3953be4b438bbb36fd410<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin.glb-af3555c12bea0ec7902988defe37466d.scn::uid://c1vwhv4l6oc0e::::res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin_texture_0.png
+Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin_texture_0.png::CompressedTexture2D::6642452657539946462::1778869596::1778869640::1::::<><><>0<>0<>1ad126ad80bd0f1ca7622ccfa31a12b0<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin_texture_0.png-e471124d4edaa73cdcaa19b2e69413c2.s3tc.ctex::
+Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin.glb::PackedScene::2365943731397946315::1778865990::1778869614::1::::<><><>0<>0<>0ac369184c7c0f9745d1c1e295b9362a<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin.glb-cdc9edc95c754c95629bc61caa977907.scn::uid://cjwaxilva348s::::res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin_texture_0.png
+Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin_texture_0.png::CompressedTexture2D::5449998782112550056::1778869606::1778869640::1::::<><><>0<>0<>d02328ce9e24b8143c2c400f1da4da1f<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin_texture_0.png-6bacd1e550205c1e0912be7a3a2c6f31.s3tc.ctex::
+Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin.glb::PackedScene::5455971398020625308::1778865990::1778869622::1::::<><><>0<>0<>06f282a465b525d43c8fb2f576f4738b<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin.glb-a4c1b8b045a60a0315fe0ee54fafedd5.scn::uid://co88r5ae26in7::::res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin_texture_0.png
+Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin_texture_0.png::CompressedTexture2D::5825645239379859874::1778869615::1778869640::1::::<><><>0<>0<>3eb03e9101b354d3eb1deb3f51247dc6<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin_texture_0.png-22a9281945500bb9fb864c1d089fefff.s3tc.ctex::
+Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin.glb::PackedScene::4430440478188664232::1778865990::1778869630::1::::<><><>0<>0<>6feb3e74f558e245112cd3939d9aca14<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin.glb-0f4232f3e204a549717050261ea49390.scn::uid://ds1huucodmcry::::res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin_texture_0.png
+Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin_texture_0.png::CompressedTexture2D::8476796847194094642::1778869623::1778869640::1::::<><><>0<>0<>186c3ea968ed4e8cf9b50f78a4326a14<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin_texture_0.png-8739b0317b3f54837fbaee890f710122.s3tc.ctex::
+Meshy_AI_Tactical_Stance_biped_Character_output.glb::PackedScene::8202444553793934915::1778865990::1778869638::1::::<><><>0<>0<>7cb53837154b4fd8fecf7566d0108059<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output.glb-c70383179f5424b6532dd42ac937903e.scn::uid://cdmwlttpol8ca::::res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png
+Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png::CompressedTexture2D::5009536876918479904::1778869631::1778869641::1::::<><><>0<>0<>721d60a61d8b56b03c35a38eb655f27e<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png-55d8465272e6a548a3dc1fe541ddeaee.s3tc.ctex::
 ::res://controllers/::1778653897
 bob_controller.gd::GDScript::8876242426015427468::1777891158::0::1::::<>Node3D<><>0<>0<><>::
 camera_effects.gd::GDScript::362535339677094397::1777903631::0::1::::CameraEffects<>Camera3D<><>0<>0<><>::
