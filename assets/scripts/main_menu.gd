@@ -383,6 +383,7 @@ func _on_leave_pressed() -> void:
 	_lobby_players.pop_back()
 	var last_tag := _dog_tag_nodes.pop_back()
 	if last_tag:
+		_lobby_join_sound.play()
 		last_tag.swing_out(func(): last_tag.queue_free())
 
 func _add_player_tag(player_name: String, swing: bool = false) -> void:

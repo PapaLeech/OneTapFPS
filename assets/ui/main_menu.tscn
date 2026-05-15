@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b8s6nw8kgf8ru" path="res://assets/ui/OneTap-Background.png" id="2_hskgt"]
 [ext_resource type="Texture2D" uid="uid://d2oxj2avimvmv" path="res://assets/ui/MB3.png" id="3_1obgd"]
 [ext_resource type="Texture2D" uid="uid://cf5cs6ujoale4" path="res://assets/ui/map_thumbnail.png" id="4_y0ntp"]
+[ext_resource type="Texture2D" uid="uid://f3tpr31vaftg" path="res://assets/ui/OneTapLogoV3.png" id="5_58nof"]
 [ext_resource type="AudioStream" uid="uid://dbekqehbshtv5" path="res://assets/audio/PlayerJoinLobby.wav" id="5_82vaf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y0ntp"]
@@ -168,24 +169,39 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Press Enter to chat..."
 
-[node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
-layout_mode = 0
+[node name="Middle" type="Control" parent="CaseInner" unique_id=865082506]
+anchors_preset = 0
 offset_left = 629.0
 offset_top = 59.0
-offset_right = 1222.0
+offset_right = 1222.0002
 offset_bottom = 434.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_constants/separation = 14
-alignment = 1
+
+[node name="Logo" type="TextureRect" parent="CaseInner/Middle" unique_id=1695841996]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 0
+offset_top = 9.0
+offset_right = 654.0
+offset_bottom = 179.0
+size_flags_horizontal = 3
+texture = ExtResource("5_58nof")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="CaseInner/Middle" unique_id=159884526]
-layout_mode = 2
+layout_mode = 0
+offset_top = 143.0
+offset_right = 593.0
+offset_bottom = 166.0
 text = "ONETAP"
 horizontal_alignment = 1
 
 [node name="DeathmatchBtn" type="PanelContainer" parent="CaseInner/Middle" unique_id=286485341]
-layout_mode = 2
+layout_mode = 0
+offset_top = 180.0
+offset_right = 593.0
+offset_bottom = 243.0
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Middle/DeathmatchBtn" unique_id=1263660762]
 layout_mode = 2
@@ -230,7 +246,10 @@ layout_mode = 2
 text = "Cancel"
 
 [node name="SearchDestroyBtn" type="PanelContainer" parent="CaseInner/Middle" unique_id=1902304804]
-layout_mode = 2
+layout_mode = 0
+offset_top = 257.0
+offset_right = 593.0
+offset_bottom = 320.0
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Middle/SearchDestroyBtn" unique_id=843823911]
 layout_mode = 2
@@ -275,7 +294,10 @@ layout_mode = 2
 text = "Cancel"
 
 [node name="PlayBtn" type="Button" parent="CaseInner/Middle" unique_id=670294308]
-layout_mode = 2
+layout_mode = 0
+offset_top = 334.0
+offset_right = 593.0
+offset_bottom = 365.0
 text = "PLAY"
 
 [node name="Right" type="Control" parent="CaseInner" unique_id=1641042074]
