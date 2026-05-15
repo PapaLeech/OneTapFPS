@@ -22,7 +22,7 @@ func _ready() -> void:
 
 func set_player_name(player_name: String) -> void:
 	name_label.text = player_name
-	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_font_size_override("font_size", 17)
 
 func _draw() -> void:
 	var bead_offset := Vector2(TAG_W / 2.0, BEAD_R)
