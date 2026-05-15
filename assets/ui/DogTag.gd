@@ -1,10 +1,10 @@
 extends Control
 
-const TAG_W := 106.05
-const TAG_H := 140.895
-const BEAD_R := 5.3025
+const TAG_W := 96.0
+const TAG_H := 127.68
+const BEAD_R := 4.8
 const BEAD_COUNT := 5
-const BEAD_GAP := 12.12
+const BEAD_GAP := 11.52
 
 @onready var name_label: Label = $NameLabel
 

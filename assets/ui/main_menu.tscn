@@ -287,7 +287,7 @@ offset_bottom = 797.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="LobbyPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=1298519292]
+[node name="LobbyPanel" type="Panel" parent="CaseInner/Right" unique_id=1094751040]
 clip_contents = true
 custom_minimum_size = Vector2(480, 320)
 layout_mode = 0
@@ -296,7 +296,9 @@ offset_right = 480.0
 offset_bottom = 376.0
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/LobbyPanel" unique_id=1350978065]
-layout_mode = 2
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 320.0
 
 [node name="Header" type="Label" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=2075645176]
 layout_mode = 2
@@ -317,7 +319,6 @@ text = "Leave"
 
 [node name="DogTags" type="HBoxContainer" parent="CaseInner/Right/LobbyPanel/VBox" unique_id=1021169146]
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="FriendsPanel" type="PanelContainer" parent="CaseInner/Right" unique_id=596794038]
