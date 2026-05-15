@@ -113,7 +113,7 @@ shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
-::res://assets/ui/::1778865050
+::res://assets/ui/::1778865637
 Bootsplash2.png::CompressedTexture2D::4677774552408887283::1778702395::1778702809::1::::<><><>0<>0<>3d7743c66d1a9b91790e98844696e272<>res://.godot/imported/Bootsplash2.png-0a44626c522983f38dc53ee7be767d19.ctex::
 Bootsplash3.png::CompressedTexture2D::5417852364192486326::1778702500::1778702809::1::::<><><>0<>0<>58c7b6f431ee13fea9b300db474b2732<>res://.godot/imported/Bootsplash3.png-85c7d6a0428ed5e90e588149db7f244e.ctex::
 Bootsplash.png::CompressedTexture2D::392300744039675099::1778697423::1778697475::1::::<><><>0<>0<>077b4d490737176e796d05fe0b4d169a<>res://.godot/imported/Bootsplash.png-5d0dbb0981e6205594211ae51d6eb32f.ctex::
@@ -128,7 +128,7 @@ dogtag_black_remove.gdshader::Shader::4328322954428907878::1778736645::0::1::::<
 dogtag_shader_mat.tres::ShaderMaterial::7940347616929375327::1778736770::0::1::::<><><>0<>0<><>::uid://b2ww311bx6iuw::::res://assets/ui/dogtag_black_remove.gdshader
 dogtag_slot_style.tres::StyleBoxFlat::1663133261181414353::1778775715::0::1::::<><><>0<>0<><>::
 hud_health.tscn::PackedScene::2532620883247856202::1778517854::0::1::::<><><>0<>0<><>::uid://c56dk6kta8w5n::::res://assets/scripts/hud_health.gd
-main_menu.tscn::PackedScene::7669145534508254606::1778865100::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png<>uid://f3tpr31vaftg::::res://assets/ui/OneTapLogoV3.png<>uid://dbekqehbshtv5::::res://assets/audio/PlayerJoinLobby.wav
+main_menu.tscn::PackedScene::7669145534508254606::1778865642::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png<>uid://f3tpr31vaftg::::res://assets/ui/OneTapLogoV3.png<>uid://dbekqehbshtv5::::res://assets/audio/PlayerJoinLobby.wav
 map_thumbnail.png::CompressedTexture2D::5185872156021561553::1778623382::1778623414::1::::<><><>0<>0<>2f5259cb433fe42978aa2307fc5c8e06<>res://.godot/imported/map_thumbnail.png-173196fba12c8588d3b0533f6cb739c6.ctex::
 MB1.png::CompressedTexture2D::5556174736054106412::1778587514::1778587619::1::::<><><>0<>0<>7a36cd3aa2d3b4c0c2d36669f8cf9aa3<>res://.godot/imported/MB1.png-785fd0f44b8893b209d2c5c55096f797.ctex::
 MB2.png::CompressedTexture2D::8077313815722129273::1778614666::1778614694::1::::<><><>0<>0<>c457980244abff5dd55652be15e7590c<>res://.godot/imported/MB2.png-02e4eff44676e644d01b495baaa640ec.ctex::
