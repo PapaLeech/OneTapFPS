@@ -36,7 +36,7 @@ func _draw() -> void:
 	# ── dimensions ─────────────────────────────────────────────────────
 	var br: float = BULLET_HEIGHT * 0.5
 	var margin_left: float = 22.0
-	var margin_right: float = 50.0
+	var margin_right: float = 20.0
 
 	var x0: float = margin_left
 	var x1: float = w - margin_right
@@ -58,24 +58,6 @@ func _draw() -> void:
 
 	var neck_r: float = br * 0.68
 
-# ── magazine frame ─────────────────────────────────────────────────
-	var frame_col := Color(0.0, 0.0, 0.0)
-	var frame_edge := Color(0.30, 0.30, 0.30)
-	var frame_x := seg_extract - 4.0
-	var frame_w := w - frame_x - 4.0
-	var frame_h := br * 2.0 + 8.0
-	var frame_y := cy - br - 4.0
-	# background fill
-	draw_rect(Rect2(frame_x, frame_y, frame_w, frame_h), frame_col)
-	# top edge
-	draw_rect(Rect2(frame_x, frame_y, frame_w, 1.5), frame_edge)
-	# bottom edge
-	draw_rect(Rect2(frame_x, frame_y + frame_h - 1.5, frame_w, 1.5), frame_edge)
-	# left edge
-	draw_rect(Rect2(frame_x, frame_y, 1.5, frame_h), frame_edge)
-	# right edge
-	draw_rect(Rect2(frame_x + frame_w - 1.5, frame_y, 1.5, frame_h), frame_edge)
-
 	# ── draw sections ──────────────────────────────────────────────────
 	_draw_casing_body(seg_body, seg_shoulder, cy, br, brass_bright, brass_mid, brass_dark)
 	_draw_extractor_groove(seg_extract, extractor_w, cy, br, brass_dark, brass_mid)
@@ -84,6 +66,24 @@ func _draw() -> void:
 	_draw_shoulder(seg_shoulder, shoulder_w, cy, br, neck_r, brass_bright, brass_mid, brass_dark)
 	_draw_neck(seg_neck, neck_w, cy, neck_r, brass_bright, brass_mid, brass_dark)
 	_draw_ogive(seg_ogive, ogive_w, cy, neck_r, lead_tip, lead_high, lead_shad)
+
+	# ── magazine frame (drawn over bullet to clip ends) ────────────────
+	var black := Color(0.0, 0.0, 0.0)
+	var edge  := Color(0.28, 0.28, 0.28)
+	var frame_x := seg_base - 4.0
+	var frame_w := w - frame_x - 4.0
+	var frame_h := br * 2.0 + 8.0
+	var frame_y := cy - br - 4.0
+	# left cap — hides primer/base
+	draw_rect(Rect2(frame_x, frame_y, (seg_body - frame_x + 4.0) * 1.5, frame_h), black)
+	# right cap — starts at shoulder, covers tip completely
+	var right_cap_x := seg_ogive + ogive_w * 0.50
+	draw_rect(Rect2(right_cap_x, frame_y, frame_x + frame_w - right_cap_x, frame_h), black)
+	# frame border
+	draw_rect(Rect2(frame_x, frame_y, frame_w, 1.5), edge)
+	draw_rect(Rect2(frame_x, frame_y + frame_h - 1.5, frame_w, 1.5), edge)
+	draw_rect(Rect2(frame_x, frame_y, 1.5, frame_h), edge)
+	draw_rect(Rect2(frame_x + frame_w - 1.5, frame_y, 1.5, frame_h), edge)
 
 	# ── name label ─────────────────────────────────────────────────────
 	var label_cx: float = seg_extract + (seg_shoulder - seg_extract) * 0.5
