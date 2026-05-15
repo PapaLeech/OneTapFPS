@@ -11,10 +11,18 @@ const BEAD_GAP := 11.52
 func _ready() -> void:
 	custom_minimum_size = Vector2(TAG_W, TAG_H + BEAD_COUNT * BEAD_GAP)
 	pivot_offset = Vector2(TAG_W / 2.0, BEAD_R)
+	var bead_height := BEAD_COUNT * BEAD_GAP
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name_label.set_anchor_and_offset(SIDE_LEFT, 0, 0)
+	name_label.set_anchor_and_offset(SIDE_RIGHT, 0, TAG_W)
+	name_label.set_anchor_and_offset(SIDE_TOP, 0, bead_height)
+	name_label.set_anchor_and_offset(SIDE_BOTTOM, 0, bead_height + TAG_H)
 	queue_redraw()
 
 func set_player_name(player_name: String) -> void:
 	name_label.text = player_name
+	name_label.add_theme_font_size_override("font_size", 14)
 
 func _draw() -> void:
 	var bead_offset := Vector2(TAG_W / 2.0, BEAD_R)
