@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://r7yivgdxwgjo"]
+
+[ext_resource type="Script" uid="uid://c03yhukaudxk4" path="res://ui/BulletSlot.gd" id="1_uj00n"]
+
+[node name="BulletSlot" type="Control" unique_id=1707509246]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_uj00n")

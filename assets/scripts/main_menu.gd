@@ -2,6 +2,7 @@ extends Control
 
 const GAME_SCENE := "res://levels/level_001.tscn"
 const DOG_TAG_SCENE := preload("res://assets/ui/DogTag.tscn")
+const BULLET_SLOT_SCENE := preload("res://ui/BulletSlot.tscn")
 const MAX_LOBBY := 5
 enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 enum ChatFocus { NONE, CHAT, TERMINAL }
@@ -29,6 +30,7 @@ var _chat_focus       : ChatFocus = ChatFocus.NONE
 @onready var _settings_btn       : Button         = $SettingsBtn
 @onready var _exit_btn           : Button         = $ExitBtn
 @onready var _dog_tags_container : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
+@onready var _bullet_list        : VBoxContainer  = $CaseInner/Right/FriendsPanel/VBox/Scroll/BulletList
 @onready var _join_btn           : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
 @onready var _leave_btn          : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
 @onready var _chat_tab_btn       : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/ChatTab
@@ -59,6 +61,12 @@ func _ready() -> void:
 	_leave_btn.pressed.connect(_on_leave_pressed)
 	_clear_placeholder_tags()
 	_setup_chat_terminal()
+	populate_friends([
+		{"name": "Player", "online": true},
+		{"name": "Player", "online": true},
+		{"name": "Player", "online": false},
+		{"name": "Player", "online": false},
+	])
 
 # ─── Styling ─────────────────────────────────────────────────────────────────
 
@@ -277,6 +285,15 @@ func _clear_placeholder_tags() -> void:
 		child.queue_free()
 	_lobby_players.clear()
 	_dog_tag_nodes.clear()
+
+func populate_friends(friends: Array) -> void:
+	for child in _bullet_list.get_children():
+		child.queue_free()
+	for f in friends:
+		var slot := BULLET_SLOT_SCENE.instantiate()
+		_bullet_list.add_child(slot)
+		slot.friend_name = f.get("name", "Player")
+		slot.is_online   = f.get("online", false)
 
 func _on_join_pressed() -> void:
 	if _lobby_players.size() >= MAX_LOBBY:

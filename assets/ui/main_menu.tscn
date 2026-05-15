@@ -325,8 +325,8 @@ theme_override_constants/separation = 0
 layout_mode = 0
 offset_left = 6.0
 offset_top = 540.0
-offset_right = 306.0
-offset_bottom = 750.0
+offset_right = 486.0
+offset_bottom = 780.0
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="CaseInner/Right/FriendsPanel" unique_id=1721889990]
@@ -336,65 +336,15 @@ layout_mode = 2
 layout_mode = 2
 text = "FRIENDS - ITCH.IO"
 
-[node name="Friend1" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=337158477]
-layout_mode = 2
-
-[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend1" unique_id=1826613906]
+[node name="Scroll" type="ScrollContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=1722209202]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Shadow Strike"
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend1" unique_id=885492012]
-layout_mode = 2
-text = "Invite"
-
-[node name="Friend2" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=1014698933]
-layout_mode = 2
-
-[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend2" unique_id=1587471596]
+[node name="BulletList" type="VBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox/Scroll" unique_id=966762355]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Friend 2"
-
-[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend2" unique_id=1755939832]
-layout_mode = 2
-text = "Invite"
-
-[node name="Friend3" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=344999889]
-layout_mode = 2
-
-[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend3" unique_id=616354415]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Friend 3"
-
-[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend3" unique_id=1510601057]
-layout_mode = 2
-text = "Invite"
-
-[node name="Friend4" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=129415043]
-layout_mode = 2
-
-[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend4" unique_id=1614586965]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Friend 4"
-
-[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend4" unique_id=543737536]
-layout_mode = 2
-text = "Invite"
-
-[node name="Friend5" type="HBoxContainer" parent="CaseInner/Right/FriendsPanel/VBox" unique_id=119135471]
-layout_mode = 2
-
-[node name="N" type="Label" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=945344076]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Friend 5"
-
-[node name="B" type="Button" parent="CaseInner/Right/FriendsPanel/VBox/Friend5" unique_id=138733101]
-layout_mode = 2
-text = "Invite"
 
 [node name="SettingsBtn" type="Button" parent="." unique_id=234233910]
 layout_mode = 0
