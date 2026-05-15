@@ -14,6 +14,13 @@ var _timer            : SceneTreeTimer = null
 var _count            : int = 3
 var _quit_dialog_open : bool = false
 var _chat_focus       : ChatFocus = ChatFocus.NONE
+var _invite_sender    : String = ""
+
+# Invite notification nodes (built in code, hidden until an invite arrives)
+var _invite_panel   : PanelContainer = null
+var _invite_label   : Label = null
+var _invite_accept  : Button = null
+var _invite_decline : Button = null
 
 @onready var _dm_btn             : PanelContainer = $CaseInner/Middle/DeathmatchBtn
 @onready var _sd_btn             : PanelContainer = $CaseInner/Middle/SearchDestroyBtn
@@ -45,6 +52,7 @@ func _ready() -> void:
 	get_window().mode = Window.MODE_FULLSCREEN
 	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_style_mission_panel()
+	_build_invite_panel()
 	_dm_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_sd_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_dm_btn.gui_input.connect(func(e): _on_mode_clicked(e, Mode.DEATHMATCH))
@@ -61,12 +69,7 @@ func _ready() -> void:
 	_leave_btn.pressed.connect(_on_leave_pressed)
 	_clear_placeholder_tags()
 	_setup_chat_terminal()
-	populate_friends([
-		{"name": "Player", "online": true},
-		{"name": "Player", "online": true},
-		{"name": "Player", "online": false},
-		{"name": "Player", "online": false},
-	])
+	populate_friends([])
 
 # ─── Styling ─────────────────────────────────────────────────────────────────
 
@@ -117,6 +120,10 @@ func _input(event: InputEvent) -> void:
 		win.mode = Window.MODE_FULLSCREEN if win.mode != Window.MODE_FULLSCREEN else Window.MODE_WINDOWED
 		get_viewport().set_input_as_handled()
 		return
+	# I: test invite (TEMP)
+	if event.keycode == KEY_I:
+		receive_invite("Player 2")
+		return
 	# Escape: release chat/console focus first; otherwise show quit dialog
 	if event.keycode == KEY_ESCAPE:
 		if _chat_focus != ChatFocus.NONE:
@@ -147,6 +154,74 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _chat_focus == ChatFocus.NONE:
 			_switch_to_tab(ChatFocus.CHAT)
 			get_viewport().set_input_as_handled()
+
+# ─── Invite Notification ─────────────────────────────────────────────────────
+
+func _build_invite_panel() -> void:
+	var settings_pos  : Vector2 = _settings_btn.position
+	var settings_size : Vector2 = _settings_btn.size
+	_invite_panel = PanelContainer.new()
+	_invite_panel.position = Vector2(settings_pos.x, settings_pos.y - 110)
+	_invite_panel.size     = Vector2(settings_size.x, 100)
+	_invite_panel.visible  = false
+	add_child(_invite_panel)
+	var vbox := VBoxContainer.new()
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.add_theme_constant_override("separation", 6)
+	_invite_panel.add_child(vbox)
+	_invite_label = Label.new()
+	_invite_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_invite_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_invite_label.text = "INVITED BY PLAYER"
+	vbox.add_child(_invite_label)
+	var btn_row := HBoxContainer.new()
+	btn_row.add_theme_constant_override("separation", 4)
+	vbox.add_child(btn_row)
+	_invite_accept = Button.new()
+	_invite_accept.text = "Accept"
+	_invite_accept.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_invite_accept.pressed.connect(_on_invite_accepted)
+	btn_row.add_child(_invite_accept)
+	_invite_decline = Button.new()
+	_invite_decline.text = "Decline"
+	_invite_decline.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_invite_decline.pressed.connect(_on_invite_declined)
+	btn_row.add_child(_invite_decline)
+	var ps := StyleBoxFlat.new()
+	ps.bg_color = Color(0.12, 0.12, 0.12, 0.97)
+	ps.border_color = Color(0.4, 0.4, 0.4, 1.0)
+	ps.set_border_width_all(1)
+	ps.set_corner_radius_all(4)
+	ps.shadow_color = Color(0, 0, 0, 0.8)
+	ps.shadow_size = 8
+	_invite_panel.add_theme_stylebox_override("panel", ps)
+	var bn := StyleBoxFlat.new()
+	bn.bg_color = Color(0.12, 0.12, 0.12, 0.97)
+	bn.border_color = Color(0.4, 0.4, 0.4, 1.0)
+	bn.set_border_width_all(1)
+	bn.set_corner_radius_all(4)
+	var bh := bn.duplicate()
+	bh.bg_color = Color(0.2, 0.2, 0.2, 0.97)
+	for btn in [_invite_accept, _invite_decline]:
+		btn.add_theme_stylebox_override("normal", bn.duplicate())
+		btn.add_theme_stylebox_override("hover", bh.duplicate())
+		btn.add_theme_stylebox_override("pressed", bh.duplicate())
+		btn.add_theme_color_override("font_color", Color.WHITE)
+
+func receive_invite(sender_name: String) -> void:
+	_invite_sender = sender_name
+	_invite_label.text = "INVITED BY  %s" % sender_name.to_upper()
+	_invite_panel.visible = true
+
+func _on_invite_accepted() -> void:
+	_invite_panel.visible = false
+	_add_player_tag_at(_invite_sender, 0, true)
+	_add_player_tag("Player 1", true)
+	_invite_sender = ""
+
+func _on_invite_declined() -> void:
+	_invite_panel.visible = false
+	_invite_sender = ""
 
 # ─── Settings ────────────────────────────────────────────────────────────────
 
@@ -315,6 +390,16 @@ func _add_player_tag(player_name: String, swing: bool = false) -> void:
 	_dog_tags_container.add_child(tag)
 	tag.set_player_name(player_name)
 	_dog_tag_nodes.append(tag)
+	if swing:
+		tag.call_deferred("swing_in")
+
+func _add_player_tag_at(player_name: String, index: int, swing: bool = false) -> void:
+	_lobby_players.insert(index, player_name)
+	var tag : Control = DOG_TAG_SCENE.instantiate()
+	_dog_tags_container.add_child(tag)
+	_dog_tags_container.move_child(tag, index)
+	tag.set_player_name(player_name)
+	_dog_tag_nodes.insert(index, tag)
 	if swing:
 		tag.call_deferred("swing_in")
 
