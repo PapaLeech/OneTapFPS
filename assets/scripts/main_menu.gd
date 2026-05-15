@@ -126,12 +126,15 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed:
 		return
-	# Backtick: focus console tab
+	# Backtick: toggle between console and chat, or focus console if unfocused
 	if event.keycode == KEY_QUOTELEFT:
-		_switch_to_tab(ChatFocus.TERMINAL)
+		if _chat_focus == ChatFocus.TERMINAL:
+			_switch_to_tab(ChatFocus.CHAT)
+		else:
+			_switch_to_tab(ChatFocus.TERMINAL)
 		get_viewport().set_input_as_handled()
 		return
-	# Enter: focus chat tab (only when nothing is focused)
+	# Enter: focus chat (only when nothing is focused)
 	if event.keycode == KEY_ENTER and not event.alt_pressed:
 		if _chat_focus == ChatFocus.NONE:
 			_switch_to_tab(ChatFocus.CHAT)
@@ -318,7 +321,7 @@ func remove_network_player(player_name: String) -> void:
 func _setup_chat_terminal() -> void:
 	_chat_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.CHAT))
 	_term_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.TERMINAL))
-	_input_line.gui_input.connect(_on_input_line_key)
+	_input_line.text_submitted.connect(_on_input_submitted)
 	_chat_output.visible = true
 	_term_output.visible = false
 	_release_chat_focus()
@@ -341,17 +344,16 @@ func _release_chat_focus() -> void:
 	_input_line.placeholder_text = "Enter = chat    ` = console"
 
 func _on_input_submitted(text: String) -> void:
-	var focus := _chat_focus
-	if text.strip_edges() != "":
-		if focus == ChatFocus.CHAT:
-			_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
-		elif focus == ChatFocus.TERMINAL:
-			_term_output.append_text("[color=lime]> " + text + "[/color]\n")
-			_execute_terminal_command(text)
+	if text.strip_edges() == "":
+		_input_line.clear()
+		return
+	if _chat_focus == ChatFocus.CHAT:
+		_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
+	elif _chat_focus == ChatFocus.TERMINAL:
+		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+		_execute_terminal_command(text)
 	_input_line.clear()
-	get_tree().create_timer(0.05).timeout.connect(func():
-		if _chat_focus != ChatFocus.NONE:
-			_input_line.grab_focus())
+	_input_line.grab_focus()
 
 func _execute_terminal_command(cmd: String) -> void:
 	var parts := cmd.strip_edges().split(" ", false)
