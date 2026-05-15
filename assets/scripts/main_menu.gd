@@ -37,6 +37,7 @@ var _invite_decline : Button = null
 @onready var _settings_btn       : Button         = $SettingsBtn
 @onready var _exit_btn           : Button         = $ExitBtn
 @onready var _dog_tags_container : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
+@onready var _lobby_join_sound   : AudioStreamPlayer = $LobbyJoinSound2
 @onready var _bullet_list        : VBoxContainer  = $CaseInner/Right/FriendsPanel/VBox/Scroll/BulletList
 @onready var _join_btn           : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
 @onready var _leave_btn          : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
@@ -390,6 +391,7 @@ func _add_player_tag(player_name: String, swing: bool = false) -> void:
 	_dog_tags_container.add_child(tag)
 	tag.set_player_name(player_name)
 	_dog_tag_nodes.append(tag)
+	_lobby_join_sound.play()
 	if swing:
 		tag.call_deferred("swing_in")
 

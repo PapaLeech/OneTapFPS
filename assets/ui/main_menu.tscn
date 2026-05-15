@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b8s6nw8kgf8ru" path="res://assets/ui/OneTap-Background.png" id="2_hskgt"]
 [ext_resource type="Texture2D" uid="uid://d2oxj2avimvmv" path="res://assets/ui/MB3.png" id="3_1obgd"]
 [ext_resource type="Texture2D" uid="uid://cf5cs6ujoale4" path="res://assets/ui/map_thumbnail.png" id="4_y0ntp"]
+[ext_resource type="AudioStream" uid="uid://dbekqehbshtv5" path="res://assets/audio/PlayerJoinLobby.wav" id="5_82vaf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y0ntp"]
 texture = ExtResource("3_1obgd")
@@ -361,3 +362,6 @@ offset_top = 827.0
 offset_right = 1060.0
 offset_bottom = 877.0
 text = "Exit"
+
+[node name="LobbyJoinSound2" type="AudioStreamPlayer" parent="." unique_id=1211762886]
+stream = ExtResource("5_82vaf")
