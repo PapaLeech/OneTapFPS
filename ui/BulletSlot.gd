@@ -85,6 +85,11 @@ func _draw() -> void:
 	draw_rect(Rect2(frame_x, frame_y, 1.5, frame_h), edge)
 	draw_rect(Rect2(frame_x + frame_w - 1.5, frame_y, 1.5, frame_h), edge)
 
+	# ── shine streak across casing top ───────────────────────────────
+	var shine := Color(1.0, 1.0, 0.9, 0.35)
+	var shine_h := br * 0.22
+	draw_rect(Rect2(seg_body, cy - br + 1.0, seg_shoulder - seg_body, shine_h), shine)
+
 	# ── name label ─────────────────────────────────────────────────────
 	var label_cx: float = seg_extract + (seg_shoulder - seg_extract) * 0.5
 	var font: Font = ThemeDB.fallback_font
