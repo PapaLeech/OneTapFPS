@@ -145,7 +145,7 @@ text = "Chat"
 [node name="TerminalTab" type="Button" parent="CaseInner/Left/ChatTerminalPanel/VBox/TabBar" unique_id=25339659]
 layout_mode = 2
 toggle_mode = true
-text = "Terminal  [`]"
+text = "Console  [`]"
 
 [node name="ChatOutput" type="RichTextLabel" parent="CaseInner/Left/ChatTerminalPanel/VBox" unique_id=377182626]
 custom_minimum_size = Vector2(0, 55)

@@ -6,36 +6,36 @@ const MAX_LOBBY := 5
 enum Mode { NONE, DEATHMATCH, SEARCH_AND_DESTROY }
 enum ChatFocus { NONE, CHAT, TERMINAL }
 
-var _lobby_players : Array[String] = []
-var _dog_tag_nodes : Array = []
-var _active_mode   : Mode = Mode.NONE
-var _timer         : SceneTreeTimer = null
-var _count         : int = 3
+var _lobby_players    : Array[String] = []
+var _dog_tag_nodes    : Array = []
+var _active_mode      : Mode = Mode.NONE
+var _timer            : SceneTreeTimer = null
+var _count            : int = 3
 var _quit_dialog_open : bool = false
-var _chat_focus    : ChatFocus = ChatFocus.NONE
+var _chat_focus       : ChatFocus = ChatFocus.NONE
 
-@onready var _dm_btn           : PanelContainer = $CaseInner/Middle/DeathmatchBtn
-@onready var _sd_btn           : PanelContainer = $CaseInner/Middle/SearchDestroyBtn
-@onready var _dm_desc          : Label          = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Desc
-@onready var _sd_desc          : Label          = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Desc
-@onready var _dm_countdown     : HBoxContainer  = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown
-@onready var _sd_countdown     : HBoxContainer  = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown
-@onready var _dm_num           : Label          = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/Num
-@onready var _sd_num           : Label          = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/Num
-@onready var _dm_cancel        : Button         = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/CancelBtn
-@onready var _sd_cancel        : Button         = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
-@onready var _play_btn         : Button         = $CaseInner/Middle/PlayBtn
-@onready var _bg_texture       : TextureRect    = $Background
-@onready var _settings_btn     : Button         = $SettingsBtn
-@onready var _exit_btn         : Button         = $ExitBtn
-@onready var _dog_tags_container : Control      = $CaseInner/Right/LobbyPanel/VBox/DogTags
-@onready var _join_btn         : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
-@onready var _leave_btn        : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
-@onready var _chat_tab_btn     : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/ChatTab
-@onready var _term_tab_btn     : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/TerminalTab
-@onready var _chat_output      : RichTextLabel  = $CaseInner/Left/ChatTerminalPanel/VBox/ChatOutput
-@onready var _term_output      : RichTextLabel  = $CaseInner/Left/ChatTerminalPanel/VBox/TerminalOutput
-@onready var _input_line       : LineEdit       = $CaseInner/Left/ChatTerminalPanel/VBox/InputLine
+@onready var _dm_btn             : PanelContainer = $CaseInner/Middle/DeathmatchBtn
+@onready var _sd_btn             : PanelContainer = $CaseInner/Middle/SearchDestroyBtn
+@onready var _dm_desc            : Label          = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Desc
+@onready var _sd_desc            : Label          = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Desc
+@onready var _dm_countdown       : HBoxContainer  = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown
+@onready var _sd_countdown       : HBoxContainer  = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown
+@onready var _dm_num             : Label          = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/Num
+@onready var _sd_num             : Label          = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/Num
+@onready var _dm_cancel          : Button         = $CaseInner/Middle/DeathmatchBtn/VBox/Body/Countdown/CancelBtn
+@onready var _sd_cancel          : Button         = $CaseInner/Middle/SearchDestroyBtn/VBox/Body/Countdown/CancelBtn
+@onready var _play_btn           : Button         = $CaseInner/Middle/PlayBtn
+@onready var _bg_texture         : TextureRect    = $Background
+@onready var _settings_btn       : Button         = $SettingsBtn
+@onready var _exit_btn           : Button         = $ExitBtn
+@onready var _dog_tags_container : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
+@onready var _join_btn           : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
+@onready var _leave_btn          : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
+@onready var _chat_tab_btn       : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/ChatTab
+@onready var _term_tab_btn       : Button         = $CaseInner/Left/ChatTerminalPanel/VBox/TabBar/TerminalTab
+@onready var _chat_output        : RichTextLabel  = $CaseInner/Left/ChatTerminalPanel/VBox/ChatOutput
+@onready var _term_output        : RichTextLabel  = $CaseInner/Left/ChatTerminalPanel/VBox/TerminalOutput
+@onready var _input_line         : LineEdit       = $CaseInner/Left/ChatTerminalPanel/VBox/InputLine
 
 # ─── Ready ───────────────────────────────────────────────────────────────────
 
@@ -103,19 +103,18 @@ func _style_mission_panel() -> void:
 func _input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed:
 		return
-	# Alt+Enter: toggle fullscreen — always
+	# Alt+Enter: toggle fullscreen
 	if event.keycode == KEY_ENTER and event.alt_pressed:
 		var win := get_window()
 		win.mode = Window.MODE_FULLSCREEN if win.mode != Window.MODE_FULLSCREEN else Window.MODE_WINDOWED
 		get_viewport().set_input_as_handled()
 		return
-	# Escape: if chat/terminal focused, release it; else allow quit dialog
+	# Escape: release chat/console focus first; otherwise show quit dialog
 	if event.keycode == KEY_ESCAPE:
 		if _chat_focus != ChatFocus.NONE:
 			_release_chat_focus()
 			get_viewport().set_input_as_handled()
 			return
-		# No chat focus — fall through to quit dialog below
 		get_viewport().set_input_as_handled()
 		if _quit_dialog_open:
 			return
@@ -127,12 +126,12 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed:
 		return
-	# Backtick: focus terminal tab
+	# Backtick: focus console tab
 	if event.keycode == KEY_QUOTELEFT:
 		_switch_to_tab(ChatFocus.TERMINAL)
 		get_viewport().set_input_as_handled()
 		return
-	# Enter: focus chat tab (only when nothing else has focus)
+	# Enter: focus chat tab (only when nothing is focused)
 	if event.keycode == KEY_ENTER and not event.alt_pressed:
 		if _chat_focus == ChatFocus.NONE:
 			_switch_to_tab(ChatFocus.CHAT)
@@ -314,12 +313,12 @@ func remove_network_player(player_name: String) -> void:
 	if tag:
 		tag.queue_free()
 
-# ─── Chat / Terminal ─────────────────────────────────────────────────────────
+# ─── Chat / Console ──────────────────────────────────────────────────────────
 
 func _setup_chat_terminal() -> void:
 	_chat_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.CHAT))
 	_term_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.TERMINAL))
-	_input_line.text_submitted.connect(_on_input_submitted)
+	_input_line.gui_input.connect(_on_input_line_key)
 	_chat_output.visible = true
 	_term_output.visible = false
 	_release_chat_focus()
@@ -339,18 +338,20 @@ func _release_chat_focus() -> void:
 	_chat_focus = ChatFocus.NONE
 	_input_line.editable = false
 	_input_line.release_focus()
-	_input_line.placeholder_text = "Enter = chat    ` = terminal"
+	_input_line.placeholder_text = "Enter = chat    ` = console"
 
 func _on_input_submitted(text: String) -> void:
-	if text.strip_edges() == "":
-		_input_line.clear()
-		return
-	if _chat_focus == ChatFocus.CHAT:
-		_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
-	elif _chat_focus == ChatFocus.TERMINAL:
-		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
-		_execute_terminal_command(text)
+	var focus := _chat_focus
+	if text.strip_edges() != "":
+		if focus == ChatFocus.CHAT:
+			_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
+		elif focus == ChatFocus.TERMINAL:
+			_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+			_execute_terminal_command(text)
 	_input_line.clear()
+	get_tree().create_timer(0.05).timeout.connect(func():
+		if _chat_focus != ChatFocus.NONE:
+			_input_line.grab_focus())
 
 func _execute_terminal_command(cmd: String) -> void:
 	var parts := cmd.strip_edges().split(" ", false)
