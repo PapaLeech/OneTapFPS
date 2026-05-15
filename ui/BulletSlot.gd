@@ -58,7 +58,6 @@ func _draw() -> void:
 
 	var neck_r: float = br * 0.68
 
-	# ── magazine frame (drawn first, behind bullet) ────────────────────
 # ── magazine frame ─────────────────────────────────────────────────
 	var frame_col := Color(0.0, 0.0, 0.0)
 	var frame_edge := Color(0.30, 0.30, 0.30)
