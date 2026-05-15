@@ -95,7 +95,7 @@ metadata_editor.gd::GDScript::4810375839038594439::1776657068::0::1::::MetadataE
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1778819033
+::res://assets/scripts/::1778819429
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -104,14 +104,14 @@ enemy_simple.gd::GDScript::3990147243834738222::1778652441::0::1::::<>StaticBody
 health.gd::GDScript::7296623631832556329::1778445466::0::1::::<>Node<><>0<>0<><>::
 hitbox.gd::GDScript::1740715284671597839::1778506723::0::1::::Hitbox<>Area3D<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
-main_menu.gd::GDScript::1244827160719643432::1778819033::0::1::::<>Control<><>0<>0<><>::
+main_menu.gd::GDScript::1244827160719643432::1778819429::0::1::::<>Control<><>0<>0<><>::
 pause_menu.gd::GDScript::4838208590412015204::1778654475::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
-::res://assets/ui/::1778818110
+::res://assets/ui/::1778819521
 Bootsplash2.png::CompressedTexture2D::4677774552408887283::1778702395::1778702809::1::::<><><>0<>0<>3d7743c66d1a9b91790e98844696e272<>res://.godot/imported/Bootsplash2.png-0a44626c522983f38dc53ee7be767d19.ctex::
 Bootsplash3.png::CompressedTexture2D::5417852364192486326::1778702500::1778702809::1::::<><><>0<>0<>58c7b6f431ee13fea9b300db474b2732<>res://.godot/imported/Bootsplash3.png-85c7d6a0428ed5e90e588149db7f244e.ctex::
 Bootsplash.png::CompressedTexture2D::392300744039675099::1778697423::1778697475::1::::<><><>0<>0<>077b4d490737176e796d05fe0b4d169a<>res://.godot/imported/Bootsplash.png-5d0dbb0981e6205594211ae51d6eb32f.ctex::
@@ -119,7 +119,7 @@ boot_splash.gd::GDScript::6817767372084623135::1778703352::0::1::::<>CanvasLayer
 boot_splash.tscn::PackedScene::1016243202688736608::1778703347::0::1::::<><><>0<>0<><>::uid://c4etvrg7sxfyd::::res://assets/ui/boot_splash.gd<>uid://bmntl4x3gyuq8::::res://assets/ui/OneTapBootsplash.png
 create_dogtag_mat.gd::GDScript::2154304943392723027::1778737614::0::1::::<>EditorScript<><>0<>1<><>::
 create_slot_style.gd::GDScript::8442064151453342281::1778775696::0::1::::<>EditorScript<><>0<>1<><>::
-DogTag.gd::GDScript::2469964959133590535::1778793848::0::1::::<>Control<><>0<>0<><>::
+DogTag.gd::GDScript::2469964959133590535::1778819521::0::1::::<>Control<><>0<>0<><>::
 DogTag.tscn::PackedScene::6008100783992871632::1778794177::0::1::::<><><>0<>0<><>::uid://bbgp7yc4kqlil::::res://assets/ui/DogTag.gd
 dogtag_black_remove.gdshader::Shader::4328322954428907878::1778736645::0::1::::<><><>0<>0<><>::
 dogtag_shader_mat.tres::ShaderMaterial::7940347616929375327::1778736770::0::1::::<><><>0<>0<><>::uid://b2ww311bx6iuw::::res://assets/ui/dogtag_black_remove.gdshader
@@ -222,10 +222,10 @@ take.res::Animation::4041995609125468541::1778137379::0::1::::<><><>0<>0<><>::ui
 fire.wav::AudioStreamWAV::4006656394015731685::1778137379::1778138350::1::::<><><>0<>0<>7ae95b5b50afb10e26b207323b12b42f<>res://.godot/imported/fire.wav-62d5b9a9600a1b16fb1bdb0bd5af0f3e.sample::
 melee.wav::AudioStreamWAV::1475848047457365467::1778137379::1778138350::1::::<><><>0<>0<>2cafd0ff49f08f820a0f520182cd0a3e<>res://.godot/imported/melee.wav-2abecf972a2591fe29c1c8f333ede2d8.sample::
 ready.wav::AudioStreamWAV::8727949331877673915::1778137379::1778138350::1::::<><><>0<>0<>7d9efc81db7767d137495e05abeae2a3<>res://.godot/imported/ready.wav-bbe51587c6f30d2eddf6f12d51bbeccd.sample::
-::res://assets/weapons/resources/sniper/::1778446983
+::res://assets/weapons/resources/sniper/::1778819429
 scope.gdshader::Shader::7566875117162933765::1778393047::0::1::::<><><>0<>0<><>::
 scope_overlay.gd::GDScript::1081039298415776912::1778393052::0::1::::<>CanvasLayer<><>0<>0<><>::
-scope_overlay.tscn::PackedScene::4498086173010527428::1778395806::0::1::::<><><>0<>0<><>::uid://pnwtas34a4ga::::res://assets/weapons/resources/sniper/scope_overlay.gd
+scope_overlay.tscn::PackedScene::4498086173010527428::1778819429::0::1::::<><><>0<>0<><>::uid://pnwtas34a4ga::::res://assets/weapons/resources/sniper/scope_overlay.gd
 sniper-rifle-fire.mp3::AudioStreamMP3::120158192269310456::1778392255::1778392263::1::::<><><>0<>0<>8e41f81f2be6493e4245489663793775<>res://.godot/imported/sniper-rifle-fire.mp3-e36577b5704b461f6058b90e83bcc48e.mp3str::
 sniper.tres::Resource/Weapon::2008648085100961892::1778446983::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://c4f20qtdtq7ns::::res://assets/weapons/resources/sniper/sniper_weapon.tscn<>uid://byg8t8kbmtnc::::res://assets/weapons/resources/sniper/sniper-rifle-fire.mp3<>uid://3t3d622mvpt::::res://assets/weapons/resources/sniper/sniperBolt.wav
 sniperBolt.wav::AudioStreamWAV::59006408927894933::1778392255::1778392263::1::::<><><>0<>0<>7d5f421ce2efddd6372947ee272568c9<>res://.godot/imported/sniperBolt.wav-997485580ea263e2520553daee11003d.sample::

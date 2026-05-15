@@ -169,10 +169,10 @@ placeholder_text = "Press Enter to chat..."
 
 [node name="Middle" type="VBoxContainer" parent="CaseInner" unique_id=1700450497]
 layout_mode = 0
-offset_left = 643.0
-offset_top = 57.0
-offset_right = 1236.0
-offset_bottom = 432.0
+offset_left = 629.0
+offset_top = 59.0
+offset_right = 1222.0
+offset_bottom = 434.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 14
