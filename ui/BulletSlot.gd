@@ -4,7 +4,7 @@ extends Control
 @export var friend_name: String = "Player" : set = set_friend_name
 @export var is_online: bool = false : set = set_is_online
 
-const BULLET_HEIGHT: float = 38.0
+const BULLET_HEIGHT: float = 32.0
 
 func set_friend_name(v: String) -> void:
 	friend_name = v
@@ -15,7 +15,7 @@ func set_is_online(v: bool) -> void:
 	queue_redraw()
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(260, BULLET_HEIGHT + 10)
+	custom_minimum_size = Vector2(300, BULLET_HEIGHT + 20)
 	queue_redraw()
 
 func _draw() -> void:
@@ -24,19 +24,19 @@ func _draw() -> void:
 	var cy: float = h * 0.5
 
 	# ── colours ────────────────────────────────────────────────────────
-	var brass_bright := Color(0.85, 0.68, 0.25) if is_online else Color(0.52, 0.42, 0.18)
-	var brass_mid    := Color(0.72, 0.55, 0.18) if is_online else Color(0.40, 0.32, 0.13)
-	var brass_dark   := Color(0.45, 0.33, 0.10) if is_online else Color(0.28, 0.21, 0.08)
-	var lead_tip     := Color(0.62, 0.63, 0.65) if is_online else Color(0.38, 0.39, 0.40)
-	var lead_high    := Color(0.80, 0.82, 0.84) if is_online else Color(0.50, 0.52, 0.53)
-	var lead_shad    := Color(0.30, 0.31, 0.32) if is_online else Color(0.20, 0.21, 0.22)
-	var primer_col   := Color(0.90, 0.75, 0.30) if is_online else Color(0.55, 0.45, 0.18)
+	var brass_bright := Color(0.96, 0.78, 0.22) if is_online else Color(0.48, 0.38, 0.14)
+	var brass_mid    := Color(0.88, 0.65, 0.15) if is_online else Color(0.40, 0.32, 0.10)
+	var brass_dark   := Color(0.52, 0.32, 0.05) if is_online else Color(0.24, 0.17, 0.05)
+	var lead_tip     := Color(0.72, 0.30, 0.06) if is_online else Color(0.38, 0.17, 0.05)
+	var lead_high    := Color(0.88, 0.45, 0.12) if is_online else Color(0.50, 0.24, 0.08)
+	var lead_shad    := Color(0.42, 0.15, 0.03) if is_online else Color(0.22, 0.09, 0.02)
+	var primer_col   := Color(0.92, 0.72, 0.22) if is_online else Color(0.50, 0.40, 0.14)
 	var text_col     := Color(0.95, 0.90, 0.70) if is_online else Color(0.60, 0.55, 0.40)
 
 	# ── dimensions ─────────────────────────────────────────────────────
 	var br: float = BULLET_HEIGHT * 0.5
-	var margin_left: float = 14.0
-	var margin_right: float = 14.0
+	var margin_left: float = 22.0
+	var margin_right: float = 50.0
 
 	var x0: float = margin_left
 	var x1: float = w - margin_right
@@ -44,9 +44,9 @@ func _draw() -> void:
 
 	var base_w:      float = br * 0.55
 	var extractor_w: float = br * 0.18
-	var body_w:      float = bullet_len * 0.55
-	var shoulder_w:  float = bullet_len * 0.10
-	var neck_w:      float = bullet_len * 0.08
+	var body_w:      float = bullet_len * 0.62
+	var shoulder_w:  float = bullet_len * 0.04
+	var neck_w:      float = bullet_len * 0.02
 	var ogive_w:     float = bullet_len - base_w - extractor_w - body_w - shoulder_w - neck_w
 
 	var seg_base:     float = x0
@@ -58,8 +58,15 @@ func _draw() -> void:
 
 	var neck_r: float = br * 0.68
 
+	# ── magazine frame (drawn first, behind bullet) ────────────────────
+	var frame_col := Color(0.08, 0.08, 0.08)
+	var frame_edge := Color(0.22, 0.22, 0.22)
+	draw_rect(Rect2(margin_left, cy - br - 4, w - margin_left - margin_right, (br + 4) * 2.0), frame_col)
+	draw_rect(Rect2(margin_left, cy - br - 4, w - margin_left - margin_right, 2), frame_edge)
+	draw_rect(Rect2(margin_left, cy + br + 2, w - margin_left - margin_right, 2), frame_edge)
+
 	# ── draw sections ──────────────────────────────────────────────────
-	_draw_casing_body(seg_extract, seg_body, cy, br, brass_bright, brass_mid, brass_dark)
+	_draw_casing_body(seg_body, seg_shoulder, cy, br, brass_bright, brass_mid, brass_dark)
 	_draw_extractor_groove(seg_extract, extractor_w, cy, br, brass_dark, brass_mid)
 	_draw_base(seg_base, base_w, cy, br, brass_bright, brass_mid, brass_dark)
 	_draw_primer(seg_base, cy, br, primer_col)
@@ -77,7 +84,7 @@ func _draw() -> void:
 
 	# ── online status dot (left of base) ───────────────────────────────
 	var dot_col: Color = Color(0.2, 0.9, 0.3) if is_online else Color(0.55, 0.55, 0.55)
-	draw_circle(Vector2(seg_base - 8.0, cy), 4.0, dot_col)
+	draw_circle(Vector2(seg_base - 14.0, cy), 4.0, dot_col)
 
 
 # ── drawing helpers ────────────────────────────────────────────────────
@@ -142,7 +149,7 @@ func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 
 	for i in range(steps + 1):
 		var t: float = float(i) / float(steps)
-		var r: float = neck_r * (1.0 - t) * (1.0 - t * 0.4)
+		var r: float = neck_r * sqrt(1.0 - t * t)
 		var x: float = xo + t * ow
 		pts_top.append(Vector2(x, cy - r))
 		pts_bot.append(Vector2(x, cy + r))
@@ -159,11 +166,11 @@ func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 	var hi_pts := PackedVector2Array()
 	for i in range(steps + 1):
 		var t: float = float(i) / float(steps)
-		var r: float = neck_r * (1.0 - t) * (1.0 - t * 0.4)
+		var r: float = neck_r * sqrt(1.0 - t * t)
 		hi_pts.append(Vector2(xo + t * ow, cy - r))
 	for i in range(steps, -1, -1):
 		var t: float = float(i) / float(steps)
-		var r: float = neck_r * (1.0 - t) * (1.0 - t * 0.4)
+		var r: float = neck_r * sqrt(1.0 - t * t)
 		hi_pts.append(Vector2(xo + t * ow, cy - r * 0.55))
 	draw_colored_polygon(hi_pts, high.darkened(0.05))
 
@@ -171,10 +178,10 @@ func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 	var sh_pts := PackedVector2Array()
 	for i in range(steps + 1):
 		var t: float = float(i) / float(steps)
-		var r: float = neck_r * (1.0 - t) * (1.0 - t * 0.4)
+		var r: float = neck_r * sqrt(1.0 - t * t)
 		sh_pts.append(Vector2(xo + t * ow, cy + r * 0.55))
 	for i in range(steps, -1, -1):
 		var t: float = float(i) / float(steps)
-		var r: float = neck_r * (1.0 - t) * (1.0 - t * 0.4)
+		var r: float = neck_r * sqrt(1.0 - t * t)
 		sh_pts.append(Vector2(xo + t * ow, cy + r))
 	draw_colored_polygon(sh_pts, shad)
