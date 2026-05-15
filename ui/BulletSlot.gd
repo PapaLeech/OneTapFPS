@@ -59,11 +59,23 @@ func _draw() -> void:
 	var neck_r: float = br * 0.68
 
 	# ── magazine frame (drawn first, behind bullet) ────────────────────
-	var frame_col := Color(0.08, 0.08, 0.08)
-	var frame_edge := Color(0.22, 0.22, 0.22)
-	draw_rect(Rect2(margin_left, cy - br - 4, w - margin_left - margin_right, (br + 4) * 2.0), frame_col)
-	draw_rect(Rect2(margin_left, cy - br - 4, w - margin_left - margin_right, 2), frame_edge)
-	draw_rect(Rect2(margin_left, cy + br + 2, w - margin_left - margin_right, 2), frame_edge)
+# ── magazine frame ─────────────────────────────────────────────────
+	var frame_col := Color(0.0, 0.0, 0.0)
+	var frame_edge := Color(0.30, 0.30, 0.30)
+	var frame_x := seg_extract - 4.0
+	var frame_w := w - frame_x - 4.0
+	var frame_h := br * 2.0 + 8.0
+	var frame_y := cy - br - 4.0
+	# background fill
+	draw_rect(Rect2(frame_x, frame_y, frame_w, frame_h), frame_col)
+	# top edge
+	draw_rect(Rect2(frame_x, frame_y, frame_w, 1.5), frame_edge)
+	# bottom edge
+	draw_rect(Rect2(frame_x, frame_y + frame_h - 1.5, frame_w, 1.5), frame_edge)
+	# left edge
+	draw_rect(Rect2(frame_x, frame_y, 1.5, frame_h), frame_edge)
+	# right edge
+	draw_rect(Rect2(frame_x + frame_w - 1.5, frame_y, 1.5, frame_h), frame_edge)
 
 	# ── draw sections ──────────────────────────────────────────────────
 	_draw_casing_body(seg_body, seg_shoulder, cy, br, brass_bright, brass_mid, brass_dark)
