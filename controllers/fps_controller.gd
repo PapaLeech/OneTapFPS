@@ -148,11 +148,15 @@ func _physics_process(delta):
 	if direction:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
+		ClientPredictionLogger.log_input(PresenceManager.username, "move", Engine.get_physics_frames())
 	else:
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 
 	move_and_slide()
+	# Log position sync every 30 physics frames (~0.5s at 60hz)
+	if Engine.get_physics_frames() % 30 == 0 and multiplayer.has_multiplayer_peer():
+		NetworkSyncLogger.log_position_sent(PresenceManager.username, global_position, Engine.get_physics_frames())
 
 	handle_lean(delta)
 	#weapon_bob(velocity.length(), delta)

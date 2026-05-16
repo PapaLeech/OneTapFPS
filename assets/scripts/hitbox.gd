@@ -6,11 +6,16 @@ extends Area3D
 func take_damage(amount: float) -> void:
 	print("HIT: ", name, " multiplier x", damage_multiplier, " = ", amount * damage_multiplier, " damage")
 	var parent := get_parent()
-	# Walk up the tree to find the enemy root (CharacterBody3D)
 	while parent and not parent is CharacterBody3D:
 		parent = parent.get_parent()
 	if parent:
 		var health := parent.get_node_or_null("Health")
 		if health:
-			health.take_damage(amount * damage_multiplier)
+			var old_hp := health.current_health
+			var dmg := amount * damage_multiplier
+			health.take_damage(dmg)
 			print("Health remaining: ", health.current_health)
+			HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")
+			HitDetectionLogger.log_damage_dealt("unknown", parent.name, dmg, health.current_health)
+			if health.current_health <= 0.0:
+				HitDetectionLogger.log_kill("unknown", parent.name, "unknown", name)
