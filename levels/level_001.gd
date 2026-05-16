@@ -34,7 +34,15 @@ func _spawn_player(peer_id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	_spawn_player_on_all.rpc(peer_id)
+	# Check if we now have 2 players and one is Rysiu — start session logging
+	if MultiplayerManager.players.size() == 2:
+		var names := MultiplayerManager.players.values()
+		SessionLogger.try_start_session(names[0], names[1])
+		NetworkSyncLogger.log_peer_connected(peer_id, MultiplayerManager.players.get(peer_id, "Unknown"))
 func _remove_player(peer_id: int) -> void:
+	var username := MultiplayerManager.players.get(peer_id, "Unknown")
+	NetworkSyncLogger.log_peer_disconnected(peer_id, username)
+	SessionLogger.end_session("player_left: %s" % username)
 	var node := get_node_or_null("Players/Player_%d" % peer_id)
 	if node:
 		node.queue_free()

@@ -157,8 +157,12 @@ func _respawn() -> void:
 		cam.position.y = 1.5
 
 func _go_to_menu() -> void:
+	SessionLogger.end_session("returned_to_menu")
+	MultiplayerManager.disconnect_from_game()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_tree().change_scene_to_file(MAIN_MENU)
 
 func _exit_game() -> void:
+	SessionLogger.end_session("game_exited")
+	MultiplayerManager.disconnect_from_game()
 	get_tree().quit()

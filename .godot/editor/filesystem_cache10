@@ -1,6 +1,6 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1778961177
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778938557::0::1::::<><><>0<>0<><>::
+::res://::1778963105
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778962327::0::1::::<><><>0<>0<><>::
 export_presets.cfg::TextFile::-1::1778959558::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -63,7 +63,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -391,8 +391,8 @@ Map_v1_UNIConcrete_wall_v1.jpg::CompressedTexture2D::9008209305074702713::177801
 Map_v1_Wooden_box_v1.jpg::CompressedTexture2D::5038190498942625454::1778015563::1778878430::1::::<><><>0<>0<>8e5346ba9173076a355cd90f157c04e3<>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.s3tc.ctex<*>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.etc2.ctex::
 map_v_1.gd::GDScript::6714484322957040553::1776709126::0::1::::<>Node3D<><>0<>0<><>::
 WE_test.tres::Environment::8424170553004968181::1778938830::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
-::res://levels/::1778959838
-level_001.gd::GDScript::612782810600861443::1778955534::0::1::::<>Node3D<><>0<>0<><>::
+::res://levels/::1778963248
+level_001.gd::GDScript::612782810600861443::1778963248::0::1::::<>Node3D<><>0<>0<><>::
 level_001.tscn::PackedScene::4261551556484119783::1778959838::0::1::::<><><>0<>0<><>::uid://iy3pcr5qh8rf::::res://levels/level_001.gd<>uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://khvf4g3dgyqi::::res://controllers/fps_controller.tscn<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://dh3j6u1fklhvr::::res://Characters/enemy.tscn<>uid://3kolpk4youf0::::res://environment/Map_v1.glb
 map_visual_boost.gd::GDScript::5407384298704008832::1776836302::0::1::::<>Node3D<><>0<>0<><>::
 OneDeag.tscn::PackedScene::310802693695771280::1777238638::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://c3ffql15mo0aj::::res://controllers/fps_controller.tscn<>uid://b5nu6sqkkvuky::::res://fps_controller.gd<>uid://b1ptf8n3s0r7s::::res://weapon.gd<>uid://3kolpk4youf0::::res://environment/Map_v1.glb<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd
@@ -401,11 +401,17 @@ WE_test.tscn::PackedScene::3764880135456822604::1776653496::0::1::::<><><>0<>0<>
 ::res://materials/::1777234919
 grid.tres::ShaderMaterial::5739367904623174735::1776654260::0::1::::<><><>0<>0<><>::uid://ivvpsi314b34::::res://textures/grid.jpg
 player.tres::StandardMaterial3D::4435626134922663587::1776653496::0::1::::<><><>0<>0<><>::
-::res://scripts/::1778954681
+::res://scripts/::1778963097
 boot_splash.gd::GDScript::8887376292968682027::1778954681::0::1::::<>CanvasLayer<><>0<>0<><>::
+ClientPredictionLogger.gd::GDScript::6908745708737179878::1778963071::0::1::::<>Node<><>0<>0<><>::
 DedicatedServer.gd::GDScript::8774166623148085721::1778953810::0::1::::<>Node<><>0<>0<><>::
+EnemyStateLogger.gd::GDScript::7334284020237050202::1778963090::0::1::::<>Node<><>0<>0<><>::
+HitDetectionLogger.gd::GDScript::4326725587912742220::1778963065::0::1::::<>Node<><>0<>0<><>::
+LagCompensationLogger.gd::GDScript::3019785753954915376::1778963097::0::1::::<>Node<><>0<>0<><>::
 MultiplayerManager.gd::GDScript::6655957580179399960::1778948160::0::1::::<>Node<><>0<>0<><>::
+NetworkSyncLogger.gd::GDScript::5404236672490161014::1778963083::0::1::::<>Node<><>0<>0<><>::
 PresenceManager.gd::GDScript::3317272715576500429::1778938898::0::1::::<>Node<><>0<>0<><>::
+SessionLogger.gd::GDScript::3342422228604137525::1778962994::0::1::::<>Node<><>0<>0<><>::
 ::res://shaders/::1777234919
 grid.gdshader::Shader::3566797187140224592::1776653496::0::1::::<><><>0<>0<><>::
 ::res://textures/::1778878455
