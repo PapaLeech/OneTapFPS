@@ -1,0 +1,63 @@
+extends Node
+
+const PORT := 7777
+const MAX_PLAYERS := 8
+const SERVER_IP := "161.35.41.206"
+
+signal player_connected(peer_id: int)
+signal player_disconnected(peer_id: int)
+signal connection_failed
+signal connected_to_server
+
+var players: Dictionary = {}  # peer_id -> username
+
+func _ready() -> void:
+	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	multiplayer.connection_failed.connect(_on_connection_failed)
+
+func connect_to_server() -> void:
+	var peer := ENetMultiplayerPeer.new()
+	var err := peer.create_client(SERVER_IP, PORT)
+	if err != OK:
+		push_error("Failed to connect to server: " + str(err))
+		connection_failed.emit()
+		return
+	multiplayer.multiplayer_peer = peer
+	print("Connecting to dedicated server %s:%d" % [SERVER_IP, PORT])
+
+func disconnect_from_game() -> void:
+	players.clear()
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = null
+
+func _on_peer_connected(peer_id: int) -> void:
+	print("Peer connected: ", peer_id)
+	player_connected.emit(peer_id)
+	# Exchange usernames
+	if multiplayer.is_server():
+		_sync_player_name.rpc_id(peer_id, PresenceManager.username)
+
+func _on_peer_disconnected(peer_id: int) -> void:
+	print("Peer disconnected: ", peer_id)
+	players.erase(peer_id)
+	player_disconnected.emit(peer_id)
+
+func _on_connected_to_server() -> void:
+	print("Connected to server!")
+	var my_id := multiplayer.get_unique_id()
+	players[my_id] = PresenceManager.username
+	_sync_player_name.rpc(PresenceManager.username)
+	connected_to_server.emit()
+
+func _on_connection_failed() -> void:
+	print("Connection failed.")
+	connection_failed.emit()
+
+@rpc("any_peer", "reliable")
+func _sync_player_name(username: String) -> void:
+	var sender_id := multiplayer.get_remote_sender_id()
+	players[sender_id] = username
+	print("Player registered: %s (id %d)" % [username, sender_id])

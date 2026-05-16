@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b1yleqbb8tc7x"]
 
+[ext_resource type="Script" uid="uid://iy3pcr5qh8rf" path="res://levels/level_001.gd" id="1_44t5x"]
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="PackedScene" uid="uid://khvf4g3dgyqi" path="res://controllers/fps_controller.tscn" id="4_po88e"]
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
@@ -10,6 +11,7 @@
 data = PackedVector3Array(10, 0, 10, -10, 0, -10, 10, 0, -10, -10, 0, -10, 10, 0, 10, -10, 0, 10)
 
 [node name="Node3D" type="Node3D" unique_id=1169815461]
+script = ExtResource("1_44t5x")
 
 [node name="WorldEnvironment" parent="." unique_id=1103224932 instance=ExtResource("1_db21n")]
 

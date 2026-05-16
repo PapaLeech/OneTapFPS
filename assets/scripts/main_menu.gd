@@ -51,6 +51,9 @@ var _invite_decline : Button = null
 # ─── Ready ───────────────────────────────────────────────────────────────────
 
 func _ready() -> void:
+	# Skip all UI on dedicated server
+	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
+		return
 	get_window().mode = Window.MODE_FULLSCREEN
 	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_style_mission_panel()
@@ -299,7 +302,10 @@ func _on_mode_clicked(event: InputEvent, mode: Mode) -> void:
 	if not event is InputEventMouseButton: return
 	if not event.pressed or event.button_index != MOUSE_BUTTON_LEFT: return
 	if _active_mode != Mode.NONE: return
-	_start_countdown(mode)
+	if mode == Mode.DEATHMATCH:
+		_show_host_join_panel()
+	else:
+		_start_countdown(mode)
 
 func _start_countdown(mode: Mode) -> void:
 	_active_mode = mode
@@ -582,6 +588,11 @@ func _show_username_prompt() -> void:
 func _go_online_and_fetch_friends() -> void:
 	PresenceManager.go_online(PresenceManager.username)
 	_refresh_friends()
+	var refresh_timer := Timer.new()
+	add_child(refresh_timer)
+	refresh_timer.wait_time = 30.0
+	refresh_timer.autostart = true
+	refresh_timer.timeout.connect(_refresh_friends)
 
 func _refresh_friends() -> void:
 	PresenceManager.get_friends_list(func(friends: Array):
@@ -606,6 +617,43 @@ func _refresh_pending_requests() -> void:
 	PresenceManager.get_friend_requests(func(requests: Array):
 		_populate_requests(requests)
 	)
+
+# ─── Multiplayer Host/Join ────────────────────────────────────────────────────
+
+func _show_host_join_panel() -> void:
+	var dialog := Window.new()
+	dialog.title = "Deathmatch"
+	dialog.size = Vector2i(340, 140)
+	dialog.unresizable = true
+	dialog.close_requested.connect(func(): dialog.queue_free())
+	var vbox := VBoxContainer.new()
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.add_theme_constant_override("separation", 12)
+	var status := Label.new()
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status.add_theme_font_size_override("font_size", 13)
+	status.text = "Connecting to OneTap server..."
+	vbox.add_child(status)
+	var connect_btn := Button.new()
+	connect_btn.text = "Join Match"
+	connect_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	connect_btn.pressed.connect(func():
+		connect_btn.disabled = true
+		status.text = "Connecting..."
+		MultiplayerManager.connect_to_server()
+		MultiplayerManager.connected_to_server.connect(func():
+			dialog.queue_free()
+			get_tree().change_scene_to_file(GAME_SCENE)
+		, CONNECT_ONE_SHOT)
+		MultiplayerManager.connection_failed.connect(func():
+			status.text = "Connection failed. Is the server running?"
+			connect_btn.disabled = false
+		, CONNECT_ONE_SHOT)
+	)
+	vbox.add_child(connect_btn)
+	dialog.add_child(vbox)
+	add_child(dialog)
+	dialog.popup_centered()
 
 # ─── Chat / Console ──────────────────────────────────────────────────────────
 

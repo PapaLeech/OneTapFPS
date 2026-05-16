@@ -75,12 +75,47 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 
 func _ready():
+	# Skip local setup on dedicated server
+	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
+		set_physics_process(false)
+		set_process_unhandled_input(false)
+		return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if _weapon_holder:
 		def_weapon_holder_pos = _weapon_holder.position
 	var health := get_node_or_null("Health")
 	if health:
 		health.died.connect(_on_died)
+	# Set up position sync
+	var sync := get_node_or_null("MultiplayerSynchronizer")
+	if sync:
+		var config := SceneReplicationConfig.new()
+		config.add_property(NodePath(".:position"))
+		config.add_property(NodePath(".:rotation"))
+		sync.replication_config = config
+		sync.set_multiplayer_authority(get_multiplayer_authority())
+	# Only process input/physics for our own character
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		set_physics_process(false)
+		set_process_unhandled_input(false)
+		if CAMERA_CONTROLLER:
+			CAMERA_CONTROLLER.current = false
+	else:
+		if CAMERA_CONTROLLER:
+			CAMERA_CONTROLLER.current = true
+		else:
+			# Camera might not be set yet, try on next frame
+			call_deferred("_activate_camera")
+
+func _activate_camera() -> void:
+	if CAMERA_CONTROLLER:
+		CAMERA_CONTROLLER.current = true
+		return
+	# Fallback: find by exact path
+	var cam := get_node_or_null("CameraController/Camera3D") as Camera3D
+	if cam:
+		cam.current = true
+		CAMERA_CONTROLLER = cam
 
 func _on_died() -> void:
 	# Disable movement

@@ -28,6 +28,7 @@ buses/default_bus_layout="uid://ylfjg8opqmon"
 
 MCPRuntime="*res://addons/godot_mcp/runtime/mcp_runtime.gd"
 PresenceManager="*uid://bni585q0qacmn"
+MultiplayerManager="*res://scripts/MultiplayerManager.gd"
 
 [debug]
 
