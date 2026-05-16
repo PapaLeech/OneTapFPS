@@ -18,6 +18,7 @@ config/name="001 - Basic Setup"
 run/main_scene="res://assets/ui/boot_splash.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=3000
 
 [audio]
 
