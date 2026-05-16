@@ -15,6 +15,7 @@ var _count            : int = 3
 var _quit_dialog_open : bool = false
 var _chat_focus       : ChatFocus = ChatFocus.NONE
 var _invite_sender    : String = ""
+var _friends_header   : Label = null
 
 # Invite notification nodes (built in code, hidden until an invite arrives)
 var _invite_panel   : PanelContainer = null
@@ -70,6 +71,7 @@ func _ready() -> void:
 	_leave_btn.pressed.connect(_on_leave_pressed)
 	_clear_placeholder_tags()
 	_setup_chat_terminal()
+	_setup_add_friend_button()
 	if not PresenceManager.has_username():
 		_show_username_prompt()
 	else:
@@ -383,6 +385,118 @@ func populate_friends(friends: Array) -> void:
 		_bullet_list.add_child(slot)
 		slot.friend_name = f.get("name", "Player")
 		slot.is_online   = f.get("online", false)
+		if f.get("online", false):
+			slot.gui_input.connect(func(event):
+				if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+					_show_friend_context_menu(slot.friend_name)
+			)
+			slot.mouse_filter = Control.MOUSE_FILTER_STOP
+			slot.tooltip_text = "Right-click to invite"
+
+func _populate_requests(requests: Array) -> void:
+	if _friends_header == null:
+		return
+	if requests.is_empty():
+		_friends_header.text = "Friends"
+		return
+	_friends_header.text = "Friends  (%d pending)" % requests.size()
+	for req in requests:
+		var hbox := HBoxContainer.new()
+		var label := Label.new()
+		label.text = req
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_font_size_override("font_size", 13)
+		hbox.add_child(label)
+		var accept_btn := Button.new()
+		accept_btn.text = "Accept"
+		accept_btn.pressed.connect(func():
+			PresenceManager.accept_friend_request(req, func(): _refresh_friends())
+			hbox.queue_free()
+		)
+		hbox.add_child(accept_btn)
+		var decline_btn := Button.new()
+		decline_btn.text = "Decline"
+		decline_btn.pressed.connect(func():
+			PresenceManager.decline_friend_request(req, func(): _refresh_friends())
+			hbox.queue_free()
+		)
+		hbox.add_child(decline_btn)
+		_bullet_list.add_child(hbox)
+
+func _show_friend_context_menu(friend_name: String) -> void:
+	var menu := PopupMenu.new()
+	menu.add_item("Invite to lobby", 0)
+	menu.id_pressed.connect(func(id):
+		if id == 0:
+			receive_invite(friend_name)
+		menu.queue_free()
+	)
+	add_child(menu)
+	menu.popup(Rect2i(get_viewport().get_mouse_position(), Vector2i(160, 0)))
+
+func _show_add_friend_popup() -> void:
+	var dialog := Window.new()
+	dialog.title = "Add Friend"
+	dialog.size = Vector2i(360, 130)
+	dialog.unresizable = true
+	dialog.close_requested.connect(func(): dialog.queue_free())
+	var vbox := VBoxContainer.new()
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.add_theme_constant_override("separation", 10)
+	var label := Label.new()
+	label.text = "Enter their username:"
+	vbox.add_child(label)
+	var input := LineEdit.new()
+	input.placeholder_text = "Username"
+	vbox.add_child(input)
+	var status := Label.new()
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status.add_theme_font_size_override("font_size", 12)
+	vbox.add_child(status)
+	var send = func():
+		var val := input.text.strip_edges().to_lower()
+		if val == "":
+			return
+		if val == PresenceManager.username:
+			status.text = "That's you!"
+			return
+		status.text = "Sending..."
+		PresenceManager.send_friend_request(val, func(code, data):
+			if code == 200:
+				status.text = "Request sent!"
+			else:
+				var msg: String = data.get("detail", "Failed.") if data else "Failed."
+				status.text = msg
+		)
+	var btn := Button.new()
+	btn.text = "Send Request"
+	btn.pressed.connect(send)
+	input.text_submitted.connect(func(_t): send.call())
+	vbox.add_child(btn)
+	dialog.add_child(vbox)
+	add_child(dialog)
+	dialog.popup_centered()
+	input.call_deferred("grab_focus")
+	var close = func(): dialog.queue_free()
+	input.gui_input.connect(func(event):
+		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+			close.call()
+	)
+
+func _setup_add_friend_button() -> void:
+	_friends_header = $CaseInner/Right/FriendsPanel/VBox/Header
+	var hbox := HBoxContainer.new()
+	var parent := _friends_header.get_parent()
+	var idx := _friends_header.get_index()
+	parent.remove_child(_friends_header)
+	hbox.add_child(_friends_header)
+	_friends_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var add_btn := Button.new()
+	add_btn.text = "+ Add"
+	add_btn.pressed.connect(_show_add_friend_popup)
+	hbox.add_child(add_btn)
+	parent.add_child(hbox)
+	parent.move_child(hbox, idx)
 
 func _on_join_pressed() -> void:
 	if _lobby_players.size() >= MAX_LOBBY:
@@ -453,10 +567,10 @@ func _show_username_prompt() -> void:
 	var btn := Button.new()
 	btn.text = "Confirm"
 	btn.pressed.connect(func():
-		var name := input.text.strip_edges()
-		if name == "":
+		var uname := input.text.strip_edges()
+		if uname == "":
 			return
-		PresenceManager.save_username(name)
+		PresenceManager.save_username(uname)
 		dialog.queue_free()
 		_go_online_and_fetch_friends()
 	)
@@ -467,11 +581,30 @@ func _show_username_prompt() -> void:
 
 func _go_online_and_fetch_friends() -> void:
 	PresenceManager.go_online(PresenceManager.username)
-	PresenceManager.get_friends_status([PresenceManager.username], func(data: Dictionary):
-		var friends_array: Array = []
-		for name in data.keys():
-			friends_array.append({"name": name, "online": data[name]})
-		populate_friends(friends_array)
+	_refresh_friends()
+
+func _refresh_friends() -> void:
+	PresenceManager.get_friends_list(func(friends: Array):
+		if friends.is_empty():
+			populate_friends([])
+			_refresh_pending_requests()
+			return
+		var names: Array = []
+		for f in friends:
+			names.append(f.get("username", ""))
+		PresenceManager.get_friends_status(names, func(status: Dictionary):
+			var friends_array: Array = []
+			for f in friends:
+				var uname: String = f.get("username", "")
+				friends_array.append({"name": uname, "online": status.get(uname, false)})
+			populate_friends(friends_array)
+			_refresh_pending_requests()
+		)
+	)
+
+func _refresh_pending_requests() -> void:
+	PresenceManager.get_friend_requests(func(requests: Array):
+		_populate_requests(requests)
 	)
 
 # ─── Chat / Console ──────────────────────────────────────────────────────────
