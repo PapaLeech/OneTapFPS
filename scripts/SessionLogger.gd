@@ -91,9 +91,9 @@ func _reset_logs() -> void:
 	ping_samples.clear()
 
 func _build_summary(script_name: String) -> String:
-	var duration := Time.get_unix_time_from_system() - session_start_unix
-	var mins := int(duration) / 60
-	var secs := int(duration) % 60
+	var duration: float = Time.get_unix_time_from_system() - session_start_unix
+	var mins: int = int(duration) / 60
+	var secs: int = int(duration) % 60
 	var lines: Array[String] = []
 	lines.append("--- Summary ---")
 	lines.append("Duration: %dm %ds" % [mins, secs])

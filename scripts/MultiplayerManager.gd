@@ -42,7 +42,8 @@ func _on_peer_connected(peer_id: int) -> void:
 func _on_peer_disconnected(peer_id: int) -> void:
 	print("Peer disconnected: ", peer_id)
 	var username := players.get(peer_id, "Unknown")
-	NetworkSyncLogger.log_peer_disconnected(peer_id, username)
+	if not multiplayer.is_server():
+		NetworkSyncLogger.log_peer_disconnected(peer_id, username)
 	players.erase(peer_id)
 	player_disconnected.emit(peer_id)
 
@@ -52,7 +53,6 @@ func _on_connected_to_server() -> void:
 	players[my_id] = PresenceManager.username
 	_sync_player_name.rpc(PresenceManager.username)
 	connected_to_server.emit()
-	# Start ping logging every 5 seconds
 	var timer := Timer.new()
 	add_child(timer)
 	timer.wait_time = 5.0
@@ -62,11 +62,7 @@ func _on_connected_to_server() -> void:
 func _log_ping() -> void:
 	if not multiplayer.has_multiplayer_peer():
 		return
-	var peer := multiplayer.multiplayer_peer
-	if peer:
-		var ping := peer.get_peer_speed(1) if peer.has_method("get_peer_speed") else -1.0
-		# ENet doesn't expose ping directly, log RTT approximation
-		LagCompensationLogger.log_ping(PresenceManager.username, float(peer.get_packet_peer() if peer.has_method("get_packet_peer") else 0))
+	LagCompensationLogger.log_ping(PresenceManager.username, 0.0)
 
 func _on_connection_failed() -> void:
 	print("Connection failed.")

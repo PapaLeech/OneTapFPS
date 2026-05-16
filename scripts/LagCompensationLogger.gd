@@ -8,7 +8,7 @@ func log_ping(player: String, ping_ms: float) -> void:
 	SessionLogger.record_ping(ping_ms)
 
 func log_timestamp_delta(player: String, client_time: float, server_time: float) -> void:
-	var delta := abs(client_time - server_time) * 1000.0
+	var delta: float = abs(client_time - server_time) * 1000.0
 	SessionLogger.log_event("lag_compensation", "TIMESTAMP DELTA | Player: %s | Delta: %.1f ms" % [player, delta])
 
 func log_rewind(target: String, rewind_ms: float, rewound_pos: Vector3) -> void:
