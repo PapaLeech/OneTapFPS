@@ -17,9 +17,8 @@ func _start_dedicated_server() -> void:
 		get_tree().quit(1)
 		return
 	multiplayer.multiplayer_peer = peer
-	multiplayer.peer_connected.connect(func(id): print("Player connected: %d" % id))
-	multiplayer.peer_disconnected.connect(func(id): print("Player disconnected: %d" % id))
 	print("Server ready. Listening on port 7777.")
+	get_tree().change_scene_to_file("res://levels/level_001.tscn")
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey or event is InputEventMouseButton or event is InputEventJoypadButton:
