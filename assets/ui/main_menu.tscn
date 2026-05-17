@@ -388,3 +388,5 @@ text = "Exit"
 
 [node name="LobbyJoinSound2" type="AudioStreamPlayer" parent="." unique_id=1211762886]
 stream = ExtResource("5_82vaf")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=366978063]

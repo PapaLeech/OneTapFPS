@@ -17,6 +17,13 @@ var _chat_focus       : ChatFocus = ChatFocus.NONE
 var _invite_sender    : String = ""
 var _friends_header   : Label = null
 
+# ─── Music playlist ──────────────────────────────────────────────────────────
+const PLAYLIST := [
+	"res://assets/audio/watermello-rock477138.mp3",
+	"res://assets/audio/nastelbom-rock.mp3",
+]
+var _playlist_index : int = 0
+
 # Invite notification nodes (built in code, hidden until an invite arrives)
 var _invite_panel   : PanelContainer = null
 var _invite_label   : Label = null
@@ -39,6 +46,7 @@ var _invite_decline : Button = null
 @onready var _exit_btn           : Button         = $ExitBtn
 @onready var _dog_tags_container : Control        = $CaseInner/Right/LobbyPanel/VBox/DogTags
 @onready var _lobby_join_sound   : AudioStreamPlayer = $LobbyJoinSound2
+@onready var _music_player       : AudioStreamPlayer = $MusicPlayer
 @onready var _bullet_list        : VBoxContainer  = $CaseInner/Right/FriendsPanel/VBox/Scroll/BulletList
 @onready var _join_btn           : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/JoinBtn
 @onready var _leave_btn          : Button         = $CaseInner/Right/LobbyPanel/VBox/BtnRow/LeaveBtn
@@ -75,14 +83,35 @@ func _ready() -> void:
 	_clear_placeholder_tags()
 	_setup_chat_terminal()
 	_setup_add_friend_button()
+	_start_music()
 	if not PresenceManager.has_username():
 		_show_username_prompt()
 	else:
 		_go_online_and_fetch_friends()
 
 
-# ─── Styling ─────────────────────────────────────────────────────────────────
+# ─── Music ────────────────────────────────────────────────────────────────────
+func _start_music() -> void:
+	_apply_volume_settings()
+	_play_track(_playlist_index)
+	_music_player.finished.connect(_on_track_finished)
 
+func _play_track(index: int) -> void:
+	var stream := load(PLAYLIST[index])
+	_music_player.stream = stream
+	_music_player.play()
+
+func _on_track_finished() -> void:
+	_playlist_index = (_playlist_index + 1) % PLAYLIST.size()
+	_play_track(_playlist_index)
+
+func _apply_volume_settings() -> void:
+	var master_vol : float = PresenceManager.load_setting("master_volume", 1.0)
+	var music_vol  : float = PresenceManager.load_setting("music_volume", 1.0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(master_vol))
+	_music_player.volume_db = linear_to_db(music_vol)
+
+# ─── Styling ────────────────────────────────────────────────────────────────────
 func _style_mission_panel() -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.12, 0.12, 0.12, 0.97)
@@ -238,7 +267,7 @@ func _on_invite_declined() -> void:
 func _show_settings() -> void:
 	var dialog := Window.new()
 	dialog.title = "Settings"
-	dialog.size = Vector2i(400, 460)
+	dialog.size = Vector2i(400, 600)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
 	dialog.window_input.connect(func(e):
@@ -267,6 +296,34 @@ func _show_settings() -> void:
 	ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
 	ads_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("ads_sensitivity", v))
 	vbox.add_child(ads_sens_slider)
+	# ── Master Volume ───────────────────────────────────────────────
+	var master_vol_label := Label.new()
+	master_vol_label.text = "Master Volume"
+	vbox.add_child(master_vol_label)
+	var master_vol_slider := HSlider.new()
+	master_vol_slider.min_value = 0.0
+	master_vol_slider.max_value = 1.0
+	master_vol_slider.step = 0.05
+	master_vol_slider.value = PresenceManager.load_setting("master_volume", 1.0)
+	master_vol_slider.value_changed.connect(func(v):
+		PresenceManager.save_setting("master_volume", v)
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(v))
+	)
+	vbox.add_child(master_vol_slider)
+	# ── Music Volume ───────────────────────────────────────────────
+	var music_vol_label := Label.new()
+	music_vol_label.text = "Music Volume"
+	vbox.add_child(music_vol_label)
+	var music_vol_slider := HSlider.new()
+	music_vol_slider.min_value = 0.0
+	music_vol_slider.max_value = 1.0
+	music_vol_slider.step = 0.05
+	music_vol_slider.value = PresenceManager.load_setting("music_volume", 1.0)
+	music_vol_slider.value_changed.connect(func(v):
+		PresenceManager.save_setting("music_volume", v)
+		_music_player.volume_db = linear_to_db(v)
+	)
+	vbox.add_child(music_vol_slider)
 	var keys_label := Label.new()
 	keys_label.text = "Keybindings"
 	vbox.add_child(keys_label)

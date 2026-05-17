@@ -17,6 +17,7 @@ var _respawn_btn : Button
 var _death_menu_btn : Button
 var _death_settings_btn : Button
 var _death_quit_btn : Button
+var _master_vol_slider : HSlider = null
 
 enum Screen { NONE, PAUSE, SETTINGS, DEATH, DEATH_SETTINGS }
 var _screen : Screen = Screen.NONE
@@ -95,6 +96,24 @@ func _build_graphics_presets() -> void:
 	if back:
 		vbox.move_child(back, vbox.get_child_count() - 1)
 
+	# ── Master Volume ──────────────────────────────────────────────
+	var master_label := Label.new()
+	master_label.text = "Master Volume"
+	vbox.add_child(master_label)
+	_master_vol_slider = HSlider.new()
+	_master_vol_slider.min_value = 0.0
+	_master_vol_slider.max_value = 1.0
+	_master_vol_slider.step = 0.05
+	_master_vol_slider.value = PresenceManager.load_setting("master_volume", 1.0)
+	_master_vol_slider.value_changed.connect(func(v):
+		PresenceManager.save_setting("master_volume", v)
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(v))
+	)
+	vbox.add_child(_master_vol_slider)
+	# Move BackBtn to very end
+	if back:
+		vbox.move_child(back, vbox.get_child_count() - 1)
+
 func _style_panels() -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.12, 0.12, 0.12, 0.97)
@@ -150,6 +169,8 @@ func _open_settings() -> void:
 	# Reload values fresh in case username wasn't set at _ready time
 	_sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
 	_ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
+	if _master_vol_slider:
+		_master_vol_slider.value = PresenceManager.load_setting("master_volume", 1.0)
 	_back_btn.grab_focus()
 
 func _close_settings() -> void:
@@ -180,6 +201,8 @@ func _open_death_settings() -> void:
 	_settings_panel.visible = true
 	_sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
 	_ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
+	if _master_vol_slider:
+		_master_vol_slider.value = PresenceManager.load_setting("master_volume", 1.0)
 	_back_btn.grab_focus()
 
 func _respawn() -> void:
