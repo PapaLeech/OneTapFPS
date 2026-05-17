@@ -7,6 +7,10 @@ var spawn_positions: Array[Vector3] = [
 	Vector3(-35, 2, -35),
 ]
 func _ready() -> void:
+	# Remove the static CharacterBody3D from scene — multiplayer spawns its own
+	var static_player := get_node_or_null("CharacterBody3D")
+	if static_player and multiplayer.has_multiplayer_peer():
+		static_player.queue_free()
 	if not multiplayer.has_multiplayer_peer():
 		return
 	if multiplayer.is_server():
@@ -15,21 +19,8 @@ func _ready() -> void:
 		for id in MultiplayerManager.players:
 			_spawn_player(id)
 	else:
-		# Client: take control of the existing player in the scene
-		var existing := get_node_or_null("CharacterBody3D") as CharacterBody3D
-		if existing:
-			var my_id := multiplayer.get_unique_id()
-			existing.set_multiplayer_authority(my_id)
-			existing.name = "Player_%d" % my_id
-			var idx := MultiplayerManager.players.keys().find(my_id)
-			existing.global_position = spawn_positions[idx % spawn_positions.size()]
-			# Re-activate camera and input now that authority is set
-			var cam := existing.get_node_or_null("CameraController/Camera3D") as Camera3D
-			if cam:
-				cam.current = true
-			existing.set_physics_process(true)
-			existing.set_process_unhandled_input(true)
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		# Client: wait for server to spawn our player via RPC
+		pass
 func _spawn_player(peer_id: int) -> void:
 	if not multiplayer.is_server():
 		return
@@ -60,3 +51,11 @@ func _spawn_player_on_all(peer_id: int) -> void:
 	var spawn_pos := spawn_positions[idx % spawn_positions.size()]
 	player.global_position = spawn_pos
 	players_node.add_child(player)
+	# Configure MultiplayerSynchronizer after adding to scene tree
+	var sync := player.get_node_or_null("MultiplayerSynchronizer")
+	if sync:
+		var config := SceneReplicationConfig.new()
+		config.add_property(NodePath(".:position"))
+		config.add_property(NodePath(".:rotation"))
+		sync.replication_config = config
+		sync.set_multiplayer_authority(peer_id)

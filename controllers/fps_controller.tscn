@@ -432,4 +432,6 @@ script = ExtResource("16_fyafc")
 
 [node name="PauseMenu" parent="." unique_id=1412426954 instance=ExtResource("18_yvtcv")]
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=621176942]
+
 [editable path="CollisionShape3D/Terrorist"]
