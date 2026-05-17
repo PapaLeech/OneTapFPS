@@ -18,21 +18,21 @@ func apply_preset(preset: int) -> void:
 			_apply_high()
 
 func _apply_low() -> void:
-	var vp := get_viewport()
+	var vp := get_tree().root
 	vp.scaling_3d_scale = 0.75
 	vp.msaa_3d = Viewport.MSAA_DISABLED
 	RenderingServer.directional_shadow_atlas_set_size(512, true)
 	Engine.max_fps = 60
 
 func _apply_medium() -> void:
-	var vp := get_viewport()
+	var vp := get_tree().root
 	vp.scaling_3d_scale = 1.0
 	vp.msaa_3d = Viewport.MSAA_DISABLED
 	RenderingServer.directional_shadow_atlas_set_size(2048, true)
 	Engine.max_fps = 0
 
 func _apply_high() -> void:
-	var vp := get_viewport()
+	var vp := get_tree().root
 	vp.scaling_3d_scale = 1.0
 	vp.msaa_3d = Viewport.MSAA_2X
 	RenderingServer.directional_shadow_atlas_set_size(4096, true)

@@ -147,6 +147,9 @@ func _open_settings() -> void:
 	_screen = Screen.SETTINGS
 	_panel.visible = false
 	_settings_panel.visible = true
+	# Reload values fresh in case username wasn't set at _ready time
+	_sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
+	_ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
 	_back_btn.grab_focus()
 
 func _close_settings() -> void:
@@ -175,6 +178,8 @@ func _open_death_settings() -> void:
 	_screen = Screen.DEATH_SETTINGS
 	_death_panel.visible = false
 	_settings_panel.visible = true
+	_sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
+	_ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
 	_back_btn.grab_focus()
 
 func _respawn() -> void:
