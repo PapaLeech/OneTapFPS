@@ -11,7 +11,7 @@ func take_damage(amount: float) -> void:
 	if parent:
 		var health := parent.get_node_or_null("Health")
 		if health:
-			var old_hp := health.current_health
+			var old_hp: float = health.current_health
 			var dmg := amount * damage_multiplier
 			health.take_damage(dmg)
 			print("Health remaining: ", health.current_health)

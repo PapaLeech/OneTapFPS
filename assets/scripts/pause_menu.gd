@@ -9,6 +9,7 @@ const MAIN_MENU := "res://assets/ui/main_menu.tscn"
 @onready var _quit_btn     : Button  = $Panel/VBox/QuitBtn
 @onready var _settings_panel : Control = $SettingsPanel
 @onready var _sens_slider    : HSlider = $SettingsPanel/VBox/SensSlider
+@onready var _ads_sens_slider : HSlider = $SettingsPanel/VBox/ADSSensSlider
 @onready var _back_btn       : Button  = $SettingsPanel/VBox/BackBtn
 @onready var _death_panel    : Control = $DeathPanel
 
@@ -32,6 +33,8 @@ func _ready() -> void:
 	_back_btn.pressed.connect(_close_settings)
 	_sens_slider.value = ProjectSettings.get_setting("game/mouse_sensitivity", 1.0)
 	_sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/mouse_sensitivity", v))
+	_ads_sens_slider.value = ProjectSettings.get_setting("game/ads_sensitivity", 1.0)
+	_ads_sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/ads_sensitivity", v))
 	_style_panels()
 
 func _build_death_panel() -> void:

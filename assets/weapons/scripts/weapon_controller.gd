@@ -36,6 +36,7 @@ var _mouse_movement: Vector2
 var _random_sway_x: float
 var _random_sway_y: float
 var _ads_weight: float = 0.0
+var _weapon_meshes: Array = []
 var _sway_time: float = 0.0
 
 var _camera: Camera3D
@@ -119,11 +120,11 @@ func _physics_process(delta):
 	if _scope_overlay and current_weapon:
 		if _is_aiming and current_weapon.has_scope and not _is_bolt_cycling:
 			_scope_overlay.show_scope()
-			for child in current_weapon_model.find_children("*", "MeshInstance3D", true, false):
+			for child in _weapon_meshes:
 				child.visible = false
 		else:
 			_scope_overlay.hide_scope()
-			for child in current_weapon_model.find_children("*", "MeshInstance3D", true, false):
+			for child in _weapon_meshes:
 				child.visible = true
 	
 	if current_weapon:
@@ -233,6 +234,7 @@ func spawn_weapon_model():
 			_anim_player = current_weapon_model.find_child("AnimationPlayer", true, false)
 		_gun_sound = current_weapon_model.find_child("AudioStreamPlayer3D", true, false)
 		_bolt_sound = current_weapon_model.find_child("BoltSoundPlayer", true, false)
+		_weapon_meshes = current_weapon_model.find_children("*", "MeshInstance3D", true, false)
 		if _bolt_sound and current_weapon.bolt_sound:
 			_bolt_sound.stream = current_weapon.bolt_sound
 		if _gun_sound and current_weapon.fire_sound:

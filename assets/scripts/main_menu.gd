@@ -257,6 +257,16 @@ func _show_settings() -> void:
 	sens_slider.value = ProjectSettings.get_setting("game/mouse_sensitivity", 1.0)
 	sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/mouse_sensitivity", v))
 	vbox.add_child(sens_slider)
+	var ads_sens_label := Label.new()
+	ads_sens_label.text = "ADS Sensitivity"
+	vbox.add_child(ads_sens_label)
+	var ads_sens_slider := HSlider.new()
+	ads_sens_slider.min_value = 0.1
+	ads_sens_slider.max_value = 1.0
+	ads_sens_slider.step = 0.05
+	ads_sens_slider.value = ProjectSettings.get_setting("game/ads_sensitivity", 1.0)
+	ads_sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/ads_sensitivity", v))
+	vbox.add_child(ads_sens_slider)
 	var keys_label := Label.new()
 	keys_label.text = "Keybindings"
 	vbox.add_child(keys_label)

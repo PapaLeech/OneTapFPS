@@ -53,7 +53,8 @@ func get_friends_status(names: Array, callback: Callable) -> void:
 		var data = JSON.parse_string(text)
 		if data == null:
 			data = {}
-		callback.call(data)
+		if callback.is_valid():
+			callback.call(data)
 		http.queue_free()
 	)
 	http.request(SERVER_URL + "/friends/status?names=" + query)
@@ -66,7 +67,8 @@ func get_friends_list(callback: Callable) -> void:
 		var data = JSON.parse_string(text)
 		if data == null:
 			data = {"friends": []}
-		callback.call(data.get("friends", []))
+		if callback.is_valid():
+			callback.call(data.get("friends", []))
 		http.queue_free()
 	)
 	http.request(SERVER_URL + "/friends/list?username=" + username)
@@ -79,7 +81,8 @@ func get_friend_requests(callback: Callable) -> void:
 		var data = JSON.parse_string(text)
 		if data == null:
 			data = {"requests": []}
-		callback.call(data.get("requests", []))
+		if callback.is_valid():
+			callback.call(data.get("requests", []))
 		http.queue_free()
 	)
 	http.request(SERVER_URL + "/friends/requests?username=" + username)
@@ -92,7 +95,8 @@ func send_friend_request(recipient: String, callback: Callable) -> void:
 	http.request_completed.connect(func(_result, code, _headers, response_body):
 		var text: String = response_body.get_string_from_utf8()
 		var data = JSON.parse_string(text)
-		callback.call(code, data)
+		if callback.is_valid():
+			callback.call(code, data)
 		http.queue_free()
 	)
 	http.request(SERVER_URL + "/friends/request", headers, HTTPClient.METHOD_POST, body)
@@ -102,7 +106,7 @@ func accept_friend_request(requester: String, callback: Callable) -> void:
 	add_child(http)
 	var body := JSON.stringify({"requester": requester, "recipient": username})
 	var headers := ["Content-Type: application/json"]
-	http.request_completed.connect(func(_result, _code, _headers, _body): callback.call(); http.queue_free())
+	http.request_completed.connect(func(_result, _code, _headers, _body): if callback.is_valid(): callback.call(); http.queue_free())
 	http.request(SERVER_URL + "/friends/accept", headers, HTTPClient.METHOD_POST, body)
 
 func decline_friend_request(requester: String, callback: Callable) -> void:
@@ -110,5 +114,5 @@ func decline_friend_request(requester: String, callback: Callable) -> void:
 	add_child(http)
 	var body := JSON.stringify({"requester": requester, "recipient": username})
 	var headers := ["Content-Type: application/json"]
-	http.request_completed.connect(func(_result, _code, _headers, _body): callback.call(); http.queue_free())
+	http.request_completed.connect(func(_result, _code, _headers, _body): if callback.is_valid(): callback.call(); http.queue_free())
 	http.request(SERVER_URL + "/friends/decline", headers, HTTPClient.METHOD_POST, body)

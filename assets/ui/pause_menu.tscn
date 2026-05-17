@@ -78,6 +78,17 @@ max_value = 5.0
 step = 0.1
 value = 1.0
 
+[node name="ADSSensLabel" type="Label" parent="SettingsPanel/VBox" unique_id=612847301]
+layout_mode = 2
+text = "ADS Sensitivity"
+
+[node name="ADSSensSlider" type="HSlider" parent="SettingsPanel/VBox" unique_id=612847302]
+layout_mode = 2
+min_value = 0.1
+max_value = 1.0
+step = 0.05
+value = 1.0
+
 [node name="KeysLabel" type="Label" parent="SettingsPanel/VBox" unique_id=1483889177]
 layout_mode = 2
 text = "Keybindings"
