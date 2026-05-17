@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://db7slb5llo5yb" path="res://assets/scripts/health.gd" id="16_fyafc"]
 [ext_resource type="PackedScene" uid="uid://bcc25pxq5xm3k" path="res://assets/ui/hud_health.tscn" id="17_tg6sc"]
 [ext_resource type="PackedScene" uid="uid://lfhkmtp0cmn8" path="res://assets/ui/pause_menu.tscn" id="18_yvtcv"]
+[ext_resource type="PackedScene" path="res://assets/ui/hud_ammo.tscn" id="19_ammo1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -426,6 +427,8 @@ libraries/ = SubResource("AnimationLibrary_jmoha")
 script = ExtResource("16_fyafc")
 
 [node name="HudHealth2" parent="." unique_id=2113120825 instance=ExtResource("17_tg6sc")]
+
+[node name="HudAmmo" parent="." instance=ExtResource("19_ammo1")]
 
 [node name="PauseMenu" parent="." unique_id=1412426954 instance=ExtResource("18_yvtcv")]
 

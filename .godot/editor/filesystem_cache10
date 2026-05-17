@@ -98,7 +98,7 @@ PlayerJoinLobby.wav::AudioStreamWAV::7238344369340536428::1778864117::1778864119
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1779000050
+::res://assets/scripts/::1779000702
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -106,6 +106,7 @@ crosshair_draw.gd::GDScript::6330458738880098340::1778514242::0::1::::<>Control<
 enemy_simple.gd::GDScript::3990147243834738222::1778652441::0::1::::<>StaticBody3D<><>0<>0<><>::
 health.gd::GDScript::7296623631832556329::1778964514::0::1::::<>Node<><>0<>0<><>::
 hitbox.gd::GDScript::1740715284671597839::1778998514::0::1::::Hitbox<>Area3D<><>0<>0<><>::
+hud_ammo.gd::GDScript::9158962113162818995::1779000702::0::1::::<>CanvasLayer<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
 main_menu.gd::GDScript::1244827160719643432::1779000050::0::1::::<>Control<><>0<>0<><>::
 pause_menu.gd::GDScript::4838208590412015204::1779000040::0::1::::<>CanvasLayer<><>0<>0<><>::
@@ -114,7 +115,7 @@ shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
 ::res://assets/textures/::1777753864
-::res://assets/ui/::1778998706
+::res://assets/ui/::1779000646
 Bootsplash2.png::CompressedTexture2D::4677774552408887283::1778702395::1778702809::1::::<><><>0<>0<>3d7743c66d1a9b91790e98844696e272<>res://.godot/imported/Bootsplash2.png-0a44626c522983f38dc53ee7be767d19.ctex::
 Bootsplash3.png::CompressedTexture2D::5417852364192486326::1778702500::1778702809::1::::<><><>0<>0<>58c7b6f431ee13fea9b300db474b2732<>res://.godot/imported/Bootsplash3.png-85c7d6a0428ed5e90e588149db7f244e.ctex::
 Bootsplash.png::CompressedTexture2D::392300744039675099::1778697423::1778697475::1::::<><><>0<>0<>077b4d490737176e796d05fe0b4d169a<>res://.godot/imported/Bootsplash.png-5d0dbb0981e6205594211ae51d6eb32f.ctex::
@@ -128,6 +129,8 @@ DogTag.tscn::PackedScene::6008100783992871632::1778794177::0::1::::<><><>0<>0<><
 dogtag_black_remove.gdshader::Shader::4328322954428907878::1778736645::0::1::::<><><>0<>0<><>::
 dogtag_shader_mat.tres::ShaderMaterial::7940347616929375327::1778736770::0::1::::<><><>0<>0<><>::uid://b2ww311bx6iuw::::res://assets/ui/dogtag_black_remove.gdshader
 dogtag_slot_style.tres::StyleBoxFlat::1663133261181414353::1778775715::0::1::::<><><>0<>0<><>::
+hud_ammo.tscn::PackedScene::17058740320110064::1779000646::0::1::::<><><>0<>0<><>::uid://d3qw1dwcspa72::::res://assets/scripts/hud_ammo.gd
+hud_ammo_placeholder.gd::GDScript::2680041484592170858::1779000614::0::1::::<>RefCounted<><>0<>0<><>::
 hud_health.tscn::PackedScene::2532620883247856202::1778517854::0::1::::<><><>0<>0<><>::uid://c56dk6kta8w5n::::res://assets/scripts/hud_health.gd
 main_menu.tscn::PackedScene::7669145534508254606::1778939477::0::1::::<><><>0<>0<><>::uid://r0aeeoc01nka::::res://assets/scripts/main_menu.gd<>uid://b8s6nw8kgf8ru::::res://assets/ui/OneTap-Background.png<>uid://d2oxj2avimvmv::::res://assets/ui/MB3.png<>uid://cf5cs6ujoale4::::res://assets/ui/map_thumbnail.png<>uid://f3tpr31vaftg::::res://assets/ui/OneTapLogoV3.png<>uid://dbekqehbshtv5::::res://assets/audio/PlayerJoinLobby.wav
 map_thumbnail.png::CompressedTexture2D::5185872156021561553::1778623382::1778623414::1::::<><><>0<>0<>2f5259cb433fe42978aa2307fc5c8e06<>res://.godot/imported/map_thumbnail.png-173196fba12c8588d3b0533f6cb739c6.ctex::
@@ -153,8 +156,8 @@ OneTapLogoV2.png::CompressedTexture2D::8751939387882385641::1778835945::17788365
 OneTapLogoV3.png::CompressedTexture2D::409928142435838512::1778836132::1778836523::1::::<><><>0<>0<>683602fc61c10a0d50549d975b4b1c82<>res://.godot/imported/OneTapLogoV3.png-010ccb49d9c6a558a4acabd4625a72c3.ctex::
 pause_menu.tscn::PackedScene::782842706023587659::1778998706::0::1::::<><><>0<>0<><>::uid://ca6wuao3xuvd1::::res://assets/scripts/pause_menu.gd
 ::res://assets/weapons/::1777755727
-::res://assets/weapons/resources/::1778878448
-ak47.tres::Resource/Weapon::8530783632837750338::1778446901::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://jov1iiovtcha::::res://assets/weapons/resources/ak47_weapon.tscn<>uid://c5r6rjywwnekw::::res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3<>uid://d2boptfjk83cg::::res://assets/weapons/resources/sounds/akreload.wav
+::res://assets/weapons/resources/::1779000547
+ak47.tres::Resource/Weapon::8530783632837750338::1779000542::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://jov1iiovtcha::::res://assets/weapons/resources/ak47_weapon.tscn<>uid://c5r6rjywwnekw::::res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3<>uid://d2boptfjk83cg::::res://assets/weapons/resources/sounds/akreload.wav
 ak47_animation.glb::PackedScene::2633954157507458332::1778014062::1778017689::1::::<><><>0<>0<>5e0749b6fcc988b5e920a97d6cb0541e<>res://.godot/imported/ak47_animation.glb-70ceaf1f0605b9b2c0f89e34efc46d2d.scn::uid://dqbitcxary1wx::::res://assets/weapons/resources/ak47_animation_0.png<>uid://cdd2fup8guind::::res://assets/weapons/resources/ak47_animation_1.png<>uid://jj2sqi7v33h0::::res://assets/weapons/resources/ak47_animation_2.png<>uid://bexq0obrlb4qt::::res://assets/weapons/resources/ak47_animation_3.png<>uid://c8sbf0wlr0bus::::res://assets/weapons/resources/ak47_animation_4.png<>uid://72idfmfhr11w::::res://assets/weapons/resources/ak47_animation_5.png<>uid://dpqsax28r70i6::::res://assets/weapons/resources/ak47_animation_6.png
 ak47_animation_0.png::CompressedTexture2D::8284867733669099515::1778017681::1778878448::1::::<><><>0<>0<>a1d876417bcc1340d9e743160924f6fd<>res://.godot/imported/ak47_animation_0.png-2e62bf534e61ad3bb2cde8ae8b57f06a.s3tc.ctex<*>res://.godot/imported/ak47_animation_0.png-2e62bf534e61ad3bb2cde8ae8b57f06a.etc2.ctex::
 ak47_animation_1.png::CompressedTexture2D::4991250394483949501::1778017683::1778878448::1::::<><><>0<>0<>300696d3ad224790ad9fbcb8e921d5f2<>res://.godot/imported/ak47_animation_1.png-0204887db50a6a6b4aa854cc70b7fa85.s3tc.ctex<*>res://.godot/imported/ak47_animation_1.png-0204887db50a6a6b4aa854cc70b7fa85.etc2.ctex::
@@ -198,7 +201,7 @@ fps_pistol_animated_3.png::CompressedTexture2D::6525620166603315503::1778015563:
 fps_pistol_animated_4.png::CompressedTexture2D::4016206795783425411::1778015563::1778878427::1::::<><><>0<>0<>540c344ffcb69c27e754ec693bd26a1b<>res://.godot/imported/fps_pistol_animated_4.png-e4cf87b797379845833901e9f0bc8080.s3tc.ctex<*>res://.godot/imported/fps_pistol_animated_4.png-e4cf87b797379845833901e9f0bc8080.etc2.ctex::
 fps_pistol_animated_5.png::CompressedTexture2D::1579814809890807119::1778015563::1778878427::1::::<><><>0<>0<>05d950601ec810186dd118b1bc88dbd5<>res://.godot/imported/fps_pistol_animated_5.png-eb8c1c0cdfd08124ade93055bc592099.s3tc.ctex<*>res://.godot/imported/fps_pistol_animated_5.png-eb8c1c0cdfd08124ade93055bc592099.etc2.ctex::
 JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav::AudioStreamWAV::8275246730036015851::1778015563::1778014846::1::::<><><>0<>0<>a0bcc3de9da293ca786901c806ee7538<>res://.godot/imported/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav-ab1554233c2125ff5ee012ec9526b60c.sample::
-pistol.tres::Resource/Weapon::8515956914358159055::1778446904::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://dhbsnu46b0br8::::res://assets/weapons/resources/pistol_weapon.tscn<>uid://dp5uds612tbex::::res://assets/weapons/resources/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav<>uid://de8qyrw2ah8v7::::res://assets/weapons/resources/sounds/pistolReload.wav
+pistol.tres::Resource/Weapon::8515956914358159055::1779000547::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://dhbsnu46b0br8::::res://assets/weapons/resources/pistol_weapon.tscn<>uid://dp5uds612tbex::::res://assets/weapons/resources/JDSherbert - Firearm FX - Pistol SFX Pack - Desert Eagle - Fire - 1.wav<>uid://de8qyrw2ah8v7::::res://assets/weapons/resources/sounds/pistolReload.wav
 pistol_weapon.tscn::PackedScene::7653765552167299423::1778445375::0::1::::<><><>0<>0<><>::uid://q6i6b2d624f8::::res://assets/weapons/resources/DJMaesen-deagle.glb<>uid://biob08htyy5df::::res://assets/scripts/shell_casing.gd
 recoil_position_z.tres::Curve::-1::1777919846::0::1::::<><><>0<>0<><>::
 recoil_rotation_x.tres::Curve::-1::1777919839::0::1::::<><><>0<>0<><>::
@@ -228,12 +231,12 @@ take.res::Animation::4041995609125468541::1778137379::0::1::::<><><>0<>0<><>::ui
 fire.wav::AudioStreamWAV::4006656394015731685::1778137379::1778138350::1::::<><><>0<>0<>7ae95b5b50afb10e26b207323b12b42f<>res://.godot/imported/fire.wav-62d5b9a9600a1b16fb1bdb0bd5af0f3e.sample::
 melee.wav::AudioStreamWAV::1475848047457365467::1778137379::1778138350::1::::<><><>0<>0<>2cafd0ff49f08f820a0f520182cd0a3e<>res://.godot/imported/melee.wav-2abecf972a2591fe29c1c8f333ede2d8.sample::
 ready.wav::AudioStreamWAV::8727949331877673915::1778137379::1778138350::1::::<><><>0<>0<>7d9efc81db7767d137495e05abeae2a3<>res://.godot/imported/ready.wav-bbe51587c6f30d2eddf6f12d51bbeccd.sample::
-::res://assets/weapons/resources/sniper/::1778878449
+::res://assets/weapons/resources/sniper/::1779000544
 scope.gdshader::Shader::7566875117162933765::1778393047::0::1::::<><><>0<>0<><>::
 scope_overlay.gd::GDScript::1081039298415776912::1778393052::0::1::::<>CanvasLayer<><>0<>0<><>::
 scope_overlay.tscn::PackedScene::4498086173010527428::1778819962::0::1::::<><><>0<>0<><>::uid://pnwtas34a4ga::::res://assets/weapons/resources/sniper/scope_overlay.gd
 sniper-rifle-fire.mp3::AudioStreamMP3::120158192269310456::1778392255::1778392263::1::::<><><>0<>0<>8e41f81f2be6493e4245489663793775<>res://.godot/imported/sniper-rifle-fire.mp3-e36577b5704b461f6058b90e83bcc48e.mp3str::
-sniper.tres::Resource/Weapon::2008648085100961892::1778446983::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://c4f20qtdtq7ns::::res://assets/weapons/resources/sniper/sniper_weapon.tscn<>uid://byg8t8kbmtnc::::res://assets/weapons/resources/sniper/sniper-rifle-fire.mp3<>uid://3t3d622mvpt::::res://assets/weapons/resources/sniper/sniperBolt.wav
+sniper.tres::Resource/Weapon::2008648085100961892::1779000544::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://c4f20qtdtq7ns::::res://assets/weapons/resources/sniper/sniper_weapon.tscn<>uid://byg8t8kbmtnc::::res://assets/weapons/resources/sniper/sniper-rifle-fire.mp3<>uid://3t3d622mvpt::::res://assets/weapons/resources/sniper/sniperBolt.wav
 sniperBolt.wav::AudioStreamWAV::59006408927894933::1778392255::1778392263::1::::<><><>0<>0<>7d5f421ce2efddd6372947ee272568c9<>res://.godot/imported/sniperBolt.wav-997485580ea263e2520553daee11003d.sample::
 sniper_animated.glb::PackedScene::5549821345621545252::1777803624::1778223082::1::::<><><>0<>0<>e135ea1e462489ce6011af10f8b2cab9<>res://.godot/imported/sniper_animated.glb-7006e08578c6ad986dfa5c36081d3b6a.scn::uid://dxoipaqnyyjio::::res://assets/weapons/resources/sniper/sniper_animated_4.png<>uid://ca316glu423y::::res://assets/weapons/resources/sniper/sniper_animated_5.png<>uid://ct8t577vwb5t0::::res://assets/weapons/resources/sniper/sniper_animated_6.png<>uid://kun7rip8jmir::::res://assets/weapons/resources/sniper/sniper_animated_0.png<>uid://ckp0rjr3qvidm::::res://assets/weapons/resources/sniper/sniper_animated_1.png<>uid://bhd1056vuin2n::::res://assets/weapons/resources/sniper/sniper_animated_2.png<>uid://lj6rwgmkr3l8::::res://assets/weapons/resources/sniper/sniper_animated_3.png
 sniper_animated_0.png::CompressedTexture2D::744023363753826185::1778223070::1778878432::1::::<><><>0<>0<>533d5317e4fb1d789a1acf01cafcdc83<>res://.godot/imported/sniper_animated_0.png-08ac990d9213b84e137e09e860706efe.s3tc.ctex<*>res://.godot/imported/sniper_animated_0.png-08ac990d9213b84e137e09e860706efe.etc2.ctex::
@@ -331,9 +334,9 @@ talonready.wav::AudioStreamWAV::5372452078962888389::1778015563::1778014846::1::
 talonreload.wav::AudioStreamWAV::1882140375152205545::1778015563::1778014846::1::::<><><>0<>0<>59b768a454d20a383cd9be88daeb6490<>res://.godot/imported/talonreload.wav-008d0dde53a0d31c7a057d555ea3c548.sample::
 talonreloadB.wav::AudioStreamWAV::7846069846915531353::1778015563::1778014846::1::::<><><>0<>0<>048330cc6f2667fd56926ac1e90eed9c<>res://.godot/imported/talonreloadB.wav-3f2c06ae7ef0c2da295a94f4920766ca.sample::
 throw.wav::AudioStreamWAV::6368331766183314654::1778015563::1778014846::1::::<><><>0<>0<>d4ffd032413399ad9ed42d3512313e1b<>res://.godot/imported/throw.wav-c180d60693917f3bf8fec5441d17fa7e.sample::
-::res://assets/weapons/scripts/::1778999905
-weapon.gd::GDScript::3182779461567556417::1778393181::0::1::::Weapon<>Resource<><>0<>0<><>::
-weapon_controller.gd::GDScript::4776619364154183538::1778999905::0::1::::WeaponController<>Node<><>0<>0<><>::
+::res://assets/weapons/scripts/::1779001662
+weapon.gd::GDScript::3182779461567556417::1779000519::0::1::::Weapon<>Resource<><>0<>0<><>::
+weapon_controller.gd::GDScript::4776619364154183538::1779001662::0::1::::WeaponController<>Node<><>0<>0<><>::
 ::res://Characters/::1778878424
 enemy.tscn::PackedScene::7708989437078052879::1778651059::0::1::::<><><>0<>0<><>::uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://bw34e3kuld0ww::::res://assets/scripts/enemy_simple.gd<>uid://db7slb5llo5yb::::res://assets/scripts/health.gd
 terrorist_1_rig.glb::PackedScene::757528666157290489::1778014062::1778014853::1::::<><><>0<>0<>7319d4485109fb0c957b5ddd7363faf8<>res://.godot/imported/terrorist_1_rig.glb-512f060693800c9bb61330fb2e75a69a.scn::uid://bf8o2immm1f11::::res://Characters/terrorist_1_rig_0.png
@@ -349,12 +352,12 @@ Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin.glb::PackedScene::4430
 Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin_texture_0.png::CompressedTexture2D::8476796847194094642::1778869623::1778878426::1::::<><><>0<>0<>fe5f0c5a5014f9697463e81161141364<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin_texture_0.png-8739b0317b3f54837fbaee890f710122.s3tc.ctex<*>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin_texture_0.png-8739b0317b3f54837fbaee890f710122.etc2.ctex::
 Meshy_AI_Tactical_Stance_biped_Character_output.glb::PackedScene::8202444553793934915::1778865990::1778869638::1::::<><><>0<>0<>7cb53837154b4fd8fecf7566d0108059<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output.glb-c70383179f5424b6532dd42ac937903e.scn::uid://cdmwlttpol8ca::::res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png
 Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png::CompressedTexture2D::5009536876918479904::1778869631::1778878426::1::::<><><>0<>0<>038b939a429d47a906b42ff8aad78749<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png-55d8465272e6a548a3dc1fe541ddeaee.s3tc.ctex<*>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output_texture_0.png-55d8465272e6a548a3dc1fe541ddeaee.etc2.ctex::
-::res://controllers/::1779000107
+::res://controllers/::1779000805
 bob_controller.gd::GDScript::8876242426015427468::1777891158::0::1::::<>Node3D<><>0<>0<><>::
 camera_effects.gd::GDScript::362535339677094397::1777903631::0::1::::CameraEffects<>Camera3D<><>0<>0<><>::
 camera_shake.gd::GDScript::113833615927190415::1777906283::0::1::::CameraShake<>Node3D<><>0<>0<><>::
-fps_controller.gd::GDScript::5726115006224352606::1779000107::0::1::::PlayerController<>CharacterBody3D<><>0<>0<><>::
-fps_controller.tscn::PackedScene::717624600198808168::1778948030::0::1::::<><><>0<>0<><>::uid://cnt1jo4c60kdy::::res://controllers/fps_controller.gd<>uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://y2hldlquhrid::::res://assets/scripts/hitbox.gd<>uid://ffu50d4gi1xh::::res://controllers/camera_effects.gd<>uid://cb6aep6qplm38::::res://controllers/scripts/player/components/step_climber.gd<>uid://dxc3qxksa053p::::res://controllers/gun.gd<>uid://cab3ht37firty::::res://assets/weapons/scripts/weapon_controller.gd<>uid://cg5ugsvg1wtw6::::res://assets/audio/weapons/desert-eagle-free.mp3<>uid://dtlgtirigux24::::res://assets/weapons/resources/pistol.tres<>uid://bve28odj66ql::::res://controllers/camera_shake.gd<>uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://dtsm03v1tnoso::::res://assets/weapons/resources/ak47.tres<>uid://1dsy5sun6twx::::res://assets/weapons/resources/dj-knife.tres<>uid://3vae1n82ekh5::::res://assets/weapons/resources/sniper/sniper.tres<>uid://b5c527lpvgwj1::::res://assets/weapons/resources/sniper/scope_overlay.tscn<>uid://db7slb5llo5yb::::res://assets/scripts/health.gd<>uid://bcc25pxq5xm3k::::res://assets/ui/hud_health.tscn<>uid://lfhkmtp0cmn8::::res://assets/ui/pause_menu.tscn
+fps_controller.gd::GDScript::5726115006224352606::1779000805::0::1::::PlayerController<>CharacterBody3D<><>0<>0<><>::
+fps_controller.tscn::PackedScene::717624600198808168::1779000675::0::1::::<><><>0<>0<><>::uid://cnt1jo4c60kdy::::res://controllers/fps_controller.gd<>uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://y2hldlquhrid::::res://assets/scripts/hitbox.gd<>uid://ffu50d4gi1xh::::res://controllers/camera_effects.gd<>uid://cb6aep6qplm38::::res://controllers/scripts/player/components/step_climber.gd<>uid://dxc3qxksa053p::::res://controllers/gun.gd<>uid://cab3ht37firty::::res://assets/weapons/scripts/weapon_controller.gd<>uid://cg5ugsvg1wtw6::::res://assets/audio/weapons/desert-eagle-free.mp3<>uid://dtlgtirigux24::::res://assets/weapons/resources/pistol.tres<>uid://bve28odj66ql::::res://controllers/camera_shake.gd<>uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://dtsm03v1tnoso::::res://assets/weapons/resources/ak47.tres<>uid://1dsy5sun6twx::::res://assets/weapons/resources/dj-knife.tres<>uid://3vae1n82ekh5::::res://assets/weapons/resources/sniper/sniper.tres<>uid://b5c527lpvgwj1::::res://assets/weapons/resources/sniper/scope_overlay.tscn<>uid://db7slb5llo5yb::::res://assets/scripts/health.gd<>uid://bcc25pxq5xm3k::::res://assets/ui/hud_health.tscn<>uid://lfhkmtp0cmn8::::res://assets/ui/pause_menu.tscn<>res://assets/ui/hud_ammo.tscn
 gun.gd::GDScript::8779464083066060231::1777919708::0::1::::<>Node3D<><>0<>0<><>::
 ::res://controllers/scripts/::1777751451
 ::res://controllers/scripts/player/::1777751477

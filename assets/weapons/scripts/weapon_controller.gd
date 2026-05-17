@@ -32,6 +32,9 @@ var _is_bolt_cycling: bool = false
 var _fire_timer: float = 0.0
 var _current_index: int = 0
 var _current_ammo: int = 0
+var _current_mags: int = 0
+
+signal ammo_changed(current_ammo: int, max_ammo: int, mags: int)
 var _mouse_movement: Vector2
 var _random_sway_x: float
 var _random_sway_y: float
@@ -183,7 +186,9 @@ func _physics_process(delta):
 			if _fire_timer <= 0.0:
 				fire()
 				_fire_timer = current_weapon.fire_rate
-			if not _is_firing:
+				if _current_ammo <= 0:
+					_start_reload()
+			if not _is_firing and not _is_reloading:
 				_is_firing = true
 				if _anim_player and _anim_player.has_animation("fire_lib/fire"):
 					_anim_player.play("fire_lib/fire")
@@ -224,6 +229,8 @@ func spawn_weapon_model():
 		current_weapon_model.rotation_degrees = current_weapon.weapon_rotation
 		current_weapon_model.scale = current_weapon.weapon_scale
 		_current_ammo = current_weapon.max_ammo
+		_current_mags = current_weapon.total_mags - 1
+		ammo_changed.emit(_current_ammo, current_weapon.max_ammo, _current_mags)
 		# Find the AnimationPlayer that actually has animations (skip empty root ones)
 		_anim_player = null
 		for ap in current_weapon_model.find_children("AnimationPlayer", "AnimationPlayer", true, false):
@@ -287,7 +294,7 @@ func fire():
 					health.take_damage(current_weapon.damage)
 					if _crosshair and _crosshair.has_method("hit_flash"):
 						_crosshair.hit_flash()
-	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
+	if _anim_player and _anim_player.has_animation("fire_lib/fire") and _current_ammo > 0:
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
 		if current_weapon and not current_weapon.full_auto:
@@ -319,6 +326,7 @@ func fire():
 		gun.apply_recoil()
 	if current_weapon and not current_weapon.is_melee:
 		_current_ammo -= 1
+		ammo_changed.emit(_current_ammo, current_weapon.max_ammo, _current_mags)
 		if _current_ammo <= 0 and not current_weapon.full_auto:
 			_start_reload()
 
@@ -344,7 +352,13 @@ func _start_reload() -> void:
 
 func _on_reload_finished() -> void:
 	_is_reloading = false
-	_current_ammo = current_weapon.max_ammo if current_weapon else 0
+	if _current_mags > 0:
+		_current_mags -= 1
+		_current_ammo = current_weapon.max_ammo if current_weapon else 0
+	else:
+		_current_ammo = current_weapon.max_ammo if current_weapon else 0
+	if current_weapon:
+		ammo_changed.emit(_current_ammo, current_weapon.max_ammo, _current_mags)
 	if _gun_sound and current_weapon.fire_sound:
 		_gun_sound.stream = current_weapon.fire_sound
 	if _anim_player and _anim_player.has_animation("fire_lib/fire"):
@@ -451,7 +465,7 @@ func _fade_out_fire_sound(duration: float) -> void:
 		_sound_tween.tween_property(_gun_sound, "volume_db", -40.0, duration)
 		_sound_tween.tween_callback(func():
 			_gun_sound.stop()
-			if not _is_reloading and current_weapon and current_weapon.full_auto:
+			if not _is_reloading and current_weapon and current_weapon.full_auto and _current_ammo <= 0:
 				_start_reload()
 		)
 

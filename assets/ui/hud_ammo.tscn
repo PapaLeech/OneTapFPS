@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ii7p61o8x6o"]
+
+[ext_resource type="Script" uid="uid://d3qw1dwcspa72" path="res://assets/scripts/hud_ammo.gd" id="1_2h6hl"]
+
+[node name="HudAmmo" type="CanvasLayer" unique_id=234001584]
+script = ExtResource("1_2h6hl")

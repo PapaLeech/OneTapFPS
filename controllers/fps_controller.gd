@@ -46,14 +46,11 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var step_handler = $Components/StepHandlerComponent
 
-func _ready() -> void:
-	MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
-
 func _unhandled_input(event: InputEvent) -> void:
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
 	if _mouse_input:
 		MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
-		var ads_mult := PresenceManager.load_setting("ads_sensitivity", 1.0) if _is_aiming else 1.0
+		var ads_mult: float = PresenceManager.load_setting("ads_sensitivity", 1.0) if _is_aiming else 1.0
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY * ads_mult
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY * ads_mult
 		mouse_input = event.relative
@@ -80,6 +77,7 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 
 func _ready():
+	MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
 	# Skip local setup on dedicated server
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		set_physics_process(false)
