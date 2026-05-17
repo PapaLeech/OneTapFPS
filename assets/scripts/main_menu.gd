@@ -254,8 +254,8 @@ func _show_settings() -> void:
 	sens_slider.min_value = 0.1
 	sens_slider.max_value = 5.0
 	sens_slider.step = 0.1
-	sens_slider.value = ProjectSettings.get_setting("game/mouse_sensitivity", 1.0)
-	sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/mouse_sensitivity", v))
+	sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
+	sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))
 	vbox.add_child(sens_slider)
 	var ads_sens_label := Label.new()
 	ads_sens_label.text = "ADS Sensitivity"
@@ -264,8 +264,8 @@ func _show_settings() -> void:
 	ads_sens_slider.min_value = 0.1
 	ads_sens_slider.max_value = 1.0
 	ads_sens_slider.step = 0.05
-	ads_sens_slider.value = ProjectSettings.get_setting("game/ads_sensitivity", 1.0)
-	ads_sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/ads_sensitivity", v))
+	ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
+	ads_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("ads_sensitivity", v))
 	vbox.add_child(ads_sens_slider)
 	var keys_label := Label.new()
 	keys_label.text = "Keybindings"
@@ -718,7 +718,7 @@ func _execute_terminal_command(cmd: String) -> void:
 		"sensitivity":
 			if parts.size() > 1 and parts[1].is_valid_float():
 				var val := float(parts[1])
-				ProjectSettings.set_setting("game/mouse_sensitivity", val)
+				PresenceManager.save_setting("mouse_sensitivity", val)
 				_term_output.append_text("Sensitivity set to " + str(val) + "\n")
 			else:
 				_term_output.append_text("Usage: sensitivity <value>\n")

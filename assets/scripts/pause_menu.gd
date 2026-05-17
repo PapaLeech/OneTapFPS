@@ -31,10 +31,10 @@ func _ready() -> void:
 	_settings_btn.pressed.connect(_open_settings)
 	_quit_btn.pressed.connect(_exit_game)
 	_back_btn.pressed.connect(_close_settings)
-	_sens_slider.value = ProjectSettings.get_setting("game/mouse_sensitivity", 1.0)
-	_sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/mouse_sensitivity", v))
-	_ads_sens_slider.value = ProjectSettings.get_setting("game/ads_sensitivity", 1.0)
-	_ads_sens_slider.value_changed.connect(func(v): ProjectSettings.set_setting("game/ads_sensitivity", v))
+	_sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
+	_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))
+	_ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
+	_ads_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("ads_sensitivity", v))
 	_style_panels()
 
 func _build_death_panel() -> void:

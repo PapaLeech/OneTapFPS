@@ -22,6 +22,18 @@ func save_username(player_name: String) -> void:
 func has_username() -> bool:
 	return username != ""
 
+func save_setting(key: String, value) -> void:
+	var config := ConfigFile.new()
+	config.load(CONFIG_PATH)
+	config.set_value("settings_" + username, key, value)
+	config.save(CONFIG_PATH)
+
+func load_setting(key: String, default):
+	var config := ConfigFile.new()
+	if config.load(CONFIG_PATH) == OK:
+		return config.get_value("settings_" + username, key, default)
+	return default
+
 func go_online(player_name: String) -> void:
 	username = player_name
 	var http := HTTPRequest.new()
