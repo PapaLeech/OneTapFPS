@@ -35,7 +35,6 @@ func disconnect_from_game() -> void:
 
 func _on_peer_connected(peer_id: int) -> void:
 	print("Peer connected: ", peer_id)
-	player_connected.emit(peer_id)
 	if multiplayer.is_server():
 		_sync_player_name.rpc_id(peer_id, PresenceManager.username)
 
@@ -71,5 +70,10 @@ func _on_connection_failed() -> void:
 @rpc("any_peer", "reliable")
 func _sync_player_name(username: String) -> void:
 	var sender_id := multiplayer.get_remote_sender_id()
+	if sender_id == 0:
+		sender_id = multiplayer.get_unique_id()
 	players[sender_id] = username
 	print("Player registered: %s (id %d)" % [username, sender_id])
+	# Emit player_connected after name is known so level can spawn correctly
+	if multiplayer.is_server():
+		player_connected.emit(sender_id)

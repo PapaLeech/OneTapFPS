@@ -697,11 +697,14 @@ func _refresh_friends() -> void:
 			return
 		var names: Array = []
 		for f in friends:
-			names.append(f.get("username", ""))
+			if f is Dictionary:
+				names.append(f.get("username", ""))
+			elif f is String:
+				names.append(f)
 		PresenceManager.get_friends_status(names, func(status: Dictionary):
 			var friends_array: Array = []
 			for f in friends:
-				var uname: String = f.get("username", "")
+				var uname: String = f.get("username", "") if f is Dictionary else str(f)
 				friends_array.append({"name": uname, "online": status.get(uname, false)})
 			populate_friends(friends_array)
 			_refresh_pending_requests()

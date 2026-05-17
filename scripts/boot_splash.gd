@@ -18,6 +18,7 @@ func _start_dedicated_server() -> void:
 		return
 	multiplayer.multiplayer_peer = peer
 	print("Server ready. Listening on port 7777.")
+	print("Loading level...")
 	get_tree().change_scene_to_file("res://levels/level_001.tscn")
 
 func _input(event: InputEvent) -> void:

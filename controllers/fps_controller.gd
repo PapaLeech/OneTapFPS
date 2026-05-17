@@ -89,14 +89,6 @@ func _ready():
 	var health := get_node_or_null("Health")
 	if health:
 		health.died.connect(_on_died)
-	# Set up position sync
-	var sync := get_node_or_null("MultiplayerSynchronizer")
-	if sync:
-		var config := SceneReplicationConfig.new()
-		config.add_property(NodePath(".:position"))
-		config.add_property(NodePath(".:rotation"))
-		sync.replication_config = config
-		sync.set_multiplayer_authority(get_multiplayer_authority())
 	# Only process input/physics for our own character
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
 		set_physics_process(false)
@@ -107,7 +99,6 @@ func _ready():
 		if CAMERA_CONTROLLER:
 			CAMERA_CONTROLLER.current = true
 		else:
-			# Camera might not be set yet, try on next frame
 			call_deferred("_activate_camera")
 
 func _activate_camera() -> void:
