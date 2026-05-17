@@ -1,6 +1,6 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1778998023
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1778998023::0::1::::<><><>0<>0<><>::
+::res://::1779003879
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1779003264::0::1::::<><><>0<>0<><>::
 export_presets.cfg::TextFile::-1::1778965605::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -63,7 +63,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -98,7 +98,7 @@ PlayerJoinLobby.wav::AudioStreamWAV::7238344369340536428::1778864117::1778864119
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1779000702
+::res://assets/scripts/::1779003762
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -108,8 +108,8 @@ health.gd::GDScript::7296623631832556329::1778964514::0::1::::<>Node<><>0<>0<><>
 hitbox.gd::GDScript::1740715284671597839::1778998514::0::1::::Hitbox<>Area3D<><>0<>0<><>::
 hud_ammo.gd::GDScript::9158962113162818995::1779000702::0::1::::<>CanvasLayer<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
-main_menu.gd::GDScript::1244827160719643432::1779000050::0::1::::<>Control<><>0<>0<><>::
-pause_menu.gd::GDScript::4838208590412015204::1779000040::0::1::::<>CanvasLayer<><>0<>0<><>::
+main_menu.gd::GDScript::1244827160719643432::1779003758::0::1::::<>Control<><>0<>0<><>::
+pause_menu.gd::GDScript::4838208590412015204::1779003762::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
@@ -334,9 +334,9 @@ talonready.wav::AudioStreamWAV::5372452078962888389::1778015563::1778014846::1::
 talonreload.wav::AudioStreamWAV::1882140375152205545::1778015563::1778014846::1::::<><><>0<>0<>59b768a454d20a383cd9be88daeb6490<>res://.godot/imported/talonreload.wav-008d0dde53a0d31c7a057d555ea3c548.sample::
 talonreloadB.wav::AudioStreamWAV::7846069846915531353::1778015563::1778014846::1::::<><><>0<>0<>048330cc6f2667fd56926ac1e90eed9c<>res://.godot/imported/talonreloadB.wav-3f2c06ae7ef0c2da295a94f4920766ca.sample::
 throw.wav::AudioStreamWAV::6368331766183314654::1778015563::1778014846::1::::<><><>0<>0<>d4ffd032413399ad9ed42d3512313e1b<>res://.godot/imported/throw.wav-c180d60693917f3bf8fec5441d17fa7e.sample::
-::res://assets/weapons/scripts/::1779001662
+::res://assets/weapons/scripts/::1779002095
 weapon.gd::GDScript::3182779461567556417::1779000519::0::1::::Weapon<>Resource<><>0<>0<><>::
-weapon_controller.gd::GDScript::4776619364154183538::1779001662::0::1::::WeaponController<>Node<><>0<>0<><>::
+weapon_controller.gd::GDScript::4776619364154183538::1779002095::0::1::::WeaponController<>Node<><>0<>0<><>::
 ::res://Characters/::1778878424
 enemy.tscn::PackedScene::7708989437078052879::1778651059::0::1::::<><><>0<>0<><>::uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://bw34e3kuld0ww::::res://assets/scripts/enemy_simple.gd<>uid://db7slb5llo5yb::::res://assets/scripts/health.gd
 terrorist_1_rig.glb::PackedScene::757528666157290489::1778014062::1778014853::1::::<><><>0<>0<>7319d4485109fb0c957b5ddd7363faf8<>res://.godot/imported/terrorist_1_rig.glb-512f060693800c9bb61330fb2e75a69a.scn::uid://bf8o2immm1f11::::res://Characters/terrorist_1_rig_0.png
@@ -404,11 +404,12 @@ WE_test.tscn::PackedScene::3764880135456822604::1776653496::0::1::::<><><>0<>0<>
 ::res://materials/::1777234919
 grid.tres::ShaderMaterial::5739367904623174735::1776654260::0::1::::<><><>0<>0<><>::uid://ivvpsi314b34::::res://textures/grid.jpg
 player.tres::StandardMaterial3D::4435626134922663587::1776653496::0::1::::<><><>0<>0<><>::
-::res://scripts/::1779000036
+::res://scripts/::1779003779
 boot_splash.gd::GDScript::8887376292968682027::1778954681::0::1::::<>CanvasLayer<><>0<>0<><>::
 ClientPredictionLogger.gd::GDScript::6908745708737179878::1778963071::0::1::::<>Node<><>0<>0<><>::
 DedicatedServer.gd::GDScript::8774166623148085721::1778953810::0::1::::<>Node<><>0<>0<><>::
 EnemyStateLogger.gd::GDScript::7334284020237050202::1778963090::0::1::::<>Node<><>0<>0<><>::
+GraphicsManager.gd::GDScript::1387688741899904528::1779003779::0::1::::<>Node<><>0<>0<><>::
 HitDetectionLogger.gd::GDScript::4326725587912742220::1778963065::0::1::::<>Node<><>0<>0<><>::
 LagCompensationLogger.gd::GDScript::3019785753954915376::1778965129::0::1::::<>Node<><>0<>0<><>::
 MultiplayerManager.gd::GDScript::6655957580179399960::1778964990::0::1::::<>Node<><>0<>0<><>::

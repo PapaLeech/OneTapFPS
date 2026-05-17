@@ -35,6 +35,7 @@ NetworkSyncLogger="*res://scripts/NetworkSyncLogger.gd"
 EnemyStateLogger="*res://scripts/EnemyStateLogger.gd"
 ClientPredictionLogger="*res://scripts/ClientPredictionLogger.gd"
 LagCompensationLogger="*res://scripts/LagCompensationLogger.gd"
+GraphicsManager="*res://scripts/GraphicsManager.gd"
 
 [debug]
 

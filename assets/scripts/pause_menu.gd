@@ -35,6 +35,7 @@ func _ready() -> void:
 	_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))
 	_ads_sens_slider.value = PresenceManager.load_setting("ads_sensitivity", 1.0)
 	_ads_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("ads_sensitivity", v))
+	_build_graphics_presets()
 	_style_panels()
 
 func _build_death_panel() -> void:
@@ -61,6 +62,38 @@ func _build_death_panel() -> void:
 	_death_quit_btn.text = "Exit Game"
 	_death_quit_btn.pressed.connect(_exit_game)
 	vbox.add_child(_death_quit_btn)
+
+func _build_graphics_presets() -> void:
+	var vbox := _settings_panel.get_node("VBox")
+	var gfx_label := Label.new()
+	gfx_label.text = "Graphics Preset"
+	vbox.add_child(gfx_label)
+	var gfx_row := HBoxContainer.new()
+	gfx_row.add_theme_constant_override("separation", 8)
+	vbox.add_child(gfx_row)
+	var preset_labels := ["Low", "Medium", "High"]
+	var current_preset : int = GraphicsManager.current_preset()
+	var preset_btns : Array = []
+	for i in range(3):
+		var pbtn := Button.new()
+		pbtn.text = preset_labels[i]
+		pbtn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pbtn.toggle_mode = true
+		pbtn.button_pressed = (i == current_preset)
+		var idx := i
+		pbtn.pressed.connect(func():
+			GraphicsManager.apply_preset(idx)
+			GraphicsManager.save_preset(idx)
+			for b in preset_btns:
+				b.button_pressed = false
+			preset_btns[idx].button_pressed = true
+		)
+		gfx_row.add_child(pbtn)
+		preset_btns.append(pbtn)
+	# Move BackBtn to end so it stays at the bottom
+	var back := vbox.get_node_or_null("BackBtn")
+	if back:
+		vbox.move_child(back, vbox.get_child_count() - 1)
 
 func _style_panels() -> void:
 	var style := StyleBoxFlat.new()

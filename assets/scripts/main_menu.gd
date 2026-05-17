@@ -238,7 +238,7 @@ func _on_invite_declined() -> void:
 func _show_settings() -> void:
 	var dialog := Window.new()
 	dialog.title = "Settings"
-	dialog.size = Vector2i(400, 380)
+	dialog.size = Vector2i(400, 460)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
 	dialog.window_input.connect(func(e):
@@ -281,6 +281,33 @@ func _show_settings() -> void:
 		_show_username_prompt()
 	)
 	vbox.add_child(username_btn)
+	# ── Graphics Preset ──────────────────────────────────────────
+	var gfx_label := Label.new()
+	gfx_label.text = "Graphics Preset"
+	vbox.add_child(gfx_label)
+	var gfx_row := HBoxContainer.new()
+	gfx_row.add_theme_constant_override("separation", 8)
+	vbox.add_child(gfx_row)
+	var preset_labels := ["Low", "Medium", "High"]
+	var current_preset : int = GraphicsManager.current_preset()
+	var preset_btns : Array = []
+	for i in range(3):
+		var pbtn := Button.new()
+		pbtn.text = preset_labels[i]
+		pbtn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pbtn.toggle_mode = true
+		pbtn.button_pressed = (i == current_preset)
+		var idx := i
+		pbtn.pressed.connect(func():
+			GraphicsManager.apply_preset(idx)
+			GraphicsManager.save_preset(idx)
+			for b in preset_btns:
+				b.button_pressed = false
+			preset_btns[idx].button_pressed = true
+		)
+		gfx_row.add_child(pbtn)
+		preset_btns.append(pbtn)
+	# ─────────────────────────────────────────────────────────────
 	var close_btn := Button.new()
 	close_btn.text = "Close"
 	close_btn.pressed.connect(func(): dialog.queue_free())
@@ -597,6 +624,7 @@ func _show_username_prompt() -> void:
 
 func _go_online_and_fetch_friends() -> void:
 	PresenceManager.go_online(PresenceManager.username)
+	GraphicsManager.load_and_apply()
 	_refresh_friends()
 	var refresh_timer := Timer.new()
 	add_child(refresh_timer)
