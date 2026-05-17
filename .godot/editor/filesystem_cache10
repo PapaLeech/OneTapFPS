@@ -1,7 +1,7 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1779003881
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1779003881::0::1::::<><><>0<>0<><>::
-export_presets.cfg::TextFile::-1::1778965605::0::1::::<><><>0<>0<><>::
+::res://::1779009499
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1779008957::0::1::::<><><>0<>0<><>::
+export_presets.cfg::TextFile::-1::1779009374::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
 README.md::TextFile::-1::1777239470::0::1::::<><><>0<>0<><>::
@@ -100,7 +100,7 @@ watermello-rock477138.mp3::AudioStreamMP3::6760230376050413994::1779005404::1779
 ::res://assets/audio/weapons/::1778014846
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1779005729
+::res://assets/scripts/::1779005737
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -111,7 +111,7 @@ hitbox.gd::GDScript::1740715284671597839::1778998514::0::1::::Hitbox<>Area3D<><>
 hud_ammo.gd::GDScript::9158962113162818995::1779000702::0::1::::<>CanvasLayer<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
 main_menu.gd::GDScript::1244827160719643432::1779005707::0::1::::<>Control<><>0<>0<><>::
-pause_menu.gd::GDScript::4838208590412015204::1779005729::0::1::::<>CanvasLayer<><>0<>0<><>::
+pause_menu.gd::GDScript::4838208590412015204::1779005737::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
