@@ -98,7 +98,6 @@ func _ready():
 		health.died.connect(_on_died)
 	# Only process input/physics for our own character
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		set_physics_process(false)
 		set_process_unhandled_input(false)
 		if CAMERA_CONTROLLER:
@@ -112,11 +111,11 @@ func _ready():
 		# Show third-person model for remote players
 		var terrorist := get_node_or_null("%Terrorist")
 		if terrorist:
-			print("Remote player setup: Showing terrorist for peer ", multiplayer.get_unique_id())
+			print("Remote player setup: Showing terrorist")
 			terrorist.show()
 			var anim_player := terrorist.get_node_or_null("AnimationPlayer")
-			if anim_player:
-				var anim := anim_player.get_animation("mixamo_com")
+			if anim_player and anim_player.has_animation("mixamo_com"):
+				var anim : Animation = anim_player.get_animation("mixamo_com")
 				if anim:
 					anim.loop_mode = Animation.LOOP_LINEAR
 				anim_player.play("mixamo_com")
