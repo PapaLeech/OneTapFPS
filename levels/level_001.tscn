@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://b1yleqbb8tc7x"]
 
-[ext_resource type="Script" uid="uid://iy3pcr5qh8rf" path="res://levels/level_001.gd" id="1_44t5x"]
+[ext_resource type="Script" uid="uid://dsi84pv87xs2j" path="res://levels/level_001_new.gd" id="1_44t5x"]
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
-[ext_resource type="PackedScene" uid="uid://khvf4g3dgyqi" path="res://controllers/fps_controller.tscn" id="4_po88e"]
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
 [ext_resource type="PackedScene" uid="uid://dh3j6u1fklhvr" path="res://Characters/enemy.tscn" id="5_44t5x"]
 [ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="5_po88e"]
@@ -26,11 +25,10 @@ shape = SubResource("ConcavePolygonShape3D_po88e")
 
 [node name="map_visual_boost" type="Node3D" parent="." unique_id=217151604]
 
-[node name="CharacterBody3D" parent="." unique_id=1254856328 instance=ExtResource("4_po88e")]
-
 [node name="TestEnemy" parent="." unique_id=1033289565 instance=ExtResource("5_44t5x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1733528808]
+spawn_path = NodePath(".")
 
 [editable path="Map_v12"]
