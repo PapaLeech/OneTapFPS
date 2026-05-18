@@ -76,6 +76,12 @@ func _update_camera(delta):
 	_rotation_input = 0.0
 	_tilt_input = 0.0
 
+func _enter_tree() -> void:
+	# Set authority based on node name (set by level_001_new.gd as Player_PEERID)
+	var peer_id := name.replace("Player_", "").to_int()
+	if peer_id > 0:
+		set_multiplayer_authority(peer_id)
+
 func _ready():
 	MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
 	# Skip local setup on dedicated server
@@ -95,11 +101,41 @@ func _ready():
 		set_process_unhandled_input(false)
 		if CAMERA_CONTROLLER:
 			CAMERA_CONTROLLER.current = false
+		
+		# Hide first-person arms/weapon for remote players
+		var camera_controller := get_node_or_null("CameraController")
+		if camera_controller:
+			camera_controller.visible = false
+			
+		# Show third-person model for remote players
+		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
+		if terrorist:
+			terrorist.show()
+			# Ensure it's on a visible layer for others
+			var mesh: MeshInstance3D = terrorist.find_child("Object_6", true)
+			if mesh:
+				mesh.set_layer_mask_value(1, true) # Layer 1 is visible to all
+				mesh.set_layer_mask_value(2, false) # Move away from hidden layer 2
+		
+		# Hide UI for remote players
+		for ui_node in ["ScopeUI", "HudHealth2", "HudAmmo", "PauseMenu"]:
+			var ui = get_node_or_null(ui_node)
+			if ui: ui.hide()
+			
+		# Disable WeaponController processing for remote players to stop it force-showing arms
+		var weapon_controller := get_node_or_null("Components/WeaponController")
+		if weapon_controller:
+			weapon_controller.set_physics_process(false)
 	else:
 		if CAMERA_CONTROLLER:
 			CAMERA_CONTROLLER.current = true
 		else:
 			call_deferred("_activate_camera")
+			
+		# Hide local body for the local player
+		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
+		if terrorist:
+			terrorist.hide()
 
 func _activate_camera() -> void:
 	if CAMERA_CONTROLLER:

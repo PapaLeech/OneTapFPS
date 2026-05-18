@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bcc25pxq5xm3k" path="res://assets/ui/hud_health.tscn" id="17_tg6sc"]
 [ext_resource type="PackedScene" uid="uid://lfhkmtp0cmn8" path="res://assets/ui/pause_menu.tscn" id="18_yvtcv"]
 [ext_resource type="PackedScene" uid="uid://ii7p61o8x6o" path="res://assets/ui/hud_ammo.tscn" id="19_ammo1"]
+[ext_resource type="SceneReplicationConfig" path="res://controllers/player_replication_config.tres" id="20_sync"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -432,6 +433,7 @@ script = ExtResource("16_fyafc")
 
 [node name="PauseMenu" parent="." unique_id=1412426954 instance=ExtResource("18_yvtcv")]
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=621176942]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = ExtResource("20_sync")
 
 [editable path="CollisionShape3D/Terrorist"]

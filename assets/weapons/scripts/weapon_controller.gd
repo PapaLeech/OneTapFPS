@@ -48,6 +48,16 @@ var _bullet_hole: Node
 var _spread: float = 0.0
 
 func _ready() -> void:
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		# On remote clients, we still want the initial weapon model for visuals,
+		# but we don't want crosshairs or camera-based logic.
+		if weapons.size() > 0:
+			current_weapon = weapons[0]
+		if current_weapon:
+			spawn_weapon_model()
+		set_physics_process(false)
+		return
+
 	if weapons.size() > 0:
 		current_weapon = weapons[0]
 	if current_weapon:

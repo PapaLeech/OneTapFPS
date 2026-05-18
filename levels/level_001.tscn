@@ -28,7 +28,4 @@ shape = SubResource("ConcavePolygonShape3D_po88e")
 [node name="TestEnemy" parent="." unique_id=1033289565 instance=ExtResource("5_44t5x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1733528808]
-spawn_path = NodePath(".")
-
 [editable path="Map_v12"]
