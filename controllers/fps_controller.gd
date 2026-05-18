@@ -9,7 +9,7 @@ extends CharacterBody3D
 @export var CAMERA_CONTROLLER : Camera3D
 @export var ANIMATIONPLAYER : AnimationPlayer
 
-# Lean exports
+# Lean exportshow 
 @export var lean_amount : float = 0.4
 @export var lean_tilt : float = 0.08
 @export var lean_speed : float = 10.0
@@ -56,8 +56,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		mouse_input = event.relative
 
 func _input(event):
-	if event.is_action_pressed("exit"):
-		get_tree().quit()
+	if event.is_action_pressed("ui_cancel"):
+		# Let PauseMenu handle it
+		pass
 	if event.is_action_pressed("kill"):
 		var health := get_node_or_null("Health")
 		if health:
@@ -80,7 +81,7 @@ func _enter_tree() -> void:
 	# Set authority based on node name (set by level_001_new.gd as Player_PEERID)
 	var peer_id := name.replace("Player_", "").to_int()
 	if peer_id > 0:
-		set_multiplayer_authority(peer_id)
+		set_multiplayer_authority(peer_id, true)
 
 func _ready():
 	MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
@@ -97,6 +98,7 @@ func _ready():
 		health.died.connect(_on_died)
 	# Only process input/physics for our own character
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		set_physics_process(false)
 		set_process_unhandled_input(false)
 		if CAMERA_CONTROLLER:
@@ -108,19 +110,34 @@ func _ready():
 			camera_controller.visible = false
 			
 		# Show third-person model for remote players
-		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
+		var terrorist := get_node_or_null("%Terrorist")
 		if terrorist:
+			print("Remote player setup: Showing terrorist for peer ", multiplayer.get_unique_id())
 			terrorist.show()
-			# Ensure it's on a visible layer for others
-			var mesh: MeshInstance3D = terrorist.find_child("Object_6", true)
-			if mesh:
+			var anim_player := terrorist.get_node_or_null("AnimationPlayer")
+			if anim_player:
+				var anim := anim_player.get_animation("mixamo_com")
+				if anim:
+					anim.loop_mode = Animation.LOOP_LINEAR
+				anim_player.play("mixamo_com")
+			
+			# Ensure ALL meshes are on a visible layer for others
+			for child in terrorist.find_children("*", "MeshInstance3D", true):
+				var mesh := child as MeshInstance3D
 				mesh.set_layer_mask_value(1, true) # Layer 1 is visible to all
-				mesh.set_layer_mask_value(2, false) # Move away from hidden layer 2
+				mesh.set_layer_mask_value(2, false) # Move away from hidden layer 2 (which is ignored by local camera)
+		else:
+			print("Remote player setup ERROR: Terrorist node NOT FOUND")
 		
 		# Hide UI for remote players
 		for ui_node in ["ScopeUI", "HudHealth2", "HudAmmo", "PauseMenu"]:
 			var ui = get_node_or_null(ui_node)
-			if ui: ui.hide()
+			if ui:
+				ui.hide()
+				if ui.has_method("set_process"): ui.set_process(false)
+				if ui.has_method("set_input_process"): ui.set_input_process(false)
+				if ui is CanvasLayer:
+					ui.process_mode = Node.PROCESS_MODE_DISABLED
 			
 		# Disable WeaponController processing for remote players to stop it force-showing arms
 		var weapon_controller := get_node_or_null("Components/WeaponController")
@@ -133,9 +150,14 @@ func _ready():
 			call_deferred("_activate_camera")
 			
 		# Hide local body for the local player
-		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
+		var terrorist := get_node_or_null("%Terrorist")
 		if terrorist:
 			terrorist.hide()
+		
+		# Ensure UI is visible for local player
+		for ui_node in ["ScopeUI", "HudHealth2", "HudAmmo", "PauseMenu"]:
+			var ui = get_node_or_null(ui_node)
+			if ui: ui.show()
 
 func _activate_camera() -> void:
 	if CAMERA_CONTROLLER:

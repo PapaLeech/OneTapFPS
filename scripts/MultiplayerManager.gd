@@ -11,7 +11,17 @@ signal connected_to_server
 
 var players: Dictionary = {}  # peer_id -> username
 
+var spawn_positions: Array[Vector3] = []
+
 func _ready() -> void:
+	# Only the server needs these for picking spawn positions
+	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args() or multiplayer.is_server():
+		spawn_positions = [
+			Vector3(-10, 2, -10),
+			Vector3(-35, 2, -10),
+			Vector3(-10, 2, -35),
+			Vector3(-35, 2, -35),
+		]
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
@@ -67,6 +77,10 @@ func _on_connection_failed() -> void:
 	print("Connection failed.")
 	connection_failed.emit()
 
+func get_next_spawn_position() -> Vector3:
+	var idx: int = players.size() % spawn_positions.size()
+	return spawn_positions[idx]
+
 @rpc("any_peer", "reliable")
 func _sync_player_name(username: String) -> void:
 	var sender_id := multiplayer.get_remote_sender_id()
@@ -81,19 +95,30 @@ func _sync_player_name(username: String) -> void:
 # Called by client when its level scene is ready to receive spawns
 @rpc("any_peer", "call_remote", "reliable")
 func client_level_ready() -> void:
+	if not multiplayer.is_server():
+		return
+		
 	var peer_id := multiplayer.get_remote_sender_id()
 	print("Server: client ", peer_id, " level ready")
+	
+	# Assign a spawn position based on current player count
+	var pos := get_next_spawn_position()
+	
 	# Spawn the new player on ALL peers (including existing ones)
-	spawn_player_on_all.rpc(peer_id)
-	# Also spawn all EXISTING players on the new client
-	for existing_id in players.keys():
+	spawn_player_on_all.rpc(peer_id, pos)
+	
+	# Also spawn all EXISTING players on the new client at their respective positions
+	var existing_ids := players.keys()
+	for i in range(existing_ids.size()):
+		var existing_id: int = existing_ids[i]
 		if existing_id != peer_id:
-			spawn_player_on_all.rpc_id(peer_id, existing_id)
+			var e_pos := spawn_positions[i % spawn_positions.size()]
+			spawn_player_on_all.rpc_id(peer_id, existing_id, e_pos)
 
 # Called by server on ALL peers to spawn a player
 @rpc("authority", "call_local", "reliable")
-func spawn_player_on_all(peer_id: int) -> void:
-	print("spawn_player_on_all on peer ", multiplayer.get_unique_id(), " for ", peer_id)
-	spawn_requested.emit(peer_id)
+func spawn_player_on_all(peer_id: int, spawn_pos: Vector3) -> void:
+	print("spawn_player_on_all on peer ", multiplayer.get_unique_id(), " for ", peer_id, " at ", spawn_pos)
+	spawn_requested.emit(peer_id, spawn_pos)
 
-signal spawn_requested(peer_id: int)
+signal spawn_requested(peer_id: int, spawn_pos: Vector3)
