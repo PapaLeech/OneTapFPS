@@ -109,7 +109,7 @@ func _ready():
 			camera_controller.visible = false
 			
 		# Show third-person model for remote players
-		var terrorist := get_node_or_null("%Terrorist")
+		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
 		if terrorist:
 			print("Remote player setup: Showing terrorist")
 			terrorist.show()
@@ -149,7 +149,7 @@ func _ready():
 			call_deferred("_activate_camera")
 			
 		# Hide local body for the local player
-		var terrorist := get_node_or_null("%Terrorist")
+		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
 		if terrorist:
 			terrorist.hide()
 		
