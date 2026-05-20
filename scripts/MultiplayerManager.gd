@@ -11,8 +11,6 @@ signal connected_to_server
 
 var players: Dictionary = {}  # peer_id -> username
 
-var spawn_positions: Array[Vector3] = []
-
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -69,8 +67,6 @@ func _on_connection_failed() -> void:
 	print("Connection failed.")
 	connection_failed.emit()
 
-var spawn_counter: int = 0
-
 @rpc("any_peer", "reliable")
 func _sync_player_name(username: String) -> void:
 	var sender_id := multiplayer.get_remote_sender_id()
@@ -81,22 +77,3 @@ func _sync_player_name(username: String) -> void:
 	# Emit player_connected after name is known so level can spawn correctly
 	if multiplayer.is_server():
 		player_connected.emit(sender_id)
-
-# Called by client when its level scene is ready to receive spawns
-@rpc("any_peer", "call_remote", "reliable")
-func client_level_ready() -> void:
-	var peer_id := multiplayer.get_remote_sender_id()
-	print("Server: client ", peer_id, " level ready")
-	spawn_player_on_all.rpc(peer_id)
-	# Also spawn all EXISTING players on the new client
-	for existing_id in players.keys():
-		if existing_id != peer_id:
-			spawn_player_on_all.rpc_id(peer_id, existing_id)
-
-# Called by server on ALL peers to spawn a player
-@rpc("authority", "call_local", "reliable")
-func spawn_player_on_all(peer_id: int) -> void:
-	print("spawn_player_on_all on peer ", multiplayer.get_unique_id(), " for ", peer_id)
-	spawn_requested.emit(peer_id)
-
-signal spawn_requested(peer_id: int)

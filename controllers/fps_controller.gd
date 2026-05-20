@@ -78,8 +78,8 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 
 func _enter_tree() -> void:
-	# Set authority based on node name (set by level_001_new.gd as Player_PEERID)
-	var peer_id := name.replace("Player_", "").to_int()
+	# Name is the raw peer ID (set by MultiplayerSpawner)
+	var peer_id := name.to_int()
 	if peer_id > 0:
 		set_multiplayer_authority(peer_id, true)
 
@@ -90,7 +90,6 @@ func _ready():
 		set_physics_process(false)
 		set_process_unhandled_input(false)
 		return
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if _weapon_holder:
 		def_weapon_holder_pos = _weapon_holder.position
 	var health := get_node_or_null("Health")
@@ -147,6 +146,7 @@ func _ready():
 			CAMERA_CONTROLLER.current = true
 		else:
 			call_deferred("_activate_camera")
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			
 		# Hide local body for the local player (layer 3 = hidden from own camera only)
 		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
