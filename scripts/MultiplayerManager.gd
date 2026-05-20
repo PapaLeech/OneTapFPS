@@ -35,8 +35,6 @@ func disconnect_from_game() -> void:
 
 func _on_peer_connected(peer_id: int) -> void:
 	print("Peer connected: ", peer_id)
-	if multiplayer.is_server():
-		_sync_player_name.rpc_id(peer_id, PresenceManager.username)
 
 func _on_peer_disconnected(peer_id: int) -> void:
 	print("Peer disconnected: ", peer_id)
@@ -50,7 +48,8 @@ func _on_connected_to_server() -> void:
 	print("Connected to server!")
 	var my_id := multiplayer.get_unique_id()
 	players[my_id] = PresenceManager.username
-	_sync_player_name.rpc(PresenceManager.username)
+	# Send our username to the server only
+	_register_username.rpc_id(1, PresenceManager.username)
 	connected_to_server.emit()
 	var timer := Timer.new()
 	add_child(timer)
@@ -67,13 +66,25 @@ func _on_connection_failed() -> void:
 	print("Connection failed.")
 	connection_failed.emit()
 
+# Client -> Server: register my username
 @rpc("any_peer", "reliable")
-func _sync_player_name(username: String) -> void:
+func _register_username(username: String) -> void:
+	if not multiplayer.is_server():
+		return
 	var sender_id := multiplayer.get_remote_sender_id()
-	if sender_id == 0:
-		sender_id = multiplayer.get_unique_id()
 	players[sender_id] = username
 	print("Player registered: %s (id %d)" % [username, sender_id])
-	# Emit player_connected after name is known so level can spawn correctly
-	if multiplayer.is_server():
-		player_connected.emit(sender_id)
+	# Broadcast this player's username to all existing clients
+	_broadcast_username.rpc(sender_id, username)
+	# Send all existing usernames to the new client
+	for id in players:
+		if id != sender_id:
+			_broadcast_username.rpc_id(sender_id, id, players[id])
+	# Now safe to spawn
+	player_connected.emit(sender_id)
+
+# Server -> All clients: here is a player's username
+@rpc("authority", "call_local", "reliable")
+func _broadcast_username(peer_id: int, username: String) -> void:
+	players[peer_id] = username
+	print("Player known: %s (id %d)" % [username, peer_id])

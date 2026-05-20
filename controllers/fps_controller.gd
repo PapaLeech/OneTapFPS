@@ -72,8 +72,6 @@ func _update_camera(delta):
 	_camera_rotation = Vector3(_mouse_rotation.x, 0.0, 0.0)
 	CAMERA_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)
 	global_transform.basis = Basis.from_euler(_player_rotation)
-	# DELETE THE LINE BELOW
-	CAMERA_CONTROLLER.rotation.z = 0.0
 	_rotation_input = 0.0
 	_tilt_input = 0.0
 
@@ -122,8 +120,8 @@ func _ready():
 			# Ensure ALL meshes are on a visible layer for others
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
 				var mesh := child as MeshInstance3D
-				mesh.set_layer_mask_value(1, true) # Layer 1 is visible to all
-				mesh.set_layer_mask_value(2, false) # Move away from hidden layer 2 (which is ignored by local camera)
+				mesh.set_layer_mask_value(1, true)
+				mesh.set_layer_mask_value(2, false)
 		else:
 			print("Remote player setup ERROR: Terrorist node NOT FOUND")
 		
@@ -137,18 +135,16 @@ func _ready():
 				if ui is CanvasLayer:
 					ui.process_mode = Node.PROCESS_MODE_DISABLED
 			
-		# Disable WeaponController processing for remote players to stop it force-showing arms
+		# Disable WeaponController for remote players
 		var weapon_controller := get_node_or_null("Components/WeaponController")
 		if weapon_controller:
 			weapon_controller.set_physics_process(false)
 	else:
-		if CAMERA_CONTROLLER:
-			CAMERA_CONTROLLER.current = true
-		else:
-			call_deferred("_activate_camera")
+		# Local player — activate camera and capture mouse here, not in level script
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-			
-		# Hide local body for the local player (layer 3 = hidden from own camera only)
+		call_deferred("_activate_camera")
+		
+		# Hide local body (layer 3 = hidden from own camera only)
 		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
 		if terrorist:
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
@@ -157,7 +153,7 @@ func _ready():
 				mesh.set_layer_mask_value(2, false)
 				mesh.set_layer_mask_value(3, true)
 		
-		# Ensure UI is visible for local player
+		# Ensure UI visible for local player
 		for ui_node in ["ScopeUI", "HudHealth2", "HudAmmo", "PauseMenu"]:
 			var ui = get_node_or_null(ui_node)
 			if ui: ui.show()
@@ -186,6 +182,7 @@ func _on_died() -> void:
 		pause_menu.open_death_menu()
 
 func _physics_process(delta):
+	if not is_multiplayer_authority(): return
 	_update_camera(delta)
 
 	if not is_on_floor():
