@@ -148,10 +148,14 @@ func _ready():
 		else:
 			call_deferred("_activate_camera")
 			
-		# Hide local body for the local player
+		# Hide local body for the local player (layer 3 = hidden from own camera only)
 		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
 		if terrorist:
-			terrorist.hide()
+			for child in terrorist.find_children("*", "MeshInstance3D", true):
+				var mesh := child as MeshInstance3D
+				mesh.set_layer_mask_value(1, false)
+				mesh.set_layer_mask_value(2, false)
+				mesh.set_layer_mask_value(3, true)
 		
 		# Ensure UI is visible for local player
 		for ui_node in ["ScopeUI", "HudHealth2", "HudAmmo", "PauseMenu"]:

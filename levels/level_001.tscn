@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b1yleqbb8tc7x"]
 
-[ext_resource type="Script" uid="uid://dsi84pv87xs2j" path="res://levels/level_001_new.gd" id="1_44t5x"]
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
+[ext_resource type="Script" uid="uid://iy3pcr5qh8rf" path="res://levels/level_001.gd" id="1_po88e"]
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
 [ext_resource type="PackedScene" uid="uid://dh3j6u1fklhvr" path="res://Characters/enemy.tscn" id="5_44t5x"]
 [ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="5_po88e"]
@@ -10,7 +10,7 @@
 data = PackedVector3Array(10, 0, 10, -10, 0, -10, 10, 0, -10, -10, 0, -10, 10, 0, 10, -10, 0, 10)
 
 [node name="Node3D" type="Node3D" unique_id=1169815461]
-script = ExtResource("1_44t5x")
+script = ExtResource("1_po88e")
 
 [node name="WorldEnvironment" parent="." unique_id=1103224932 instance=ExtResource("1_db21n")]
 

@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://bcc25pxq5xm3k" path="res://assets/ui/hud_health.tscn" id="17_tg6sc"]
 [ext_resource type="PackedScene" uid="uid://lfhkmtp0cmn8" path="res://assets/ui/pause_menu.tscn" id="18_yvtcv"]
 [ext_resource type="PackedScene" uid="uid://ii7p61o8x6o" path="res://assets/ui/hud_ammo.tscn" id="19_ammo1"]
-[ext_resource type="SceneReplicationConfig" path="res://controllers/player_replication_config.tres" id="20_sync"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -213,6 +212,9 @@ bones/39/rotation = Quaternion(-0.075712055, 0.027120186, -0.16165437, 0.983565)
 bones/41/rotation = Quaternion(0.072531626, -0.19164601, -0.2957674, 0.9330234)
 bones/42/rotation = Quaternion(-0.1051671, 0.022258727, 0.038904585, 0.99344397)
 
+[node name="Object_6" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="0" unique_id=921392250]
+layers = 2
+
 [node name="HitboxHead" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="1" unique_id=762075296]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.194679e-08, 1.6809396, -0.034706615)
 bone_name = "head neck upper_015"
@@ -388,7 +390,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 [node name="Camera3D" type="Camera3D" parent="CameraController" unique_id=1719719607]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, -0.17)
-cull_mask = 1048573
+cull_mask = 1048569
 near = 0.1
 script = ExtResource("3_gshig")
 
@@ -431,8 +433,5 @@ script = ExtResource("16_fyafc")
 [node name="HudAmmo" parent="." unique_id=1819158740 instance=ExtResource("19_ammo1")]
 
 [node name="PauseMenu" parent="." unique_id=1412426954 instance=ExtResource("18_yvtcv")]
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2025715525]
-replication_config = ExtResource("20_sync")
 
 [editable path="CollisionShape3D/Terrorist"]
