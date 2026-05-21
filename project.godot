@@ -45,12 +45,11 @@ gdscript/warnings/inference_on_variant=0.0
 
 window/size/viewport_width=1920.0
 window/size/viewport_height=1080.0
-window/size/mode=4.0
 window/size/always_on_top=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
+enabled=PackedStringArray("res://addons/copilot/plugin.cfg", "res://addons/godot_mcp/plugin.cfg")
 
 [input]
 
