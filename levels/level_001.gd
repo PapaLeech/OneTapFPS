@@ -4,9 +4,9 @@ const PLAYER_SCENE := preload("res://controllers/fps_controller.tscn")
 
 var spawn_positions: Array[Vector3] = [
 	Vector3(0, 2, 0),
-	Vector3(10, 2, 10),
-	Vector3(-10, 2, 10),
-	Vector3(10, 2, -10),
+	Vector3(25, 2, 25),
+	Vector3(-25, 2, 25),
+	Vector3(25, 2, -25),
 ]
 var spawn_counter: int = 0
 var spawn_index_map: Dictionary = {}  # peer_id -> pos_index
@@ -56,12 +56,13 @@ func _on_player_connected(peer_id: int) -> void:
 @rpc("authority", "call_local", "reliable")
 func _do_spawn(peer_id: int, pos_index: int) -> void:
 	print("_do_spawn called for peer: ", peer_id, " on my peer: ", multiplayer.get_unique_id())
+	# Strong duplicate check
 	if get_node_or_null(str(peer_id)) != null:
+		print("_do_spawn: player ", peer_id, " already exists, skipping")
 		return
 	var player := PLAYER_SCENE.instantiate()
 	player.name = str(peer_id)
-	player.set_meta("spawn_pos", spawn_positions[pos_index])
-	add_child(player)
+	add_child(player, true)  # true = force_readable_name, prevents silent renames
 	player.global_position = spawn_positions[pos_index]
 
 func _remove_player(peer_id: int) -> void:

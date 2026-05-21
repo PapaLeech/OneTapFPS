@@ -42,6 +42,12 @@ var _is_aiming : bool = false
 # Bob baseline
 var def_weapon_holder_pos : Vector3
 
+# GDC-style position sync
+var _sync_counter: int = 0
+var _target_position: Vector3
+var _target_rotation_y: float
+var _is_remote: bool = false
+
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var step_handler = $Components/StepHandlerComponent
@@ -95,6 +101,7 @@ func _ready():
 		health.died.connect(_on_died)
 	# Only process input/physics for our own character
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		_is_remote = true
 		set_physics_process(false)
 		set_process_unhandled_input(false)
 		if CAMERA_CONTROLLER:
@@ -117,11 +124,12 @@ func _ready():
 					anim.loop_mode = Animation.LOOP_LINEAR
 				anim_player.play("mixamo_com")
 			
-			# Ensure ALL meshes are on a visible layer for others
+			# Ensure ALL meshes are on layer 1 only (visible to all cameras)
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
 				var mesh := child as MeshInstance3D
 				mesh.set_layer_mask_value(1, true)
 				mesh.set_layer_mask_value(2, false)
+				mesh.set_layer_mask_value(3, false)
 		else:
 			print("Remote player setup ERROR: Terrorist node NOT FOUND")
 		
@@ -210,12 +218,19 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 
 	move_and_slide()
+
+	# GDC-style: send state to server every 3 frames
+	_sync_counter += 1
+	if _sync_counter >= 3:
+		_sync_counter = 0
+		if multiplayer.has_multiplayer_peer():
+			_send_state.rpc_id(1, global_position, global_rotation.y)
+
 	# Log position sync every 30 physics frames (~0.5s at 60hz)
 	if Engine.get_physics_frames() % 30 == 0 and multiplayer.has_multiplayer_peer():
 		NetworkSyncLogger.log_position_sent(PresenceManager.username, global_position, Engine.get_physics_frames())
 
 	handle_lean(delta)
-	#weapon_bob(velocity.length(), delta)
 
 	var want_crouch = Input.is_action_pressed("CROUCH")
 	if want_crouch != _is_crouching:
@@ -232,6 +247,25 @@ func _physics_process(delta):
 
 	if is_on_floor():
 		step_handler.handle_step_climbing()
+
+# Client -> Server: send my position and rotation
+@rpc("any_peer", "unreliable_ordered")
+func _send_state(pos: Vector3, rot_y: float) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	# Broadcast to all other clients
+	_receive_state.rpc(sender, pos, rot_y)
+
+# Server -> All clients: here is a player's position
+@rpc("authority", "unreliable_ordered")
+func _receive_state(peer_id: int, pos: Vector3, rot_y: float) -> void:
+	if peer_id == multiplayer.get_unique_id():
+		return  # Don't update our own position
+	var player := get_parent().get_node_or_null(str(peer_id))
+	if player:
+		player.global_position = pos
+		player.global_rotation.y = rot_y
 
 func toggle_crouch():
 	if _is_crouching:
