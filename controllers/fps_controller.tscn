@@ -212,9 +212,6 @@ bones/39/rotation = Quaternion(-0.075712055, 0.027120186, -0.16165437, 0.983565)
 bones/41/rotation = Quaternion(0.072531626, -0.19164601, -0.2957674, 0.9330234)
 bones/42/rotation = Quaternion(-0.1051671, 0.022258727, 0.038904585, 0.99344397)
 
-[node name="Object_6" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="0" unique_id=921392250]
-layers = 2
-
 [node name="HitboxHead" type="BoneAttachment3D" parent="CollisionShape3D/Terrorist/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D" index="1" unique_id=762075296]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.194679e-08, 1.6809396, -0.034706615)
 bone_name = "head neck upper_015"

@@ -142,7 +142,11 @@ func _ready():
 	else:
 		# Local player — activate camera and capture mouse here, not in level script
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		call_deferred("_activate_camera")
+		# Activate camera immediately — CAMERA_CONTROLLER is assigned via @export in scene
+		if CAMERA_CONTROLLER:
+			CAMERA_CONTROLLER.current = true
+		else:
+			call_deferred("_activate_camera")
 		
 		# Hide local body (layer 3 = hidden from own camera only)
 		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
