@@ -80,8 +80,8 @@ func _register_username(username: String) -> void:
 	for id in players:
 		if id != sender_id:
 			_broadcast_username.rpc_id(sender_id, id, players[id])
-	# Now safe to spawn
-	player_connected.emit(sender_id)
+	# Don't emit player_connected here - spawning is triggered by _client_ready in level_001.gd
+	# once the client confirms its level scene is loaded and ready to receive RPCs
 
 # Server -> All clients: here is a player's username
 @rpc("authority", "call_local", "reliable")
