@@ -441,6 +441,9 @@ func _reset() -> void:
 	_sd_countdown.visible = false
 
 func _load_mode() -> void:
+	# Solo play - disconnect from server if connected
+	if multiplayer.has_multiplayer_peer():
+		MultiplayerManager.disconnect_from_game()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 # ─── Lobby / Dog Tags ────────────────────────────────────────────────────────

@@ -1,5 +1,6 @@
-[gd_scene format=3 uid="uid://3hamqb2ht07r"]
+[gd_scene format=3 uid="uid://khvf4g3dgyqi"]
 
+[ext_resource type="Script" uid="uid://b20raquxarflx" path="res://controllers/player.gd" id="1_ff6fx"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]
 [ext_resource type="Script" uid="uid://y2hldlquhrid" path="res://assets/scripts/hitbox.gd" id="3_3og01"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
@@ -171,6 +172,7 @@ _data = {
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1254856328 groups=["player"]]
 floor_max_angle = 1.0471976
+script = ExtResource("1_ff6fx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2118348457]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

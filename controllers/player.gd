@@ -44,8 +44,6 @@ var def_weapon_holder_pos : Vector3
 
 # GDC-style position sync
 var _sync_counter: int = 0
-var _target_position: Vector3
-var _target_rotation_y: float
 var _is_remote: bool = false
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -113,7 +111,7 @@ func _ready():
 			camera_controller.visible = false
 			
 		# Show third-person model for remote players
-		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
+		var terrorist := get_node_or_null("CollisionShape3D/PlayerModel")
 		if terrorist:
 			print("Remote player setup: Showing terrorist")
 			terrorist.show()
@@ -157,7 +155,7 @@ func _ready():
 			call_deferred("_activate_camera")
 		
 		# Hide local body (layer 3 = hidden from own camera only)
-		var terrorist := get_node_or_null("CollisionShape3D/Terrorist")
+		var terrorist := get_node_or_null("CollisionShape3D/PlayerModel")
 		if terrorist:
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
 				var mesh := child as MeshInstance3D
@@ -194,7 +192,7 @@ func _on_died() -> void:
 		pause_menu.open_death_menu()
 
 func _physics_process(delta):
-	if not is_multiplayer_authority(): return
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority(): return
 	_update_camera(delta)
 
 	if not is_on_floor():
@@ -223,7 +221,7 @@ func _physics_process(delta):
 	_sync_counter += 1
 	if _sync_counter >= 3:
 		_sync_counter = 0
-		if multiplayer.has_multiplayer_peer():
+		if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
 			_send_state.rpc_id(1, global_position, global_rotation.y)
 
 	# Log position sync every 30 physics frames (~0.5s at 60hz)
@@ -258,7 +256,7 @@ func _send_state(pos: Vector3, rot_y: float) -> void:
 	_receive_state.rpc(sender, pos, rot_y)
 
 # Server -> All clients: here is a player's position
-@rpc("authority", "unreliable_ordered")
+@rpc("any_peer", "unreliable_ordered")
 func _receive_state(peer_id: int, pos: Vector3, rot_y: float) -> void:
 	if peer_id == multiplayer.get_unique_id():
 		return  # Don't update our own position
