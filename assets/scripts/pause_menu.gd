@@ -146,6 +146,10 @@ func _open() -> void:
 	_settings_panel.visible = false
 	_death_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Hide crosshair via weapon controller
+	var wc := get_parent().get_node_or_null("Components/WeaponController")
+	if wc and wc.get("_crosshair"): wc._crosshair.hide()
+
 	_resume_btn.focus_neighbor_top = _resume_btn.get_path_to(_quit_btn)
 	_resume_btn.focus_neighbor_bottom = _resume_btn.get_path_to(_menu_btn)
 	_menu_btn.focus_neighbor_top = _menu_btn.get_path_to(_resume_btn)
@@ -161,6 +165,10 @@ func _close() -> void:
 	_panel.visible = false
 	_settings_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Show crosshair via weapon controller
+	var wc := get_parent().get_node_or_null("Components/WeaponController")
+	if wc and wc.get("_crosshair"): wc._crosshair.show()
+
 
 func _open_settings() -> void:
 	_screen = Screen.SETTINGS
