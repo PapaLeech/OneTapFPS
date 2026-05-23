@@ -88,6 +88,7 @@ func _ready() -> void:
 		_show_username_prompt()
 	else:
 		_go_online_and_fetch_friends()
+	ClientToServer.invite_received.connect(_on_network_invite_received)
 
 
 # ─── Music ────────────────────────────────────────────────────────────────────
@@ -254,13 +255,23 @@ func receive_invite(sender_name: String) -> void:
 
 func _on_invite_accepted() -> void:
 	_invite_panel.visible = false
-	_add_player_tag_at(_invite_sender, 0, true)
-	_add_player_tag("Player 1", true)
 	_invite_sender = ""
+	if not multiplayer.has_multiplayer_peer():
+		MultiplayerManager.connect_to_server()
+		MultiplayerManager.connected_to_server.connect(func():
+			ClientToServer.try_connect_client_to_lobby()
+			_add_player_tag(PresenceManager.username, true)
+		, CONNECT_ONE_SHOT)
+	else:
+		ClientToServer.try_connect_client_to_lobby()
+		_add_player_tag(PresenceManager.username, true)
 
 func _on_invite_declined() -> void:
 	_invite_panel.visible = false
 	_invite_sender = ""
+
+func _on_network_invite_received(from_username: String) -> void:
+	receive_invite(from_username)
 
 # ─── Settings ────────────────────────────────────────────────────────────────
 
@@ -489,12 +500,8 @@ func populate_friends(friends: Array) -> void:
 		slot.friend_name = f.get("name", "Player")
 		slot.is_online   = f.get("online", false)
 		if f.get("online", false):
-			slot.gui_input.connect(func(event):
-				if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-					_show_friend_context_menu(slot.friend_name)
-			)
+			slot.invite_pressed.connect(func(name): ClientToServer.send_invite(name))
 			slot.mouse_filter = Control.MOUSE_FILTER_STOP
-			slot.tooltip_text = "Right-click to invite"
 
 func _populate_requests(requests: Array) -> void:
 	if _friends_header == null:
@@ -688,7 +695,7 @@ func _go_online_and_fetch_friends() -> void:
 	_refresh_friends()
 	var refresh_timer := Timer.new()
 	add_child(refresh_timer)
-	refresh_timer.wait_time = 30.0
+	refresh_timer.wait_time = 15.0
 	refresh_timer.autostart = true
 	refresh_timer.timeout.connect(_refresh_friends)
 

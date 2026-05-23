@@ -9,6 +9,7 @@ var peer := ENetMultiplayerPeer.new()
 
 var lobbies : Array[Lobby] = []
 var idle_clients : Array[int] = []
+var username_to_peer: Dictionary = {}
 
 
 func _ready() -> void:
@@ -40,10 +41,29 @@ func _on_peer_disconnected(id : int) -> void:
 	
 	idle_clients.erase(id)
 	
+	for uname in username_to_peer.keys():
+		if username_to_peer[uname] == id:
+			username_to_peer.erase(uname)
+			break
+	
 	print("client %d disconnected from server" % id)
 	
 func _on_connection_failed() -> void:
 	print("failed to connect to server")
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_register_username(username: String) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	username_to_peer[username] = sender
+	print("registered %s as peer %d" % [username, sender])
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_send_invite(from_username: String, to_username: String) -> void:
+	var target_peer := username_to_peer.get(to_username, -1)
+	if target_peer == -1:
+		print("Invite failed: %s not found" % to_username)
+		return
+	ClientToServer.receive_invite_rpc.rpc_id(target_peer, from_username)
 
 func get_lobby_from_client_id(id : int) -> Lobby:
 	for lobby in lobbies:
@@ -60,7 +80,7 @@ func c_try_connect_client_to_lobby() -> void:
 	if maybe_lobby:
 		maybe_lobby.add_client(client_id)
 		idle_clients.erase(client_id)
-		print("client %d connected to lobby %s %[client_id, maybe_lobby.name]",)
+		print("client %d connected to lobby %s" % [client_id, maybe_lobby.name])
 	
 	#TODO logic when lobbies are full and client tries to connect to one 
 		

@@ -14,8 +14,11 @@ func set_is_online(v: bool) -> void:
 	is_online = v
 	queue_redraw()
 
+signal invite_pressed(friend_name: String)
+
 func _ready() -> void:
 	custom_minimum_size = Vector2(300, BULLET_HEIGHT + 20)
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	queue_redraw()
 
 func _draw() -> void:
@@ -101,6 +104,15 @@ func _draw() -> void:
 	# ── online status dot (left of base) ───────────────────────────────
 	var dot_col: Color = Color(0.2, 0.9, 0.3) if is_online else Color(0.55, 0.55, 0.55)
 	draw_circle(Vector2(seg_base - 14.0, cy), 4.0, dot_col)
+
+	# ── invite text on right black cap ─────────────────────────────────
+	if is_online:
+		var invite_font: Font = ThemeDB.fallback_font
+		var invite_text := "Invite"
+		var invite_size := invite_font.get_string_size(invite_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13)
+		var cap_cx := right_cap_x + (frame_x + frame_w - right_cap_x) * 0.5
+		draw_string(invite_font, Vector2(cap_cx - invite_size.x * 0.5, cy + 13 * 0.38),
+			invite_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(0.85, 0.85, 0.85))
 
 
 # ── drawing helpers ────────────────────────────────────────────────────
@@ -201,3 +213,22 @@ func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 		var r: float = neck_r * sqrt(1.0 - t * t)
 		sh_pts.append(Vector2(xo + t * ow, cy + r))
 	draw_colored_polygon(sh_pts, shad)
+
+func _gui_input(event: InputEvent) -> void:
+	if not is_online:
+		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var w: float = size.x
+		var br: float = BULLET_HEIGHT * 0.5
+		var x0: float = 22.0
+		var x1: float = w - 20.0
+		var bullet_len: float = x1 - x0
+		var body_w: float = bullet_len * 0.62
+		var shoulder_w: float = bullet_len * 0.04
+		var neck_w: float = bullet_len * 0.02
+		var ogive_w: float = bullet_len - br * 0.55 - br * 0.18 - body_w - shoulder_w - neck_w
+		var seg_ogive: float = x0 + br * 0.55 + br * 0.18 + body_w + shoulder_w + neck_w
+		var right_cap_x: float = seg_ogive + ogive_w * 0.50
+		if event.position.x >= right_cap_x:
+			invite_pressed.emit(friend_name)
+			accept_event()
