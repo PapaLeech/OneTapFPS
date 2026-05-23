@@ -1,18 +1,17 @@
 extends Node3D
 
-const PLAYER_SCENE := preload("res://controllers/player.tscn")
+const PLAYER_SCENE: PackedScene = preload("res://controllers/player.tscn")
 
-var spawn_positions: Array[Vector3] = [
-	Vector3(0, 10, 0),
-	Vector3(5, 10, 5),
-	Vector3(-5, 10, 5),
-	Vector3(5, 10, -5),
-]
+var spawn_positions: Array[Vector3] = []
 var spawn_counter: int = 0
 var spawn_index_map: Dictionary = {}  # peer_id -> pos_index, server only
 
 func _ready() -> void:
 	print("Level _ready, is_server: ", multiplayer.is_server())
+	# Read spawn positions from spawn_points group
+	for point in get_tree().get_nodes_in_group("spawn_points"):
+		spawn_positions.append(point.global_position)
+	print("Spawn positions loaded: ", spawn_positions.size())
 	# Solo play mode - no multiplayer peer at all
 	if not multiplayer.has_multiplayer_peer():
 		_spawn_solo_player()
@@ -40,6 +39,14 @@ func _client_ready() -> void:
 	var peer_id := multiplayer.get_remote_sender_id()
 	if spawn_index_map.has(peer_id):
 		return  # Already spawned, ignore
+	# Clean up stale peers not currently connected
+	var connected := multiplayer.get_peers()
+	for stale_id in spawn_index_map.keys().duplicate():
+		if stale_id not in connected:
+			print("Removing stale peer: ", stale_id)
+			spawn_index_map.erase(stale_id)
+			var node := get_node_or_null(str(stale_id))
+			if node: node.queue_free()
 	print("Server: client ", peer_id, " ready")
 	_on_player_connected(peer_id)
 
@@ -71,6 +78,9 @@ func _do_spawn(peer_id: int, pos_index: int) -> void:
 		return
 	if pos_index < 0 or pos_index >= spawn_positions.size():
 		pos_index = 0
+	if spawn_positions.is_empty():
+		print("ERROR: No spawn points found! Add Node3D nodes to 'spawn_points' group in level_001.tscn")
+		return
 	var player := PLAYER_SCENE.instantiate()
 	player.name = str(peer_id)
 	add_child(player, true)

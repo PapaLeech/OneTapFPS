@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="Script" uid="uid://iy3pcr5qh8rf" path="res://levels/level_001.gd" id="1_po88e"]
 [ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_y34ju"]
+[ext_resource type="Script" uid="uid://37k35ornbomj" path="res://scripts/PlayerSpawnPoint.gd" id="5_44t5x"]
 [ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="5_po88e"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_po88e"]
@@ -23,5 +24,15 @@ script = ExtResource("4_y34ju")
 shape = SubResource("ConcavePolygonShape3D_po88e")
 
 [node name="map_visual_boost" type="Node3D" parent="." unique_id=217151604]
+
+[node name="SpawnPoint1" type="Node3D" parent="." unique_id=120323497]
+
+[node name="SpawnPoint2" type="Node3D" parent="." unique_id=1176110138 groups=["spawn_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.89, -0.3, -41.26)
+script = ExtResource("5_44t5x")
+
+[node name="SpawnPoint3" type="Node3D" parent="." unique_id=1698304536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 0.83, -38.39)
+script = ExtResource("5_44t5x")
 
 [editable path="Map_v12"]

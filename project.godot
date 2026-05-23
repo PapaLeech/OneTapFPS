@@ -28,7 +28,6 @@ buses/default_bus_layout="uid://ylfjg8opqmon"
 
 MCPRuntime="*res://addons/godot_mcp/runtime/mcp_runtime.gd"
 PresenceManager="*uid://bni585q0qacmn"
-MultiplayerManager="*res://scripts/MultiplayerManager.gd"
 SessionLogger="*res://scripts/SessionLogger.gd"
 HitDetectionLogger="*res://scripts/HitDetectionLogger.gd"
 NetworkSyncLogger="*res://scripts/NetworkSyncLogger.gd"
@@ -36,6 +35,8 @@ EnemyStateLogger="*res://scripts/EnemyStateLogger.gd"
 ClientPredictionLogger="*res://scripts/ClientPredictionLogger.gd"
 LagCompensationLogger="*res://scripts/LagCompensationLogger.gd"
 GraphicsManager="*res://scripts/GraphicsManager.gd"
+MultiplayerManager="*uid://ipoxuyovwc2"
+ClientToServer="*uid://cd08n2jpc15wx"
 
 [debug]
 

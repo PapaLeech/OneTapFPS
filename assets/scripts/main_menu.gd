@@ -742,6 +742,7 @@ func _show_host_join_panel() -> void:
 		connect_btn.disabled = true
 		status.text = "Connecting..."
 		MultiplayerManager.connect_to_server()
+		ClientToServer.try_connect_client_to_lobby()
 		MultiplayerManager.connected_to_server.connect(func():
 			dialog.queue_free()
 			get_tree().change_scene_to_file(GAME_SCENE)
