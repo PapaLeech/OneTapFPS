@@ -19,14 +19,14 @@ signal connected_to_server
 
 
 func _ready() -> void:
-	var error := peer.create_client(ADDRESS, PORT)
+	var error := peer.create_server(PORT)
 	if error != OK:
-		print("failed to connect to server")
+		print("failed to start server")
 		return
-		
+
 	multiplayer.multiplayer_peer = peer
-	multiplayer.connected_to_server.connect(_on_connected_to_server)
-	multiplayer.connection_failed.connect(_on_connection_failed)
+	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 func _on_connected_to_server() -> void:
 	print("connected to server")
