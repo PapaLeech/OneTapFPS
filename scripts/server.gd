@@ -10,6 +10,12 @@ var peer := ENetMultiplayerPeer.new()
 var lobbies : Array[Lobby] = []
 var idle_clients : Array[int] = []
 var username_to_peer: Dictionary = {}
+var players: Dictionary = {}
+
+signal player_connected(peer_id: int)
+signal player_disconnected(peer_id: int)
+signal connection_failed
+signal connected_to_server
 
 
 func _ready() -> void:

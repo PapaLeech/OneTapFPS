@@ -695,7 +695,7 @@ func _go_online_and_fetch_friends() -> void:
 	_refresh_friends()
 	var refresh_timer := Timer.new()
 	add_child(refresh_timer)
-	refresh_timer.wait_time = 15.0
+	refresh_timer.wait_time = 10.0
 	refresh_timer.autostart = true
 	refresh_timer.timeout.connect(_refresh_friends)
 
@@ -705,17 +705,20 @@ func _refresh_friends() -> void:
 			populate_friends([])
 			_refresh_pending_requests()
 			return
+		# Server returns plain strings e.g. ["vauxhall", "rysiu"]
 		var names: Array = []
 		for f in friends:
-			if f is Dictionary:
-				names.append(f.get("username", ""))
-			elif f is String:
-				names.append(f)
+			var uname: String = f.get("username", "") if f is Dictionary else str(f)
+			if uname != "" and not names.has(uname):
+				names.append(uname)
 		PresenceManager.get_friends_status(names, func(status: Dictionary):
+			# Build a lowercase lookup so case differences don't matter
+			var status_lower: Dictionary = {}
+			for k in status.keys():
+				status_lower[k.to_lower()] = status[k]
 			var friends_array: Array = []
-			for f in friends:
-				var uname: String = f.get("username", "") if f is Dictionary else str(f)
-				friends_array.append({"name": uname, "online": status.get(uname, false)})
+			for uname in names:
+				friends_array.append({"name": uname, "online": status_lower.get(uname.to_lower(), false)})
 			populate_friends(friends_array)
 			_refresh_pending_requests()
 		)

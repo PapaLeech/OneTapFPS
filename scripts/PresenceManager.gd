@@ -1,12 +1,23 @@
 extends Node
 
-const SERVER_URL = "http://161.35.41.206:8000"
-const CONFIG_PATH = "user://config.cfg"
+const SERVER_URL   = "http://161.35.41.206:8000"
+const CONFIG_PATH  = "user://config.cfg"
+const HEARTBEAT_INTERVAL := 5.0
 
 var username: String = ""
 
+var _heartbeat_timer: Timer = null
+var _is_online: bool = false
+
 func _ready() -> void:
 	_load_username()
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		go_offline()
+
+func _exit_tree() -> void:
+	go_offline()
 
 func _load_username() -> void:
 	var config := ConfigFile.new()
@@ -34,18 +45,56 @@ func load_setting(key: String, default):
 		return config.get_value("settings_" + username, key, default)
 	return default
 
-func go_online(player_name: String) -> void:
-	username = player_name
+# ─── Presence: Online / Offline / Heartbeat ──────────────────────────────────
+
+func _ensure_heartbeat_timer() -> void:
+	if _heartbeat_timer and is_instance_valid(_heartbeat_timer):
+		return
+	_heartbeat_timer = Timer.new()
+	_heartbeat_timer.wait_time = HEARTBEAT_INTERVAL
+	_heartbeat_timer.one_shot = false
+	_heartbeat_timer.autostart = false
+	add_child(_heartbeat_timer)
+	_heartbeat_timer.timeout.connect(_send_heartbeat)
+
+func _start_heartbeat() -> void:
+	_ensure_heartbeat_timer()
+	if not _heartbeat_timer.is_stopped():
+		return
+	_heartbeat_timer.start()
+
+func _stop_heartbeat() -> void:
+	if _heartbeat_timer and is_instance_valid(_heartbeat_timer):
+		_heartbeat_timer.stop()
+
+func _send_heartbeat() -> void:
+	if username == "" or not _is_online:
+		return
 	var http := HTTPRequest.new()
 	add_child(http)
-	var body := JSON.stringify({"username": player_name})
+	var body := JSON.stringify({"username": username})
+	var headers := ["Content-Type: application/json"]
+	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
+	http.request(SERVER_URL + "/heartbeat", headers, HTTPClient.METHOD_POST, body)
+
+func go_online(player_name: String) -> void:
+	username = player_name
+	if username == "":
+		return
+	_is_online = true
+	var http := HTTPRequest.new()
+	add_child(http)
+	var body := JSON.stringify({"username": username})
 	var headers := ["Content-Type: application/json"]
 	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
 	http.request(SERVER_URL + "/online", headers, HTTPClient.METHOD_POST, body)
+	_start_heartbeat()
 
 func go_offline() -> void:
-	if username == "":
+	if not _is_online or username == "":
 		return
+	_is_online = false
+	_stop_heartbeat()
 	var http := HTTPRequest.new()
 	add_child(http)
 	var body := JSON.stringify({"username": username})
@@ -55,7 +104,8 @@ func go_offline() -> void:
 
 func get_friends_status(names: Array, callback: Callable) -> void:
 	if names.is_empty():
-		callback.call({})
+		if callback.is_valid():
+			callback.call({})
 		return
 	var http := HTTPRequest.new()
 	add_child(http)

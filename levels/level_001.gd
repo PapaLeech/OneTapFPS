@@ -67,7 +67,7 @@ func _on_player_connected(peer_id: int) -> void:
 		if existing_id != peer_id:
 			_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
 	if MultiplayerManager.players.size() >= 2:
-		var names := MultiplayerManager.players.values()
+		var names: Array = MultiplayerManager.players.values()
 		SessionLogger.try_start_session(names[0], names[1])
 
 # Runs on ALL peers via RPC — spawns the player locally
@@ -99,7 +99,7 @@ func _spawn_solo_player() -> void:
 	player.velocity = Vector3.ZERO
 
 func _remove_player(peer_id: int) -> void:
-	var username := MultiplayerManager.players.get(peer_id, "Unknown")
+	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
 	NetworkSyncLogger.log_peer_disconnected(peer_id, username)
 	SessionLogger.end_session("player_left: %s" % username)
 	spawn_index_map.erase(peer_id)
