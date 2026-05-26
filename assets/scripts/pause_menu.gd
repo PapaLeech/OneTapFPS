@@ -230,11 +230,13 @@ func _respawn() -> void:
 
 func _go_to_menu() -> void:
 	SessionLogger.end_session("returned_to_menu")
-	MultiplayerManager.disconnect_from_game()
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_tree().change_scene_to_file(MAIN_MENU)
 
 func _exit_game() -> void:
 	SessionLogger.end_session("game_exited")
-	MultiplayerManager.disconnect_from_game()
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
 	get_tree().quit()

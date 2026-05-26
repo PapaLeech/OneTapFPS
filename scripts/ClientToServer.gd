@@ -28,6 +28,20 @@ func _on_connected_to_server() -> void:
 func _on_connection_failed() -> void:
 	print("failed to connect to server")
 
+func reconnect() -> void:
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
+	peer = ENetMultiplayerPeer.new()
+	var error := peer.create_client(ADDRESS, PORT)
+	if error != OK:
+		print("failed to connect to server")
+		return
+	multiplayer.multiplayer_peer = peer
+	if not multiplayer.connected_to_server.is_connected(_on_connected_to_server):
+		multiplayer.connected_to_server.connect(_on_connected_to_server)
+	if not multiplayer.connection_failed.is_connected(_on_connection_failed):
+		multiplayer.connection_failed.connect(_on_connection_failed)
+
 func try_connect_client_to_lobby() -> void:
 	print("Client: trying to join lobby")
 	c_try_connect_client_to_lobby.rpc_id(1)

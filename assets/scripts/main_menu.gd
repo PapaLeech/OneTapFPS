@@ -452,7 +452,7 @@ func _reset() -> void:
 func _load_mode() -> void:
 	# Solo play - disconnect from server if connected
 	if multiplayer.has_multiplayer_peer():
-		MultiplayerManager.disconnect_from_game()
+		multiplayer.multiplayer_peer = null
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 # ─── Lobby / Dog Tags ────────────────────────────────────────────────────────
@@ -774,6 +774,8 @@ func _show_host_join_panel() -> void:
 
 		if multiplayer.has_multiplayer_peer():
 			_on_deathmatch_connected()
+		else:
+			ClientToServer.reconnect()
 	)
 
 # ─── Chat / Console ──────────────────────────────────────────────────────────
