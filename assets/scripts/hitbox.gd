@@ -10,6 +10,7 @@ func take_damage(amount: float) -> void:
 		parent = parent.get_parent()
 	if parent:
 		var health := parent.get_node_or_null("Health")
+		print("HIT parent name: ", parent.name, " health: ", health)
 		if health:
 			var dmg := amount * damage_multiplier
 			# In multiplayer, send damage RPC to the player's authority

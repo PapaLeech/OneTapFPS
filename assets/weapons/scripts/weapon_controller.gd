@@ -290,6 +290,11 @@ func fire():
 		var ray_end := ray_origin + aim_dir * 500.0
 		var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
 		query.collision_mask = 1
+		query.collide_with_areas = true
+		# Exclude the local player's own body
+		var local_player := get_parent().get_parent()
+		if local_player:
+			query.exclude = [local_player.get_rid()]
 		var result := space.intersect_ray(query)
 		if result:
 			_bullet_hole.spawn(result.position, result.normal, get_tree().current_scene)
