@@ -11,11 +11,14 @@ func take_damage(amount: float) -> void:
 	if parent:
 		var health := parent.get_node_or_null("Health")
 		if health:
-			var old_hp: float = health.current_health
 			var dmg := amount * damage_multiplier
-			health.take_damage(dmg)
-			print("Health remaining: ", health.current_health)
+			# In multiplayer, send damage RPC to the player's authority
+			if multiplayer.has_multiplayer_peer():
+				var target_id := int(parent.name)
+				if target_id > 0:
+					health._take_damage_rpc.rpc_id(target_id, dmg)
+					HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")
+					return
+			health._apply_damage(dmg)
 			HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")
 			HitDetectionLogger.log_damage_dealt("unknown", parent.name, dmg, health.current_health)
-			if health.current_health <= 0.0:
-				HitDetectionLogger.log_kill("unknown", parent.name, "unknown", name)

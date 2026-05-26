@@ -82,7 +82,7 @@ func _do_spawn(peer_id: int, pos_index: int) -> void:
 	var player := PLAYER_SCENE.instantiate()
 	player.name = str(peer_id)
 	add_child(player, true)
-	player.global_position = spawn_positions[pos_index]
+	player.global_position = spawn_positions[pos_index] + Vector3(0, 1.0, 0)
 	print("Spawned player ", peer_id, " at ", spawn_positions[pos_index])
 
 # Solo play mode - spawn player without multiplayer
