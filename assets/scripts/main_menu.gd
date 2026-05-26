@@ -89,6 +89,7 @@ func _ready() -> void:
 	else:
 		_go_online_and_fetch_friends()
 	ClientToServer.invite_received.connect(_on_network_invite_received)
+	ClientToServer.lobby_joined.connect(_on_lobby_joined)
 
 
 # ─── Music ────────────────────────────────────────────────────────────────────
@@ -256,15 +257,12 @@ func receive_invite(sender_name: String) -> void:
 func _on_invite_accepted() -> void:
 	_invite_panel.visible = false
 	_invite_sender = ""
-	if not multiplayer.has_multiplayer_peer():
-		MultiplayerManager.connect_to_server()
-		MultiplayerManager.connected_to_server.connect(func():
-			ClientToServer.try_connect_client_to_lobby()
-			_add_player_tag(PresenceManager.username, true)
-		, CONNECT_ONE_SHOT)
-	else:
+	if multiplayer.has_multiplayer_peer():
 		ClientToServer.try_connect_client_to_lobby()
-		_add_player_tag(PresenceManager.username, true)
+	else:
+		ClientToServer.connected_to_server.connect(func():
+			ClientToServer.try_connect_client_to_lobby()
+		, CONNECT_ONE_SHOT)
 
 func _on_invite_declined() -> void:
 	_invite_panel.visible = false
@@ -492,17 +490,22 @@ func _clear_placeholder_tags() -> void:
 func populate_friends(friends: Array) -> void:
 	for child in _bullet_list.get_children():
 		child.queue_free()
+
 	for f in friends:
 		if f.get("name", "") == PresenceManager.username:
 			continue
+
 		var slot := BULLET_SLOT_SCENE.instantiate()
 		_bullet_list.add_child(slot)
 		slot.friend_name = f.get("name", "Player")
-		slot.is_online   = f.get("online", false)
-		if f.get("online", false):
-			slot.invite_pressed.connect(func(name): ClientToServer.send_invite(name))
-			slot.mouse_filter = Control.MOUSE_FILTER_STOP
+		slot.is_online = f.get("online", false)
 
+		if slot.is_online:
+			slot.invite_pressed.connect(func(name):
+				print("invite_pressed signal received for ", name)
+				print("send_invite called for ", name)
+				ClientToServer.send_invite(name)
+			)
 func _populate_requests(requests: Array) -> void:
 	if _friends_header == null:
 		return
@@ -609,10 +612,7 @@ func _setup_add_friend_button() -> void:
 	parent.move_child(hbox, idx)
 
 func _on_join_pressed() -> void:
-	if _lobby_players.size() >= MAX_LOBBY:
-		return
-	var player_name := "Player %d" % (_lobby_players.size() + 1)
-	_add_player_tag(player_name, true)
+	_show_host_join_panel()
 
 func _on_leave_pressed() -> void:
 	if _lobby_players.is_empty():
@@ -731,42 +731,50 @@ func _refresh_pending_requests() -> void:
 
 # ─── Multiplayer Host/Join ────────────────────────────────────────────────────
 
+func _on_deathmatch_connected() -> void:
+	ClientToServer.try_connect_client_to_lobby()
+
+func _on_lobby_joined() -> void:
+	get_tree().change_scene_to_file(GAME_SCENE)
+
 func _show_host_join_panel() -> void:
 	var dialog := Window.new()
 	dialog.title = "Deathmatch"
 	dialog.size = Vector2i(340, 140)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
+
 	var vbox := VBoxContainer.new()
 	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	vbox.add_theme_constant_override("separation", 12)
+
 	var status := Label.new()
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.add_theme_font_size_override("font_size", 13)
 	status.text = "Connecting to OneTap server..."
 	vbox.add_child(status)
+
 	var connect_btn := Button.new()
 	connect_btn.text = "Join Match"
 	connect_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	connect_btn.pressed.connect(func():
-		connect_btn.disabled = true
-		status.text = "Connecting..."
-		MultiplayerManager.connect_to_server()
-		MultiplayerManager.connected_to_server.connect(func():
-			ClientToServer.c_register_username.rpc_id(1, PresenceManager.username)
-			ClientToServer.try_connect_client_to_lobby()
-			dialog.queue_free()
-			get_tree().change_scene_to_file(GAME_SCENE)
-		, CONNECT_ONE_SHOT)
-		MultiplayerManager.connection_failed.connect(func():
-			status.text = "Connection failed. Is the server running?"
-			connect_btn.disabled = false
-		, CONNECT_ONE_SHOT)
-	)
 	vbox.add_child(connect_btn)
+
 	dialog.add_child(vbox)
 	add_child(dialog)
 	dialog.popup_centered()
+
+	connect_btn.pressed.connect(func():
+		connect_btn.disabled = true
+		status.text = "Connecting..."
+
+		var cb := Callable(self, "_on_deathmatch_connected")
+		if ClientToServer.connected_to_server.is_connected(cb):
+			ClientToServer.connected_to_server.disconnect(cb)
+		ClientToServer.connected_to_server.connect(cb, CONNECT_ONE_SHOT)
+
+		if multiplayer.has_multiplayer_peer():
+			_on_deathmatch_connected()
+	)
 
 # ─── Chat / Console ──────────────────────────────────────────────────────────
 

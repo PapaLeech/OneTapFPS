@@ -4,7 +4,6 @@ const MAIN_MENU = "res://assets/ui/main_menu.tscn"
 
 func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
-		_start_dedicated_server()
 		return
 	get_window().mode = Window.MODE_FULLSCREEN
 	await get_tree().create_timer(5.0).timeout

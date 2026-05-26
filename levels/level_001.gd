@@ -22,13 +22,10 @@ func _ready() -> void:
 		_spawn_solo_player()
 		return
 	if multiplayer.is_server():
-		MultiplayerManager.player_connected.connect(_on_player_connected)
 		MultiplayerManager.player_disconnected.connect(_remove_player)
-		# Spawn players already registered before level loaded
-		for id in MultiplayerManager.players.keys():
-			_on_player_connected(id)
 	else:
 		print("Client level ready, notifying server")
+		await get_tree().create_timer(0.1).timeout
 		_client_ready.rpc_id(1)
 
 # Client tells server it has loaded the level
@@ -48,6 +45,7 @@ func _client_ready() -> void:
 			var node := get_node_or_null(str(stale_id))
 			if node: node.queue_free()
 	print("Server: client ", peer_id, " ready")
+	await get_tree().create_timer(0.5).timeout
 	_on_player_connected(peer_id)
 
 # Server only — assigns spawn position and broadcasts to all peers

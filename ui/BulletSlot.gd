@@ -1,18 +1,24 @@
 @tool
 extends Control
 
-@export var friend_name: String = "Player" : set = set_friend_name
-@export var is_online: bool = false : set = set_is_online
+var _friend_name: String = "Player"
+var _is_online: bool = false
+
+@export var friend_name: String = "Player":
+	get:
+		return _friend_name
+	set(value):
+		_friend_name = value
+		queue_redraw()
+
+@export var is_online: bool = false:
+	get:
+		return _is_online
+	set(value):
+		_is_online = value
+		queue_redraw()
 
 const BULLET_HEIGHT: float = 32.0
-
-func set_friend_name(v: String) -> void:
-	friend_name = v
-	queue_redraw()
-
-func set_is_online(v: bool) -> void:
-	is_online = v
-	queue_redraw()
 
 signal invite_pressed(friend_name: String)
 
@@ -172,8 +178,8 @@ func _draw_neck(xn: float, nw: float, cy: float, neck_r: float,
 func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 		tip: Color, high: Color, shad: Color) -> void:
 	var steps: int = 20
-	var pts_top: PackedVector2Array
-	var pts_bot: PackedVector2Array
+	var pts_top := PackedVector2Array()
+	var pts_bot := PackedVector2Array()
 
 	for i in range(steps + 1):
 		var t: float = float(i) / float(steps)
@@ -219,16 +225,39 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var w: float = size.x
+		var h: float = size.y
+		var cy: float = h * 0.5
+
 		var br: float = BULLET_HEIGHT * 0.5
-		var x0: float = 22.0
-		var x1: float = w - 20.0
+		var margin_left: float = 22.0
+		var margin_right: float = 20.0
+
+		var x0: float = margin_left
+		var x1: float = w - margin_right
 		var bullet_len: float = x1 - x0
+
+		var base_w: float = br * 0.55
+		var extractor_w: float = br * 0.18
 		var body_w: float = bullet_len * 0.62
 		var shoulder_w: float = bullet_len * 0.04
 		var neck_w: float = bullet_len * 0.02
-		var ogive_w: float = bullet_len - br * 0.55 - br * 0.18 - body_w - shoulder_w - neck_w
-		var seg_ogive: float = x0 + br * 0.55 + br * 0.18 + body_w + shoulder_w + neck_w
+		var ogive_w: float = bullet_len - base_w - extractor_w - body_w - shoulder_w - neck_w
+
+		var seg_base: float = x0
+		var seg_extract: float = seg_base + base_w
+		var seg_body: float = seg_extract + extractor_w
+		var seg_shoulder: float = seg_body + body_w
+		var seg_neck: float = seg_shoulder + shoulder_w
+		var seg_ogive: float = seg_neck + neck_w
+
 		var right_cap_x: float = seg_ogive + ogive_w * 0.50
-		if event.position.x >= right_cap_x:
+		var frame_x: float = seg_base - 4.0
+		var frame_w: float = w - frame_x - 4.0
+		var frame_h: float = br * 2.0 + 8.0
+		var frame_y: float = cy - br - 4.0
+
+		var cap_rect := Rect2(right_cap_x, frame_y, frame_x + frame_w - right_cap_x, frame_h)
+		if cap_rect.has_point(event.position):
+			print("BulletSlot clicked for ", friend_name)
 			invite_pressed.emit(friend_name)
 			accept_event()

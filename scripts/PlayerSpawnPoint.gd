@@ -5,4 +5,4 @@ class_name PlayerSpawnPoint
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	queue_free()
+	add_to_group("spawn_points")
