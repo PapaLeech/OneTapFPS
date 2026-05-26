@@ -386,7 +386,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 [node name="Camera3D" type="Camera3D" parent="CameraController" unique_id=1719719607]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, -0.17)
-cull_mask = 1048569
+cull_mask = 1048571
 near = 0.1
 script = ExtResource("3_gshig")
 
