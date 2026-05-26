@@ -742,7 +742,13 @@ func _show_host_join_panel() -> void:
 	dialog.title = "Deathmatch"
 	dialog.size = Vector2i(340, 140)
 	dialog.unresizable = true
-	dialog.close_requested.connect(func(): dialog.queue_free())
+	dialog.exclusive = false
+	dialog.close_requested.connect(func():
+		var cb := Callable(self, "_on_deathmatch_connected")
+		if ClientToServer.connected_to_server.is_connected(cb):
+			ClientToServer.connected_to_server.disconnect(cb)
+		dialog.queue_free()
+	)
 
 	var vbox := VBoxContainer.new()
 	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)

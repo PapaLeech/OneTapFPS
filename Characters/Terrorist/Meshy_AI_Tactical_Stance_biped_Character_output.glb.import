@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
+type="AnimationLibrary"
 uid="uid://do4lcfkhrqmt4"
-path="res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output.glb-c70383179f5424b6532dd42ac937903e.scn"
+path="res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output.glb-c70383179f5424b6532dd42ac937903e.res"
 
 [deps]
 
 source_file="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Character_output.glb"
-dest_files=["res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output.glb-c70383179f5424b6532dd42ac937903e.scn"]
+dest_files=["res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Character_output.glb-c70383179f5424b6532dd42ac937903e.res"]
 
 [params]
 

@@ -46,6 +46,13 @@ var def_weapon_holder_pos : Vector3
 var _sync_counter: int = 0
 var _is_remote: bool = false
 
+var _last_sync_position: Vector3 = Vector3.ZERO
+var _last_received_positions: Dictionary = {}
+
+const ANIM_IDLE := "Meshy_AI_Tactical_Stance_biped_Character_output/Armature|clip0|baselayer"
+const ANIM_WALK := "Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin/Armature|walking_man|baselayer"
+const ANIM_RUN := "Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin/Armature|running|baselayer"
+
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var step_handler = $Components/StepHandlerComponent
@@ -188,7 +195,9 @@ func _on_died() -> void:
 		pause_menu.open_death_menu()
 
 func _physics_process(delta):
-	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority(): return
+	if not multiplayer.has_multiplayer_peer():
+		return
+	if not is_multiplayer_authority(): return
 	_update_camera(delta)
 
 	if not is_on_floor():
@@ -218,7 +227,10 @@ func _physics_process(delta):
 	if _sync_counter >= 3:
 		_sync_counter = 0
 		if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
-			_send_state.rpc_id(1, global_position, global_rotation.y)
+			var is_moving := global_position.distance_to(_last_sync_position) > 0.01
+			var is_sprinting := Input.is_action_pressed("sprint") and is_moving
+			_last_sync_position = global_position
+			_send_state.rpc_id(1, global_position, global_rotation.y, is_moving, is_sprinting)
 
 	# Log position sync every 30 physics frames (~0.5s at 60hz)
 	if Engine.get_physics_frames() % 30 == 0 and multiplayer.has_multiplayer_peer():
@@ -244,22 +256,39 @@ func _physics_process(delta):
 
 # Client -> Server: send my position and rotation
 @rpc("any_peer", "unreliable_ordered")
-func _send_state(pos: Vector3, rot_y: float) -> void:
+func _send_state(pos: Vector3, rot_y: float, is_moving: bool, is_sprinting: bool) -> void:
 	if not multiplayer.is_server():
 		return
 	var sender := multiplayer.get_remote_sender_id()
-	# Broadcast to all other clients
-	_receive_state.rpc(sender, pos, rot_y)
+	_receive_state.rpc(sender, pos, rot_y, is_moving, is_sprinting)
 
-# Server -> All clients: here is a player's position
 @rpc("any_peer", "unreliable_ordered")
-func _receive_state(peer_id: int, pos: Vector3, rot_y: float) -> void:
+func _receive_state(peer_id: int, pos: Vector3, rot_y: float, is_moving: bool, is_sprinting: bool) -> void:
 	if peer_id == multiplayer.get_unique_id():
-		return  # Don't update our own position
+		return
 	var player := get_parent().get_node_or_null(str(peer_id))
+	print("_receive_state: peer_id=", peer_id, " player=", player, " my_id=", multiplayer.get_unique_id())
 	if player:
+		var last_pos: Vector3 = _last_received_positions.get(peer_id, Vector3.ZERO)
+		var detected_moving := pos.distance_to(last_pos) > 0.01
+		var detected_sprinting := detected_moving and is_sprinting
+		_last_received_positions[peer_id] = pos
 		player.global_position = pos
 		player.global_rotation.y = rot_y
+		player._update_remote_animation(detected_moving, detected_sprinting)
+
+func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
+	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
+	if not anim_player:
+		print("ANIM: no AnimationPlayer found on remote player")
+		return
+	var target_anim := ANIM_IDLE
+	if is_sprinting:
+		target_anim = ANIM_RUN
+	elif is_moving:
+		target_anim = ANIM_WALK
+	if anim_player.current_animation != target_anim:
+		anim_player.play(target_anim)
 
 func toggle_crouch():
 	if _is_crouching:

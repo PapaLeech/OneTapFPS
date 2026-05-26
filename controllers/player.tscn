@@ -5,11 +5,15 @@
 [ext_resource type="Script" uid="uid://y2hldlquhrid" path="res://assets/scripts/hitbox.gd" id="3_3og01"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
+[ext_resource type="AnimationLibrary" uid="uid://8yc0ohf8mf8f" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin.glb" id="4_1c04l"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
+[ext_resource type="AnimationLibrary" uid="uid://cjy6b044sg3sy" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin.glb" id="5_7gamu"]
 [ext_resource type="AudioStream" uid="uid://cg5ugsvg1wtw6" path="res://assets/audio/weapons/desert-eagle-free.mp3" id="5_bneyr"]
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
 [ext_resource type="Script" uid="uid://bve28odj66ql" path="res://controllers/camera_shake.gd" id="6_jdr2h"]
+[ext_resource type="AnimationLibrary" uid="uid://b4eeyby41oubg" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin.glb" id="6_wnlbb"]
+[ext_resource type="AnimationLibrary" uid="uid://do4lcfkhrqmt4" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Character_output.glb" id="7_7gamu"]
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="9_rk4xh"]
 [ext_resource type="Resource" uid="uid://dtsm03v1tnoso" path="res://assets/weapons/resources/ak47.tres" id="10_uovkr"]
 [ext_resource type="Resource" uid="uid://1dsy5sun6twx" path="res://assets/weapons/resources/dj-knife.tres" id="13_l8yvu"]
@@ -378,6 +382,13 @@ script = ExtResource("3_3og01")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4/Skeleton3D/HitboxRightCalf/Area3D" unique_id=1818586389]
 transform = Transform3D(0.9999999, 1.11849204e-07, 3.3760443e-09, 2.4265319e-09, 1, 0, -8.731149e-11, 0, 1, -2.2351742e-08, -0.19173591, 9.313226e-10)
 shape = SubResource("CapsuleShape3D_1mod5")
+
+[node name="AnimationPlayer" parent="CollisionShape3D/PlayerModel" index="1" unique_id=316462011]
+libraries/death = ExtResource("4_1c04l")
+libraries/idle = ExtResource("7_7gamu")
+libraries/run = ExtResource("5_7gamu")
+libraries/walk = ExtResource("6_wnlbb")
+next/mixamo_com = &"mixamo_com"
 
 [node name="CameraController" type="Node3D" parent="." unique_id=1035603513]
 unique_name_in_owner = true
