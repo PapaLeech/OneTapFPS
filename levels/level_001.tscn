@@ -26,15 +26,15 @@ shape = SubResource("ConcavePolygonShape3D_po88e")
 [node name="map_visual_boost" type="Node3D" parent="." unique_id=217151604]
 
 [node name="SpawnPoint1" type="Node3D" parent="." unique_id=120323497]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.585, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.585, 0, 0)
 script = ExtResource("5_44t5x")
 
 [node name="SpawnPoint2" type="Node3D" parent="." unique_id=1176110138 groups=["spawn_points"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.89, 2, -41.26)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.89, 0, -41.26)
 script = ExtResource("5_44t5x")
 
 [node name="SpawnPoint3" type="Node3D" parent="." unique_id=1698304536]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 2, -38.39)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 0, -38.39)
 script = ExtResource("5_44t5x")
 
 [editable path="Map_v12"]

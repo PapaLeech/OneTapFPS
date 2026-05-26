@@ -180,7 +180,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("CapsuleShape3D_j0767")
 
 [node name="PlayerModel" parent="CollisionShape3D" unique_id=1589091963 groups=["terrorist_mesh"] instance=ExtResource("2_ca8e7")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.695, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1, 0)
 
 [node name="Skeleton3D" parent="CollisionShape3D/PlayerModel/Sketchfab_model/Generic_Item_mesh (2)_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(1589091963, 970069315) index="0" unique_id=1121168737]
 bones/1/position = Vector3(-1.138277e-07, 0.0016576052, -0.01461814)
