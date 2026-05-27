@@ -14,6 +14,7 @@ extends CharacterBody3D
 @export var lean_tilt : float = 0.08
 @export var lean_speed : float = 10.0
 
+
 var _mouse_input : bool = false
 var _rotation_input : float
 var _tilt_input : float
@@ -53,6 +54,10 @@ const ANIM_IDLE := "idle/Armature|clip0|baselayer"
 const ANIM_WALK := "walk/Armature|walking_man|baselayer"
 const ANIM_RUN := "run/Armature|running|baselayer"
 const ANIM_DEAD := "death/Armature|Dead|baselayer"
+
+enum AnimState { IDLE, WALK, RUN, DEAD }
+@export var current_anim_state : int = AnimState.IDLE
+
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -217,6 +222,20 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
+	var is_moving := direction.length() > 0.01
+	var is_sprinting := Input.is_action_pressed("sprint") and is_moving
+
+# --- Animation State Selection ---
+	var anim_state := AnimState.IDLE
+	if is_sprinting:
+		anim_state = AnimState.RUN
+	elif is_moving:
+		anim_state = AnimState.WALK
+	
+	_set_anim_state(anim_state)
+	# --------------------------------
+
+
 
 	move_and_slide()
 
@@ -287,6 +306,30 @@ func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 		target_anim = ANIM_WALK
 	if anim_player.current_animation != target_anim:
 		anim_player.play(target_anim)
+
+var _last_anim_state := -1
+
+func _set_anim_state(new_state: int) -> void:
+	if new_state == _last_anim_state:
+		return
+	_last_anim_state = new_state
+	current_anim_state = new_state
+	_play_anim_state(new_state)
+	_update_anim_state.rpc(new_state)
+
+@rpc("any_peer", "unreliable")
+func _update_anim_state(state: int) -> void:
+	_play_anim_state(state)
+
+func _play_anim_state(state: int) -> void:
+	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer")
+	if not anim_player:
+		return
+	match state:
+		AnimState.IDLE: anim_player.play(ANIM_IDLE)
+		AnimState.WALK: anim_player.play(ANIM_WALK)
+		AnimState.RUN: anim_player.play(ANIM_RUN)
+		AnimState.DEAD: anim_player.play(ANIM_DEAD)
 
 func toggle_crouch():
 	if _is_crouching:
