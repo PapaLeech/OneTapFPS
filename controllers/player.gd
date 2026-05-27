@@ -49,9 +49,10 @@ var _is_remote: bool = false
 var _last_sync_position: Vector3 = Vector3.ZERO
 var _last_received_positions: Dictionary = {}
 
-const ANIM_IDLE := "Meshy_AI_Tactical_Stance_biped_Character_output/Armature|clip0|baselayer"
-const ANIM_WALK := "Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin/Armature|walking_man|baselayer"
-const ANIM_RUN := "Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin/Armature|running|baselayer"
+const ANIM_IDLE := "idle/Armature|clip0|baselayer"
+const ANIM_WALK := "walk/Armature|walking_man|baselayer"
+const ANIM_RUN := "run/Armature|running|baselayer"
+const ANIM_DEAD := "death/Armature|Dead|baselayer"
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -122,12 +123,9 @@ func _ready():
 		if terrorist:
 			print("Remote player setup: Showing terrorist")
 			terrorist.show()
-			var anim_player := terrorist.get_node_or_null("AnimationPlayer")
-			if anim_player and anim_player.has_animation("mixamo_com"):
-				var anim : Animation = anim_player.get_animation("mixamo_com")
-				if anim:
-					anim.loop_mode = Animation.LOOP_LINEAR
-				anim_player.play("mixamo_com")
+		var anim_player := terrorist.get_node_or_null("AnimationPlayer")
+		if anim_player:
+			anim_player.play(ANIM_IDLE)
 			
 			# Ensure ALL meshes are on layer 1 only (visible to all cameras)
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
