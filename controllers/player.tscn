@@ -1,19 +1,15 @@
-[gd_scene format=3 uid="uid://khvf4g3dgyqi"]
+[gd_scene format=3 uid="uid://b2leeudmow76g"]
 
 [ext_resource type="Script" uid="uid://b20raquxarflx" path="res://controllers/player.gd" id="1_ff6fx"]
-[ext_resource type="PackedScene" uid="uid://de5n5ji53yc5w" path="res://Characters/Player/Meshy_AI_Tactical_Stance_biped_Character_output.glb" id="2_ca8e7"]
+[ext_resource type="PackedScene" uid="uid://dc1ufkf0p2txd" path="res://Characters/Swat/Animations/Idle.glb" id="2_ca8e7"]
 [ext_resource type="Script" uid="uid://y2hldlquhrid" path="res://assets/scripts/hitbox.gd" id="3_3og01"]
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
-[ext_resource type="AnimationLibrary" uid="uid://8yc0ohf8mf8f" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Dead_withSkin.glb" id="4_1c04l"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
-[ext_resource type="AnimationLibrary" uid="uid://cjy6b044sg3sy" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Running_withSkin.glb" id="5_7gamu"]
 [ext_resource type="AudioStream" uid="uid://cg5ugsvg1wtw6" path="res://assets/audio/weapons/desert-eagle-free.mp3" id="5_bneyr"]
 [ext_resource type="Resource" uid="uid://dtlgtirigux24" path="res://assets/weapons/resources/pistol.tres" id="5_co0pi"]
 [ext_resource type="Script" uid="uid://bve28odj66ql" path="res://controllers/camera_shake.gd" id="6_jdr2h"]
-[ext_resource type="AnimationLibrary" uid="uid://b4eeyby41oubg" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Animation_Walking_withSkin.glb" id="6_wnlbb"]
-[ext_resource type="AnimationLibrary" uid="uid://do4lcfkhrqmt4" path="res://Characters/Terrorist/Meshy_AI_Tactical_Stance_biped_Character_output.glb" id="7_7gamu"]
 [ext_resource type="Script" uid="uid://bll06bdvoptuv" path="res://assets/weapons/scripts/weapon.gd" id="9_rk4xh"]
 [ext_resource type="Resource" uid="uid://dtsm03v1tnoso" path="res://assets/weapons/resources/ak47.tres" id="10_uovkr"]
 [ext_resource type="Resource" uid="uid://1dsy5sun6twx" path="res://assets/weapons/resources/dj-knife.tres" id="13_l8yvu"]
@@ -25,17 +21,18 @@
 [ext_resource type="PackedScene" uid="uid://ii7p61o8x6o" path="res://assets/ui/hud_ammo.tscn" id="19_ammo1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
+radius = 0.28564453
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3og01"]
-radius = 0.10252627
+radius = 12.772258
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3og01"]
 radius = 0.1665039
 height = 0.62597656
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fyafc"]
-radius = 0.032226563
-height = 0.33261657
+radius = 6.9536133
+height = 27.35669
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tg6sc"]
 radius = 0.04248047
@@ -89,91 +86,6 @@ height = 0.39967287
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_bneyr"]
 
-[sub_resource type="Animation" id="Animation_co0pi"]
-resource_name = "Crouch"
-length = 1.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:shape:height")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [2.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.5, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CameraController:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.5, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_gshig"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:shape:height")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [2.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.5, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CameraController:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.5, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_jmoha"]
-_data = {
-&"Crouch": SubResource("Animation_co0pi"),
-&"RESET": SubResource("Animation_gshig")
-}
-
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1254856328 node_paths=PackedStringArray("CAMERA_CONTROLLER") groups=["player"]]
 floor_max_angle = 1.0471976
 script = ExtResource("1_ff6fx")
@@ -186,180 +98,164 @@ shape = SubResource("CapsuleShape3D_j0767")
 [node name="PlayerModel" parent="CollisionShape3D" unique_id=1589091963 groups=["terrorist_mesh"] instance=ExtResource("2_ca8e7")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1, 0)
 
-[node name="HitboxHead" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="0" unique_id=762075296]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.194679e-08, 1.6809396, -0.034706615)
-bone_name = "Head"
-bone_idx = 21
+[node name="Ch15" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="0" unique_id=1482228820]
+visible = false
+
+[node name="HitboxHead" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="1" unique_id=762075296]
+transform = Transform3D(1, 0, 0, 0, 1.8970034e-09, 1, 0, -0.99999994, -2.045474e-08, 0, -1.7461865, -154.4011)
+bone_name = "mixamorig_Head"
+bone_idx = 5
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxHead" unique_id=590186302 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxHead/Area3D" unique_id=1660210420]
-transform = Transform3D(0.9999999, -3.1554436e-30, -1.4210855e-14, 3.1554436e-30, 0.9999999, 0, 1.4210855e-14, 0, 0.9999999, -3.75276e-09, 0.11645436, 0.04292655)
+transform = Transform3D(1, 9.264423e-23, 0, 0, 1.000001, 1.5987212e-14, 0, -1.110223e-15, 1, 1.8069508, 9.721512, 1.1920929e-07)
 shape = SubResource("SphereShape3D_3og01")
 
-[node name="HitboxSpine" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="1" unique_id=1772629932]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3010683e-08, 1.2858576, -0.097137734)
-bone_name = "Spine"
-bone_idx = 11
+[node name="HitboxSpine" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="2" unique_id=1772629932]
+transform = Transform3D(1, 0, 0, 0, -0.087185495, 0.9961921, 0, -0.996192, -0.0871855, 0, -0.36373168, -104.79927)
+bone_name = "mixamorig_Spine"
+bone_idx = 1
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxSpine" unique_id=2086724427 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxSpine/Area3D" unique_id=1052779222]
-transform = Transform3D(0.9999999, -3.1554436e-30, -1.4210855e-14, 3.1554436e-30, 0.9999999, 0, 1.4210855e-14, 0, 0.9999999, -8.1181355e-09, 0.11279273, 0.09286057)
 shape = SubResource("CapsuleShape3D_3og01")
 
-[node name="HitboxLeftArm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="2" unique_id=802827838]
-transform = Transform3D(0.6480198, -0.7601898, -0.046710066, 0.7610233, 0.64872456, 9.3049275e-05, 0.030231232, -0.035607748, 0.99890846, 0.20615363, 1.548932, -0.06547876)
-bone_name = "LeftArm"
-bone_idx = 13
+[node name="HitboxLeftArm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="3" unique_id=802827838]
+transform = Transform3D(0.0019430304, 0.99348927, -0.11390862, -0.994966, 0.013333465, 0.09931941, 0.100191645, 0.11314221, 0.9885141, 19.42174, -4.645081, -141.33961)
+bone_name = "mixamorig_LeftArm"
+bone_idx = 8
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftArm" unique_id=1669897510 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftArm/Area3D" unique_id=219803342]
-transform = Transform3D(0.6580918, -0.6463977, -0.3861154, 0.51281303, 0.76027733, -0.39874953, 0.551305, 0.06440854, 0.83181417, 0.10791898, -0.089404225, 0.009578466)
+transform = Transform3D(0.99996644, 9.313226e-08, 2.8312206e-07, 2.0768493e-07, 0.9999979, -2.0919833e-07, -1.385808e-06, -8.182833e-07, 0.99995226, 3.8146973e-06, 10.695284, -1.5258789e-05)
 shape = SubResource("CapsuleShape3D_fyafc")
 
-[node name="HitboxRightArm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="3" unique_id=1776354051]
-transform = Transform3D(0.6474759, 0.76065266, 0.046718292, -0.76148653, 0.64818084, 7.933934e-05, -0.030221552, -0.035626713, 0.9989081, -0.20615368, 1.5489318, -0.0654789)
-bone_name = "RightArm"
-bone_idx = 17
+[node name="HitboxRightArm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="4" unique_id=1776354051]
+transform = Transform3D(-0.04780367, -0.99281836, 0.10966349, 0.9960029, -0.039085537, 0.08031627, -0.07545328, 0.11306442, 0.99071854, -19.421703, -4.6450825, -141.33966)
+bone_name = "mixamorig_RightArm"
+bone_idx = 32
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightArm" unique_id=1991057198 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightArm/Area3D" unique_id=815245665]
-transform = Transform3D(-0.014921992, 0.61057305, -0.72765243, 0, 0.72774243, 0.6106481, 0.9498828, 0.009591058, -0.011430775, -0.08118093, -0.11834818, -0.03155864)
 shape = SubResource("CapsuleShape3D_tg6sc")
 
-[node name="HitboxLeftLeg" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="4" unique_id=40099267]
-transform = Transform3D(0.9999867, 0.0051596495, -1.071021e-08, -0.005156066, 0.9992922, 0.03726332, 0.00019227635, -0.03726282, 0.9993055, 0.10115149, 1.0043976, -0.0007446408)
-bone_name = "LeftUpLeg"
-bone_idx = 1
+[node name="HitboxLeftLeg" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="5" unique_id=40099267]
+transform = Transform3D(-1, -5.5511138e-17, 1.5099582e-07, 1.5098479e-07, -0.012084667, 0.999927, 1.8247346e-09, 0.9999268, 0.012084669, 13.400273, -0.13909245, -87.888405)
+bone_name = "mixamorig_LeftUpLeg"
+bone_idx = 55
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftLeg" unique_id=327702318 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftLeg/Area3D" unique_id=2127274944]
-transform = Transform3D(0.9999999, 2.6621365e-08, 6.548362e-10, 9.87734e-08, 0.9999814, -1.0803342e-07, -3.0559022e-10, 2.1979213e-07, 0.9999669, 7.450581e-09, -0.117577195, 0)
 shape = SubResource("CapsuleShape3D_yvtcv")
 
-[node name="HitboxRightLeg" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="5" unique_id=2130453702]
-transform = Transform3D(0.9999867, -0.005159865, -8.389179e-09, 0.0051562814, 0.9992921, 0.037265707, -0.00019227766, -0.037265208, 0.99930537, -0.10115171, 1.0043976, -0.0007446408)
-bone_name = "RightUpLeg"
-bone_idx = 5
+[node name="HitboxRightLeg" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="6" unique_id=2130453702]
+transform = Transform3D(-1, -5.5511157e-16, 1.509958e-07, 1.5098374e-07, -0.012655392, 0.99991983, 1.9109105e-09, 0.99992, 0.0126553895, -13.400273, -0.20941317, -87.888405)
+bone_name = "mixamorig_RightUpLeg"
+bone_idx = 60
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightLeg" unique_id=2121021120 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightLeg/Area3D" unique_id=1668127758]
-transform = Transform3D(0.9999999, 1.5897967e-08, 9.313226e-10, 1.0677468e-09, 0.99998933, -4.6938658e-07, 1.4551915e-11, -4.0978193e-08, 1, -7.450581e-09, -0.115747154, 7.450581e-09)
 shape = SubResource("CapsuleShape3D_h7h5r")
 
-[node name="HitboxLeftForearm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="6" unique_id=508526998]
-transform = Transform3D(0.642532, -0.76614743, 0.013065051, 0.7662132, 0.64258635, -4.212898e-05, -0.008363146, 0.010037679, 0.99991465, 0.5101602, 1.5489302, -0.06547554)
-bone_name = "LeftForeArm"
-bone_idx = 14
+[node name="HitboxLeftForearm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="7" unique_id=508526998]
+transform = Transform3D(0.02684734, 0.99598706, -0.08537432, -0.994319, 0.03540653, 0.100376256, 0.10299635, 0.08219446, 0.99127966, 44.301094, -4.393672, -139.41658)
+bone_name = "mixamorig_LeftForeArm"
+bone_idx = 9
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftForearm" unique_id=2130464404 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftForearm/Area3D" unique_id=1680663162]
-transform = Transform3D(0.248414, -0.5511858, -0.79652876, 0.17581417, 0.834308, -0.522491, 0.9525466, -0.010247503, 0.30416486, 0.105002284, -0.11532807, -0.0037742034)
 shape = SubResource("CapsuleShape3D_fdopr")
 
-[node name="HitboxRightForearm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="7" unique_id=290422979]
-transform = Transform3D(0.6428936, 0.7658441, -0.013065588, -0.7659098, 0.64294815, -3.5900914e-05, 0.008372996, 0.010030139, 0.9999147, -0.51016015, 1.5489343, -0.06549996)
-bone_name = "RightForeArm"
-bone_idx = 18
+[node name="HitboxRightForearm" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="8" unique_id=290422979]
+transform = Transform3D(0.03059371, -0.99590975, 0.085014485, 0.99598515, 0.037533633, 0.08127132, -0.084129855, 0.08218662, 0.9930597, -44.301105, -4.431377, -139.41667)
+bone_name = "mixamorig_RightForeArm"
+bone_idx = 33
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightForearm" unique_id=1823935832 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightForearm/Area3D" unique_id=1194111266]
-transform = Transform3D(0.8049902, 0.5746679, -0.1475337, -0.5724927, 0.81762415, 0.061048392, 0.15570928, 0.035321247, 0.9871712, -0.24536431, -0.30845016, -0.002614554)
 shape = SubResource("CapsuleShape3D_5b0ob")
 
-[node name="HitboxLeftHand" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="8" unique_id=861649648]
-transform = Transform3D(0.6326359, -0.7126564, 0.30313793, 0.6112874, 0.69983613, 0.3695361, -0.47549918, -0.048477404, 0.87837946, 0.80868375, 1.548874, -0.06546719)
-bone_name = "LeftHand"
-bone_idx = 15
+[node name="HitboxLeftHand" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="9" unique_id=861649648]
+transform = Transform3D(0.11315167, 0.98174244, -0.15290031, -0.98788786, 0.09471856, -0.12290373, -0.10617724, 0.16495514, 0.98056924, 69.01159, -3.5152345, -137.37735)
+bone_name = "mixamorig_LeftHand"
+bone_idx = 10
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftHand" unique_id=1610300895 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftHand/Area3D" unique_id=695193422]
-transform = Transform3D(0.26584947, -0.6771218, 0.79148406, -0.23172587, 0.7579345, 0.72625744, -1.0155056, -0.35021597, 0.041478604, 0.06272638, -0.08099717, 0.031224072)
 shape = SubResource("CapsuleShape3D_5s75f")
 
-[node name="HitboxRightHand" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="9" unique_id=506846018]
-transform = Transform3D(0.63830924, 0.70797706, -0.30220824, -0.61761653, 0.7053467, 0.3479023, 0.4594684, -0.03542044, 0.88748765, -0.80868447, 1.5489509, -0.065465085)
-bone_name = "RightHand"
-bone_idx = 19
+[node name="HitboxRightHand" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="10" unique_id=506846018]
+transform = Transform3D(0.112986505, -0.98013616, 0.16299373, 0.9902141, 0.09755197, -0.09979914, 0.081916355, 0.1726745, 0.9815669, -69.0116, -3.5000925, -137.37746)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightHand" unique_id=1337758955 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightHand/Area3D" unique_id=2057132999]
-transform = Transform3D(0.756484, -0.637876, 0.14435339, -0.5078938, -0.71203506, -0.48480812, 0.41203693, 0.29343185, -0.8626224, 0.08389163, 0.12357104, -0.03560567)
 shape = SubResource("CapsuleShape3D_bygp4")
 
-[node name="HitboxLeftFoot" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="10" unique_id=2137305205]
-transform = Transform3D(1, -1.2192898e-07, -3.739615e-09, 1.2191644e-07, 1, -7.450581e-09, 3.7102268e-09, 1.4901161e-08, 1, 0.101207376, 0.11125326, -0.028552186)
-bone_name = "LeftFoot"
-bone_idx = 3
+[node name="HitboxLeftFoot" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="11" unique_id=2137305205]
+transform = Transform3D(-0.99792343, 0.06410666, -0.0062415823, 0.046968076, 0.79057896, 0.6105557, 0.044075157, 0.6089946, -0.7919483, 14.876724, -3.5518847, -10.289768)
+bone_name = "mixamorig_LeftFoot"
+bone_idx = 57
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftFoot" unique_id=1756693078 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftFoot/Area3D" unique_id=1065531772]
-transform = Transform3D(0.9999999, 2.842171e-14, 2.4868996e-14, -6.237078e-16, 0.50753826, 0.8616289, 7.1054274e-15, -0.8616289, 0.50753826, -0.0010422692, -0.046308156, 0.07401391)
 shape = SubResource("CapsuleShape3D_rcx31")
 
-[node name="HitboxRightFoot" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="11" unique_id=62817980]
-transform = Transform3D(1, -1.1893925e-07, -3.8024837e-09, 1.1978271e-07, 0.99999994, 3.7252903e-09, 3.73268e-09, 3.7252903e-09, 0.99999994, -0.101207405, 0.11125359, -0.02855302)
-bone_name = "RightFoot"
-bone_idx = 7
+[node name="HitboxRightFoot" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="12" unique_id=62817980]
+transform = Transform3D(-0.99793327, -0.058461465, -0.026672278, -0.06262681, 0.7919084, 0.6074199, -0.014388647, 0.6078352, -0.7939331, -14.876724, -3.4761207, -10.289764)
+bone_name = "mixamorig_RightFoot"
+bone_idx = 62
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightFoot" unique_id=1878547194 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightFoot/Area3D" unique_id=134149152]
-transform = Transform3D(1, 7.1054274e-15, -3.9293013e-12, 3.1176027e-16, 0.50753844, 0.8616292, 2.3803182e-12, -0.8616292, 0.50753844, -0.005302295, -0.05140682, 0.09050905)
 shape = SubResource("CapsuleShape3D_57us7")
 
-[node name="HitboxLeftCalf" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="12" unique_id=1217208847]
-transform = Transform3D(0.9999867, 0.005159583, 7.5668015e-07, -0.0051560737, 0.9993012, 0.037022185, 0.00019026286, -0.037021693, 0.9993145, 0.10117776, 0.54039407, -0.0075040516)
-bone_name = "LeftLeg"
-bone_idx = 2
+[node name="HitboxLeftCalf" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="13" unique_id=1217208847]
+transform = Transform3D(-0.999186, 0.040249098, 0.0027278229, -0.00048128638, -0.07950692, 0.99683404, 0.040338553, 0.9960212, 0.079461545, 13.400273, -0.6353464, -46.82664)
+bone_name = "mixamorig_LeftLeg"
+bone_idx = 56
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftCalf" unique_id=2088922165 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftCalf/Area3D" unique_id=1664787128]
-transform = Transform3D(1, -2.1432243e-09, -5.151378e-09, 3.0970114e-08, 0.9999999, -3.7252903e-09, -3.0559022e-10, 3.7252903e-09, 1, 0, -0.18471678, -1.8626451e-09)
 shape = SubResource("CapsuleShape3D_5hww7")
 
-[node name="HitboxRightCalf" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="13" unique_id=659836190]
-transform = Transform3D(0.9999867, -0.0051597976, -7.726295e-07, 0.0051562903, 0.99930125, 0.03701769, -0.00019023173, -0.037017196, 0.99931455, -0.10117908, 0.54039395, -0.007502949)
-bone_name = "RightLeg"
-bone_idx = 6
+[node name="HitboxRightCalf" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1589091963, 2031682413) index="14" unique_id=659836190]
+transform = Transform3D(-0.9991859, -0.040263515, -0.0025178534, 0.00050586613, -0.0749123, 0.9971899, -0.04033899, 0.99637705, 0.07487169, -13.400273, -0.7291074, -46.826637)
+bone_name = "mixamorig_RightLeg"
+bone_idx = 61
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightCalf" unique_id=372468557 groups=["enemy"]]
 script = ExtResource("3_3og01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightCalf/Area3D" unique_id=1818586389]
-transform = Transform3D(0.9999999, 1.11849204e-07, 3.3760443e-09, 2.4265319e-09, 1, 0, -8.731149e-11, 0, 1, -2.2351742e-08, -0.19173591, 9.313226e-10)
 shape = SubResource("CapsuleShape3D_1mod5")
-
-[node name="AnimationPlayer" parent="CollisionShape3D/PlayerModel" index="1" unique_id=316462011]
-libraries/death = ExtResource("4_1c04l")
-libraries/idle = ExtResource("7_7gamu")
-libraries/run = ExtResource("5_7gamu")
-libraries/walk = ExtResource("6_wnlbb")
-next/mixamo_com = &"mixamo_com"
 
 [node name="CameraController" type="Node3D" parent="." unique_id=1035603513]
 unique_name_in_owner = true
@@ -399,7 +295,6 @@ gun = NodePath("../../CameraController/Camera3D/WeaponHolder")
 scope_overlay = NodePath("../../ScopeUI")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1916915474]
-libraries/ = SubResource("AnimationLibrary_jmoha")
 
 [node name="ScopeUI" parent="." unique_id=1200081777 groups=["scope_overlay"] instance=ExtResource("14_fyafc")]
 

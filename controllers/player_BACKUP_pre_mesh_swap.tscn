@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b2leeudmow76g"]
+[gd_scene format=3 uid="uid://backup_player_pre_swap"]
 
 [ext_resource type="Script" uid="uid://b20raquxarflx" path="res://controllers/player.gd" id="1_ff6fx"]
 [ext_resource type="PackedScene" uid="uid://k17ne0id3pwb" path="res://Characters/terrorist_1_rig.glb" id="2_ca8e7"]

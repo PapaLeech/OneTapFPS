@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
+type="AnimationLibrary"
 uid="uid://r670e1141g32"
-path="res://.godot/imported/Meshy_AI_Dead.glb-72b91ecf019551fe1bce52dcaeb61ace.scn"
+path="res://.godot/imported/Meshy_AI_Dead.glb-72b91ecf019551fe1bce52dcaeb61ace.res"
 
 [deps]
 
 source_file="res://Characters/Terrorist/Meshy_AI_Dead.glb"
-dest_files=["res://.godot/imported/Meshy_AI_Dead.glb-72b91ecf019551fe1bce52dcaeb61ace.scn"]
+dest_files=["res://.godot/imported/Meshy_AI_Dead.glb-72b91ecf019551fe1bce52dcaeb61ace.res"]
 
 [params]
 

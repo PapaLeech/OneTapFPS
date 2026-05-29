@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
+type="AnimationLibrary"
 uid="uid://dfdan2xlkurce"
-path="res://.godot/imported/Sprint.fbx-92018481c4780710a306c8bf02651fa2.scn"
+path="res://.godot/imported/Sprint.fbx-92018481c4780710a306c8bf02651fa2.res"
 
 [deps]
 
 source_file="res://Characters/Swat/Animations/Sprint.fbx"
-dest_files=["res://.godot/imported/Sprint.fbx-92018481c4780710a306c8bf02651fa2.scn"]
+dest_files=["res://.godot/imported/Sprint.fbx-92018481c4780710a306c8bf02651fa2.res"]
 
 [params]
 

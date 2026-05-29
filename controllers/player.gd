@@ -50,10 +50,10 @@ var _is_remote: bool = false
 var _last_sync_position: Vector3 = Vector3.ZERO
 var _last_received_positions: Dictionary = {}
 
-const ANIM_IDLE := "idle/Armature|clip0|baselayer"
-const ANIM_WALK := "walk/Armature|walking_man|baselayer"
-const ANIM_RUN := "run/Armature|running|baselayer"
-const ANIM_DEAD := "death/Armature|Dead|baselayer"
+const ANIM_IDLE := "idle/Armature|mixamo_com|Layer0"
+const ANIM_WALK := "walk/Armature|mixamo_com|Layer0"
+const ANIM_RUN := "run/Armature|mixamo_com|Layer0"
+const ANIM_DEAD := "death/Armature|mixamo_com|Layer0"
 
 enum AnimState { IDLE, WALK, RUN, DEAD }
 @export var current_anim_state : int = AnimState.IDLE
