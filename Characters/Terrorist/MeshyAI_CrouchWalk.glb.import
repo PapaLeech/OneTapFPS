@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
+type="AnimationLibrary"
 uid="uid://cdix4jhe6q7er"
-path="res://.godot/imported/MeshyAI_CrouchWalk.glb-f5fac98dce27dfe4ce1e90508f81610d.scn"
+path="res://.godot/imported/MeshyAI_CrouchWalk.glb-f5fac98dce27dfe4ce1e90508f81610d.res"
 
 [deps]
 
 source_file="res://Characters/Terrorist/MeshyAI_CrouchWalk.glb"
-dest_files=["res://.godot/imported/MeshyAI_CrouchWalk.glb-f5fac98dce27dfe4ce1e90508f81610d.scn"]
+dest_files=["res://.godot/imported/MeshyAI_CrouchWalk.glb-f5fac98dce27dfe4ce1e90508f81610d.res"]
 
 [params]
 

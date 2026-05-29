@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
+type="AnimationLibrary"
 uid="uid://5fg4g4ad6p52"
-path="res://.godot/imported/Walking.fbx-ec54ebbcb32116eb02fe90ef5582eb1c.scn"
+path="res://.godot/imported/Walking.fbx-ec54ebbcb32116eb02fe90ef5582eb1c.res"
 
 [deps]
 
 source_file="res://Characters/Swat/Animations/Walking.fbx"
-dest_files=["res://.godot/imported/Walking.fbx-ec54ebbcb32116eb02fe90ef5582eb1c.scn"]
+dest_files=["res://.godot/imported/Walking.fbx-ec54ebbcb32116eb02fe90ef5582eb1c.res"]
 
 [params]
 
