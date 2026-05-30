@@ -291,24 +291,27 @@ func fire():
 		var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
 		query.collision_mask = 1
 		query.collide_with_areas = true
-		# Exclude the local player's own body
-		var local_player := get_parent().get_parent()
-		if local_player:
-			query.exclude = [local_player.get_rid()]
+		# Exclude ALL CharacterBody3D players so ray passes through to hitbox Area3Ds
+		var excludes: Array[RID] = []
+		for p in get_tree().get_nodes_in_group("player"):
+			excludes.append(p.get_rid())
+		query.exclude = excludes
 		var result := space.intersect_ray(query)
 		if result:
 			_bullet_hole.spawn(result.position, result.normal, get_tree().current_scene)
 			var hit := result.collider as Node
-			if hit is Hitbox:
-				hit.take_damage(current_weapon.damage)
+			# collider is CollisionShape3D — walk up to find the Hitbox Area3D parent
+			var hitbox: Hitbox = null
+			var check := hit
+			while check:
+				if check is Hitbox:
+					hitbox = check
+					break
+				check = check.get_parent()
+			if hitbox:
+				hitbox.take_damage(current_weapon.damage)
 				if _crosshair and _crosshair.has_method("hit_flash"):
 					_crosshair.hit_flash()
-			elif hit.is_in_group("enemy"):
-				var health := hit.get_node_or_null("Health")
-				if health:
-					health.take_damage(current_weapon.damage)
-					if _crosshair and _crosshair.has_method("hit_flash"):
-						_crosshair.hit_flash()
 	if _anim_player and _anim_player.has_animation("fire_lib/fire") and _current_ammo > 0:
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")
