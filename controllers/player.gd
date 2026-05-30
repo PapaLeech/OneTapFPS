@@ -50,12 +50,14 @@ var _is_remote: bool = false
 var _last_sync_position: Vector3 = Vector3.ZERO
 var _last_received_positions: Dictionary = {}
 
-const ANIM_IDLE := "idle/Armature|mixamo_com|Layer0"
-const ANIM_WALK := "walk/Armature|mixamo_com|Layer0"
-const ANIM_RUN := "run/Armature|mixamo_com|Layer0"
-const ANIM_DEAD := "death/Armature|mixamo_com|Layer0"
+const ANIM_IDLE := "walk/Armature|mixamo_com|Layer0_002"
+const ANIM_WALK := "walk/Armature|mixamo_com|Layer0_004"
+const ANIM_RUN := "walk/Armature|mixamo_com|Layer0_003"
+const ANIM_DEAD := "walk/Armature|mixamo_com|Layer0_001"
+const ANIM_CROUCH_WALK := "crouch/Armature|mixamo_com|Layer0"
 
-enum AnimState { IDLE, WALK, RUN, DEAD }
+
+enum AnimState { IDLE, WALK, RUN, DEAD, CROUCH }
 @export var current_anim_state : int = AnimState.IDLE
 
 
@@ -128,10 +130,7 @@ func _ready():
 		if terrorist:
 			print("Remote player setup: Showing terrorist")
 			terrorist.show()
-		var anim_player := terrorist.get_node_or_null("AnimationPlayer")
-		if anim_player:
-			anim_player.play(ANIM_IDLE)
-			
+			var anim_player := terrorist.get_node_or_null("AnimationPlayer")
 			# Ensure ALL meshes are on layer 1 only (visible to all cameras)
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
 				var mesh := child as MeshInstance3D
@@ -187,6 +186,8 @@ func _activate_camera() -> void:
 func _on_died() -> void:
 	# Disable movement
 	set_physics_process(false)
+	# Play death animation
+	_set_anim_state(AnimState.DEAD)
 	# Tilt camera to the side and drop it down like falling
 	var tween := create_tween()
 	tween.set_parallel(true)
@@ -229,6 +230,8 @@ func _physics_process(delta):
 	var anim_state := AnimState.IDLE
 	if is_sprinting:
 		anim_state = AnimState.RUN
+	elif _is_crouching:
+		anim_state = AnimState.CROUCH
 	elif is_moving:
 		anim_state = AnimState.WALK
 	
@@ -244,8 +247,8 @@ func _physics_process(delta):
 	if _sync_counter >= 3:
 		_sync_counter = 0
 		if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
-			var is_moving := global_position.distance_to(_last_sync_position) > 0.01
-			var is_sprinting := Input.is_action_pressed("sprint") and is_moving
+			is_moving = global_position.distance_to(_last_sync_position) > 0.01
+			is_sprinting = Input.is_action_pressed("sprint") and is_moving
 			_last_sync_position = global_position
 			_send_state.rpc_id(1, global_position, global_rotation.y, is_moving, is_sprinting)
 
@@ -261,7 +264,6 @@ func _physics_process(delta):
 
 	var t = CROUCH_SPEED * delta
 	CAMERA_CONTROLLER.position.y = lerp(CAMERA_CONTROLLER.position.y, _crouch_target_height, t)
-	$CollisionShape3D.position.y = lerp($CollisionShape3D.position.y, _crouch_target_height, t)
 	$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, _crouch_target_shape, t)
 
 	_is_aiming = Input.is_action_pressed("aim")
@@ -323,6 +325,7 @@ func _update_anim_state(state: int) -> void:
 
 func _play_anim_state(state: int) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer")
+
 	if not anim_player:
 		return
 	match state:
@@ -330,6 +333,7 @@ func _play_anim_state(state: int) -> void:
 		AnimState.WALK: anim_player.play(ANIM_WALK)
 		AnimState.RUN: anim_player.play(ANIM_RUN)
 		AnimState.DEAD: anim_player.play(ANIM_DEAD)
+		AnimState.CROUCH: anim_player.play(ANIM_CROUCH_WALK)
 
 func toggle_crouch():
 	if _is_crouching:
@@ -340,6 +344,10 @@ func toggle_crouch():
 		_crouch_target_shape = 1.0
 	_is_crouching = !_is_crouching
 	crouching = _is_crouching
+	# Offset PlayerModel to stay grounded when capsule shrinks
+	var model := get_node_or_null("CollisionShape3D/PlayerModel")
+	if model:
+		model.position.y = -1.0 if not _is_crouching else -0.5
 
 func handle_lean(delta):
 	var lean_dir = 0.0

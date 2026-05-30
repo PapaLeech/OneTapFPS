@@ -193,6 +193,9 @@ func _open_death_menu() -> void:
 	_settings_panel.visible = false
 	_death_panel.visible = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Hide crosshair
+	var wc := get_parent().get_node_or_null("Components/WeaponController")
+	if wc and wc.get("_crosshair"): wc._crosshair.hide()
 	_respawn_btn.focus_neighbor_top = _respawn_btn.get_path_to(_death_quit_btn)
 	_respawn_btn.focus_neighbor_bottom = _respawn_btn.get_path_to(_death_menu_btn)
 	_death_menu_btn.focus_neighbor_top = _death_menu_btn.get_path_to(_respawn_btn)
@@ -217,6 +220,9 @@ func _respawn() -> void:
 	_screen = Screen.NONE
 	_death_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Show crosshair
+	var wc := get_parent().get_node_or_null("Components/WeaponController")
+	if wc and wc.get("_crosshair"): wc._crosshair.show()
 	var player := get_parent()
 	var health := player.get_node_or_null("Health")
 	if health:
