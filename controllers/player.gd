@@ -54,7 +54,7 @@ const ANIM_IDLE := "walk/Armature|mixamo_com|Layer0_002"
 const ANIM_WALK := "walk/Armature|mixamo_com|Layer0_004"
 const ANIM_RUN := "walk/Armature|mixamo_com|Layer0_003"
 const ANIM_DEAD := "walk/Armature|mixamo_com|Layer0_001"
-const ANIM_CROUCH_WALK := "crouch/Armature|mixamo_com|Layer0"
+const ANIM_CROUCH_WALK := "crouch_walk/Armature|mixamo_com|Layer0"
 
 
 enum AnimState { IDLE, WALK, RUN, DEAD, CROUCH }
@@ -234,6 +234,7 @@ func _physics_process(delta):
 		anim_state = AnimState.CROUCH
 	elif is_moving:
 		anim_state = AnimState.WALK
+		anim_state = AnimState.WALK
 	
 	_set_anim_state(anim_state)
 	# --------------------------------
@@ -299,7 +300,6 @@ func _receive_state(peer_id: int, pos: Vector3, rot_y: float, is_moving: bool, i
 func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
 	if not anim_player:
-		print("ANIM: no AnimationPlayer found on remote player")
 		return
 	var target_anim := ANIM_IDLE
 	if is_sprinting:
@@ -325,7 +325,6 @@ func _update_anim_state(state: int) -> void:
 
 func _play_anim_state(state: int) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer")
-
 	if not anim_player:
 		return
 	match state:
@@ -333,21 +332,26 @@ func _play_anim_state(state: int) -> void:
 		AnimState.WALK: anim_player.play(ANIM_WALK)
 		AnimState.RUN: anim_player.play(ANIM_RUN)
 		AnimState.DEAD: anim_player.play(ANIM_DEAD)
-		AnimState.CROUCH: anim_player.play(ANIM_CROUCH_WALK)
+		AnimState.CROUCH:
+			if anim_player.current_animation != ANIM_CROUCH_WALK:
+				anim_player.play(ANIM_CROUCH_WALK)
+				anim_player.get_animation(ANIM_CROUCH_WALK).loop_mode = Animation.LOOP_LINEAR
 
 func toggle_crouch():
 	if _is_crouching:
 		_crouch_target_height = 1.5
 		_crouch_target_shape = 2.0
+		$CollisionShape3D.position.y = 1.5
 	else:
 		_crouch_target_height = 0.7
 		_crouch_target_shape = 1.0
+		$CollisionShape3D.position.y = 1.0
 	_is_crouching = !_is_crouching
 	crouching = _is_crouching
 	# Offset PlayerModel to stay grounded when capsule shrinks
 	var model := get_node_or_null("CollisionShape3D/PlayerModel")
 	if model:
-		model.position.y = -1.0 if not _is_crouching else -0.5
+		model.position.y = -1.0 if not _is_crouching else -1.0
 
 func handle_lean(delta):
 	var lean_dir = 0.0
