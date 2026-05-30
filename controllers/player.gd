@@ -130,7 +130,6 @@ func _ready():
 		if terrorist:
 			print("Remote player setup: Showing terrorist")
 			terrorist.show()
-			var anim_player := terrorist.get_node_or_null("AnimationPlayer")
 			# Ensure ALL meshes are on layer 1 only (visible to all cameras)
 			for child in terrorist.find_children("*", "MeshInstance3D", true):
 				var mesh := child as MeshInstance3D
@@ -293,7 +292,7 @@ func _send_state(pos: Vector3, rot_y: float, is_moving: bool, is_sprinting: bool
 	_receive_state.rpc(sender, pos, rot_y, is_moving, is_sprinting)
 
 @rpc("any_peer", "unreliable_ordered")
-func _receive_state(peer_id: int, pos: Vector3, rot_y: float, is_moving: bool, is_sprinting: bool) -> void:
+func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, is_sprinting: bool) -> void:
 	if peer_id == multiplayer.get_unique_id():
 		return
 	var player := get_parent().get_node_or_null(str(peer_id))
