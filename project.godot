@@ -38,6 +38,8 @@ LagCompensationLogger="*res://scripts/LagCompensationLogger.gd"
 GraphicsManager="*res://scripts/GraphicsManager.gd"
 MultiplayerManager="*uid://ipoxuyovwc2"
 ClientToServer="*uid://cd08n2jpc15wx"
+LagCompensator="*res://scripts/LagCompensator.gd"
+LagCompLogger="*res://scripts/LagCompLogger.gd"
 
 [debug]
 

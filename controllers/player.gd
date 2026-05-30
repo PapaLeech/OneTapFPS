@@ -405,3 +405,15 @@ func weapon_bob(vel : float, delta):
 		else:
 			_weapon_holder.position.y = lerp(_weapon_holder.position.y, def_weapon_holder_pos.y, 10 * delta)
 			_weapon_holder.position.x = lerp(_weapon_holder.position.x, def_weapon_holder_pos.x, 10 * delta)
+
+## Lag compensation: client sends shot to server with timestamp
+@rpc("any_peer", "reliable")
+func _server_shot(origin: Vector3, direction: Vector3, shot_time: float, damage: float) -> void:
+	if not multiplayer.is_server():
+		return
+	var shooter_id := multiplayer.get_remote_sender_id()
+	var result := LagCompensator.check_hit(shooter_id, origin, direction, shot_time, 500.0)
+	if result.get("hit", false):
+		var hitbox := result.get("hitbox") as Node
+		if hitbox and hitbox.has_method("take_damage"):
+			hitbox.take_damage(damage)
