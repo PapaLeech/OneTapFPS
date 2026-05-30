@@ -234,9 +234,19 @@ func _physics_process(delta):
 		anim_state = AnimState.CROUCH
 	elif is_moving:
 		anim_state = AnimState.WALK
-		anim_state = AnimState.WALK
 	
 	_set_anim_state(anim_state)
+
+	# Per-frame crouch animation control
+	if _is_crouching:
+		var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
+		if anim_player and anim_player.current_animation == ANIM_CROUCH_WALK:
+			if is_moving:
+				if not anim_player.is_playing():
+					anim_player.play(ANIM_CROUCH_WALK)
+			else:
+				if anim_player.is_playing():
+					anim_player.pause()
 	# --------------------------------
 
 
@@ -300,6 +310,9 @@ func _receive_state(peer_id: int, pos: Vector3, rot_y: float, is_moving: bool, i
 func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
 	if not anim_player:
+		return
+	# Don't override crouch animation set by _update_anim_state RPC
+	if anim_player.current_animation == ANIM_CROUCH_WALK:
 		return
 	var target_anim := ANIM_IDLE
 	if is_sprinting:
