@@ -54,7 +54,8 @@ const ANIM_IDLE := "walk/Armature|mixamo_com|Layer0_002"
 const ANIM_WALK := "walk/Armature|mixamo_com|Layer0_004"
 const ANIM_RUN := "walk/Armature|mixamo_com|Layer0_003"
 const ANIM_DEAD := "walk/Armature|mixamo_com|Layer0_001"
-const ANIM_CROUCH_WALK := "crouch_walk/Armature|mixamo_com|Layer0"
+const ANIM_CROUCH_IDLE := "Idle_Crouching 2/Armature|mixamo_com|Layer0"
+const ANIM_CROUCH_WALK := "Walk_Crouching_Forward/Armature|mixamo_com|Layer0_001"
 
 
 enum AnimState { IDLE, WALK, RUN, DEAD, CROUCH }
@@ -239,13 +240,13 @@ func _physics_process(delta):
 	# Per-frame crouch animation control
 	if _is_crouching:
 		var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
-		if anim_player and anim_player.current_animation == ANIM_CROUCH_WALK:
+		if anim_player:
 			if is_moving:
-				if not anim_player.is_playing():
+				if anim_player.current_animation != ANIM_CROUCH_WALK:
 					anim_player.play(ANIM_CROUCH_WALK)
 			else:
-				if anim_player.is_playing():
-					anim_player.pause()
+				if anim_player.current_animation != ANIM_CROUCH_IDLE:
+					anim_player.play(ANIM_CROUCH_IDLE)
 	# --------------------------------
 
 
@@ -310,8 +311,8 @@ func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
 	if not anim_player:
 		return
-	# Don't override crouch animation set by _update_anim_state RPC
-	if anim_player.current_animation == ANIM_CROUCH_WALK:
+	# Don't override crouch animations set by _update_anim_state RPC
+	if anim_player.current_animation == ANIM_CROUCH_IDLE or anim_player.current_animation == ANIM_CROUCH_WALK:
 		return
 	var target_anim := ANIM_IDLE
 	if is_sprinting:
@@ -345,9 +346,10 @@ func _play_anim_state(state: int) -> void:
 		AnimState.RUN: anim_player.play(ANIM_RUN)
 		AnimState.DEAD: anim_player.play(ANIM_DEAD)
 		AnimState.CROUCH:
-			if anim_player.current_animation != ANIM_CROUCH_WALK:
-				anim_player.play(ANIM_CROUCH_WALK)
-				anim_player.get_animation(ANIM_CROUCH_WALK).loop_mode = Animation.LOOP_LINEAR
+			anim_player.play(ANIM_CROUCH_IDLE)
+			var anim: Animation = anim_player.get_animation(ANIM_CROUCH_IDLE)
+			if anim:
+				anim.loop_mode = Animation.LOOP_LINEAR
 
 func toggle_crouch():
 	if _is_crouching:

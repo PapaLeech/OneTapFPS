@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
-uid="uid://c8711ygn38iec"
-path="res://.godot/imported/death.fbx-a24b93f6b94faa961638d3cb9485c734.scn"
+type="AnimationLibrary"
+uid="uid://cap1tlgii7i06"
+path="res://.godot/imported/Idle_Crouching.glb-0688cbaadc06dc75aca65b760c012393.res"
 
 [deps]
 
-source_file="res://Characters/Swat/Animations/death.fbx"
-dest_files=["res://.godot/imported/death.fbx-a24b93f6b94faa961638d3cb9485c734.scn"]
+source_file="res://Characters/Swat/Animations/Idle_Crouching.glb"
+dest_files=["res://.godot/imported/Idle_Crouching.glb-0688cbaadc06dc75aca65b760c012393.res"]
 
 [params]
 
@@ -30,7 +30,7 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=true
+animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
@@ -38,7 +38,5 @@ materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
 _subresources={}
-fbx/importer=0
-fbx/allow_geometry_helper_nodes=false
-fbx/embedded_image_handling=1
-fbx/naming_version=2
+gltf/naming_version=2
+gltf/embedded_image_handling=1
