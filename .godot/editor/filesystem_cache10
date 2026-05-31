@@ -1,6 +1,6 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1780222410
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1780216446::0::1::::<><><>0<>0<><>::
+::res://::1780222412
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1780222412::0::1::::<><><>0<>0<><>::
 export_presets.cfg::TextFile::-1::1780126867::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -152,7 +152,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -692,8 +692,8 @@ Map_v1_UNIConcrete_wall_v1.jpg::CompressedTexture2D::9008209305074702713::177801
 Map_v1_Wooden_box_v1.jpg::CompressedTexture2D::5038190498942625454::1778015563::1778878430::1::::<><><>0<>0<>8e5346ba9173076a355cd90f157c04e3<>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.s3tc.ctex<*>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.etc2.ctex::
 map_v_1.gd::GDScript::6714484322957040553::1776709126::0::1::::<>Node3D<><>0<>0<><>::
 WE_test.tres::Environment::8424170553004968181::1779903083::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
-::res://levels/::1780171967
-level_001.gd::GDScript::612782810600861443::1780171967::0::1::::<>Node3D<><>0<>0<><>::
+::res://levels/::1780222751
+level_001.gd::GDScript::612782810600861443::1780222751::0::1::::<>Node3D<><>0<>0<><>::
 level_001.tscn::PackedScene::4261551556484119783::1779812988::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://iy3pcr5qh8rf::::res://levels/level_001.gd<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://37k35ornbomj::::res://scripts/PlayerSpawnPoint.gd<>uid://3kolpk4youf0::::res://environment/Map_v1.glb
 level_001_BACKUP_spawning.gd::GDScript::1713391506944079805::1779944861::0::1::::<>Node3D<><>0<>0<><>::
 map_visual_boost.gd::GDScript::5407384298704008832::1776836302::0::1::::<>Node3D<><>0<>0<><>::
