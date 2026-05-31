@@ -212,6 +212,7 @@ bone_idx = 5
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxHead" unique_id=590186302 groups=["enemy"]]
 script = ExtResource("3_3og01")
+damage_multiplier = 3.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxHead/Area3D" unique_id=1660210420]
 transform = Transform3D(1, 1.4901161e-08, 2.980233e-08, 0, 1.0000011, -2.9802322e-08, 0, -2.220446e-16, 0.99999994, -0.3518471, 12.742691, 3.07991)
@@ -224,7 +225,6 @@ bone_idx = 1
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxSpine" unique_id=2086724427 groups=["enemy"]]
 script = ExtResource("3_3og01")
-damage_multiplier = 3.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxSpine/Area3D" unique_id=1052779222]
 transform = Transform3D(1, -2.9802266e-08, -5.9600627e-08, 2.9802319e-08, 0.9999996, -1.7881393e-07, -3.5527137e-14, -1.0952353e-06, 0.9999998, 0.070100635, 9.359604, 0.23681545)
@@ -237,6 +237,7 @@ bone_idx = 8
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftArm" unique_id=1669897510 groups=["enemy"]]
 script = ExtResource("3_3og01")
+damage_multiplier = 0.75
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxLeftArm/Area3D" unique_id=219803342]
 transform = Transform3D(0.8599804, 6.146729e-08, 1.6912818e-06, 3.9115548e-07, 0.859988, 2.9010698e-07, -2.3320317e-06, -2.4581095e-06, 0.85996324, -0.48623943, 9.834077, 0.048553467)
@@ -379,7 +380,7 @@ bone_idx = 61
 
 [node name="Area3D" type="Area3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightCalf" unique_id=372468557 groups=["enemy"]]
 script = ExtResource("3_3og01")
-damage_multiplier = 0.75
+damage_multiplier = 0.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightCalf/Area3D" unique_id=1818586389]
 transform = Transform3D(0.9999939, -1.3857789e-07, -1.4784746e-08, -2.0479274e-07, 0.99999356, -5.9604645e-08, -2.7008355e-08, 2.9802322e-08, 0.9999961, -0.26096916, 17.530807, -0.88327503)
