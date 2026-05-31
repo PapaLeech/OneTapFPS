@@ -244,6 +244,9 @@ func _physics_process(delta):
 			if is_moving:
 				if anim_player.current_animation != ANIM_CROUCH_WALK:
 					anim_player.play(ANIM_CROUCH_WALK)
+					var anim: Animation = anim_player.get_animation(ANIM_CROUCH_WALK)
+					if anim:
+						anim.loop_mode = Animation.LOOP_LINEAR
 			else:
 				if anim_player.current_animation != ANIM_CROUCH_IDLE:
 					anim_player.play(ANIM_CROUCH_IDLE)
@@ -321,6 +324,10 @@ func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 		target_anim = ANIM_WALK
 	if anim_player.current_animation != target_anim:
 		anim_player.play(target_anim)
+		if target_anim == ANIM_CROUCH_WALK:
+			var anim: Animation = anim_player.get_animation(ANIM_CROUCH_WALK)
+			if anim:
+				anim.loop_mode = Animation.LOOP_LINEAR
 
 var _last_anim_state := -1
 
