@@ -27,6 +27,8 @@ func _ready() -> void:
 		print("Client level ready, notifying server")
 		await get_tree().create_timer(0.1).timeout
 		_client_ready.rpc_id(1)
+		# Client: listen for peer disconnection to remove stale meshes
+		multiplayer.peer_disconnected.connect(_client_remove_player)
 
 # Client tells server it has loaded the level
 @rpc("any_peer", "reliable")
@@ -103,4 +105,10 @@ func _remove_player(peer_id: int) -> void:
 	spawn_index_map.erase(peer_id)
 	var node := get_node_or_null(str(peer_id))
 	if node:
+		node.queue_free()
+
+func _client_remove_player(peer_id: int) -> void:
+	var node := get_node_or_null(str(peer_id))
+	if node:
+		print("Client: removing mesh for disconnected peer ", peer_id)
 		node.queue_free()
