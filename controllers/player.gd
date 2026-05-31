@@ -311,11 +311,11 @@ func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
 	if not anim_player:
 		return
-	# Don't override crouch animations set by _update_anim_state RPC
-	if anim_player.current_animation == ANIM_CROUCH_IDLE or anim_player.current_animation == ANIM_CROUCH_WALK:
-		return
 	var target_anim := ANIM_IDLE
-	if is_sprinting:
+	if anim_player.current_animation == ANIM_CROUCH_IDLE or anim_player.current_animation == ANIM_CROUCH_WALK:
+		# Already in crouch — switch between idle and walk based on movement
+		target_anim = ANIM_CROUCH_WALK if is_moving else ANIM_CROUCH_IDLE
+	elif is_sprinting:
 		target_anim = ANIM_RUN
 	elif is_moving:
 		target_anim = ANIM_WALK
