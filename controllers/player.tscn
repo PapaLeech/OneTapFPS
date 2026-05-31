@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://ffu50d4gi1xh" path="res://controllers/camera_effects.gd" id="3_gshig"]
 [ext_resource type="Script" uid="uid://cb6aep6qplm38" path="res://controllers/scripts/player/components/step_climber.gd" id="3_xc2pf"]
 [ext_resource type="AnimationLibrary" uid="uid://cap1tlgii7i06" path="res://Characters/Swat/Animations/Idle_Crouching.glb" id="4_1c04l"]
+[ext_resource type="Script" uid="uid://dixce431tuaql" path="res://controllers/scripts/weapon_3p.gd" id="4_7gamu"]
 [ext_resource type="Script" uid="uid://dxc3qxksa053p" path="res://controllers/gun.gd" id="4_bneyr"]
 [ext_resource type="Script" uid="uid://cab3ht37firty" path="res://assets/weapons/scripts/weapon_controller.gd" id="4_y677r"]
 [ext_resource type="AnimationLibrary" uid="uid://bwjqiw4rqdwpy" path="res://Characters/Swat/Animations/Walk_Crouching_Forward.glb" id="5_7gamu"]
@@ -370,6 +371,22 @@ script = ExtResource("3_3og01")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/HitboxRightCalf/Area3D" unique_id=1818586389]
 transform = Transform3D(0.9999939, -1.3857789e-07, -1.4784746e-08, -2.0479274e-07, 0.99999356, -5.9604645e-08, -2.7008355e-08, 2.9802322e-08, 0.9999961, -0.26096916, 17.530807, -0.88327503)
 shape = SubResource("CapsuleShape3D_1mod5")
+
+[node name="WeaponAttachment3P" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="15" unique_id=221123845]
+transform = Transform3D(-0.18808918, 0.08000426, 0.9788881, -0.23245147, 0.9647339, -0.12351228, -0.9542479, -0.25077504, -0.16285886, -27.166962, 34.31429, -86.88206)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+
+[node name="Weapon3P" type="Node3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/WeaponAttachment3P" unique_id=1694523549]
+script = ExtResource("4_7gamu")
+
+[node name="WeaponAttachment3P_Left" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="16" unique_id=1701742845]
+transform = Transform3D(-0.4418723, -0.85503936, 0.27139643, -0.8199789, 0.5076736, 0.26439014, -0.3638447, -0.10571268, -0.9254409, -10.044111, 63.19218, -89.33881)
+bone_name = "mixamorig_LeftHand"
+bone_idx = 10
+
+[node name="Weapon3P_Left" type="Node3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D/WeaponAttachment3P_Left" unique_id=1298000393]
+script = ExtResource("4_7gamu")
 
 [node name="AnimationPlayer" parent="CollisionShape3D/PlayerModel" index="1" unique_id=2124907866]
 "libraries/Idle_Crouching 2" = ExtResource("4_1c04l")

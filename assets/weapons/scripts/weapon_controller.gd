@@ -105,7 +105,22 @@ func _switch_weapon(direction: int) -> void:
 	_fire_timer = 0.0
 	if _anim_player:
 		_anim_player.stop()
-	spawn_weapon_model()
+	# CS2-style weapon switch animation
+	if weapon_model_parent:
+		var tween := create_tween()
+		tween.set_parallel(false)
+		# Drop current weapon down and forward
+		tween.tween_property(weapon_model_parent, "position",
+			weapon_model_parent.position + Vector3(0.0, -0.25, 0.05), 0.12)\
+			.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+		# Swap model at the bottom
+		tween.tween_callback(spawn_weapon_model)
+		# Rise back up to rest position
+		tween.tween_property(weapon_model_parent, "position",
+			current_weapon.weapon_position, 0.15)\
+			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	else:
+		spawn_weapon_model()
 
 func _physics_process(delta):
 	if not _scope_overlay:
@@ -238,6 +253,20 @@ func spawn_weapon_model():
 		current_weapon_model.position = current_weapon.weapon_position
 		current_weapon_model.rotation_degrees = current_weapon.weapon_rotation
 		current_weapon_model.scale = current_weapon.weapon_scale
+	# Update 3P weapon on the player model
+	var player := get_parent().get_parent()
+	var skeleton_path := "CollisionShape3D/PlayerModel/Armature/Skeleton3D/"
+	var weapon_3p := player.get_node_or_null(skeleton_path + "WeaponAttachment3P/Weapon3P")
+	var weapon_3p_left := player.get_node_or_null(skeleton_path + "WeaponAttachment3P_Left/Weapon3P_Left")
+	var weapon_id := current_weapon.weapon_name.to_lower()
+	if weapon_3p and weapon_3p.has_method("show_weapon"):
+		weapon_3p.show_weapon(weapon_id)
+	if weapon_3p_left and weapon_3p_left.has_method("show_weapon"):
+		# Knife is one-handed — hide left hand weapon
+		if weapon_id == "knife":
+			weapon_3p_left.hide_weapon()
+		else:
+			weapon_3p_left.show_weapon(weapon_id)
 		_current_ammo = current_weapon.max_ammo
 		_current_mags = current_weapon.total_mags - 1
 		ammo_changed.emit(_current_ammo, current_weapon.max_ammo, _current_mags)
