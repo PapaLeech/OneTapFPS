@@ -105,6 +105,8 @@ func _build_graphics_presets() -> void:
 	_master_vol_slider.max_value = 1.0
 	_master_vol_slider.step = 0.05
 	_master_vol_slider.value = PresenceManager.load_setting("master_volume", 1.0)
+	# Apply saved volume immediately on load
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(_master_vol_slider.value))
 	_master_vol_slider.value_changed.connect(func(v):
 		PresenceManager.save_setting("master_volume", v)
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(v))
