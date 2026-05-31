@@ -253,20 +253,19 @@ func spawn_weapon_model():
 		current_weapon_model.position = current_weapon.weapon_position
 		current_weapon_model.rotation_degrees = current_weapon.weapon_rotation
 		current_weapon_model.scale = current_weapon.weapon_scale
-	# Update 3P weapon on the player model
-	var player := get_parent().get_parent()
-	var skeleton_path := "CollisionShape3D/PlayerModel/Armature/Skeleton3D/"
-	var weapon_3p := player.get_node_or_null(skeleton_path + "WeaponAttachment3P/Weapon3P")
-	var weapon_3p_left := player.get_node_or_null(skeleton_path + "WeaponAttachment3P_Left/Weapon3P_Left")
-	var weapon_id := current_weapon.weapon_name.to_lower()
-	if weapon_3p and weapon_3p.has_method("show_weapon"):
-		weapon_3p.show_weapon(weapon_id)
-	if weapon_3p_left and weapon_3p_left.has_method("show_weapon"):
-		# Knife is one-handed — hide left hand weapon
-		if weapon_id == "knife":
-			weapon_3p_left.hide_weapon()
-		else:
-			weapon_3p_left.show_weapon(weapon_id)
+	# Update 3P weapon on the player model - disabled until correct meshes are set up
+	#var player := get_parent().get_parent()
+	#var skeleton_path := "CollisionShape3D/PlayerModel/Armature/Skeleton3D/"
+	#var weapon_3p := player.get_node_or_null(skeleton_path + "WeaponAttachment3P/Weapon3P")
+	#var weapon_3p_left := player.get_node_or_null(skeleton_path + "WeaponAttachment3P_Left/Weapon3P_Left")
+	#var weapon_id := current_weapon.weapon_name.to_lower()
+	#if weapon_3p and weapon_3p.has_method("show_weapon"):
+	#	weapon_3p.show_weapon(weapon_id)
+	#if weapon_3p_left and weapon_3p_left.has_method("show_weapon"):
+	#	if weapon_id == "knife":
+	#		weapon_3p_left.hide_weapon()
+	#	else:
+	#		weapon_3p_left.show_weapon(weapon_id)
 		_current_ammo = current_weapon.max_ammo
 		_current_mags = current_weapon.total_mags - 1
 		ammo_changed.emit(_current_ammo, current_weapon.max_ammo, _current_mags)

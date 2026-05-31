@@ -427,9 +427,9 @@ talonready.wav::AudioStreamWAV::5372452078962888389::1778015563::1778014846::1::
 talonreload.wav::AudioStreamWAV::1882140375152205545::1778015563::1778014846::1::::<><><>0<>0<>59b768a454d20a383cd9be88daeb6490<>res://.godot/imported/talonreload.wav-008d0dde53a0d31c7a057d555ea3c548.sample::
 talonreloadB.wav::AudioStreamWAV::7846069846915531353::1778015563::1778014846::1::::<><><>0<>0<>048330cc6f2667fd56926ac1e90eed9c<>res://.godot/imported/talonreloadB.wav-3f2c06ae7ef0c2da295a94f4920766ca.sample::
 throw.wav::AudioStreamWAV::6368331766183314654::1778015563::1778014846::1::::<><><>0<>0<>d4ffd032413399ad9ed42d3512313e1b<>res://.godot/imported/throw.wav-c180d60693917f3bf8fec5441d17fa7e.sample::
-::res://assets/weapons/scripts/::1780208263
+::res://assets/weapons/scripts/::1780216521
 weapon.gd::GDScript::3182779461567556417::1779000519::0::1::::Weapon<>Resource<><>0<>0<><>::
-weapon_controller.gd::GDScript::4776619364154183538::1780208263::0::1::::WeaponController<>Node<><>0<>0<><>::
+weapon_controller.gd::GDScript::4776619364154183538::1780216521::0::1::::WeaponController<>Node<><>0<>0<><>::
 ::res://Characters/::1780033638
 enemy.tscn::PackedScene::7708989437078052879::1778651059::0::1::::<><><>0<>0<><>::uid://k17ne0id3pwb::::res://Characters/terrorist_1_rig.glb<>uid://bw34e3kuld0ww::::res://assets/scripts/enemy_simple.gd<>uid://db7slb5llo5yb::::res://assets/scripts/health.gd
 Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin.glb::PackedScene::3198484914390336460::1779903776::1779903793::1::::<><><>0<>0<>71c1f28c55e1eca4c52a64895fc964c7<>res://.godot/imported/Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin.glb-34f8a22ced60fd420aaf70a2928df876.scn::uid://ufmfm28b2jvu::::res://Characters/Meshy_AI_Tactical_Stance_biped_Animation_Crouch_Walk_Left_with_Gun_withSkin_texture_0.png
