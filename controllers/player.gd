@@ -270,10 +270,16 @@ func _physics_process(delta):
 			is_sprinting = Input.is_action_pressed("sprint") and is_moving
 			_last_sync_position = global_position
 			_send_state.rpc_id(1, global_position, global_rotation.y, is_moving, is_sprinting)
+			if Engine.get_physics_frames() % 60 == 0:
+				var ping_ms := float(multiplayer.get_peer(1).get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)) if multiplayer.has_multiplayer_peer() else 0.0
+				if ping_ms > 0:
+					LagCompensationLogger.log_ping(PresenceManager.username, ping_ms)
 
 	# Log position sync every 30 physics frames (~0.5s at 60hz)
 	if Engine.get_physics_frames() % 30 == 0 and multiplayer.has_multiplayer_peer():
 		NetworkSyncLogger.log_position_sent(PresenceManager.username, global_position, Engine.get_physics_frames())
+		if velocity.length() > 0.01:
+			ClientPredictionLogger.log_input(PresenceManager.username, "move", Engine.get_physics_frames())
 
 	handle_lean(delta)
 
@@ -323,6 +329,8 @@ func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, 
 		player._target_position = pos
 		player._target_rot_y = rot_y
 		player._update_remote_animation(detected_moving, detected_sprinting)
+		NetworkSyncLogger.log_position_received(str(peer_id), pos, Engine.get_physics_frames())
+		EnemyStateLogger.log_position_update(str(peer_id), pos, Vector3.ZERO)
 
 func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
