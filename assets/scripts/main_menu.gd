@@ -276,14 +276,16 @@ func _on_network_invite_received(from_username: String) -> void:
 func _show_settings() -> void:
 	var dialog := Window.new()
 	dialog.title = "Settings"
-	dialog.size = Vector2i(400, 600)
+	dialog.size = Vector2i(400, 700)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
 	dialog.window_input.connect(func(e):
 		if e.is_action_pressed("ui_cancel"):
 			dialog.queue_free())
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 16)
 	var sens_label := Label.new()
 	sens_label.text = "Mouse Sensitivity"
@@ -373,12 +375,42 @@ func _show_settings() -> void:
 		)
 		gfx_row.add_child(pbtn)
 		preset_btns.append(pbtn)
+	# ── FPS Counter ──────────────────────────────────────────────
+	var fps_label := Label.new()
+	fps_label.text = "FPS Counter"
+	vbox.add_child(fps_label)
+	var fps_row := HBoxContainer.new()
+	fps_row.add_theme_constant_override("separation", 8)
+	vbox.add_child(fps_row)
+	var fps_check := CheckBox.new()
+	fps_check.text = "Enable"
+	fps_check.button_pressed = PresenceManager.load_setting("fps_counter_enabled", false)
+	fps_row.add_child(fps_check)
+	var fps_corner_label := Label.new()
+	fps_corner_label.text = "Position:"
+	fps_row.add_child(fps_corner_label)
+	var fps_corner := OptionButton.new()
+	fps_corner.add_item("Top Left")
+	fps_corner.add_item("Top Right")
+	fps_corner.add_item("Bottom Left")
+	fps_corner.add_item("Bottom Right")
+	fps_corner.selected = PresenceManager.load_setting("fps_counter_corner", 0)
+	fps_corner.item_selected.connect(func(idx):
+		PresenceManager.save_setting("fps_counter_corner", idx)
+		FPSCounter.set_corner(idx)
+	)
+	fps_check.toggled.connect(func(on):
+		PresenceManager.save_setting("fps_counter_enabled", on)
+		FPSCounter.set_visible(on)
+	)
+	fps_row.add_child(fps_corner)
 	# ─────────────────────────────────────────────────────────────
 	var close_btn := Button.new()
 	close_btn.text = "Close"
 	close_btn.pressed.connect(func(): dialog.queue_free())
 	vbox.add_child(close_btn)
-	dialog.add_child(vbox)
+	scroll.add_child(vbox)
+	dialog.add_child(scroll)
 	add_child(dialog)
 	dialog.popup_centered()
 
