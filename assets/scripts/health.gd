@@ -9,7 +9,7 @@ signal health_changed(new_health: float, max_health: float)
 
 func _ready() -> void:
 	current_health = max_health
-	EnemyStateLogger.log_spawn(get_parent().name if get_parent() else "unknown", get_parent().global_position if get_parent() else Vector3.ZERO)
+	EnemyStateLogger.log_spawn(str(get_parent().name) if get_parent() else "unknown", get_parent().global_position if get_parent() else Vector3.ZERO)
 
 func take_damage(amount: float) -> void:
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
@@ -28,9 +28,9 @@ func _apply_damage(amount: float) -> void:
 	current_health -= amount
 	current_health = max(current_health, 0.0)
 	emit_signal("health_changed", current_health, max_health)
-	EnemyStateLogger.log_health_change(get_parent().name if get_parent() else "unknown", old_hp, current_health)
+	EnemyStateLogger.log_health_change(str(get_parent().name) if get_parent() else "unknown", old_hp, current_health)
 	if current_health <= 0.0:
-		EnemyStateLogger.log_death(get_parent().name if get_parent() else "unknown", get_parent().global_position if get_parent() else Vector3.ZERO)
+		EnemyStateLogger.log_death(str(get_parent().name) if get_parent() else "unknown", get_parent().global_position if get_parent() else Vector3.ZERO)
 		emit_signal("died")
 
 func heal(amount: float) -> void:

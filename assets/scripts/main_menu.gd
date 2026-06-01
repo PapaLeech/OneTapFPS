@@ -290,13 +290,18 @@ func _show_settings() -> void:
 	var sens_label := Label.new()
 	sens_label.text = "Mouse Sensitivity"
 	vbox.add_child(sens_label)
-	var sens_slider := HSlider.new()
-	sens_slider.min_value = 0.0005
-	sens_slider.max_value = 0.01
-	sens_slider.step = 0.0005
-	sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 0.002)
-	sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))
-	vbox.add_child(sens_slider)
+	var sens_row := HBoxContainer.new()
+	sens_row.add_theme_constant_override("separation", 8)
+	vbox.add_child(sens_row)
+	var sens_field := LineEdit.new()
+	sens_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sens_field.text = str(PresenceManager.load_setting("mouse_sensitivity", 0.5))
+	sens_field.text_submitted.connect(func(val):
+		var f := float(val)
+		if f > 0:
+			PresenceManager.save_setting("mouse_sensitivity", f)
+	)
+	sens_row.add_child(sens_field)
 	var ads_sens_label := Label.new()
 	ads_sens_label.text = "ADS Sensitivity"
 	vbox.add_child(ads_sens_label)
@@ -622,6 +627,18 @@ func _show_add_friend_popup() -> void:
 	dialog.add_child(vbox)
 	add_child(dialog)
 	dialog.popup_centered()
+	get_tree().create_timer(0.05).timeout.connect(func():
+		if is_instance_valid(input):
+			input.grab_focus()
+			input.set_caret_column(input.text.length())
+	)
+	dialog.window_input.connect(func(event):
+		if not input.has_focus():
+			input.grab_focus()
+	)
+	for i in 3:
+		await get_tree().process_frame
+	input.grab_focus()
 	input.call_deferred("grab_focus")
 	var close = func(): dialog.queue_free()
 	input.gui_input.connect(func(event):
@@ -691,14 +708,24 @@ func remove_network_player(player_name: String) -> void:
 	if tag:
 		tag.queue_free()
 func _show_username_prompt() -> void:
-	var dialog := Window.new()
-	dialog.title = "Welcome to OneTap"
-	dialog.size = Vector2i(400, 180)
-	dialog.unresizable = true
-	dialog.close_requested.connect(func(): pass)
+	var overlay := CanvasLayer.new()
+	overlay.layer = 10
+	# Dark background
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.6)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(bg)
+	# Centred panel
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.custom_minimum_size = Vector2(400, 180)
+	panel.offset_left = -200
+	panel.offset_top = -90
+	panel.offset_right = 200
+	panel.offset_bottom = 90
 	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	vbox.add_theme_constant_override("separation", 16)
+	vbox.custom_minimum_size = Vector2(380, 0)
 	var label := Label.new()
 	label.text = "Enter your username:"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -709,18 +736,20 @@ func _show_username_prompt() -> void:
 	vbox.add_child(input)
 	var btn := Button.new()
 	btn.text = "Confirm"
-	btn.pressed.connect(func():
+	var confirm := func():
 		var uname := input.text.strip_edges()
 		if uname == "":
 			return
 		PresenceManager.save_username(uname)
-		dialog.queue_free()
+		overlay.queue_free()
 		_go_online_and_fetch_friends()
-	)
+	btn.pressed.connect(confirm)
+	input.text_submitted.connect(func(_t): confirm.call())
 	vbox.add_child(btn)
-	dialog.add_child(vbox)
-	add_child(dialog)
-	dialog.popup_centered()
+	panel.add_child(vbox)
+	overlay.add_child(panel)
+	add_child(overlay)
+	input.grab_focus()
 
 func _go_online_and_fetch_friends() -> void:
 	PresenceManager.go_online(PresenceManager.username)

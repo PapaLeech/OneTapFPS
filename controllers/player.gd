@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 @export var SPEED : float = 5.0
 @export var JUMP_VELOCITY : float = 4.5
-@export var MOUSE_SENSITIVITY : float = 0.002
+@export var MOUSE_SENSITIVITY : float = 0.5
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
@@ -72,7 +72,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _unhandled_input(event: InputEvent) -> void:
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
 	if _mouse_input:
-		MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", 0.002)
+		MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", 0.5)
 		var ads_mult: float = PresenceManager.load_setting("ads_sensitivity", 1.0) if _is_aiming else 1.0
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY * ads_mult
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY * ads_mult
@@ -88,9 +88,9 @@ func _input(event):
 			health.take_damage(health.max_health)
 
 func _update_camera(delta):
-	_mouse_rotation.x += _tilt_input
+	_mouse_rotation.x += _tilt_input * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
-	_mouse_rotation.y += _rotation_input
+	_mouse_rotation.y += _rotation_input * delta
 	_player_rotation = Vector3(0.0, _mouse_rotation.y, 0.0)
 	_camera_rotation = Vector3(_mouse_rotation.x, 0.0, 0.0)
 	CAMERA_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)
@@ -204,9 +204,8 @@ func _on_died() -> void:
 		pause_menu.open_death_menu()
 
 func _physics_process(delta):
-	if not multiplayer.has_multiplayer_peer():
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
 		return
-	if not is_multiplayer_authority(): return
 	_update_camera(delta)
 
 	if not is_on_floor():
@@ -260,8 +259,7 @@ func _physics_process(delta):
 
 
 	move_and_slide()
-
-	# GDC-style: send state to server every 3 frames
+	weapon_bob(velocity.length(), delta)
 	_sync_counter += 1
 	if _sync_counter >= 3:
 		_sync_counter = 0
@@ -414,8 +412,8 @@ func weapon_bob(vel : float, delta):
 		return
 	if _weapon_holder:
 		if vel > 0 or is_on_floor():
-			var bob_amount : float = 0.01
-			var bob_freq : float = 0.01
+			var bob_amount : float = 0.04
+			var bob_freq : float = 0.008
 			_weapon_holder.position.y = lerp(
 				_weapon_holder.position.y,
 				def_weapon_holder_pos.y + sin(Time.get_ticks_msec() * bob_freq) * bob_amount,
@@ -429,6 +427,28 @@ func weapon_bob(vel : float, delta):
 		else:
 			_weapon_holder.position.y = lerp(_weapon_holder.position.y, def_weapon_holder_pos.y, 10 * delta)
 			_weapon_holder.position.x = lerp(_weapon_holder.position.x, def_weapon_holder_pos.x, 10 * delta)
+		# Wall proximity check — pull weapon back if anything is close to it
+		if CAMERA_CONTROLLER and _weapon_holder:
+			var space := get_world_3d().direct_space_state
+			var weapon_world := _weapon_holder.global_position
+			var cam_forward := -CAMERA_CONTROLLER.global_transform.basis.z
+			var hit := false
+			var min_dist := 0.5
+			# Cast rays in multiple directions from weapon world pos
+			for ray_dir in [cam_forward, Vector3(0,-1,0), Vector3(0,1,0), CAMERA_CONTROLLER.global_transform.basis.x, -CAMERA_CONTROLLER.global_transform.basis.x]:
+				var q := PhysicsRayQueryParameters3D.create(weapon_world, weapon_world + ray_dir.normalized() * 0.5)
+				q.exclude = [get_rid()]
+				q.collision_mask = 0xFFFFFFFF
+				var r := space.intersect_ray(q)
+				if r:
+					min_dist = min(min_dist, weapon_world.distance_to(r.position))
+					hit = true
+			if hit:
+				print("wall hit! dist: ", min_dist)
+				var pull_z := remap(min_dist, 0.0, 0.5, 0.6, 0.0)
+				_weapon_holder.position.z = lerp(_weapon_holder.position.z, pull_z, 20 * delta)
+			else:
+				_weapon_holder.position.z = lerp(_weapon_holder.position.z, 0.0, 10 * delta)
 
 ## Lag compensation: client sends shot to server with timestamp
 @rpc("any_peer", "reliable")
