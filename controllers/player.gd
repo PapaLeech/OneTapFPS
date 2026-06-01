@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 @export var SPEED : float = 5.0
 @export var JUMP_VELOCITY : float = 4.5
-@export var MOUSE_SENSITIVITY : float = 0.5
+@export var MOUSE_SENSITIVITY : float = 0.002
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
@@ -72,7 +72,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _unhandled_input(event: InputEvent) -> void:
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
 	if _mouse_input:
-		MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
+		MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", 0.002)
 		var ads_mult: float = PresenceManager.load_setting("ads_sensitivity", 1.0) if _is_aiming else 1.0
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY * ads_mult
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY * ads_mult
@@ -88,9 +88,9 @@ func _input(event):
 			health.take_damage(health.max_health)
 
 func _update_camera(delta):
-	_mouse_rotation.x += _tilt_input * delta
+	_mouse_rotation.x += _tilt_input
 	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
-	_mouse_rotation.y += _rotation_input * delta
+	_mouse_rotation.y += _rotation_input
 	_player_rotation = Vector3(0.0, _mouse_rotation.y, 0.0)
 	_camera_rotation = Vector3(_mouse_rotation.x, 0.0, 0.0)
 	CAMERA_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)

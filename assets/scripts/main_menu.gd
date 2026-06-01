@@ -291,10 +291,10 @@ func _show_settings() -> void:
 	sens_label.text = "Mouse Sensitivity"
 	vbox.add_child(sens_label)
 	var sens_slider := HSlider.new()
-	sens_slider.min_value = 0.1
-	sens_slider.max_value = 5.0
-	sens_slider.step = 0.1
-	sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 1.0)
+	sens_slider.min_value = 0.0005
+	sens_slider.max_value = 0.01
+	sens_slider.step = 0.0005
+	sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 0.002)
 	sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))
 	vbox.add_child(sens_slider)
 	var ads_sens_label := Label.new()
