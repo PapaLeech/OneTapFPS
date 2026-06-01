@@ -276,7 +276,7 @@ func _on_network_invite_received(from_username: String) -> void:
 func _show_settings() -> void:
 	var dialog := Window.new()
 	dialog.title = "Settings"
-	dialog.size = Vector2i(400, 700)
+	dialog.size = Vector2i(420, 800)
 	dialog.unresizable = true
 	dialog.close_requested.connect(func(): dialog.queue_free())
 	dialog.window_input.connect(func(e):
@@ -401,7 +401,7 @@ func _show_settings() -> void:
 	)
 	fps_check.toggled.connect(func(on):
 		PresenceManager.save_setting("fps_counter_enabled", on)
-		FPSCounter.set_visible(on)
+		FPSCounter.set_enabled(on)
 	)
 	fps_row.add_child(fps_corner)
 	# ─────────────────────────────────────────────────────────────
@@ -413,6 +413,7 @@ func _show_settings() -> void:
 	dialog.add_child(scroll)
 	add_child(dialog)
 	dialog.popup_centered()
+	dialog.size = Vector2i(420, 800)
 
 func _show_quit_dialog() -> void:
 	_quit_dialog_open = true

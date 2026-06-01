@@ -34,8 +34,8 @@ func set_corner(idx: int) -> void:
 		Vector2(1, 1)
 	]
 	idx = clamp(idx, 0, 3)
-	var a := anchors[idx]
-	var p := positions[idx]
+	var a : Vector2 = anchors[idx]
+	var p : Vector2 = positions[idx]
 	_label.anchor_left = a.x
 	_label.anchor_top = a.y
 	_label.anchor_right = a.x
@@ -45,5 +45,5 @@ func set_corner(idx: int) -> void:
 	_label.offset_right = p.x + 120
 	_label.offset_bottom = p.y + 24
 
-func set_visible(on: bool) -> void:
+func set_enabled(on: bool) -> void:
 	_label.visible = on
