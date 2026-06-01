@@ -31,6 +31,8 @@ func _apply_damage(amount: float) -> void:
 	EnemyStateLogger.log_health_change(str(get_parent().name) if get_parent() else "unknown", old_hp, current_health)
 	if current_health <= 0.0:
 		EnemyStateLogger.log_death(str(get_parent().name) if get_parent() else "unknown", get_parent().global_position if get_parent() else Vector3.ZERO)
+		HitDetectionLogger.log_kill("unknown", str(get_parent().name) if get_parent() else "unknown", "unknown", "unknown")
+		SessionLogger.record_death()
 		emit_signal("died")
 
 func heal(amount: float) -> void:

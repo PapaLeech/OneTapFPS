@@ -1,7 +1,6 @@
 extends Node
 
 const SERVER_URL := "http://161.35.41.206:8000"
-const RYSIU := "Rysiu"
 
 var session_active := false
 var session_start_time := ""
@@ -33,16 +32,19 @@ func _ready() -> void:
 func try_start_session(player_a: String, player_b: String) -> void:
 	if session_active:
 		return
-	if player_a != RYSIU and player_b != RYSIU:
+	var my_name := PresenceManager.username
+	if my_name == "":
 		return
-	opponent_name = player_b if player_a == RYSIU else player_a
+	if player_a != my_name and player_b != my_name:
+		return
+	opponent_name = player_b if player_a == my_name else player_a
 	var now := Time.get_datetime_dict_from_system()
 	session_start_time = "%04d-%02d-%02d_%02d-%02d" % [now["year"], now["month"], now["day"], now["hour"], now["minute"]]
 	session_start_unix = Time.get_unix_time_from_system()
 	session_active = true
 	_reset_logs()
-	log_event("debug_log", "SESSION STARTED: %s vs %s" % [RYSIU, opponent_name])
-	print("[SessionLogger] Session started: %s vs %s" % [RYSIU, opponent_name])
+	log_event("debug_log", "SESSION STARTED: %s vs %s" % [my_name, opponent_name])
+	print("[SessionLogger] Session started: %s vs %s" % [my_name, opponent_name])
 	session_started.emit()
 
 func end_session(reason: String = "normal") -> void:
@@ -97,7 +99,7 @@ func _build_summary(script_name: String) -> String:
 	var lines: Array[String] = []
 	lines.append("--- Summary ---")
 	lines.append("Duration: %dm %ds" % [mins, secs])
-	lines.append("Players: %s vs %s" % [RYSIU, opponent_name])
+	lines.append("Players: %s vs %s" % [PresenceManager.username, opponent_name])
 	match script_name:
 		"hit_detection":
 			var acc := "N/A"
@@ -122,7 +124,7 @@ func _build_log_content(script_name: String) -> String:
 	lines.append("=== OneTapFPS Session Log ===")
 	lines.append("Script:  %s" % script_name)
 	lines.append("Session: %s" % session_start_time)
-	lines.append("Players: %s vs %s" % [RYSIU, opponent_name])
+	lines.append("Players: %s vs %s" % [PresenceManager.username, opponent_name])
 	lines.append("")
 	lines.append("--- Events ---")
 	if logs[script_name].size() == 0:
@@ -136,7 +138,7 @@ func _build_log_content(script_name: String) -> String:
 
 func _save_all_logs() -> void:
 	for script_name in logs:
-		var filename := "%s_%s_vs_%s_%s.log" % [session_start_time, RYSIU, opponent_name, script_name]
+		var filename := "%s_%s_vs_%s_%s.log" % [session_start_time, PresenceManager.username, opponent_name, script_name]
 		_upload_log(filename, _build_log_content(script_name))
 
 func _upload_log(filename: String, content: String) -> void:
