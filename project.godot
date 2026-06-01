@@ -52,7 +52,6 @@ shapes/collision/show_on_start=false
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/always_on_top=true
-window/subwindows/embed_subwindows=true
 
 [editor_plugins]
 
