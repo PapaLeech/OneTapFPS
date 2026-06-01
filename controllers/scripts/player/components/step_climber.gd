@@ -2,9 +2,13 @@ class_name StepHandlerComponent extends Node
 
 @export_category("References")
 @export var player : CharacterBody3D
+
+func _ready() -> void:
+	if not player:
+		player = get_parent().get_parent() as CharacterBody3D
 @export_category("Step Settings")
-@export var surface_threshold : float = 0.3
-@export var step_height : float = 0.6
+@export var surface_threshold : float = 0.5
+@export var step_height : float = 1.0
 
 @export_group("Step Smoothing")
 @export var step_speed : float = 8.0
@@ -32,8 +36,6 @@ func process_smoothing(delta: float):
 func handle_step_climbing():
 	if not player:
 		return
-	print("handle called, collisions: ", player.get_slide_collision_count())
-	step_status = "No vertical collision detected"
 	for i in player.get_slide_collision_count():
 		var collision = player.get_slide_collision(i)
 		if _is_vertical_surface(collision):
@@ -42,15 +44,10 @@ func handle_step_climbing():
 			if measured_height > MIN_STEP_HEIGHT and measured_height <= step_height and _is_valid_step_direction(collision):
 				player.global_position.y += measured_height
 				smooth_step(measured_height)
-				step_status = "Step Found! Height: " + str(measured_height)
-			else:
-				print("step failed - height: ", measured_height, " max: ", step_height, " valid dir: ", _is_valid_step_direction(collision))
-				step_status = "Step too high: " + str(measured_height)
 			break
 
 func _is_vertical_surface(collision: KinematicCollision3D) -> bool:
 	var normal = collision.get_normal()
-	print("normal: ", normal)
 	return abs(normal.y) < surface_threshold
 
 func _is_valid_step_direction(collision: KinematicCollision3D) -> bool:

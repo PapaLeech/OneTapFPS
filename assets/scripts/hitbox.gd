@@ -4,13 +4,11 @@ extends Area3D
 @export var damage_multiplier: float = 1.0
 
 func take_damage(amount: float) -> void:
-	print("HIT: ", name, " multiplier x", damage_multiplier, " = ", amount * damage_multiplier, " damage")
 	var parent := get_parent()
 	while parent and not parent is CharacterBody3D:
 		parent = parent.get_parent()
 	if parent:
 		var health := parent.get_node_or_null("Health")
-		print("HIT parent name: ", parent.name, " health: ", health)
 		if health:
 			var dmg := amount * damage_multiplier
 			# In multiplayer, send damage RPC to the player's authority
@@ -19,8 +17,7 @@ func take_damage(amount: float) -> void:
 				if target_id > 0:
 					health._take_damage_rpc.rpc_id(target_id, dmg)
 					HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")
-					var ping_ms := float(multiplayer.get_peer(1).get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)) if multiplayer.has_multiplayer_peer() else 0.0
-					LagCompensationLogger.log_hit_validated(PresenceManager.username, parent.name, true, ping_ms)
+					LagCompensationLogger.log_hit_validated(PresenceManager.username, parent.name, true, 0.0)
 					return
 			health._apply_damage(dmg)
 			HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")

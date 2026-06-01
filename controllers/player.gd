@@ -270,10 +270,6 @@ func _physics_process(delta):
 			is_sprinting = Input.is_action_pressed("sprint") and is_moving
 			_last_sync_position = global_position
 			_send_state.rpc_id(1, global_position, global_rotation.y, is_moving, is_sprinting)
-			if Engine.get_physics_frames() % 60 == 0:
-				var ping_ms := float(multiplayer.get_peer(1).get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)) if multiplayer.has_multiplayer_peer() else 0.0
-				if ping_ms > 0:
-					LagCompensationLogger.log_ping(PresenceManager.username, ping_ms)
 
 	# Log position sync every 30 physics frames (~0.5s at 60hz)
 	if Engine.get_physics_frames() % 30 == 0 and multiplayer.has_multiplayer_peer():
@@ -295,8 +291,7 @@ func _physics_process(delta):
 	var target_fov = fov_ads if _is_aiming else fov_default
 	CAMERA_CONTROLLER.fov = lerp(CAMERA_CONTROLLER.fov, target_fov, ads_speed * delta)
 
-	if is_on_floor():
-		step_handler.handle_step_climbing()
+	step_handler.handle_step_climbing()
 
 # Smooth interpolation for remote players
 func _process(delta: float) -> void:
@@ -320,7 +315,6 @@ func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, 
 	if peer_id == multiplayer.get_unique_id():
 		return
 	var player := get_parent().get_node_or_null(str(peer_id))
-	print("_receive_state: peer_id=", peer_id, " player=", player, " my_id=", multiplayer.get_unique_id())
 	if player:
 		var last_pos: Vector3 = _last_received_positions.get(peer_id, Vector3.ZERO)
 		var detected_moving := pos.distance_to(last_pos) > 0.01
