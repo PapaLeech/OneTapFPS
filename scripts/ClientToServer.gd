@@ -66,7 +66,13 @@ func c_try_connect_client_to_lobby() -> void:
 func c_send_invite(from_username: String, to_username: String) -> void:
 	var target_peer := MultiplayerManager.username_to_peer.get(to_username, -1)
 	if target_peer == -1:
-		print("Invite failed: %s not found" % to_username)
+		# Try case-insensitive lookup
+		for key in MultiplayerManager.username_to_peer:
+			if key.to_lower() == to_username.to_lower():
+				target_peer = MultiplayerManager.username_to_peer[key]
+				break
+	if target_peer == -1:
+		print("Invite failed: %s not found in %s" % [to_username, MultiplayerManager.username_to_peer])
 		return
 	receive_invite_rpc.rpc_id(target_peer, from_username)
 

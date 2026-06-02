@@ -20,9 +20,19 @@ func _exit_tree() -> void:
 	go_offline()
 
 func _load_username() -> void:
+	# First try game_config.cfg written by launcher (next to game exe)
+	var game_config_path := OS.get_executable_path().get_base_dir() + "/game_config.cfg"
 	var config := ConfigFile.new()
+	if config.load(game_config_path) == OK:
+		var name_from_launcher := config.get_value("player", "username", "")
+		if name_from_launcher != "":
+			username = name_from_launcher
+			print("[PresenceManager] Username loaded from launcher: ", username)
+			return
+	# Fallback to user://config.cfg
 	if config.load(CONFIG_PATH) == OK:
 		username = config.get_value("player", "username", "")
+		print("[PresenceManager] Username loaded from config: ", username)
 
 func save_username(player_name: String) -> void:
 	username = player_name

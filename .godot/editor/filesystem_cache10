@@ -1,7 +1,7 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1780379221
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1780379221::0::1::::<><><>0<>0<><>::
-export_presets.cfg::TextFile::-1::1780334917::0::1::::<><><>0<>0<><>::
+::res://::1780424755
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1780422820::0::1::::<><><>0<>0<><>::
+export_presets.cfg::TextFile::-1::1780423425::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
 README.md::TextFile::-1::1777239470::0::1::::<><><>0<>0<><>::
@@ -152,7 +152,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -325,8 +325,8 @@ take.res::Animation::4041995609125468541::1778137379::0::1::::<><><>0<>0<><>::ui
 fire.wav::AudioStreamWAV::4006656394015731685::1778137379::1778138350::1::::<><><>0<>0<>7ae95b5b50afb10e26b207323b12b42f<>res://.godot/imported/fire.wav-62d5b9a9600a1b16fb1bdb0bd5af0f3e.sample::
 melee.wav::AudioStreamWAV::1475848047457365467::1778137379::1778138350::1::::<><><>0<>0<>2cafd0ff49f08f820a0f520182cd0a3e<>res://.godot/imported/melee.wav-2abecf972a2591fe29c1c8f333ede2d8.sample::
 ready.wav::AudioStreamWAV::8727949331877673915::1778137379::1778138350::1::::<><><>0<>0<>7d9efc81db7767d137495e05abeae2a3<>res://.godot/imported/ready.wav-bbe51587c6f30d2eddf6f12d51bbeccd.sample::
-::res://assets/weapons/resources/sniper/::1779382704
-scope.gdshader::Shader::7566875117162933765::1778393047::0::1::::<><><>0<>0<><>::
+::res://assets/weapons/resources/sniper/::1780380111
+scope.gdshader::Shader::7566875117162933765::1780380111::0::1::::<><><>0<>0<><>::
 scope_overlay.gd::GDScript::1081039298415776912::1778393052::0::1::::<>CanvasLayer<><>0<>0<><>::
 scope_overlay.tscn::PackedScene::4498086173010527428::1779382704::0::1::::<><><>0<>0<><>::uid://pnwtas34a4ga::::res://assets/weapons/resources/sniper/scope_overlay.gd
 sniper-rifle-fire.mp3::AudioStreamMP3::120158192269310456::1778392255::1778392263::1::::<><><>0<>0<>8e41f81f2be6493e4245489663793775<>res://.godot/imported/sniper-rifle-fire.mp3-e36577b5704b461f6058b90e83bcc48e.mp3str::
@@ -704,10 +704,10 @@ WE_test.tscn::PackedScene::3764880135456822604::1776653496::0::1::::<><><>0<>0<>
 ::res://materials/::1777234919
 grid.tres::ShaderMaterial::5739367904623174735::1776654260::0::1::::<><><>0<>0<><>::uid://ivvpsi314b34::::res://textures/grid.jpg
 player.tres::StandardMaterial3D::4435626134922663587::1776653496::0::1::::<><><>0<>0<><>::
-::res://scripts/::1780346513
+::res://scripts/::1780381167
 boot_splash.gd::GDScript::8887376292968682027::1779037817::0::1::::<>CanvasLayer<><>0<>0<><>::
 ClientPredictionLogger.gd::GDScript::6908745708737179878::1778963071::0::1::::<>Node<><>0<>0<><>::
-ClientToServer.gd::GDScript::5037045650952805643::1779795844::0::1::::<>Node<><>0<>0<><>::
+ClientToServer.gd::GDScript::5037045650952805643::1780381005::0::1::::<>Node<><>0<>0<><>::
 ClientToServer_BACKUP_spawning.gd::GDScript::1487171386575510520::1779944861::0::1::::<>Node<><>0<>0<><>::
 DedicatedServer.gd::GDScript::8774166623148085721::1778953810::0::1::::<>Node<><>0<>0<><>::
 DedicatedServer_BACKUP_spawning.gd::GDScript::6110229400042988549::1779944861::0::1::::<>Node<><>0<>0<><>::
@@ -721,7 +721,7 @@ LagCompLogger.gd::GDScript::1682954390993155495::1780181701::0::1::::<>Node<><>0
 lobby.gd::GDScript::7753599627076661289::1779512070::0::1::::Lobby<>Node3D<><>0<>0<><>::
 NetworkSyncLogger.gd::GDScript::5404236672490161014::1778963083::0::1::::<>Node<><>0<>0<><>::
 PlayerSpawnPoint.gd::GDScript::2032006480269417937::1779792776::0::1::::PlayerSpawnPoint<>Node3D<><>0<>1<><>::
-PresenceManager.gd::GDScript::3317272715576500429::1779598533::0::1::::<>Node<><>0<>0<><>::
+PresenceManager.gd::GDScript::3317272715576500429::1780381167::0::1::::<>Node<><>0<>0<><>::
 server.gd::GDScript::17452018081795135::1780171971::0::1::::<>Node<><>0<>0<><>::
 server_BACKUP_spawning.gd::GDScript::4694610972509405548::1779944861::0::1::::<>Node<><>0<>0<><>::
 SessionLogger.gd::GDScript::3342422228604137525::1780346513::0::1::::<>Node<><>0<>0<><>::
