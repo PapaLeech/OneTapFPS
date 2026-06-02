@@ -4,7 +4,7 @@ uniform float scope_radius : hint_range(0.1, 0.5) = 0.38;
 uniform float edge_softness : hint_range(0.001, 0.05) = 0.008;
 uniform float crosshair_thickness : hint_range(0.0005, 0.005) = 0.0012;
 uniform float crosshair_length : hint_range(0.01, 0.15) = 0.06;
-uniform float crosshair_gap : hint_range(0.0, 0.05) = 0.015;
+uniform float crosshair_gap : hint_range(0.0, 0.05) = 0.0;
 uniform vec4 crosshair_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 uniform vec4 scope_tint : source_color = vec4(0.05, 0.08, 0.05, 0.15);
 

@@ -811,6 +811,13 @@ func _show_host_join_panel() -> void:
 			ClientToServer.connected_to_server.disconnect(cb)
 		dialog.queue_free()
 	)
+	dialog.window_input.connect(func(event):
+		if event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed:
+			var cb := Callable(self, "_on_deathmatch_connected")
+			if ClientToServer.connected_to_server.is_connected(cb):
+				ClientToServer.connected_to_server.disconnect(cb)
+			dialog.queue_free()
+	)
 
 	var vbox := VBoxContainer.new()
 	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)

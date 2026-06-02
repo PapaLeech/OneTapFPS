@@ -16,9 +16,9 @@ func take_damage(amount: float) -> void:
 				var target_id := int(parent.name)
 				if target_id > 0:
 					health._take_damage_rpc.rpc_id(target_id, dmg)
-					HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")
+					HitDetectionLogger.log_hit(PresenceManager.username, parent.name, name, dmg, "unknown")
 					LagCompensationLogger.log_hit_validated(PresenceManager.username, parent.name, true, 0.0)
 					return
 			health._apply_damage(dmg)
-			HitDetectionLogger.log_hit("unknown", parent.name, name, dmg, "unknown")
-			HitDetectionLogger.log_damage_dealt("unknown", parent.name, dmg, health.current_health)
+			HitDetectionLogger.log_hit(PresenceManager.username, parent.name, name, dmg, "unknown")
+			HitDetectionLogger.log_damage_dealt(PresenceManager.username, parent.name, dmg, health.current_health)

@@ -276,8 +276,8 @@ func _physics_process(delta):
 					if ping > 0:
 						LagCompensationLogger.log_ping(PresenceManager.username, float(ping))
 
-	# Log position sync every 30 physics frames (~0.5s at 60hz)
-	if Engine.get_physics_frames() % 30 == 0 and multiplayer.has_multiplayer_peer():
+	# Log position sync every 60 physics frames (~1s at 60hz)
+	if Engine.get_physics_frames() % 60 == 0 and multiplayer.has_multiplayer_peer() and SessionLogger.session_active:
 		NetworkSyncLogger.log_position_sent(PresenceManager.username, global_position, Engine.get_physics_frames())
 		if velocity.length() > 0.01:
 			ClientPredictionLogger.log_input(PresenceManager.username, "move", Engine.get_physics_frames())
@@ -329,7 +329,7 @@ func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, 
 		player._target_rot_y = rot_y
 		player._update_remote_animation(detected_moving, detected_sprinting)
 		NetworkSyncLogger.log_position_received(str(peer_id), pos, Engine.get_physics_frames())
-		if Engine.get_physics_frames() % 60 == 0:
+		if Engine.get_physics_frames() % 60 == 0 and SessionLogger.session_active:
 			EnemyStateLogger.log_position_update(str(peer_id), pos, Vector3.ZERO)
 
 func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
