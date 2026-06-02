@@ -290,18 +290,13 @@ func _show_settings() -> void:
 	var sens_label := Label.new()
 	sens_label.text = "Mouse Sensitivity"
 	vbox.add_child(sens_label)
-	var sens_row := HBoxContainer.new()
-	sens_row.add_theme_constant_override("separation", 8)
-	vbox.add_child(sens_row)
-	var sens_field := LineEdit.new()
-	sens_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	sens_field.text = str(PresenceManager.load_setting("mouse_sensitivity", 0.5))
-	sens_field.text_submitted.connect(func(val):
-		var f := float(val)
-		if f > 0:
-			PresenceManager.save_setting("mouse_sensitivity", f)
-	)
-	sens_row.add_child(sens_field)
+	var sens_slider := HSlider.new()
+	sens_slider.min_value = 0.0009
+	sens_slider.max_value = 0.006
+	sens_slider.step = 0.0001
+	sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 0.002)
+	sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))
+	vbox.add_child(sens_slider)
 	var ads_sens_label := Label.new()
 	ads_sens_label.text = "ADS Sensitivity"
 	vbox.add_child(ads_sens_label)
