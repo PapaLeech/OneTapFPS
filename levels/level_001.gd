@@ -16,6 +16,19 @@ var _chat_enabled : bool = true
 @onready var _chat_output   : RichTextLabel = $HUDLayer/ChatTerminalPanel/VBox/ChatOutput
 @onready var _term_output   : RichTextLabel = $HUDLayer/ChatTerminalPanel/VBox/TerminalOutput
 @onready var _input_line    : LineEdit      = $HUDLayer/ChatTerminalPanel/VBox/InputLine
+@onready var _lock_btn      : Button        = $HUDLayer/ChatTerminalPanel/VBox/TabBar/LockBtn
+@onready var _resize_handle : Button        = $HUDLayer/ChatTerminalPanel/ResizeHandle
+@onready var _chat_panel    : PanelContainer = $HUDLayer/ChatTerminalPanel
+
+# ─── Chat window drag / resize / lock ────────────────────────────────────────
+var _chat_locked       : bool    = false
+var _dragging          : bool    = false
+var _resizing          : bool    = false
+var _drag_offset       : Vector2 = Vector2.ZERO
+var _resize_start_pos  : Vector2 = Vector2.ZERO
+var _resize_start_size : Vector2 = Vector2.ZERO
+const CHAT_MIN_SIZE    : Vector2 = Vector2(160, 100)
+const CHAT_MAX_SIZE    : Vector2 = Vector2(500, 400)
 
 func _ready() -> void:
 	print("Level _ready, is_server: ", multiplayer.is_server())
@@ -141,6 +154,10 @@ func _setup_chat() -> void:
 	panel.modulate.a = 0.0
 	panel.visible = false
 	_release_chat_focus()
+	_setup_chat_window()
+	# Hook drag on the tab bar (header area)
+	var tab_bar := $HUDLayer/ChatTerminalPanel/VBox/TabBar
+	tab_bar.gui_input.connect(_on_tabbar_gui_input)
 
 func set_chat_enabled(enabled: bool) -> void:
 	_chat_enabled = enabled
@@ -224,6 +241,89 @@ func _execute_chat_command(cmd: String) -> void:
 			_term_output.append_text("Ping: (coming soon)\n")
 		_:
 			_term_output.append_text("Unknown command: " + parts[0] + "\n")
+
+# ─── Lock / drag / resize ──────────────────────────────────────────────────────────────
+func _setup_chat_window() -> void:
+	_lock_btn.pressed.connect(_toggle_chat_lock)
+	_resize_handle.button_down.connect(_on_resize_start)
+	# Load saved position/size/lock state
+	var pos_x  := PresenceManager.load_setting("chat_pos_x",  8.0)
+	var pos_y  := PresenceManager.load_setting("chat_pos_y",  -212.0)
+	var size_x := PresenceManager.load_setting("chat_size_x", 162.0)
+	var size_y := PresenceManager.load_setting("chat_size_y", 124.0)
+	_chat_locked = PresenceManager.load_setting("chat_locked", false)
+	_chat_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	_chat_panel.offset_left   = pos_x
+	_chat_panel.offset_top    = pos_y
+	_chat_panel.offset_right  = pos_x + size_x
+	_chat_panel.offset_bottom = pos_y + size_y
+	_update_lock_ui()
+
+func _toggle_chat_lock() -> void:
+	_chat_locked = not _chat_locked
+	PresenceManager.save_setting("chat_locked", _chat_locked)
+	_update_lock_ui()
+
+func _update_lock_ui() -> void:
+	_lock_btn.text = "☑" if _chat_locked else "☐"
+	_resize_handle.visible = not _chat_locked
+
+func _on_resize_start() -> void:
+	if _chat_locked:
+		return
+	_resizing = true
+	_resize_start_pos  = get_viewport().get_mouse_position()
+	_resize_start_size = Vector2(
+		_chat_panel.offset_right  - _chat_panel.offset_left,
+		_chat_panel.offset_bottom - _chat_panel.offset_top
+	)
+
+func _save_chat_layout() -> void:
+	PresenceManager.save_setting("chat_pos_x",  _chat_panel.offset_left)
+	PresenceManager.save_setting("chat_pos_y",  _chat_panel.offset_top)
+	PresenceManager.save_setting("chat_size_x", _chat_panel.offset_right  - _chat_panel.offset_left)
+	PresenceManager.save_setting("chat_size_y", _chat_panel.offset_bottom - _chat_panel.offset_top)
+
+func _process_chat_drag(delta: float) -> void:
+	if not (_dragging or _resizing):
+		return
+	var mouse := get_viewport().get_mouse_position()
+	var vp    := get_viewport().get_visible_rect().size
+	if _dragging:
+		var new_left   := mouse.x - _drag_offset.x
+		var new_top_abs := mouse.y - _drag_offset.y
+		var w := _chat_panel.offset_right - _chat_panel.offset_left
+		var h := _chat_panel.offset_bottom - _chat_panel.offset_top
+		new_left   = clamp(new_left, 0, vp.x - w)
+		new_top_abs = clamp(new_top_abs, 0, vp.y - h)
+		_chat_panel.offset_left   = new_left
+		_chat_panel.offset_right  = new_left + w
+		_chat_panel.offset_top    = new_top_abs - vp.y
+		_chat_panel.offset_bottom = new_top_abs - vp.y + h
+	elif _resizing:
+		var diff := mouse - _resize_start_pos
+		var new_w := clamp(_resize_start_size.x + diff.x, CHAT_MIN_SIZE.x, CHAT_MAX_SIZE.x)
+		var new_h := clamp(_resize_start_size.y + diff.y, CHAT_MIN_SIZE.y, CHAT_MAX_SIZE.y)
+		_chat_panel.offset_right  = _chat_panel.offset_left + new_w
+		_chat_panel.offset_bottom = _chat_panel.offset_top  + new_h
+
+func _on_tabbar_gui_input(event: InputEvent) -> void:
+	if _chat_locked:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_dragging = true
+			var abs_top := _chat_panel.offset_top + get_viewport().get_visible_rect().size.y
+			_drag_offset = get_viewport().get_mouse_position() - Vector2(_chat_panel.offset_left, abs_top)
+		else:
+			_dragging = false
+			_save_chat_layout()
+
+func _process(delta: float) -> void:
+	_process_chat_drag(delta)
+	if _resizing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		_resizing = false
+		_save_chat_layout()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed:
