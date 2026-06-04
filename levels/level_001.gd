@@ -66,9 +66,11 @@ func _on_player_connected(peer_id: int) -> void:
 	for existing_id in spawn_index_map:
 		if existing_id != peer_id:
 			_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
+	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
+	NetworkSyncLogger.log_peer_connected(peer_id, username)
 	if MultiplayerManager.players.size() >= 2:
 		var names: Array = MultiplayerManager.players.values()
-		SessionLogger.try_start_session(names[0], names[1])
+		SessionLogger.start_session_rpc.rpc(names[0], names[1])
 
 # Runs on ALL peers via RPC — spawns the player locally
 @rpc("authority", "call_local", "reliable")

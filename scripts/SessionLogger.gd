@@ -29,6 +29,11 @@ signal session_ended
 func _ready() -> void:
 	get_tree().root.connect("tree_exiting", _on_exit)
 
+# Called by the server via RPC to start a session on all clients
+@rpc("authority", "call_local", "reliable")
+func start_session_rpc(player_a: String, player_b: String) -> void:
+	try_start_session(player_a, player_b)
+
 func try_start_session(player_a: String, player_b: String) -> void:
 	if session_active:
 		return

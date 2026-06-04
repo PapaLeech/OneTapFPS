@@ -11,6 +11,7 @@ func take_damage(amount: float) -> void:
 		var health := parent.get_node_or_null("Health")
 		if health:
 			var dmg := amount * damage_multiplier
+			health.last_attacker = PresenceManager.username
 			# In multiplayer, send damage RPC to the player's authority
 			if multiplayer.has_multiplayer_peer():
 				var target_id := int(parent.name)

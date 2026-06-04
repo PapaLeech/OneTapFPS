@@ -292,7 +292,7 @@ func _show_settings() -> void:
 	vbox.add_child(sens_label)
 	var sens_slider := HSlider.new()
 	sens_slider.min_value = 0.0009
-	sens_slider.max_value = 0.006
+	sens_slider.max_value = 0.003
 	sens_slider.step = 0.0001
 	sens_slider.value = PresenceManager.load_setting("mouse_sensitivity", 0.002)
 	sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("mouse_sensitivity", v))

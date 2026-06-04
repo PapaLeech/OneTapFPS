@@ -325,6 +325,7 @@ func fire():
 			excludes.append(p.get_rid())
 		query.exclude = excludes
 		var result := space.intersect_ray(query)
+		HitDetectionLogger.log_shot_fired(PresenceManager.username, current_weapon.weapon_name if current_weapon else "unknown", ray_origin)
 		if result:
 			_bullet_hole.spawn(result.position, result.normal, get_tree().current_scene)
 			var hit := result.collider as Node
@@ -340,6 +341,10 @@ func fire():
 				hitbox.take_damage(current_weapon.damage)
 				if _crosshair and _crosshair.has_method("hit_flash"):
 					_crosshair.hit_flash()
+			else:
+				HitDetectionLogger.log_miss(PresenceManager.username, current_weapon.weapon_name if current_weapon else "unknown")
+		else:
+			HitDetectionLogger.log_miss(PresenceManager.username, current_weapon.weapon_name if current_weapon else "unknown")
 		# Send shot to server for lag-compensated hit validation
 		if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
 			var local_player := get_parent().get_parent()

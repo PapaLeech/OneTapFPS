@@ -3,6 +3,7 @@ extends Node
 @export var max_health: float = 100.0
 
 var current_health: float = max_health
+var last_attacker: String = "unknown"
 
 signal died
 signal health_changed(new_health: float, max_health: float)
@@ -32,7 +33,7 @@ func _apply_damage(amount: float) -> void:
 	if current_health <= 0.0:
 		var victim := str(get_parent().name) if get_parent() else "unknown"
 		EnemyStateLogger.log_death(victim, get_parent().global_position if get_parent() else Vector3.ZERO)
-		HitDetectionLogger.log_kill("unknown", victim, "unknown", "unknown")
+		HitDetectionLogger.log_kill(last_attacker, victim, "unknown", "unknown")
 		SessionLogger.record_death()
 		emit_signal("died")
 
