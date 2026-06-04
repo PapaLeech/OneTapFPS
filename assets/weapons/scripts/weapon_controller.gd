@@ -190,7 +190,7 @@ func _physics_process(delta):
 		target_pos += Vector3(sway_x, sway_y, 0.0)
 		weapon_model_parent.position = weapon_model_parent.position.lerp(target_pos, 8.0 * delta)
 
-	if Input.is_action_just_pressed("reload") and not _is_reloading:
+	if Input.is_action_just_pressed("reload") and not _is_reloading and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_start_reload()
 		return
 
