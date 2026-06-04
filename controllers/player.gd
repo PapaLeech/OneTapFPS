@@ -82,7 +82,7 @@ func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		# Let PauseMenu handle it
 		pass
-	if event.is_action_pressed("kill"):
+	if event.is_action_pressed("kill") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var health := get_node_or_null("Health")
 		if health:
 			health.take_damage(health.max_health)
