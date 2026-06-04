@@ -219,7 +219,8 @@ func _on_chat_input_submitted(text: String) -> void:
 		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
 		_execute_chat_command(text)
 	_input_line.clear()
-	# Stay focused after sending — Esc required to close
+	# Regrab focus next frame — LineEdit releases it internally after text_submitted
+	await get_tree().process_frame
 	_input_line.grab_focus()
 
 @rpc("any_peer", "call_local", "reliable")
