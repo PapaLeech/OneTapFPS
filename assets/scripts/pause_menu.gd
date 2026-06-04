@@ -148,6 +148,10 @@ func _open() -> void:
 	_settings_panel.visible = false
 	_death_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Disable chat while pause menu is open
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_method("set_chat_enabled"):
+		level.set_chat_enabled(false)
 	# Hide crosshair via weapon controller
 	var wc := get_parent().get_node_or_null("Components/WeaponController")
 	if wc and wc.get("_crosshair"): wc._crosshair.hide()
@@ -167,6 +171,10 @@ func _close() -> void:
 	_panel.visible = false
 	_settings_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Re-enable chat when pause menu closes
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_method("set_chat_enabled"):
+		level.set_chat_enabled(true)
 	# Show crosshair via weapon controller
 	var wc := get_parent().get_node_or_null("Components/WeaponController")
 	if wc and wc.get("_crosshair"): wc._crosshair.show()
@@ -195,6 +203,10 @@ func _open_death_menu() -> void:
 	_settings_panel.visible = false
 	_death_panel.visible = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Disable chat while death menu is open
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_method("set_chat_enabled"):
+		level.set_chat_enabled(false)
 	# Hide crosshair
 	var wc := get_parent().get_node_or_null("Components/WeaponController")
 	if wc and wc.get("_crosshair"): wc._crosshair.hide()
@@ -222,6 +234,10 @@ func _respawn() -> void:
 	_screen = Screen.NONE
 	_death_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Re-enable chat on respawn
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_method("set_chat_enabled"):
+		level.set_chat_enabled(true)
 	# Show crosshair
 	var wc := get_parent().get_node_or_null("Components/WeaponController")
 	if wc and wc.get("_crosshair"): wc._crosshair.show()

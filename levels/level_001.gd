@@ -6,6 +6,17 @@ var spawn_positions: Array[Vector3] = []
 var spawn_counter: int = 0
 var spawn_index_map: Dictionary = {}  # peer_id -> pos_index, server only
 
+# ─── Chat ────────────────────────────────────────────────────────────────────
+enum ChatFocus { NONE, CHAT, TERMINAL }
+var _chat_focus : ChatFocus = ChatFocus.NONE
+var _chat_enabled : bool = true
+
+@onready var _chat_tab_btn  : Button        = $HUDLayer/ChatTerminalPanel/VBox/TabBar/ChatTab
+@onready var _term_tab_btn  : Button        = $HUDLayer/ChatTerminalPanel/VBox/TabBar/TerminalTab
+@onready var _chat_output   : RichTextLabel = $HUDLayer/ChatTerminalPanel/VBox/ChatOutput
+@onready var _term_output   : RichTextLabel = $HUDLayer/ChatTerminalPanel/VBox/TerminalOutput
+@onready var _input_line    : LineEdit      = $HUDLayer/ChatTerminalPanel/VBox/InputLine
+
 func _ready() -> void:
 	print("Level _ready, is_server: ", multiplayer.is_server())
 	# Read spawn positions from spawn_points group
@@ -29,6 +40,9 @@ func _ready() -> void:
 		_client_ready.rpc_id(1)
 		# Client: listen for peer disconnection to remove stale meshes
 		multiplayer.peer_disconnected.connect(_client_remove_player)
+	# Skip chat setup on dedicated server
+	if not OS.has_feature("dedicated_server") and not "--dedicated-server" in OS.get_cmdline_args():
+		_setup_chat()
 
 # Client tells server it has loaded the level
 @rpc("any_peer", "reliable")
@@ -114,3 +128,109 @@ func _client_remove_player(peer_id: int) -> void:
 	if node:
 		print("Client: removing mesh for disconnected peer ", peer_id)
 		node.queue_free()
+
+# ─── In-game Chat / Terminal ──────────────────────────────────────────────────────────
+func _setup_chat() -> void:
+	_chat_tab_btn.pressed.connect(func(): _switch_chat_tab(ChatFocus.CHAT))
+	_term_tab_btn.pressed.connect(func(): _switch_chat_tab(ChatFocus.TERMINAL))
+	_input_line.text_submitted.connect(_on_chat_input_submitted)
+	_chat_output.visible = true
+	_term_output.visible = false
+	# Start fully hidden — appears on first Enter press
+	var panel := $HUDLayer/ChatTerminalPanel
+	panel.modulate.a = 0.0
+	panel.visible = false
+	_release_chat_focus()
+
+func set_chat_enabled(enabled: bool) -> void:
+	_chat_enabled = enabled
+	if not enabled and _chat_focus != ChatFocus.NONE:
+		_release_chat_focus()
+	if not enabled:
+		var panel := $HUDLayer/ChatTerminalPanel
+		panel.modulate.a = 0.0
+		panel.visible = false
+
+func _switch_chat_tab(focus: ChatFocus) -> void:
+	if not _chat_enabled:
+		return
+	_chat_focus = focus
+	_chat_output.visible = (focus == ChatFocus.CHAT)
+	_term_output.visible = (focus == ChatFocus.TERMINAL)
+	_input_line.editable = true
+	_input_line.grab_focus()
+	# Show panel fully opaque when focused
+	var panel := $HUDLayer/ChatTerminalPanel
+	panel.visible = true
+	panel.modulate.a = 1.0
+	if focus == ChatFocus.CHAT:
+		_input_line.placeholder_text = "Type message, Enter to send, Esc to exit..."
+	else:
+		_input_line.placeholder_text = "Type command, Enter to run, Esc to exit..."
+
+func _release_chat_focus() -> void:
+	_chat_focus = ChatFocus.NONE
+	_input_line.editable = false
+	_input_line.release_focus()
+	_input_line.placeholder_text = "Enter = chat    ` = console"
+	# Fade to faint if messages exist, otherwise hide completely
+	var panel := $HUDLayer/ChatTerminalPanel
+	if _chat_output.get_parsed_text().strip_edges() != "":
+		panel.visible = true
+		panel.modulate.a = 0.25
+	else:
+		panel.modulate.a = 0.0
+		panel.visible = false
+
+func _on_chat_input_submitted(text: String) -> void:
+	if text.strip_edges() == "":
+		_input_line.clear()
+		return
+	if _chat_focus == ChatFocus.CHAT:
+		_send_chat_message.rpc(PresenceManager.username, text)
+	elif _chat_focus == ChatFocus.TERMINAL:
+		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+		_execute_chat_command(text)
+	_input_line.clear()
+	_input_line.grab_focus()
+
+@rpc("any_peer", "call_local", "reliable")
+func _send_chat_message(sender: String, message: String) -> void:
+	_chat_output.append_text("[color=yellow][b]" + sender + ":[/b][/color] " + message + "\n")
+
+func _execute_chat_command(cmd: String) -> void:
+	var parts := cmd.strip_edges().split(" ", false)
+	if parts.is_empty():
+		return
+	match parts[0].to_lower():
+		"help":
+			_term_output.append_text("Commands: help, clear, version, ping\n")
+		"clear":
+			_term_output.clear()
+		"version":
+			_term_output.append_text("OneTapFPS v0.1-dev\n")
+		"ping":
+			_term_output.append_text("Ping: (coming soon)\n")
+		_:
+			_term_output.append_text("Unknown command: " + parts[0] + "\n")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed:
+		return
+	if event.keycode == KEY_QUOTELEFT:
+		if _chat_enabled:
+			if _chat_focus == ChatFocus.TERMINAL:
+				_switch_chat_tab(ChatFocus.CHAT)
+			else:
+				_switch_chat_tab(ChatFocus.TERMINAL)
+		get_viewport().set_input_as_handled()
+		return
+	if event.keycode == KEY_ENTER and not event.alt_pressed:
+		if _chat_enabled and _chat_focus == ChatFocus.NONE:
+			_switch_chat_tab(ChatFocus.CHAT)
+			get_viewport().set_input_as_handled()
+		return
+	if event.keycode == KEY_ESCAPE:
+		if _chat_focus != ChatFocus.NONE:
+			_release_chat_focus()
+			get_viewport().set_input_as_handled()

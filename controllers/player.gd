@@ -191,6 +191,10 @@ func _activate_camera() -> void:
 func _on_died() -> void:
 	# Disable movement
 	set_physics_process(false)
+	# Disable in-game chat
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_method("set_chat_enabled"):
+		level.set_chat_enabled(false)
 	# Play death animation
 	_set_anim_state(AnimState.DEAD)
 	# Tilt camera to the side and drop it down like falling

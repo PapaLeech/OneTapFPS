@@ -37,4 +37,52 @@ script = ExtResource("5_44t5x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 0, -38.39)
 script = ExtResource("5_44t5x")
 
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1488801044]
+
+[node name="ChatTerminalPanel" type="PanelContainer" parent="HUDLayer" unique_id=1576192935]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -132.0
+offset_right = 170.0
+offset_bottom = -8.0
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="HUDLayer/ChatTerminalPanel" unique_id=881437390]
+layout_mode = 2
+
+[node name="TabBar" type="HBoxContainer" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1100182385]
+layout_mode = 2
+
+[node name="ChatTab" type="Button" parent="HUDLayer/ChatTerminalPanel/VBox/TabBar" unique_id=1026734388]
+layout_mode = 2
+text = "Chat"
+flat = true
+
+[node name="TerminalTab" type="Button" parent="HUDLayer/ChatTerminalPanel/VBox/TabBar" unique_id=17061255]
+layout_mode = 2
+text = "Terminal  [`]"
+flat = true
+
+[node name="ChatOutput" type="RichTextLabel" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=704674644]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="TerminalOutput" type="RichTextLabel" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1645832158]
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="InputLine" type="LineEdit" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1364002442]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter = chat    ` = console"
+
 [editable path="Map_v12"]
