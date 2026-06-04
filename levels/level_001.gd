@@ -163,6 +163,11 @@ func _switch_chat_tab(focus: ChatFocus) -> void:
 	var panel := $HUDLayer/ChatTerminalPanel
 	panel.visible = true
 	panel.modulate.a = 1.0
+	# Freeze player movement and release mouse while typing
+	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % str(multiplayer.get_unique_id()))
+	if player and player.has_method("set_physics_process"):
+		player.set_physics_process(false)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if focus == ChatFocus.CHAT:
 		_input_line.placeholder_text = "Type message, Enter to send, Esc to exit..."
 	else:
@@ -173,6 +178,11 @@ func _release_chat_focus() -> void:
 	_input_line.editable = false
 	_input_line.release_focus()
 	_input_line.placeholder_text = "Enter = chat    ` = console"
+	# Restore player movement and recapture mouse
+	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % str(multiplayer.get_unique_id()))
+	if player and player.has_method("set_physics_process"):
+		player.set_physics_process(true)
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	# Fade to faint if messages exist, otherwise hide completely
 	var panel := $HUDLayer/ChatTerminalPanel
 	if _chat_output.get_parsed_text().strip_edges() != "":
@@ -192,6 +202,7 @@ func _on_chat_input_submitted(text: String) -> void:
 		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
 		_execute_chat_command(text)
 	_input_line.clear()
+	# Stay focused after sending — Esc required to close
 	_input_line.grab_focus()
 
 @rpc("any_peer", "call_local", "reliable")
@@ -231,6 +242,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event.keycode == KEY_ESCAPE:
+		# Chat consumes Esc first — pause menu only gets it when chat is closed
 		if _chat_focus != ChatFocus.NONE:
 			_release_chat_focus()
 			get_viewport().set_input_as_handled()

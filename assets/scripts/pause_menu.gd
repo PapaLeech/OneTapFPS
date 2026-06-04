@@ -130,6 +130,10 @@ func _style_panels() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("exit"):
+		# Don't handle Esc if chat is open — level_001 handles it first
+		var level := get_tree().get_root().get_node_or_null("Node3D")
+		if level and level.get("_chat_focus") != null and level._chat_focus != 0:
+			return
 		get_viewport().set_input_as_handled()
 		if _screen == Screen.SETTINGS:
 			_close_settings()
