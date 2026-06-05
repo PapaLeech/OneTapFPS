@@ -224,8 +224,10 @@ func _on_chat_line_gui_input(event: InputEvent) -> void:
 		elif _chat_focus == ChatFocus.TERMINAL:
 			_term_output.append_text("[color=lime]> " + text + "[/color]\n")
 			_execute_chat_command(text)
-		# Stay in focus — do NOT call release or switch
 		_input_line.grab_focus()
+	if event.keycode == KEY_ESCAPE:
+		get_viewport().set_input_as_handled()
+		_release_chat_focus()
 
 @rpc("any_peer", "call_local", "reliable")
 func _send_chat_message(sender: String, message: String) -> void:
