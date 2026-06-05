@@ -12,17 +12,20 @@ signal invite_received(from_username: String)
 func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		return
-	# Connection is deferred — call connect_to_game_server() when needed
+	connect_to_game_server()
 
 func connect_to_game_server() -> void:
-	if multiplayer.has_multiplayer_peer():
-		# Already connected — just re-register username in case peer map was cleared
-		if multiplayer.get_unique_id() != 1:
-			c_register_username.rpc_id(1, PresenceManager.username)
-			connected_to_server.emit()
+	# If already connected as a real client, just re-register
+	if multiplayer.has_multiplayer_peer() and multiplayer.get_unique_id() != 1:
+		print("[CTS] already connected as client, re-registering")
+		c_register_username.rpc_id(1, PresenceManager.username)
+		connected_to_server.emit()
 		return
+	# Clear any default/stale peer
+	multiplayer.multiplayer_peer = null
 	peer = ENetMultiplayerPeer.new()
 	var error := peer.create_client(ADDRESS, PORT)
+	print("[CTS] create_client error: ", error)
 	if error != OK:
 		print("failed to connect to server")
 		return
@@ -31,11 +34,13 @@ func connect_to_game_server() -> void:
 		multiplayer.connected_to_server.connect(_on_connected_to_server)
 	if not multiplayer.connection_failed.is_connected(_on_connection_failed):
 		multiplayer.connection_failed.connect(_on_connection_failed)
+	if not multiplayer.connection_failed.is_connected(_on_connection_failed):
+		multiplayer.connection_failed.connect(_on_connection_failed)
 
 func _on_connected_to_server() -> void:
 	print("connected to server")
-	connected_to_server.emit()
 	c_register_username.rpc_id(1, PresenceManager.username)
+	connected_to_server.emit()
 
 func _on_connection_failed() -> void:
 	print("failed to connect to server")
@@ -50,8 +55,10 @@ func try_connect_client_to_lobby() -> void:
 	c_try_connect_client_to_lobby.rpc_id(1)
 
 func send_invite(to_username: String) -> void:
-	if not multiplayer.has_multiplayer_peer():
+	print("[CTS] send_invite called for ", to_username, " has_peer: ", multiplayer.has_multiplayer_peer(), " unique_id: ", multiplayer.get_unique_id())
+	if not multiplayer.has_multiplayer_peer() or multiplayer.get_unique_id() == 1:
 		connected_to_server.connect(func():
+			await get_tree().create_timer(0.3).timeout
 			c_send_invite.rpc_id(1, PresenceManager.username, to_username)
 		, CONNECT_ONE_SHOT)
 		connect_to_game_server()
