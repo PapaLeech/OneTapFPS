@@ -90,6 +90,8 @@ func _ready() -> void:
 		_go_online_and_fetch_friends()
 	ClientToServer.invite_received.connect(_on_network_invite_received)
 	ClientToServer.lobby_joined.connect(_on_lobby_joined)
+	ClientToServer.invite_accepted.connect(_on_friend_accepted_invite)
+	ClientToServer.lobby_match_starting.connect(_on_lobby_match_starting)
 
 
 # ─── Music ────────────────────────────────────────────────────────────────────
@@ -256,14 +258,13 @@ func receive_invite(sender_name: String) -> void:
 
 func _on_invite_accepted() -> void:
 	_invite_panel.visible = false
+	var sender := _invite_sender
 	_invite_sender = ""
-	if multiplayer.has_multiplayer_peer():
-		ClientToServer.try_connect_client_to_lobby()
-	else:
-		ClientToServer.connected_to_server.connect(func():
-			ClientToServer.try_connect_client_to_lobby()
-		, CONNECT_ONE_SHOT)
-		ClientToServer.connect_to_game_server()
+	# Add host and self to lobby panel
+	_add_player_tag(sender, true)
+	_add_player_tag(PresenceManager.username, true)
+	# Notify host we accepted
+	ClientToServer.accept_invite(sender)
 
 func _on_invite_declined() -> void:
 	_invite_panel.visible = false
@@ -271,6 +272,16 @@ func _on_invite_declined() -> void:
 
 func _on_network_invite_received(from_username: String) -> void:
 	receive_invite(from_username)
+
+func _on_friend_accepted_invite(accepter_username: String) -> void:
+	# Add both to lobby if not already there
+	if not _lobby_players.has(PresenceManager.username):
+		_add_player_tag(PresenceManager.username, true)
+	if not _lobby_players.has(accepter_username):
+		_add_player_tag(accepter_username, true)
+
+func _on_lobby_match_starting() -> void:
+	ClientToServer.try_connect_client_to_lobby()
 
 # ─── Settings ────────────────────────────────────────────────────────────────
 
@@ -440,7 +451,11 @@ func _on_mode_clicked(event: InputEvent, mode: Mode) -> void:
 	if not event.pressed or event.button_index != MOUSE_BUTTON_LEFT: return
 	if _active_mode != Mode.NONE: return
 	if mode == Mode.DEATHMATCH:
-		_show_host_join_panel()
+		if _lobby_players.size() > 0:
+			# Lobby has players from invite — start match for everyone
+			ClientToServer.start_lobby_match()
+		else:
+			_show_host_join_panel()
 	else:
 		_start_countdown(mode)
 

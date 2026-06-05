@@ -78,6 +78,31 @@ func c_send_invite(from_username: String, to_username: String) -> void:
 		return
 	ClientToServer.receive_invite_rpc.rpc_id(target_peer, from_username)
 
+@rpc("any_peer", "call_remote", "reliable")
+func c_accept_invite(accepter: String, host_username: String) -> void:
+	var host_peer := username_to_peer.get(host_username, -1)
+	if host_peer == -1:
+		for key in username_to_peer:
+			if key.to_lower() == host_username.to_lower():
+				host_peer = username_to_peer[key]
+				break
+	if host_peer == -1:
+		print("accept_invite: host %s not found" % host_username)
+		return
+	var accepter_peer := multiplayer.get_remote_sender_id()
+	print("Server: %s accepted invite from %s" % [accepter, host_username])
+	# Tell host someone accepted
+	ClientToServer.invite_accepted_rpc.rpc_id(host_peer, accepter)
+	# Tell accepter the host username so they can add dogtags
+	ClientToServer.lobby_member_added_rpc.rpc_id(accepter_peer, host_username, accepter)
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_start_lobby_match(host_username: String) -> void:
+	print("Server: start_lobby_match from %s" % host_username)
+	for uname in username_to_peer:
+		var pid: int = username_to_peer[uname]
+		ClientToServer.lobby_match_starting_rpc.rpc_id(pid)
+
 func get_lobby_from_client_id(id: int) -> Lobby:
 	for lobby in lobbies:
 		if lobby.clients.has(id):

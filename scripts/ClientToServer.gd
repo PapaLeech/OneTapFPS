@@ -8,6 +8,8 @@ var peer := ENetMultiplayerPeer.new()
 signal connected_to_server
 signal lobby_joined
 signal invite_received(from_username: String)
+signal invite_accepted(from_username: String)
+signal lobby_match_starting
 
 func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
@@ -99,3 +101,49 @@ func receive_invite_rpc(from_username: String) -> void:
 @rpc("authority", "call_remote", "reliable")
 func confirm_lobby_join() -> void:
 	lobby_joined.emit()
+
+func accept_invite(from_username: String) -> void:
+	c_accept_invite.rpc_id(1, PresenceManager.username, from_username)
+
+func start_lobby_match() -> void:
+	c_start_lobby_match.rpc_id(1, PresenceManager.username)
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_accept_invite(accepter: String, host_username: String) -> void:
+	# Notify host that someone accepted
+	var host_peer := MultiplayerManager.username_to_peer.get(host_username, -1)
+	if host_peer == -1:
+		for key in MultiplayerManager.username_to_peer:
+			if key.to_lower() == host_username.to_lower():
+				host_peer = MultiplayerManager.username_to_peer[key]
+				break
+	if host_peer == -1:
+		print("accept_invite: host %s not found" % host_username)
+		return
+	# Tell host someone accepted
+	invite_accepted_rpc.rpc_id(host_peer, accepter)
+	# Tell accepter to add dogtags
+	var accepter_peer := multiplayer.get_remote_sender_id()
+	lobby_member_added_rpc.rpc_id(accepter_peer, host_username, accepter)
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_start_lobby_match(host_username: String) -> void:
+	# Tell all members of this pre-lobby to join the match
+	var host_peer := multiplayer.get_remote_sender_id()
+	print("Server: start_lobby_match from %s" % host_username)
+	# Notify all registered peers that match is starting (simple broadcast for now)
+	for uname in MultiplayerManager.username_to_peer:
+		var pid: int = MultiplayerManager.username_to_peer[uname]
+		lobby_match_starting_rpc.rpc_id(pid)
+
+@rpc("authority", "call_remote", "reliable")
+func invite_accepted_rpc(accepter_username: String) -> void:
+	invite_accepted.emit(accepter_username)
+
+@rpc("authority", "call_remote", "reliable")
+func lobby_member_added_rpc(host_username: String, accepter_username: String) -> void:
+	invite_accepted.emit(accepter_username)
+
+@rpc("authority", "call_remote", "reliable")
+func lobby_match_starting_rpc() -> void:
+	lobby_match_starting.emit()
