@@ -263,6 +263,7 @@ func _on_invite_accepted() -> void:
 		ClientToServer.connected_to_server.connect(func():
 			ClientToServer.try_connect_client_to_lobby()
 		, CONNECT_ONE_SHOT)
+		ClientToServer.connect_to_game_server()
 
 func _on_invite_declined() -> void:
 	_invite_panel.visible = false
