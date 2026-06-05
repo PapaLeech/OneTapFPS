@@ -147,7 +147,8 @@ func _client_remove_player(peer_id: int) -> void:
 func _setup_chat() -> void:
 	_chat_tab_btn.pressed.connect(func(): _switch_chat_tab(ChatFocus.CHAT))
 	_term_tab_btn.pressed.connect(func(): _switch_chat_tab(ChatFocus.TERMINAL))
-	_input_line.text_submitted.connect(_on_chat_input_submitted)
+	# Use gui_input instead of text_submitted so we control focus
+	_input_line.gui_input.connect(_on_chat_line_gui_input)
 	_chat_output.visible = true
 	_term_output.visible = false
 	# Start fully hidden — appears on first Enter press
@@ -209,19 +210,22 @@ func _release_chat_focus() -> void:
 		panel.modulate.a = 0.0
 		panel.visible = false
 
-func _on_chat_input_submitted(text: String) -> void:
-	if text.strip_edges() == "":
-		_input_line.clear()
+func _on_chat_line_gui_input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed:
 		return
-	if _chat_focus == ChatFocus.CHAT:
-		_send_chat_message.rpc(PresenceManager.username, text)
-	elif _chat_focus == ChatFocus.TERMINAL:
-		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
-		_execute_chat_command(text)
-	_input_line.clear()
-	# Regrab focus next frame — LineEdit releases it internally after text_submitted
-	await get_tree().process_frame
-	_input_line.grab_focus()
+	if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+		get_viewport().set_input_as_handled()
+		var text := _input_line.text.strip_edges()
+		_input_line.clear()
+		if text == "":
+			return
+		if _chat_focus == ChatFocus.CHAT:
+			_send_chat_message.rpc(PresenceManager.username, text)
+		elif _chat_focus == ChatFocus.TERMINAL:
+			_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+			_execute_chat_command(text)
+		# Stay in focus — do NOT call release or switch
+		_input_line.grab_focus()
 
 @rpc("any_peer", "call_local", "reliable")
 func _send_chat_message(sender: String, message: String) -> void:

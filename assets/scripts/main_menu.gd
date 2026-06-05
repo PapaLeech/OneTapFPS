@@ -885,7 +885,8 @@ func _on_input_submitted(text: String) -> void:
 		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
 		_execute_terminal_command(text)
 	_input_line.clear()
-	_input_line.grab_focus()
+	await get_tree().process_frame
+	_input_line.call_deferred("grab_focus")
 
 func _execute_terminal_command(cmd: String) -> void:
 	var parts := cmd.strip_edges().split(" ", false)
