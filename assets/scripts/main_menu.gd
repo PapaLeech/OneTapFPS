@@ -853,7 +853,7 @@ func _show_host_join_panel() -> void:
 func _setup_chat_terminal() -> void:
 	_chat_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.CHAT))
 	_term_tab_btn.pressed.connect(func(): _switch_to_tab(ChatFocus.TERMINAL))
-	_input_line.text_submitted.connect(_on_input_submitted)
+	_input_line.gui_input.connect(_on_chat_line_gui_input)
 	_chat_output.visible = true
 	_term_output.visible = false
 	_release_chat_focus()
@@ -875,18 +875,24 @@ func _release_chat_focus() -> void:
 	_input_line.release_focus()
 	_input_line.placeholder_text = "Enter = chat    ` = console"
 
-func _on_input_submitted(text: String) -> void:
-	if text.strip_edges() == "":
-		_input_line.clear()
+func _on_chat_line_gui_input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed:
 		return
-	if _chat_focus == ChatFocus.CHAT:
-		_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
-	elif _chat_focus == ChatFocus.TERMINAL:
-		_term_output.append_text("[color=lime]> " + text + "[/color]\n")
-		_execute_terminal_command(text)
-	_input_line.clear()
-	await get_tree().process_frame
-	_input_line.call_deferred("grab_focus")
+	if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+		get_viewport().set_input_as_handled()
+		var text := _input_line.text.strip_edges()
+		_input_line.clear()
+		if text == "":
+			return
+		if _chat_focus == ChatFocus.CHAT:
+			_chat_output.append_text("[color=white][b]You:[/b][/color] " + text + "\n")
+		elif _chat_focus == ChatFocus.TERMINAL:
+			_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+			_execute_terminal_command(text)
+		_input_line.grab_focus()
+	if event.keycode == KEY_ESCAPE:
+		get_viewport().set_input_as_handled()
+		_release_chat_focus()
 
 func _execute_terminal_command(cmd: String) -> void:
 	var parts := cmd.strip_edges().split(" ", false)
