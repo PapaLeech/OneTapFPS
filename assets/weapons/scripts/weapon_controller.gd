@@ -82,8 +82,6 @@ func _ready() -> void:
 		add_child(_bullet_hole)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if PresenceManager.scoreboard_open:
-		return
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		_mouse_movement = event.relative
 	if event is InputEventMouseButton:
@@ -128,8 +126,10 @@ func _physics_process(delta):
 	if not _scope_overlay:
 		_scope_overlay = scope_overlay
 		print("scope overlay assigned: ", _scope_overlay)
-	if PresenceManager.scoreboard_open:
+	if PresenceManager.scoreboard_open or Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 		_is_aiming = false
+		if _camera and current_weapon:
+			_camera.fov = lerp(_camera.fov, 75.0, current_weapon.ads_speed * delta)
 		return
 	_is_aiming = Input.is_action_pressed("aim") and not (current_weapon and current_weapon.is_melee)
 

@@ -35,6 +35,7 @@ var _scoreboard_panel  : PanelContainer = null
 var _scoreboard_canvas : CanvasLayer    = null
 var _scoreboard_cursor : bool           = false
 var _software_cursor   : Control        = null
+var _cursor_pos        : Vector2        = Vector2(640, 360)
 # stats[peer_id] = {username, kills, deaths, assists, ping}
 var _stats             : Dictionary     = {}
 
@@ -354,20 +355,24 @@ func _process(delta: float) -> void:
 		var sz := _chat_panel.size
 		_resize_handle.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		_resize_handle.position = Vector2(gp.x + sz.x - 18, gp.y + sz.y - 18)
-	# Move software cursor with accumulated mouse delta
+	# Move software cursor using accumulated delta
 	if _software_cursor and _software_cursor.visible:
-		var mouse_pos := get_viewport().get_mouse_position()
-		_software_cursor.position = mouse_pos - Vector2(5, 5)
+		_software_cursor.position = _cursor_pos
 
 func _input(event: InputEvent) -> void:
+	# Track mouse position for software cursor
+	if event is InputEventMouseMotion and _scoreboard_cursor:
+		var vp := get_viewport().get_visible_rect().size
+		_cursor_pos = (_cursor_pos + event.relative).clamp(Vector2.ZERO, vp)
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Right-click while scoreboard open — toggle software cursor
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if _scoreboard_panel and _scoreboard_panel.visible:
 			_scoreboard_cursor = not _scoreboard_cursor
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if _scoreboard_cursor else Input.MOUSE_MODE_CAPTURED
 			get_viewport().set_input_as_handled()
 			return
-
-func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
 		return
 	# Tab — show/hide scoreboard
@@ -427,13 +432,20 @@ func _setup_scoreboard() -> void:
 	_scoreboard_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	_scoreboard_panel.custom_minimum_size = Vector2(520, 0)
 	_scoreboard_canvas.add_child(_scoreboard_panel)
-	# Software cursor — white dot, hidden by default
-	_software_cursor = ColorRect.new()
-	_software_cursor.color = Color(1, 1, 1, 0.9)
-	_software_cursor.size = Vector2(10, 10)
+	# Software cursor — arrow label, hidden by default
+	_software_cursor = Label.new()
+	_software_cursor.text = "\u25B6"
+	_software_cursor.add_theme_font_size_override("font_size", 20)
+	_software_cursor.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 	_software_cursor.visible = false
 	_software_cursor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_scoreboard_canvas.add_child(_software_cursor)
+
+func _set_mouse_visible() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _set_mouse_captured() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _show_scoreboard() -> void:
 	if _scoreboard_panel == null:
