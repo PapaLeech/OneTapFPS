@@ -869,7 +869,7 @@ func _on_deathmatch_connected() -> void:
 	ClientToServer.try_connect_client_to_lobby()
 
 func _on_lobby_joined() -> void:
-	get_tree().change_scene_to_file(GAME_SCENE)
+	get_tree().change_scene_to_file("res://levels/map_splash.tscn")
 
 func _show_host_join_panel() -> void:
 	var dialog := Window.new()
