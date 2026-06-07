@@ -9,6 +9,7 @@ const CONFIG_PATH  = "user://config.cfg"
 const HEARTBEAT_INTERVAL := 2.0
 
 var username: String = ""
+var scoreboard_open: bool = false
 
 var _heartbeat_timer: Timer = null
 var _is_online: bool = false

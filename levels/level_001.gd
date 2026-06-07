@@ -3,7 +3,6 @@ extends Node3D
 const PLAYER_SCENE: PackedScene = preload("res://controllers/player.tscn")
 
 var spawn_positions: Array[Vector3] = []
-var spawn_counter: int = 0
 var spawn_index_map: Dictionary = {}  # peer_id -> pos_index, server only
 
 # ─── Chat ────────────────────────────────────────────────────────────────────
@@ -31,6 +30,14 @@ var _resize_start_size : Vector2 = Vector2.ZERO
 const CHAT_MIN_SIZE    : Vector2 = Vector2(160, 100)
 const CHAT_MAX_SIZE    : Vector2 = Vector2(500, 400)
 
+# ─── Scoreboard ───────────────────────────────────────────────────────────────
+var _scoreboard_panel  : PanelContainer = null
+var _scoreboard_canvas : CanvasLayer    = null
+var _scoreboard_cursor : bool           = false
+var _software_cursor   : Control        = null
+# stats[peer_id] = {username, kills, deaths, assists, ping}
+var _stats             : Dictionary     = {}
+
 func _ready() -> void:
 	print("Level _ready, is_server: ", multiplayer.is_server())
 	# Read spawn positions from spawn_points group
@@ -57,6 +64,7 @@ func _ready() -> void:
 	# Skip chat setup on dedicated server
 	if not OS.has_feature("dedicated_server") and not "--dedicated-server" in OS.get_cmdline_args():
 		_setup_chat()
+		_setup_scoreboard()
 
 # Client tells server it has loaded the level
 @rpc("any_peer", "reliable")
@@ -84,8 +92,11 @@ func _on_player_connected(peer_id: int) -> void:
 		return
 	if spawn_index_map.has(peer_id):
 		return  # Already assigned
-	var pos_index := spawn_counter % spawn_positions.size()
-	spawn_counter += 1
+	var last_index: int = spawn_index_map.get(peer_id, -1)
+	var pos_index := randi() % spawn_positions.size()
+	if spawn_positions.size() > 1:
+		while pos_index == last_index:
+			pos_index = randi() % spawn_positions.size()
 	spawn_index_map[peer_id] = pos_index
 	print("Server spawning player: ", peer_id, " at index ", pos_index)
 	# Tell ALL peers (including server) to spawn this player
@@ -96,6 +107,8 @@ func _on_player_connected(peer_id: int) -> void:
 			_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
 	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
 	NetworkSyncLogger.log_peer_connected(peer_id, username)
+	_stats[peer_id] = {"username": username, "kills": 0, "deaths": 0, "assists": 0, "ping": 0}
+	_sync_stats.rpc(var_to_bytes(_stats))
 	if MultiplayerManager.players.size() >= 2:
 		var names: Array = MultiplayerManager.players.values()
 		SessionLogger.start_session_rpc.rpc(names[0], names[1])
@@ -133,6 +146,9 @@ func _remove_player(peer_id: int) -> void:
 	NetworkSyncLogger.log_peer_disconnected(peer_id, username)
 	SessionLogger.end_session("player_left: %s" % username)
 	spawn_index_map.erase(peer_id)
+	_stats.erase(peer_id)
+	if multiplayer.is_server():
+		_sync_stats.rpc(var_to_bytes(_stats))
 	var node := get_node_or_null(str(peer_id))
 	if node:
 		node.queue_free()
@@ -338,9 +354,33 @@ func _process(delta: float) -> void:
 		var sz := _chat_panel.size
 		_resize_handle.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		_resize_handle.position = Vector2(gp.x + sz.x - 18, gp.y + sz.y - 18)
+	# Move software cursor with accumulated mouse delta
+	if _software_cursor and _software_cursor.visible:
+		var mouse_pos := get_viewport().get_mouse_position()
+		_software_cursor.position = mouse_pos - Vector2(5, 5)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		if _scoreboard_panel and _scoreboard_panel.visible:
+			_scoreboard_cursor = not _scoreboard_cursor
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if _scoreboard_cursor else Input.MOUSE_MODE_CAPTURED
+			get_viewport().set_input_as_handled()
+			return
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.pressed:
+	if not event is InputEventKey:
+		return
+	# Tab — show/hide scoreboard
+	if event.keycode == KEY_TAB:
+		if event.pressed:
+			PresenceManager.scoreboard_open = true
+			_show_scoreboard()
+		else:
+			PresenceManager.scoreboard_open = false
+			_hide_scoreboard()
+		get_viewport().set_input_as_handled()
+		return
+	if not event.pressed:
 		return
 	if event.keycode == KEY_QUOTELEFT:
 		if _chat_enabled:
@@ -360,3 +400,181 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _chat_focus != ChatFocus.NONE:
 			_release_chat_focus()
 			get_viewport().set_input_as_handled()
+
+# ─── Scoreboard ─────────────────────────────────────────────────────────────
+func is_scoreboard_open() -> bool:
+	return _scoreboard_panel != null and _scoreboard_panel.visible
+
+func _setup_scoreboard() -> void:
+	_scoreboard_canvas = CanvasLayer.new()
+	_scoreboard_canvas.layer = 128  # Above everything including death menu
+	add_child(_scoreboard_canvas)
+	_scoreboard_panel = PanelContainer.new()
+	_scoreboard_panel.visible = false
+	# Style matching pause/death menu
+	var style := StyleBoxFlat.new()
+	style.bg_color     = Color(0.12, 0.12, 0.12, 0.97)
+	style.border_color = Color(0.4, 0.4, 0.4, 1.0)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	style.shadow_color = Color(0, 0, 0, 0.8)
+	style.shadow_size  = 8
+	_scoreboard_panel.add_theme_stylebox_override("panel", style)
+	_scoreboard_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Centre panel dead centre on screen
+	_scoreboard_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_scoreboard_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_scoreboard_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
+	_scoreboard_panel.custom_minimum_size = Vector2(520, 0)
+	_scoreboard_canvas.add_child(_scoreboard_panel)
+	# Software cursor — white dot, hidden by default
+	_software_cursor = ColorRect.new()
+	_software_cursor.color = Color(1, 1, 1, 0.9)
+	_software_cursor.size = Vector2(10, 10)
+	_software_cursor.visible = false
+	_software_cursor.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_scoreboard_canvas.add_child(_software_cursor)
+
+func _show_scoreboard() -> void:
+	if _scoreboard_panel == null:
+		return
+	_rebuild_scoreboard()
+	_scoreboard_panel.visible = true
+	_scoreboard_cursor = false
+	PresenceManager.scoreboard_open = true
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _hide_scoreboard() -> void:
+	if _scoreboard_panel == null:
+		return
+	_scoreboard_panel.visible = false
+	_scoreboard_cursor = false
+	PresenceManager.scoreboard_open = false
+	if _software_cursor:
+		_software_cursor.visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _rebuild_scoreboard() -> void:
+	# Clear previous content
+	for child in _scoreboard_panel.get_children():
+		child.queue_free()
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 0)
+	_scoreboard_panel.add_child(vbox)
+	# Title bar
+	var title_bar := ColorRect.new()
+	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
+	title_bar.custom_minimum_size = Vector2(520, 32)
+	vbox.add_child(title_bar)
+	var title := Label.new()
+	title.text = "DEATHMATCH"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	title.set_anchors_preset(Control.PRESET_FULL_RECT)
+	title_bar.add_child(title)
+	# Column header row
+	var header := _make_row("PLAYER", "K", "D", "A", "PING", true)
+	vbox.add_child(header)
+	# Divider
+	var div := ColorRect.new()
+	div.color = Color(0.4, 0.4, 0.4, 0.5)
+	div.custom_minimum_size = Vector2(520, 1)
+	vbox.add_child(div)
+	# Sort players by kills descending
+	var sorted_peers := _stats.keys()
+	sorted_peers.sort_custom(func(a, b): return _stats[a]["kills"] > _stats[b]["kills"])
+	# ─ Team A header
+	var team_a_bar := _make_team_header("TEAM A")
+	vbox.add_child(team_a_bar)
+	for pid in sorted_peers:
+		var s   : Dictionary = _stats[pid]
+		var row := _make_row(
+			s["username"],
+			str(s["kills"]),
+			str(s["deaths"]),
+			str(s["assists"]),
+			str(s["ping"]) + " ms",
+			false
+		)
+		vbox.add_child(row)
+		var rdiv := ColorRect.new()
+		rdiv.color = Color(0.3, 0.3, 0.3, 0.3)
+		rdiv.custom_minimum_size = Vector2(520, 1)
+		vbox.add_child(rdiv)
+	# Blank slots under Team A (fill up to 6)
+	var filled := sorted_peers.size()
+	for i in range(6 - filled):
+		var blank := _make_row("", "", "", "", "", false)
+		vbox.add_child(blank)
+		var bdiv := ColorRect.new()
+		bdiv.color = Color(0.3, 0.3, 0.3, 0.3)
+		bdiv.custom_minimum_size = Vector2(520, 1)
+		vbox.add_child(bdiv)
+	# ─ Team B header
+	var team_b_bar := _make_team_header("TEAM B")
+	vbox.add_child(team_b_bar)
+	# 6 blank slots for Team B
+	for i in range(6):
+		var blank := _make_row("", "", "", "", "", false)
+		vbox.add_child(blank)
+		var bdiv := ColorRect.new()
+		bdiv.color = Color(0.3, 0.3, 0.3, 0.3)
+		bdiv.custom_minimum_size = Vector2(520, 1)
+		vbox.add_child(bdiv)
+
+func _make_team_header(team_name: String) -> ColorRect:
+	var bar := ColorRect.new()
+	bar.color = Color(0.18, 0.18, 0.18, 1.0)
+	bar.custom_minimum_size = Vector2(520, 24)
+	var lbl := Label.new()
+	lbl.text = team_name
+	lbl.add_theme_font_size_override("font_size", 11)
+	lbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1))
+	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	bar.add_child(lbl)
+	return bar
+
+func _make_row(player: String, kills: String, deaths: String, assists: String, ping: String, is_header: bool) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	row.custom_minimum_size = Vector2(520, 28)
+	var cols := [player, kills, deaths, assists, ping]
+	var widths := [220, 60, 60, 60, 80]
+	for i in range(cols.size()):
+		var lbl := Label.new()
+		lbl.text = cols[i]
+		lbl.custom_minimum_size.x = widths[i]
+		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if i > 0 else HORIZONTAL_ALIGNMENT_LEFT
+		if is_header:
+			lbl.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1))
+			lbl.add_theme_font_size_override("font_size", 11)
+		else:
+			lbl.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+			lbl.add_theme_font_size_override("font_size", 13)
+		row.add_child(lbl)
+	return row
+
+# Server broadcasts stats to all clients
+@rpc("authority", "call_local", "reliable")
+func _sync_stats(data: PackedByteArray) -> void:
+	_stats = bytes_to_var(data)
+
+func record_kill(killer_id: int, victim_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if _stats.has(killer_id):
+		_stats[killer_id]["kills"] += 1
+	if _stats.has(victim_id):
+		_stats[victim_id]["deaths"] += 1
+	_sync_stats.rpc(var_to_bytes(_stats))
+
+func record_assist(assister_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if _stats.has(assister_id):
+		_stats[assister_id]["assists"] += 1
+	_sync_stats.rpc(var_to_bytes(_stats))
