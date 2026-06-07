@@ -18,6 +18,8 @@ var _is_online: bool = false
 		_is_online = value
 		queue_redraw()
 
+var invited: bool = false
+
 const BULLET_HEIGHT: float = 32.0
 
 signal invite_pressed(friend_name: String)
@@ -114,7 +116,7 @@ func _draw() -> void:
 	# ── invite text on right black cap ─────────────────────────────────
 	if is_online:
 		var invite_font: Font = ThemeDB.fallback_font
-		var invite_text := "Invite"
+		var invite_text := "Invited" if invited else "Invite"
 		var invite_size := invite_font.get_string_size(invite_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13)
 		var cap_cx := right_cap_x + (frame_x + frame_w - right_cap_x) * 0.5
 		draw_string(invite_font, Vector2(cap_cx - invite_size.x * 0.5, cy + 13 * 0.38),
@@ -220,6 +222,15 @@ func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 		sh_pts.append(Vector2(xo + t * ow, cy + r))
 	draw_colored_polygon(sh_pts, shad)
 
+func set_online_state(online: bool) -> void:
+	is_online = online
+
+func set_invited_state(value: bool) -> void:
+	invited = value
+	queue_redraw()
+	invited = value
+	queue_redraw()
+
 func _gui_input(event: InputEvent) -> void:
 	if not is_online:
 		return
@@ -259,5 +270,7 @@ func _gui_input(event: InputEvent) -> void:
 		var cap_rect := Rect2(right_cap_x, frame_y, frame_x + frame_w - right_cap_x, frame_h)
 		if cap_rect.has_point(event.position):
 			print("BulletSlot clicked for ", friend_name)
+			invited = true
+			queue_redraw()
 			invite_pressed.emit(friend_name)
 			accept_event()

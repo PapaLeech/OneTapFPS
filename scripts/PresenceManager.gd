@@ -1,8 +1,12 @@
 extends Node
 
+const SERVER_URL_V6 = "http://[2a03:b0c0:1:e0:0:1:7a5e:2001]:8000"
+const SERVER_URL_V4 = "http://161.35.41.206:8000"
 const SERVER_URL   = "http://161.35.41.206:8000"
+
+var _active_url: String = SERVER_URL_V6
 const CONFIG_PATH  = "user://config.cfg"
-const HEARTBEAT_INTERVAL := 5.0
+const HEARTBEAT_INTERVAL := 2.0
 
 var username: String = ""
 
@@ -11,6 +15,21 @@ var _is_online: bool = false
 
 func _ready() -> void:
 	_load_username()
+	_detect_server_url()
+
+func _detect_server_url() -> void:
+	var http := HTTPRequest.new()
+	add_child(http)
+	http.request_completed.connect(func(result, code, _h, _b):
+		if result == OK and code == 200:
+			print("[Presence] Using IPv6 server")
+			_active_url = SERVER_URL_V6
+		else:
+			print("[Presence] IPv6 failed, falling back to IPv4")
+			_active_url = SERVER_URL_V4
+		http.queue_free()
+	)
+	http.request(SERVER_URL_V6 + "/version")
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -85,7 +104,7 @@ func _send_heartbeat() -> void:
 	var body := JSON.stringify({"username": username})
 	var headers := ["Content-Type: application/json"]
 	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
-	http.request(SERVER_URL + "/heartbeat", headers, HTTPClient.METHOD_POST, body)
+	http.request(_active_url + "/heartbeat", headers, HTTPClient.METHOD_POST, body)
 
 func go_online(player_name: String) -> void:
 	username = player_name
@@ -97,8 +116,9 @@ func go_online(player_name: String) -> void:
 	var body := JSON.stringify({"username": username})
 	var headers := ["Content-Type: application/json"]
 	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
-	http.request(SERVER_URL + "/online", headers, HTTPClient.METHOD_POST, body)
+	http.request(_active_url + "/online", headers, HTTPClient.METHOD_POST, body)
 	_start_heartbeat()
+	_send_heartbeat()
 
 func go_offline() -> void:
 	if not _is_online or username == "":
@@ -110,7 +130,7 @@ func go_offline() -> void:
 	var body := JSON.stringify({"username": username})
 	var headers := ["Content-Type: application/json"]
 	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
-	http.request(SERVER_URL + "/offline", headers, HTTPClient.METHOD_POST, body)
+	http.request(_active_url + "/offline", headers, HTTPClient.METHOD_POST, body)
 
 func get_friends_status(names: Array, callback: Callable) -> void:
 	if names.is_empty():
@@ -120,8 +140,11 @@ func get_friends_status(names: Array, callback: Callable) -> void:
 	var http := HTTPRequest.new()
 	add_child(http)
 	var query := ",".join(names)
+	var url := _active_url + "/friends/status?names=" + query + "&t=" + str(Time.get_ticks_msec())
+	print("[Presence] Requesting: ", url)
 	http.request_completed.connect(func(_result, _code, _headers, body):
 		var text: String = body.get_string_from_utf8()
+		print("[Presence] friends/status raw: ", text)
 		var data = JSON.parse_string(text)
 		if data == null:
 			data = {}
@@ -129,7 +152,7 @@ func get_friends_status(names: Array, callback: Callable) -> void:
 			callback.call(data)
 		http.queue_free()
 	)
-	http.request(SERVER_URL + "/friends/status?names=" + query)
+	http.request(url)
 
 func get_friends_list(callback: Callable) -> void:
 	var http := HTTPRequest.new()
@@ -143,7 +166,7 @@ func get_friends_list(callback: Callable) -> void:
 			callback.call(data.get("friends", []))
 		http.queue_free()
 	)
-	http.request(SERVER_URL + "/friends/list?username=" + username)
+	http.request(_active_url + "/friends/list?username=" + username)
 
 func get_friend_requests(callback: Callable) -> void:
 	var http := HTTPRequest.new()
@@ -157,7 +180,7 @@ func get_friend_requests(callback: Callable) -> void:
 			callback.call(data.get("requests", []))
 		http.queue_free()
 	)
-	http.request(SERVER_URL + "/friends/requests?username=" + username)
+	http.request(_active_url + "/friends/requests?username=" + username)
 
 func send_friend_request(recipient: String, callback: Callable) -> void:
 	var http := HTTPRequest.new()
@@ -171,7 +194,7 @@ func send_friend_request(recipient: String, callback: Callable) -> void:
 			callback.call(code, data)
 		http.queue_free()
 	)
-	http.request(SERVER_URL + "/friends/request", headers, HTTPClient.METHOD_POST, body)
+	http.request(_active_url + "/friends/request", headers, HTTPClient.METHOD_POST, body)
 
 func accept_friend_request(requester: String, callback: Callable) -> void:
 	var http := HTTPRequest.new()
@@ -179,7 +202,7 @@ func accept_friend_request(requester: String, callback: Callable) -> void:
 	var body := JSON.stringify({"requester": requester, "recipient": username})
 	var headers := ["Content-Type: application/json"]
 	http.request_completed.connect(func(_result, _code, _headers, _body): if callback.is_valid(): callback.call(); http.queue_free())
-	http.request(SERVER_URL + "/friends/accept", headers, HTTPClient.METHOD_POST, body)
+	http.request(_active_url + "/friends/accept", headers, HTTPClient.METHOD_POST, body)
 
 func decline_friend_request(requester: String, callback: Callable) -> void:
 	var http := HTTPRequest.new()
@@ -187,4 +210,38 @@ func decline_friend_request(requester: String, callback: Callable) -> void:
 	var body := JSON.stringify({"requester": requester, "recipient": username})
 	var headers := ["Content-Type: application/json"]
 	http.request_completed.connect(func(_result, _code, _headers, _body): if callback.is_valid(): callback.call(); http.queue_free())
-	http.request(SERVER_URL + "/friends/decline", headers, HTTPClient.METHOD_POST, body)
+	http.request(_active_url + "/friends/decline", headers, HTTPClient.METHOD_POST, body)
+
+func lobby_join() -> void:
+	if username == "":
+		return
+	var http := HTTPRequest.new()
+	add_child(http)
+	var body := JSON.stringify({"username": username})
+	var headers := ["Content-Type: application/json"]
+	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
+	http.request(_active_url + "/lobby/join", headers, HTTPClient.METHOD_POST, body)
+
+func lobby_leave() -> void:
+	if username == "":
+		return
+	var http := HTTPRequest.new()
+	add_child(http)
+	var body := JSON.stringify({"username": username})
+	var headers := ["Content-Type: application/json"]
+	http.request_completed.connect(func(_r, _c, _h, _b): http.queue_free())
+	http.request(_active_url + "/lobby/leave", headers, HTTPClient.METHOD_POST, body)
+
+func get_lobby_members(callback: Callable) -> void:
+	var http := HTTPRequest.new()
+	add_child(http)
+	http.request_completed.connect(func(_result, _code, _headers, body):
+		var text: String = body.get_string_from_utf8()
+		var data = JSON.parse_string(text)
+		if data == null:
+			data = {"members": []}
+		if callback.is_valid():
+			callback.call(data.get("members", []))
+		http.queue_free()
+	)
+	http.request(_active_url + "/lobby/members")

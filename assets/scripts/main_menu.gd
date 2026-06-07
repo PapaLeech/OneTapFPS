@@ -9,6 +9,7 @@ enum ChatFocus { NONE, CHAT, TERMINAL }
 
 var _lobby_players    : Array[String] = []
 var _dog_tag_nodes    : Array = []
+var _friend_slots     : Dictionary = {}
 var _active_mode      : Mode = Mode.NONE
 var _timer            : SceneTreeTimer = null
 var _count            : int = 3
@@ -265,6 +266,8 @@ func _on_invite_accepted() -> void:
 	_add_player_tag(PresenceManager.username, true)
 	# Notify host we accepted
 	ClientToServer.accept_invite(sender)
+	# Tell presence server we're in the lobby
+	PresenceManager.lobby_join()
 
 func _on_invite_declined() -> void:
 	_invite_panel.visible = false
@@ -279,6 +282,8 @@ func _on_friend_accepted_invite(accepter_username: String) -> void:
 		_add_player_tag(PresenceManager.username, true)
 	if not _lobby_players.has(accepter_username):
 		_add_player_tag(accepter_username, true)
+	# Tell presence server we're in the lobby
+	PresenceManager.lobby_join()
 
 func _on_lobby_match_starting() -> void:
 	ClientToServer.try_connect_client_to_lobby()
@@ -538,7 +543,8 @@ func _clear_placeholder_tags() -> void:
 
 func populate_friends(friends: Array) -> void:
 	for child in _bullet_list.get_children():
-		child.queue_free()
+		child.free()
+	_friend_slots.clear()
 
 	for f in friends:
 		if f.get("name", "") == PresenceManager.username:
@@ -549,12 +555,26 @@ func populate_friends(friends: Array) -> void:
 		slot.friend_name = f.get("name", "Player")
 		slot.is_online = f.get("online", false)
 
-		if slot.is_online:
-			slot.invite_pressed.connect(func(name):
-				print("invite_pressed signal received for ", name)
-				print("send_invite called for ", name)
-				ClientToServer.send_invite(name)
-			)
+		var key: String = slot.friend_name.to_lower()
+		_friend_slots[key] = slot
+
+		slot.invite_pressed.connect(_on_friend_invite_pressed)
+
+func _on_friend_invite_pressed(name: String) -> void:
+	ClientToServer.send_invite(name)
+	var key := name.to_lower()
+	if _friend_slots.has(key):
+		_friend_slots[key].set_invited_state(true)
+
+func update_friends_status(friends: Array) -> void:
+	for f in friends:
+		var name := str(f.get("name", ""))
+		var key := name.to_lower()
+		if not _friend_slots.has(key):
+			continue
+		var slot = _friend_slots[key]
+		slot.set_online_state(bool(f.get("online", false)))
+		slot.queue_redraw()
 func _populate_requests(requests: Array) -> void:
 	if _friends_header == null:
 		return
@@ -678,11 +698,8 @@ func _on_join_pressed() -> void:
 func _on_leave_pressed() -> void:
 	if _lobby_players.is_empty():
 		return
-	_lobby_players.pop_back()
-	var last_tag := _dog_tag_nodes.pop_back()
-	if last_tag:
-		_lobby_join_sound.play()
-		last_tag.swing_out(func(): last_tag.queue_free())
+	PresenceManager.lobby_leave()
+	remove_network_player(PresenceManager.username)
 
 func _add_player_tag(player_name: String, swing: bool = false) -> void:
 	_lobby_players.append(player_name)
@@ -763,38 +780,75 @@ func _show_username_prompt() -> void:
 	input.grab_focus()
 
 func _go_online_and_fetch_friends() -> void:
+	print("[Main] _go_online_and_fetch_friends called")
 	PresenceManager.go_online(PresenceManager.username)
 	GraphicsManager.load_and_apply()
 	_refresh_friends()
 	var refresh_timer := Timer.new()
 	add_child(refresh_timer)
-	refresh_timer.wait_time = 10.0
+	var force_timer := Timer.new()
+	add_child(force_timer)
+	force_timer.wait_time = 10.0
+	force_timer.autostart = true
+	force_timer.timeout.connect(_force_refresh_friends)
+	refresh_timer.wait_time = 5.0
 	refresh_timer.autostart = true
 	refresh_timer.timeout.connect(_refresh_friends)
+	refresh_timer.timeout.connect(_refresh_lobby)
+	get_tree().create_timer(3.0).timeout.connect(_force_refresh_friends)
+	get_tree().create_timer(6.0).timeout.connect(_force_refresh_friends)
+	get_tree().create_timer(10.0).timeout.connect(_force_refresh_friends)
+
+func _force_refresh_friends() -> void:
+	print("[Friends] Force refresh fired")
+	_friend_slots.clear()
+	_refresh_friends()
 
 func _refresh_friends() -> void:
+	print("[Main] _refresh_friends called")
 	PresenceManager.get_friends_list(func(friends: Array):
 		if friends.is_empty():
 			populate_friends([])
 			_refresh_pending_requests()
 			return
-		# Server returns plain strings e.g. ["vauxhall", "rysiu"]
 		var names: Array = []
 		for f in friends:
 			var uname: String = f.get("username", "") if f is Dictionary else str(f)
 			if uname != "" and not names.has(uname):
 				names.append(uname)
 		PresenceManager.get_friends_status(names, func(status: Dictionary):
-			# Build a lowercase lookup so case differences don't matter
+			print("[Friends] Status received: ", status)
+			print("[Friends] Status received: ", status)
 			var status_lower: Dictionary = {}
 			for k in status.keys():
 				status_lower[k.to_lower()] = status[k]
 			var friends_array: Array = []
 			for uname in names:
 				friends_array.append({"name": uname, "online": status_lower.get(uname.to_lower(), false)})
-			populate_friends(friends_array)
+			if _friend_slots.is_empty():
+				populate_friends(friends_array)
+			else:
+				update_friends_status(friends_array)
 			_refresh_pending_requests()
 		)
+	)
+
+func _refresh_lobby() -> void:
+	if _lobby_players.is_empty():
+		return
+	PresenceManager.get_lobby_members(func(members: Array):
+		# Remove any players from our lobby who are no longer in the server lobby
+		var to_remove: Array = []
+		for player in _lobby_players:
+			var found := false
+			for m in members:
+				if str(m).to_lower() == player.to_lower():
+					found = true
+					break
+			if not found:
+				to_remove.append(player)
+		for player in to_remove:
+			remove_network_player(player)
 	)
 
 func _refresh_pending_requests() -> void:

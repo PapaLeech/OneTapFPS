@@ -63,46 +63,6 @@ func _on_peer_disconnected(id: int) -> void:
 func _on_connection_failed() -> void:
 	print("failed to connect to server")
 
-@rpc("any_peer", "call_remote", "reliable")
-func c_register_username(username: String) -> void:
-	var sender := multiplayer.get_remote_sender_id()
-	username_to_peer[username] = sender
-	players[sender] = username
-	print("registered %s as peer %d" % [username, sender])
-
-@rpc("any_peer", "call_remote", "reliable")
-func c_send_invite(from_username: String, to_username: String) -> void:
-	var target_peer := username_to_peer.get(to_username, -1)
-	if target_peer == -1:
-		print("Invite failed: %s not found" % to_username)
-		return
-	ClientToServer.receive_invite_rpc.rpc_id(target_peer, from_username)
-
-@rpc("any_peer", "call_remote", "reliable")
-func c_accept_invite(accepter: String, host_username: String) -> void:
-	var host_peer := username_to_peer.get(host_username, -1)
-	if host_peer == -1:
-		for key in username_to_peer:
-			if key.to_lower() == host_username.to_lower():
-				host_peer = username_to_peer[key]
-				break
-	if host_peer == -1:
-		print("accept_invite: host %s not found" % host_username)
-		return
-	var accepter_peer := multiplayer.get_remote_sender_id()
-	print("Server: %s accepted invite from %s" % [accepter, host_username])
-	# Tell host someone accepted
-	ClientToServer.invite_accepted_rpc.rpc_id(host_peer, accepter)
-	# Tell accepter the host username so they can add dogtags
-	ClientToServer.lobby_member_added_rpc.rpc_id(accepter_peer, host_username, accepter)
-
-@rpc("any_peer", "call_remote", "reliable")
-func c_start_lobby_match(host_username: String) -> void:
-	print("Server: start_lobby_match from %s" % host_username)
-	for uname in username_to_peer:
-		var pid: int = username_to_peer[uname]
-		ClientToServer.lobby_match_starting_rpc.rpc_id(pid)
-
 func get_lobby_from_client_id(id: int) -> Lobby:
 	for lobby in lobbies:
 		if lobby.clients.has(id):
@@ -110,20 +70,6 @@ func get_lobby_from_client_id(id: int) -> Lobby:
 	return null
 
 func handle_lobby_join(client_id: int) -> void:
-	var maybe_lobby := get_non_full_lobby()
-	if maybe_lobby:
-		maybe_lobby.add_client(client_id)
-		idle_clients.erase(client_id)
-		print("client %d connected to lobby %s" % [client_id, maybe_lobby.name])
-		player_connected.emit(client_id)
-		ClientToServer.confirm_lobby_join.rpc_id(client_id)
-	else:
-		print("No available lobby for client %d" % client_id)
-
-@rpc("any_peer", "call_remote", "reliable")
-func c_try_connect_client_to_lobby() -> void:
-	print("Server: lobby join RPC received")
-	var client_id := multiplayer.get_remote_sender_id()
 	var maybe_lobby := get_non_full_lobby()
 	if maybe_lobby:
 		maybe_lobby.add_client(client_id)
