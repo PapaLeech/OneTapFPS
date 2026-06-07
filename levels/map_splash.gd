@@ -6,7 +6,6 @@ const DISPLAY_TIME := 2.0
 @onready var progress_bar : ProgressBar = $ProgressBar
 
 func _ready() -> void:
-	get_window().mode = Window.MODE_FULLSCREEN
 	progress_bar.value = 0.0
 	var tween := create_tween()
 	tween.tween_property(progress_bar, "value", 100.0, DISPLAY_TIME)

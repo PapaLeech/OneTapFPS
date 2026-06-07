@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bula4gkrkllr2"]
 
 [ext_resource type="Script" uid="uid://lggmr1lbvojl" path="res://levels/map_splash.gd" id="1_r07r6"]
-[ext_resource type="Texture2D" uid="uid://h8g7snil504p" path="res://assets/ui/Dmitrii Kutsenko - Industrial Set v2.0 map thumbnail12.png" id="2_jv2wu"]
+[ext_resource type="Texture2D" uid="uid://h8g7snil504p" path="res://assets/ui/Dmitrii_Kutsenko-Industrial_Set_v2.png" id="2_jv2wu"]
 
 [node name="MapSplash" type="Control" unique_id=780211405]
 layout_mode = 3

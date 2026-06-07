@@ -56,12 +56,6 @@ func _ready() -> void:
 		return
 	if multiplayer.is_server():
 		MultiplayerManager.player_disconnected.connect(_remove_player)
-		# Add server player to stats and sync
-		var my_id := multiplayer.get_unique_id()
-		var my_name : String = PresenceManager.username if PresenceManager.username != "" else "Host"
-		_stats[my_id] = {"username": my_name, "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": "A"}
-		await get_tree().create_timer(0.5).timeout
-		_sync_stats.rpc(var_to_bytes(_stats))
 	else:
 		print("Client level ready, notifying server")
 		await get_tree().create_timer(0.1).timeout
