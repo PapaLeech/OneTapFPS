@@ -56,12 +56,17 @@ func _ready() -> void:
 		return
 	if multiplayer.is_server():
 		MultiplayerManager.player_disconnected.connect(_remove_player)
+		# Add server player to stats
+		var my_id := multiplayer.get_unique_id()
+		var my_name : String = MultiplayerManager.players.get(my_id, PresenceManager.username)
+		_stats[my_id] = {"username": my_name, "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": "A"}
 	else:
 		print("Client level ready, notifying server")
 		await get_tree().create_timer(0.1).timeout
 		_client_ready.rpc_id(1)
 		# Client: listen for peer disconnection to remove stale meshes
 		multiplayer.peer_disconnected.connect(_client_remove_player)
+		_start_ping_timer()
 	# Skip chat setup on dedicated server
 	if not OS.has_feature("dedicated_server") and not "--dedicated-server" in OS.get_cmdline_args():
 		_setup_chat()
@@ -108,7 +113,11 @@ func _on_player_connected(peer_id: int) -> void:
 			_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
 	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
 	NetworkSyncLogger.log_peer_connected(peer_id, username)
-	_stats[peer_id] = {"username": username, "kills": 0, "deaths": 0, "assists": 0, "ping": 0}
+	# Assign balanced team
+	var team_a := _stats.values().filter(func(s): return s["team"] == "A").size()
+	var team_b := _stats.values().filter(func(s): return s["team"] == "B").size()
+	var team := "A" if team_a <= team_b else "B"
+	_stats[peer_id] = {"username": username, "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": team}
 	_sync_stats.rpc(var_to_bytes(_stats))
 	if MultiplayerManager.players.size() >= 2:
 		var names: Array = MultiplayerManager.players.values()
@@ -493,43 +502,39 @@ func _rebuild_scoreboard() -> void:
 	div.color = Color(0.4, 0.4, 0.4, 0.5)
 	div.custom_minimum_size = Vector2(520, 1)
 	vbox.add_child(div)
-	# Sort players by kills descending
-	var sorted_peers := _stats.keys()
-	sorted_peers.sort_custom(func(a, b): return _stats[a]["kills"] > _stats[b]["kills"])
-	# ─ Team A header
+	# Split players into teams sorted by kills
+	var team_a_peers : Array = _stats.keys().filter(func(p): return _stats[p].get("team", "A") == "A")
+	var team_b_peers : Array = _stats.keys().filter(func(p): return _stats[p].get("team", "B") == "B")
+	team_a_peers.sort_custom(func(a, b): return _stats[a]["kills"] > _stats[b]["kills"])
+	team_b_peers.sort_custom(func(a, b): return _stats[a]["kills"] > _stats[b]["kills"])
+	# ─ Team A
 	var team_a_bar := _make_team_header("TEAM A")
 	vbox.add_child(team_a_bar)
-	for pid in sorted_peers:
-		var s   : Dictionary = _stats[pid]
-		var row := _make_row(
-			s["username"],
-			str(s["kills"]),
-			str(s["deaths"]),
-			str(s["assists"]),
-			str(s["ping"]) + " ms",
-			false
-		)
-		vbox.add_child(row)
+	for pid in team_a_peers:
+		var s : Dictionary = _stats[pid]
+		vbox.add_child(_make_row(s["username"], str(s["kills"]), str(s["deaths"]), str(s["assists"]), str(s["ping"]) + " ms", false))
 		var rdiv := ColorRect.new()
 		rdiv.color = Color(0.3, 0.3, 0.3, 0.3)
 		rdiv.custom_minimum_size = Vector2(520, 1)
 		vbox.add_child(rdiv)
-	# Blank slots under Team A (fill up to 6)
-	var filled := sorted_peers.size()
-	for i in range(6 - filled):
-		var blank := _make_row("", "", "", "", "", false)
-		vbox.add_child(blank)
+	for i in range(6 - team_a_peers.size()):
+		vbox.add_child(_make_row("", "", "", "", "", false))
 		var bdiv := ColorRect.new()
 		bdiv.color = Color(0.3, 0.3, 0.3, 0.3)
 		bdiv.custom_minimum_size = Vector2(520, 1)
 		vbox.add_child(bdiv)
-	# ─ Team B header
+	# ─ Team B
 	var team_b_bar := _make_team_header("TEAM B")
 	vbox.add_child(team_b_bar)
-	# 6 blank slots for Team B
-	for i in range(6):
-		var blank := _make_row("", "", "", "", "", false)
-		vbox.add_child(blank)
+	for pid in team_b_peers:
+		var s : Dictionary = _stats[pid]
+		vbox.add_child(_make_row(s["username"], str(s["kills"]), str(s["deaths"]), str(s["assists"]), str(s["ping"]) + " ms", false))
+		var rdiv := ColorRect.new()
+		rdiv.color = Color(0.3, 0.3, 0.3, 0.3)
+		rdiv.custom_minimum_size = Vector2(520, 1)
+		vbox.add_child(rdiv)
+	for i in range(6 - team_b_peers.size()):
+		vbox.add_child(_make_row("", "", "", "", "", false))
 		var bdiv := ColorRect.new()
 		bdiv.color = Color(0.3, 0.3, 0.3, 0.3)
 		bdiv.custom_minimum_size = Vector2(520, 1)
@@ -574,6 +579,44 @@ func _make_row(player: String, kills: String, deaths: String, assists: String, p
 @rpc("authority", "call_local", "reliable")
 func _sync_stats(data: PackedByteArray) -> void:
 	_stats = bytes_to_var(data)
+
+# ─── Ping ────────────────────────────────────────────────────────────────────
+var _ping_sent_at : float = 0.0
+
+func _start_ping_timer() -> void:
+	var t := Timer.new()
+	t.wait_time = 5.0
+	t.autostart = true
+	t.timeout.connect(_send_ping)
+	add_child(t)
+
+func _send_ping() -> void:
+	if not multiplayer.has_multiplayer_peer() or multiplayer.is_server():
+		return
+	_ping_sent_at = Time.get_ticks_msec()
+	_ping_request.rpc_id(1)
+
+@rpc("any_peer", "reliable")
+func _ping_request() -> void:
+	if not multiplayer.is_server():
+		return
+	_ping_response.rpc_id(multiplayer.get_remote_sender_id())
+
+@rpc("authority", "reliable")
+func _ping_response() -> void:
+	var rtt := int(Time.get_ticks_msec() - _ping_sent_at)
+	var my_id := multiplayer.get_unique_id()
+	if _stats.has(my_id):
+		_stats[my_id]["ping"] = rtt
+		_update_ping.rpc_id(1, my_id, rtt)
+
+@rpc("any_peer", "reliable")
+func _update_ping(peer_id: int, rtt: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if _stats.has(peer_id):
+		_stats[peer_id]["ping"] = rtt
+		_sync_stats.rpc(var_to_bytes(_stats))
 
 func record_kill(killer_id: int, victim_id: int) -> void:
 	if not multiplayer.is_server():
