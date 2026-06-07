@@ -10,6 +10,7 @@ enum ChatFocus { NONE, CHAT, TERMINAL }
 var _lobby_players    : Array[String] = []
 var _dog_tag_nodes    : Array = []
 var _friend_slots     : Dictionary = {}
+var _refreshing       : bool = false
 var _active_mode      : Mode = Mode.NONE
 var _timer            : SceneTreeTimer = null
 var _count            : int = 3
@@ -553,7 +554,7 @@ func populate_friends(friends: Array) -> void:
 		var slot := BULLET_SLOT_SCENE.instantiate()
 		_bullet_list.add_child(slot)
 		slot.friend_name = f.get("name", "Player")
-		slot.is_online = f.get("online", false)
+		slot.set_online_state(f.get("online", false))
 
 		var key: String = slot.friend_name.to_lower()
 		_friend_slots[key] = slot
@@ -802,14 +803,19 @@ func _go_online_and_fetch_friends() -> void:
 func _force_refresh_friends() -> void:
 	print("[Friends] Force refresh fired")
 	_friend_slots.clear()
+	_refreshing = false
 	_refresh_friends()
 
 func _refresh_friends() -> void:
+	if _refreshing:
+		return
+	_refreshing = true
 	print("[Main] _refresh_friends called")
 	PresenceManager.get_friends_list(func(friends: Array):
 		if friends.is_empty():
 			populate_friends([])
 			_refresh_pending_requests()
+			_refreshing = false
 			return
 		var names: Array = []
 		for f in friends:
@@ -830,6 +836,7 @@ func _refresh_friends() -> void:
 			else:
 				update_friends_status(friends_array)
 			_refresh_pending_requests()
+			_refreshing = false
 		)
 	)
 

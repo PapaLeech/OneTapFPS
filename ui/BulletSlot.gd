@@ -35,14 +35,14 @@ func _draw() -> void:
 	var cy: float = h * 0.5
 
 	# ── colours ────────────────────────────────────────────────────────
-	var brass_bright := Color(0.96, 0.78, 0.22) if is_online else Color(0.48, 0.38, 0.14)
-	var brass_mid    := Color(0.88, 0.65, 0.15) if is_online else Color(0.40, 0.32, 0.10)
-	var brass_dark   := Color(0.52, 0.32, 0.05) if is_online else Color(0.24, 0.17, 0.05)
-	var lead_tip     := Color(0.72, 0.30, 0.06) if is_online else Color(0.38, 0.17, 0.05)
-	var lead_high    := Color(0.88, 0.45, 0.12) if is_online else Color(0.50, 0.24, 0.08)
-	var lead_shad    := Color(0.42, 0.15, 0.03) if is_online else Color(0.22, 0.09, 0.02)
-	var primer_col   := Color(0.92, 0.72, 0.22) if is_online else Color(0.50, 0.40, 0.14)
-	var text_col     := Color(0.95, 0.90, 0.70) if is_online else Color(0.60, 0.55, 0.40)
+	var brass_bright := Color(0.96, 0.78, 0.22) if _is_online else Color(0.48, 0.38, 0.14)
+	var brass_mid    := Color(0.88, 0.65, 0.15) if _is_online else Color(0.40, 0.32, 0.10)
+	var brass_dark   := Color(0.52, 0.32, 0.05) if _is_online else Color(0.24, 0.17, 0.05)
+	var lead_tip     := Color(0.72, 0.30, 0.06) if _is_online else Color(0.38, 0.17, 0.05)
+	var lead_high    := Color(0.88, 0.45, 0.12) if _is_online else Color(0.50, 0.24, 0.08)
+	var lead_shad    := Color(0.42, 0.15, 0.03) if _is_online else Color(0.22, 0.09, 0.02)
+	var primer_col   := Color(0.92, 0.72, 0.22) if _is_online else Color(0.50, 0.40, 0.14)
+	var text_col     := Color(0.95, 0.90, 0.70) if _is_online else Color(0.60, 0.55, 0.40)
 
 	# ── dimensions ─────────────────────────────────────────────────────
 	var br: float = BULLET_HEIGHT * 0.5
@@ -110,11 +110,11 @@ func _draw() -> void:
 		friend_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_col)
 
 	# ── online status dot (left of base) ───────────────────────────────
-	var dot_col: Color = Color(0.2, 0.9, 0.3) if is_online else Color(0.55, 0.55, 0.55)
+	var dot_col: Color = Color(0.2, 0.9, 0.3) if _is_online else Color(0.55, 0.55, 0.55)
 	draw_circle(Vector2(seg_base - 14.0, cy), 4.0, dot_col)
 
 	# ── invite text on right black cap ─────────────────────────────────
-	if is_online:
+	if _is_online:
 		var invite_font: Font = ThemeDB.fallback_font
 		var invite_text := "Invited" if invited else "Invite"
 		var invite_size := invite_font.get_string_size(invite_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13)
@@ -223,16 +223,15 @@ func _draw_ogive(xo: float, ow: float, cy: float, neck_r: float,
 	draw_colored_polygon(sh_pts, shad)
 
 func set_online_state(online: bool) -> void:
-	is_online = online
+	_is_online = online
+	queue_redraw()
 
 func set_invited_state(value: bool) -> void:
 	invited = value
 	queue_redraw()
-	invited = value
-	queue_redraw()
 
 func _gui_input(event: InputEvent) -> void:
-	if not is_online:
+	if not _is_online:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var w: float = size.x
