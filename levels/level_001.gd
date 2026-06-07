@@ -56,10 +56,12 @@ func _ready() -> void:
 		return
 	if multiplayer.is_server():
 		MultiplayerManager.player_disconnected.connect(_remove_player)
-		# Add server player to stats
+		# Add server player to stats and sync
 		var my_id := multiplayer.get_unique_id()
-		var my_name : String = MultiplayerManager.players.get(my_id, PresenceManager.username)
+		var my_name : String = PresenceManager.username if PresenceManager.username != "" else "Host"
 		_stats[my_id] = {"username": my_name, "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": "A"}
+		await get_tree().create_timer(0.5).timeout
+		_sync_stats.rpc(var_to_bytes(_stats))
 	else:
 		print("Client level ready, notifying server")
 		await get_tree().create_timer(0.1).timeout
@@ -369,17 +371,27 @@ func _process(delta: float) -> void:
 		_software_cursor.position = _cursor_pos
 
 func _input(event: InputEvent) -> void:
-	# Track mouse position for software cursor
-	if event is InputEventMouseMotion and _scoreboard_cursor:
-		var vp := get_viewport().get_visible_rect().size
-		_cursor_pos = (_cursor_pos + event.relative).clamp(Vector2.ZERO, vp)
-
-func _unhandled_input(event: InputEvent) -> void:
-	# Right-click while scoreboard open — toggle software cursor
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if _scoreboard_panel and _scoreboard_panel.visible:
 			_scoreboard_cursor = not _scoreboard_cursor
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if _scoreboard_cursor else Input.MOUSE_MODE_CAPTURED
+			if _scoreboard_cursor:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+				call_deferred("_warp_to_centre")
+			else:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			get_viewport().set_input_as_handled()
+			return
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Right-click while scoreboard open — toggle cursor
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		if _scoreboard_panel and _scoreboard_panel.visible:
+			_scoreboard_cursor = not _scoreboard_cursor
+			if _scoreboard_cursor:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+				call_deferred("_warp_to_centre")
+			else:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			get_viewport().set_input_as_handled()
 			return
 	if not event is InputEventKey:
@@ -455,6 +467,10 @@ func _set_mouse_visible() -> void:
 
 func _set_mouse_captured() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _warp_to_centre() -> void:
+	var centre := get_viewport().get_visible_rect().size / 2.0
+	Input.warp_mouse(centre)
 
 func _show_scoreboard() -> void:
 	if _scoreboard_panel == null:
@@ -576,9 +592,10 @@ func _make_row(player: String, kills: String, deaths: String, assists: String, p
 	return row
 
 # Server broadcasts stats to all clients
-@rpc("authority", "call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func _sync_stats(data: PackedByteArray) -> void:
 	_stats = bytes_to_var(data)
+	print("_sync_stats received, players: ", _stats.size())
 
 # ─── Ping ────────────────────────────────────────────────────────────────────
 var _ping_sent_at : float = 0.0
