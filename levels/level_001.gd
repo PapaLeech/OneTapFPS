@@ -286,6 +286,7 @@ func _execute_chat_command(cmd: String) -> void:
 
 # ─── Lock / drag / resize ──────────────────────────────────────────────────────────────
 func _setup_chat_window() -> void:
+	_resize_handle.visible = false
 	_lock_btn.pressed.connect(_toggle_chat_lock)
 	_resize_handle.button_down.connect(_on_resize_start)
 	_drag_bar.mouse_filter = Control.MOUSE_FILTER_STOP
