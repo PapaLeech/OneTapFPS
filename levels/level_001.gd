@@ -97,6 +97,8 @@ func _on_player_connected(peer_id: int) -> void:
 	_on_player_connected_respawn(peer_id, -1)
 
 func _on_player_connected_respawn(peer_id: int, last_index: int) -> void:
+	if not multiplayer.is_server():
+		return
 	var occupied := spawn_index_map.values()
 	var pos_index := randi() % spawn_positions.size()
 	if spawn_positions.size() > 1:
