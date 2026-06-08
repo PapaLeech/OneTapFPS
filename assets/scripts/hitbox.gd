@@ -16,7 +16,7 @@ func take_damage(amount: float) -> void:
 			if multiplayer.has_multiplayer_peer():
 				var target_id := int(parent.name)
 				if target_id > 0:
-					health._take_damage_rpc.rpc_id(target_id, dmg)
+					health._take_damage_rpc.rpc_id(target_id, dmg, PresenceManager.username, multiplayer.get_unique_id())
 					HitDetectionLogger.log_hit(PresenceManager.username, parent.name, name, dmg, "unknown")
 					LagCompensationLogger.log_hit_validated(PresenceManager.username, parent.name, true, 0.0)
 					return

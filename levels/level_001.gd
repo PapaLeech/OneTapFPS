@@ -95,10 +95,13 @@ func _on_player_connected(peer_id: int) -> void:
 	if spawn_index_map.has(peer_id):
 		return  # Already assigned
 	var last_index: int = spawn_index_map.get(peer_id, -1)
+	var occupied := spawn_index_map.values()
 	var pos_index := randi() % spawn_positions.size()
 	if spawn_positions.size() > 1:
-		while pos_index == last_index:
+		var attempts := 0
+		while (pos_index == last_index or pos_index in occupied) and attempts < 10:
 			pos_index = randi() % spawn_positions.size()
+			attempts += 1
 	spawn_index_map[peer_id] = pos_index
 	print("Server spawning player: ", peer_id, " at index ", pos_index)
 	# Tell ALL peers (including server) to spawn this player
@@ -109,11 +112,12 @@ func _on_player_connected(peer_id: int) -> void:
 			_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
 	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
 	NetworkSyncLogger.log_peer_connected(peer_id, username)
-	# Assign balanced team
-	var team_a := _stats.values().filter(func(s): return s["team"] == "A").size()
-	var team_b := _stats.values().filter(func(s): return s["team"] == "B").size()
-	var team := "A" if team_a <= team_b else "B"
-	_stats[peer_id] = {"username": username, "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": team}
+	# Only initialise stats for new players, preserve existing on respawn
+	if not _stats.has(peer_id):
+		var team_a := _stats.values().filter(func(s): return s["team"] == "A").size()
+		var team_b := _stats.values().filter(func(s): return s["team"] == "B").size()
+		var team := "A" if team_a <= team_b else "B"
+		_stats[peer_id] = {"username": username, "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": team}
 	_sync_stats.rpc(var_to_bytes(_stats))
 	if MultiplayerManager.players.size() >= 2:
 		var names: Array = MultiplayerManager.players.values()
@@ -128,12 +132,12 @@ func _do_spawn(peer_id: int, pos_index: int) -> void:
 	if pos_index < 0 or pos_index >= spawn_positions.size():
 		pos_index = 0
 	if spawn_positions.is_empty():
-		print("ERROR: No spawn points found! Add Node3D nodes to 'spawn_points' group in level_001.tscn")
+		print("ERROR: No spawn points found!")
 		return
 	var player := PLAYER_SCENE.instantiate()
 	player.name = str(peer_id)
-	add_child(player, true)
 	player.global_position = spawn_positions[pos_index] + Vector3(0, 1.0, 0)
+	add_child(player, true)
 	print("Spawned player ", peer_id, " at ", spawn_positions[pos_index])
 
 # Solo play mode - spawn player without multiplayer
@@ -661,5 +665,13 @@ func request_respawn() -> void:
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
+	# Remove old node on all clients first
+	_remove_node_for_respawn.rpc(peer_id)
 	spawn_index_map.erase(peer_id)
 	_on_player_connected(peer_id)
+
+@rpc("authority", "call_local", "reliable")
+func _remove_node_for_respawn(peer_id: int) -> void:
+	var node := get_node_or_null(str(peer_id))
+	if node:
+		node.queue_free()
