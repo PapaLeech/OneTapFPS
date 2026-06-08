@@ -94,7 +94,9 @@ func _on_player_connected(peer_id: int) -> void:
 		return
 	if spawn_index_map.has(peer_id):
 		return  # Already assigned
-	var last_index: int = spawn_index_map.get(peer_id, -1)
+	_on_player_connected_respawn(peer_id, -1)
+
+func _on_player_connected_respawn(peer_id: int, last_index: int) -> void:
 	var occupied := spawn_index_map.values()
 	var pos_index := randi() % spawn_positions.size()
 	if spawn_positions.size() > 1:
@@ -104,12 +106,15 @@ func _on_player_connected(peer_id: int) -> void:
 			attempts += 1
 	spawn_index_map[peer_id] = pos_index
 	print("Server spawning player: ", peer_id, " at index ", pos_index)
-	# Tell ALL peers (including server) to spawn this player
-	_do_spawn.rpc(peer_id, pos_index)
-	# Tell the NEW player about all existing players
-	for existing_id in spawn_index_map:
-		if existing_id != peer_id:
-			_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
+	# If node exists, teleport. Otherwise spawn fresh.
+	if get_node_or_null(str(peer_id)) != null:
+		_teleport_player.rpc(peer_id, pos_index)
+	else:
+		_do_spawn.rpc(peer_id, pos_index)
+		# Tell the NEW player about all existing players
+		for existing_id in spawn_index_map:
+			if existing_id != peer_id:
+				_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
 	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
 	NetworkSyncLogger.log_peer_connected(peer_id, username)
 	# Only initialise stats for new players, preserve existing on respawn
@@ -595,7 +600,6 @@ func _make_row(player: String, kills: String, deaths: String, assists: String, p
 @rpc("any_peer", "call_local", "reliable")
 func _sync_stats(data: PackedByteArray) -> void:
 	_stats = bytes_to_var(data)
-	print("_sync_stats received, players: ", _stats.size())
 
 # ─── Ping ────────────────────────────────────────────────────────────────────
 var _ping_sent_at : float = 0.0
@@ -665,13 +669,21 @@ func request_respawn() -> void:
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
-	# Remove old node on all clients first
-	_remove_node_for_respawn.rpc(peer_id)
+	var last_idx : int = spawn_index_map.get(peer_id, -1)
 	spawn_index_map.erase(peer_id)
-	_on_player_connected(peer_id)
+	_on_player_connected_respawn(peer_id, last_idx)
 
 @rpc("authority", "call_local", "reliable")
 func _remove_node_for_respawn(peer_id: int) -> void:
+	# Only free remote players - local player is handled by pause_menu._respawn()
+	if not multiplayer.is_server() and peer_id == multiplayer.get_unique_id():
+		return
 	var node := get_node_or_null(str(peer_id))
 	if node:
 		node.queue_free()
+
+@rpc("authority", "call_local", "reliable")
+func _teleport_player(peer_id: int, pos_index: int) -> void:
+	var node := get_node_or_null(str(peer_id))
+	if node:
+		node.global_position = spawn_positions[pos_index] + Vector3(0, 1.0, 0)

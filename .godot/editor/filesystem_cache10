@@ -196,7 +196,7 @@ watermello-rock477138.mp3::AudioStreamMP3::6760230376050413994::1779005404::1779
 ::res://assets/audio/weapons/::1779256902
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1780919424
+::res://assets/scripts/::1780924972
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -208,7 +208,7 @@ hud_ammo.gd::GDScript::9158962113162818995::1779000702::0::1::::<>CanvasLayer<><
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
 main_menu.gd::GDScript::1244827160719643432::1780835446::0::1::::<>Control<><>0<>0<><>::
 main_menu_BACKUP_pre_lobby_flow.gd::GDScript::4222380842014184972::1780658478::0::1::::<>RefCounted<><>0<>0<><>::
-pause_menu.gd::GDScript::4838208590412015204::1780919424::0::1::::<>CanvasLayer<><>0<>0<><>::
+pause_menu.gd::GDScript::4838208590412015204::1780924972::0::1::::<>CanvasLayer<><>0<>0<><>::
 shell_casing.gd::GDScript::2976939828175094723::1778431741::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
@@ -699,8 +699,8 @@ Map_v1_UNIConcrete_wall_v1.jpg::CompressedTexture2D::9008209305074702713::177801
 Map_v1_Wooden_box_v1.jpg::CompressedTexture2D::5038190498942625454::1778015563::1778878430::1::::<><><>0<>0<>8e5346ba9173076a355cd90f157c04e3<>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.s3tc.ctex<*>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.etc2.ctex::
 map_v_1.gd::GDScript::6714484322957040553::1776709126::0::1::::<>Node3D<><>0<>0<><>::
 WE_test.tres::Environment::8424170553004968181::1780831753::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
-::res://levels/::1780924746
-level_001.gd::GDScript::612782810600861443::1780924746::0::1::::<>Node3D<><>0<>0<><>::
+::res://levels/::1780926500
+level_001.gd::GDScript::612782810600861443::1780926500::0::1::::<>Node3D<><>0<>0<><>::
 level_001.tscn::PackedScene::4261551556484119783::1780652491::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://iy3pcr5qh8rf::::res://levels/level_001.gd<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://37k35ornbomj::::res://scripts/PlayerSpawnPoint.gd<>uid://3kolpk4youf0::::res://environment/Map_v1.glb
 map_splash.gd::GDScript::784850211590007565::1780859433::0::1::::<>Control<><>0<>0<><>::
 map_splash.tscn::PackedScene::3812957831146004513::1780859902::0::1::::<><><>0<>0<><>::uid://lggmr1lbvojl::::res://levels/map_splash.gd<>uid://h8g7snil504p::::res://assets/ui/Dmitrii_Kutsenko-Industrial_Set_v2.png
