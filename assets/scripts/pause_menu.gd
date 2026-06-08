@@ -255,6 +255,9 @@ func _respawn() -> void:
 	if cam:
 		cam.rotation_degrees.z = 0
 		cam.position.y = 1.5
+	# Request new random spawn from server
+	if level and level.has_method("request_respawn"):
+		level.request_respawn.rpc_id(1)
 
 func _go_to_menu() -> void:
 	SessionLogger.end_session("returned_to_menu")

@@ -143,6 +143,8 @@ func _spawn_solo_player() -> void:
 	add_child(player)
 	player.global_position = Vector3(0, -1.5, 0)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Add solo player to stats
+	_stats[0] = {"username": PresenceManager.username if PresenceManager.username != "" else "Player", "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": "A"}
 	# Zero out velocity so player doesn't fall on spawn
 	await get_tree().process_frame
 	player.velocity = Vector3.ZERO
@@ -630,8 +632,17 @@ func _update_ping(peer_id: int, rtt: int) -> void:
 		_sync_stats.rpc(var_to_bytes(_stats))
 
 func record_kill(killer_id: int, victim_id: int) -> void:
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		_record_kill_rpc.rpc_id(1, killer_id, victim_id)
+		return
+	_do_record_kill(killer_id, victim_id)
+@rpc("any_peer", "reliable")
+func _record_kill_rpc(killer_id: int, victim_id: int) -> void:
 	if not multiplayer.is_server():
 		return
+	_do_record_kill(killer_id, victim_id)
+
+func _do_record_kill(killer_id: int, victim_id: int) -> void:
 	if _stats.has(killer_id):
 		_stats[killer_id]["kills"] += 1
 	if _stats.has(victim_id):
@@ -644,3 +655,11 @@ func record_assist(assister_id: int) -> void:
 	if _stats.has(assister_id):
 		_stats[assister_id]["assists"] += 1
 	_sync_stats.rpc(var_to_bytes(_stats))
+
+@rpc("any_peer", "reliable")
+func request_respawn() -> void:
+	if not multiplayer.is_server():
+		return
+	var peer_id := multiplayer.get_remote_sender_id()
+	spawn_index_map.erase(peer_id)
+	_on_player_connected(peer_id)

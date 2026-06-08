@@ -35,6 +35,21 @@ func _apply_damage(amount: float) -> void:
 		EnemyStateLogger.log_death(victim, get_parent().global_position if get_parent() else Vector3.ZERO)
 		HitDetectionLogger.log_kill(last_attacker, victim, "unknown", "unknown")
 		SessionLogger.record_death()
+		# Record kill/death in scoreboard
+		var level := get_tree().get_root().get_node_or_null("Node3D")
+		if level and level.has_method("record_kill"):
+			var parent_name := get_parent().name if get_parent() else "unknown"
+			var victim_id := int(parent_name) if parent_name.is_valid_int() else 0
+			var killer_id := -1
+			if last_attacker == "" or last_attacker == "unknown":
+				killer_id = victim_id
+			else:
+				for pid in MultiplayerManager.players:
+					if MultiplayerManager.players[pid] == last_attacker:
+						killer_id = pid
+						break
+			if victim_id >= 0:
+				level.record_kill(killer_id, victim_id)
 		emit_signal("died")
 
 func heal(amount: float) -> void:
