@@ -38,6 +38,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 0, -38.39)
 script = ExtResource("5_44t5x")
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1488801044]
+visible = false
 
 [node name="ChatTerminalPanel" type="PanelContainer" parent="HUDLayer" unique_id=1576192935]
 anchors_preset = 2
