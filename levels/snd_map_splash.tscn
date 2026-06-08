@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://duperehx2idex"]
+
+[ext_resource type="Script" uid="uid://c1i5auay6uln3" path="res://levels/snd_map_splash.gd" id="1_et4lx"]
+
+[node name="MapSplash" type="Control" unique_id=2012709927]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_et4lx")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1438972677]
+layout_mode = 0
+
+[node name="BottomOverlay" type="ColorRect" parent="." unique_id=1786242363]
+layout_mode = 0
+
+[node name="CreditLabel" type="Label" parent="." unique_id=1213090030]
+layout_mode = 0
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1321771173]
+layout_mode = 0

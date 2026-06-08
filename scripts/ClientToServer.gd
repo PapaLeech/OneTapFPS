@@ -56,6 +56,13 @@ func try_connect_client_to_lobby() -> void:
 	print("Client: trying to join lobby")
 	c_try_connect_client_to_lobby.rpc_id(1)
 
+func request_snd_match() -> void:
+	c_request_snd_match.rpc_id(1)
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_request_snd_match() -> void:
+	MultiplayerManager.set_mode("snd")
+
 func send_invite(to_username: String) -> void:
 	print("[CTS] send_invite called for ", to_username, " has_peer: ", multiplayer.has_multiplayer_peer(), " unique_id: ", multiplayer.get_unique_id())
 	if not multiplayer.has_multiplayer_peer() or multiplayer.get_unique_id() == 1:

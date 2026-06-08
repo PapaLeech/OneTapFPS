@@ -11,6 +11,11 @@ var lobbies: Array[Lobby] = []
 var idle_clients: Array[int] = []
 var username_to_peer: Dictionary = {}
 var players: Dictionary = {}
+var _mode : String = "deathmatch"  # default; switches to "snd" when requested
+
+func set_mode(mode: String) -> void:
+	_mode = mode
+	print("Server: mode set to %s" % _mode)
 
 signal player_connected(peer_id: int)
 signal player_disconnected(peer_id: int)
@@ -77,6 +82,8 @@ func handle_lobby_join(client_id: int) -> void:
 		print("client %d connected to lobby %s" % [client_id, maybe_lobby.name])
 		player_connected.emit(client_id)
 		ClientToServer.confirm_lobby_join.rpc_id(client_id)
+		var scene := "res://levels/snd_level_001.tscn" if _mode == "snd" else "res://levels/level_001.tscn"
+		get_tree().change_scene_to_file(scene)
 	else:
 		print("No available lobby for client %d" % client_id)
 

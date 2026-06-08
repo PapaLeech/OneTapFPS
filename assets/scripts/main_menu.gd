@@ -505,10 +505,13 @@ func _reset() -> void:
 	_sd_countdown.visible = false
 
 func _load_mode() -> void:
-	# Solo play - disconnect from server if connected
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
-	get_tree().change_scene_to_file(GAME_SCENE)
+	if _active_mode == Mode.SEARCH_AND_DESTROY:
+		ClientToServer.request_snd_match()
+		get_tree().change_scene_to_file("res://levels/snd_map_splash.tscn")
+	else:
+		get_tree().change_scene_to_file(GAME_SCENE)
 
 # ─── Lobby / Dog Tags ────────────────────────────────────────────────────────
 
@@ -869,7 +872,10 @@ func _on_deathmatch_connected() -> void:
 	ClientToServer.try_connect_client_to_lobby()
 
 func _on_lobby_joined() -> void:
-	get_tree().change_scene_to_file("res://levels/map_splash.tscn")
+	if _active_mode == Mode.SEARCH_AND_DESTROY:
+		get_tree().change_scene_to_file("res://levels/snd_map_splash.tscn")
+	else:
+		get_tree().change_scene_to_file("res://levels/map_splash.tscn")
 
 func _show_host_join_panel() -> void:
 	var dialog := Window.new()

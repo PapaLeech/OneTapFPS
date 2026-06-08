@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://31x0q414m3ll"]
+
+[ext_resource type="Script" uid="uid://bs5acyf5b5x1l" path="res://scripts/modes/SearchAndDestroy.gd" id="1_l4brg"]
+[ext_resource type="PackedScene" uid="uid://b1yleqbb8tc7x" path="res://levels/level_001.tscn" id="2_7udwi"]
+
+[node name="Node3D" unique_id=1169815461 instance=ExtResource("2_7udwi")]
+
+[node name="SearchAndDestroyController" type="Node" parent="." index="7" unique_id=314852383]
+script = ExtResource("1_l4brg")
+
+[node name="TeamA_SpawnMarker" type="Node3D" parent="." index="8" unique_id=1535223012 groups=["TeamA_Spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.046, -19.056, 13.491)
+
+[node name="TeamB_SpawnMarker" type="Node3D" parent="." index="9" unique_id=979831229 groups=["TeamB_Spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.953, -17.056, 13.49)
+
+[editable path="Map_v12"]
