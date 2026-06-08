@@ -598,7 +598,7 @@ var _ping_sent_at : float = 0.0
 
 func _start_ping_timer() -> void:
 	var t := Timer.new()
-	t.wait_time = 5.0
+	t.wait_time = 1.0
 	t.autostart = true
 	t.timeout.connect(_send_ping)
 	add_child(t)
