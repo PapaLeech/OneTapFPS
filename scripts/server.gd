@@ -34,14 +34,19 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	print("Server ready. Listening on port %d" % PORT)
-	get_tree().change_scene_to_file.call_deferred("res://levels/level_001.tscn")
+	var scene := "res://levels/level_001.tscn"
+	if _mode == "snd":
+		scene = "res://levels/snd_level_001.tscn"
+	print("Server loading scene: ", scene)
+	get_tree().change_scene_to_file.call_deferred(scene)
+
 
 func _on_connected_to_server() -> void:
 	print("connected to server")
 
 func _on_peer_connected(id: int) -> void:
 	idle_clients.append(id)
-	print("connected to server")
+	print("client %d connected to server" % id)
 
 func _on_peer_disconnected(id: int) -> void:
 	var maybe_lobby := get_lobby_from_client_id(id)
@@ -82,8 +87,6 @@ func handle_lobby_join(client_id: int) -> void:
 		print("client %d connected to lobby %s" % [client_id, maybe_lobby.name])
 		player_connected.emit(client_id)
 		ClientToServer.confirm_lobby_join.rpc_id(client_id)
-		var scene := "res://levels/snd_level_001.tscn" if _mode == "snd" else "res://levels/level_001.tscn"
-		get_tree().change_scene_to_file(scene)
 	else:
 		print("No available lobby for client %d" % client_id)
 
