@@ -163,6 +163,8 @@ func get_friends_list(callback: Callable) -> void:
 		var data = JSON.parse_string(text)
 		if data == null:
 			data = {"friends": []}
+		if not is_instance_valid(http):
+			return
 		if callback.is_valid():
 			callback.call(data.get("friends", []))
 		http.queue_free()

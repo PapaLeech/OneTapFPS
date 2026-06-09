@@ -337,6 +337,7 @@ func _build_ready_up_panel() -> void:
 	_ready_up_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
 	_ready_up_panel.custom_minimum_size = Vector2(340, 0)
 	_ready_up_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_ready_up_panel.focus_mode = Control.FOCUS_NONE
 	_ready_up_panel.visible = true
 	_hud_canvas.add_child(_ready_up_panel)
 
