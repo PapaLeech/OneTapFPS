@@ -363,7 +363,8 @@ func _set_anim_state(new_state: int) -> void:
 	_last_anim_state = new_state
 	current_anim_state = new_state
 	_play_anim_state(new_state)
-	_update_anim_state.rpc(new_state)
+	if multiplayer.has_multiplayer_peer():
+		_update_anim_state.rpc(new_state)
 
 @rpc("any_peer", "unreliable")
 func _update_anim_state(state: int) -> void:
