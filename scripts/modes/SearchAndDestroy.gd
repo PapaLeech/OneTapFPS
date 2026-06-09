@@ -67,6 +67,20 @@ func _build_hud() -> void:
 	_build_center_label()
 	_build_round_timer_label()
 	# End scoreboard built on demand in _show_end_scoreboard()
+	# Restore chat input focus after HUD rebuild (SND HUD rebuild steals GUI focus from _input_line)
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_node("HUDLayer/ChatTerminalPanel/VBox/InputLine"):
+		var input_line := level.get_node("HUDLayer/ChatTerminalPanel/VBox/InputLine")
+		if input_line.has_focus():
+			input_line.grab_focus()
+	# Wait two frames to let all SND UI finish building before restoring focus
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if level and level.has_node("HUDLayer/ChatTerminalPanel/VBox/InputLine"):
+		var chat_focus = level.get("_chat_focus")
+		if chat_focus != null and chat_focus != 0:  # 0 = ChatFocus.NONE
+			var input_line := level.get_node("HUDLayer/ChatTerminalPanel/VBox/InputLine")
+			input_line.grab_focus()
 
 # ─── Process ─────────────────────────────────────────────────────────────────
 func _process(delta: float) -> void:
@@ -642,6 +656,10 @@ func _set_local_player_frozen(frozen: bool) -> void:
 # ─── F Key Input ─────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
+		return
+	# Don't handle SND input when chat is open
+	var level := get_parent()
+	if level and level.get("_chat_focus") != null and level._chat_focus != 0:
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F and _phase == Phase.READY_UP:
