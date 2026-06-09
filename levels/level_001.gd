@@ -217,7 +217,8 @@ func _switch_chat_tab(focus: ChatFocus) -> void:
 	panel.visible = true
 	panel.modulate.a = 1.0
 	# Block movement input but keep physics running (preserves idle bobbing)
-	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % str(multiplayer.get_unique_id()))
+	var my_id := str(multiplayer.get_unique_id()) if multiplayer.has_multiplayer_peer() else "SoloPlayer"
+	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % my_id)
 	if player and player.get("_chat_open") != null:
 		player._chat_open = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -232,7 +233,8 @@ func _release_chat_focus() -> void:
 	_input_line.release_focus()
 	_input_line.placeholder_text = "Enter = chat    ` = console"
 	# Restore movement input and recapture mouse
-	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % str(multiplayer.get_unique_id()))
+	var my_id := str(multiplayer.get_unique_id()) if multiplayer.has_multiplayer_peer() else "SoloPlayer"
+	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % my_id)
 	if player and player.get("_chat_open") != null:
 		player._chat_open = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -252,13 +254,12 @@ func _on_chat_line_gui_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		var text := _input_line.text.strip_edges()
 		_input_line.clear()
-		if text == "":
-			return
-		if _chat_focus == ChatFocus.CHAT:
-			_send_chat_message.rpc(PresenceManager.username, text)
-		elif _chat_focus == ChatFocus.TERMINAL:
-			_term_output.append_text("[color=lime]> " + text + "[/color]\n")
-			_execute_chat_command(text)
+		if text != "":
+			if _chat_focus == ChatFocus.CHAT:
+				_send_chat_message.rpc(PresenceManager.username, text)
+			elif _chat_focus == ChatFocus.TERMINAL:
+				_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+				_execute_chat_command(text)
 		_input_line.grab_focus()
 	if event.keycode == KEY_ESCAPE:
 		get_viewport().set_input_as_handled()

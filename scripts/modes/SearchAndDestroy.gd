@@ -633,8 +633,10 @@ func _set_local_player_frozen(frozen: bool) -> void:
 	var my_id := multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else 1
 	var player := level.get_node_or_null(str(my_id))
 	if player:
+		# Don't unfreeze if chat is open
+		if not frozen and player.get("_chat_open") == true:
+			return
 		player.set_physics_process(not frozen)
-		player.set_process_input(not frozen)
 
 # ─── F Key Input ─────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:

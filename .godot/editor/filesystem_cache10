@@ -1,5 +1,5 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1781025178
+::res://::1781040434
 default_bus_layout.tres::AudioBusLayout::1707560426491841929::1781025122::0::1::::<><><>0<>0<><>::
 export_presets.cfg::TextFile::-1::1781025178::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
@@ -669,6 +669,11 @@ weapon_3p.gd::GDScript::7768383633327265467::1780652490::0::1::::<>Node3D<><>0<>
 ::res://controllers/scripts/player/::1777751477
 ::res://controllers/scripts/player/components/::1780652490
 step_climber.gd::GDScript::4907033901062355217::1780652490::0::1::::StepHandlerComponent<>Node<><>0<>0<><>::
+::res://docs/::1781040478
+OneTapFPS_ChatWindow_Documentation.md::TextFile::-1::1781040478::0::1::::<><><>0<>0<><>::
+OneTapFPS_Launcher_Documentation.md::TextFile::-1::1781040478::0::1::::<><><>0<>0<><>::
+OneTapFPS_Scoreboard_Documentation.md::TextFile::-1::1781040478::0::1::::<><><>0<>0<><>::
+OneTapFPS_SND_ReadyUp_Documentation.md::TextFile::-1::1781040478::0::1::::<><><>0<>0<><>::
 ::res://environment/::1781026024
 Map_v1.glb::PackedScene::1986801885685758115::1778014062::1778014852::1::::<><><>0<>0<>15e0768e44328892aaf9ffe26ded475e<>res://.godot/imported/Map_v1.glb-63d61b0e2a849e6344b19ac1db9988c7.scn::uid://c3yesvv685euf::::res://environment/Map_v1_Seamless_asphalt_v1.jpg<>uid://4fcxsdloyl3m::::res://environment/Map_v1_Road_with_pavements_v1.jpg<>uid://2o8xj37oq1kk::::res://environment/Map_v1_Hangar_v4.jpg<>uid://cuimamweffrbt::::res://environment/Map_v1_Hangar_v3.jpg<>uid://ot5782xlocff::::res://environment/Map_v1_Concrete_fence_v1.jpg<>uid://d1lv5kfk1a5gv::::res://environment/Map_v1_UNIConcrete_wall_v1.jpg<>uid://vbobryilwa8s::::res://environment/Map_v1_Hangar_v2.jpg<>uid://cxnt67hsk3o3i::::res://environment/Map_v1_Lattice_v1.png<>uid://43kl8ai30ph3::::res://environment/Map_v1_Concrete_fence_v2.jpg<>uid://cmw1pbltdo0c0::::res://environment/Map_v1_Oil_tank_v2.jpg<>uid://76ncdnbny5ju::::res://environment/Map_v1_Oil_tank_v1.jpg<>uid://bhw0uinbxiy1c::::res://environment/Map_v1_Hangar_v1.jpg<>uid://cy2alx0sgrgck::::res://environment/Map_v1_Road_block_v1.jpg<>uid://cd1si5hgvxs0m::::res://environment/Map_v1_Wooden_box_v1.jpg<>uid://c2vi0eotdja4d::::res://environment/Map_v1_Barrel_v3.jpg<>uid://264ik7qh77du::::res://environment/Map_v1_Palet_v1.jpg<>uid://cryexwvlaysrk::::res://environment/Map_v1_Conditioner_v1.jpg<>uid://dayq6aumx7v1j::::res://environment/Map_v1_Industrial_pipe_v1.jpg<>uid://ckelf53phhc5x::::res://environment/Map_v1_Cargo_container_v1.jpg<>uid://bj54f2t7bahfw::::res://environment/Map_v1_Dumpsters_v1.jpg<>uid://w82xm7o7r3dq::::res://environment/Map_v1_Electric_box_v1.jpg<>uid://b8hhbo7phxh0b::::res://environment/Map_v1_Generator_v1.jpg<>uid://ckol0uteypcy0::::res://environment/Map_v1_Electric_box_v3.jpg<>uid://csgudbdsdktv::::res://environment/Map_v1_Electric_box_v2.jpg<>uid://c8gdsxqm1hbed::::res://environment/Map_v1_Pipes_set_v1.jpg<>uid://kxem2r8akcsy::::res://environment/Map_v1_Barrel_v2.jpg<>uid://b0ks562d2lgkx::::res://environment/Map_v1_Barrel_v1.jpg
 Map_v1_Barrel_v1.jpg::CompressedTexture2D::4162933701977852331::1778015563::1778878424::1::::<><><>0<>0<>5c4d5dfe1843fa2e0246636394ca5e9b<>res://.godot/imported/Map_v1_Barrel_v1.jpg-8c5a371835f962a47cdf99e71c7a3e72.s3tc.ctex<*>res://.godot/imported/Map_v1_Barrel_v1.jpg-8c5a371835f962a47cdf99e71c7a3e72.etc2.ctex::
@@ -700,9 +705,9 @@ Map_v1_UNIConcrete_wall_v1.jpg::CompressedTexture2D::9008209305074702713::177801
 Map_v1_Wooden_box_v1.jpg::CompressedTexture2D::5038190498942625454::1778015563::1778878430::1::::<><><>0<>0<>8e5346ba9173076a355cd90f157c04e3<>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.s3tc.ctex<*>res://.godot/imported/Map_v1_Wooden_box_v1.jpg-4952edc47f859b5cf7756be46a85984d.etc2.ctex::
 map_v_1.gd::GDScript::6714484322957040553::1776709126::0::1::::<>Node3D<><>0<>0<><>::
 WE_test.tres::Environment::8424170553004968181::1781026024::0::1::::<><><>0<>0<><>::uid://b1jvh1ehiaebt::::res://textures/industrial_sunset_puresky_4k.hdr
-::res://levels/::1781038107
-level_001.gd::GDScript::612782810600861443::1781037990::0::1::::<>Node3D<><>0<>0<><>::
-level_001.tscn::PackedScene::4261551556484119783::1781038182::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://iy3pcr5qh8rf::::res://levels/level_001.gd<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://37k35ornbomj::::res://scripts/PlayerSpawnPoint.gd<>uid://3kolpk4youf0::::res://environment/Map_v1.glb
+::res://levels/::1781041639
+level_001.gd::GDScript::612782810600861443::1781041639::0::1::::<>Node3D<><>0<>0<><>::
+level_001.tscn::PackedScene::4261551556484119783::1781038192::0::1::::<><><>0<>0<><>::uid://btv0a42cgxt8g::::res://levels/WE_test.tscn<>uid://iy3pcr5qh8rf::::res://levels/level_001.gd<>uid://c2wsttvjfnclt::::res://environment/map_v_1.gd<>uid://37k35ornbomj::::res://scripts/PlayerSpawnPoint.gd<>uid://3kolpk4youf0::::res://environment/Map_v1.glb
 map_splash.gd::GDScript::784850211590007565::1780859433::0::1::::<>Control<><>0<>0<><>::
 map_splash.tscn::PackedScene::3812957831146004513::1780859902::0::1::::<><><>0<>0<><>::uid://lggmr1lbvojl::::res://levels/map_splash.gd<>uid://h8g7snil504p::::res://assets/ui/Dmitrii_Kutsenko-Industrial_Set_v2.png
 map_visual_boost.gd::GDScript::5407384298704008832::1776836302::0::1::::<>Node3D<><>0<>0<><>::
@@ -733,8 +738,8 @@ PlayerSpawnPoint.gd::GDScript::2032006480269417937::1779792776::0::1::::PlayerSp
 PresenceManager.gd::GDScript::3317272715576500429::1780848674::0::1::::<>Node<><>0<>0<><>::
 server.gd::GDScript::17452018081795135::1781006237::0::1::::<>Node<><>0<>0<><>::
 SessionLogger.gd::GDScript::3342422228604137525::1780652491::0::1::::<>Node<><>0<>0<><>::
-::res://scripts/modes/::1781013250
-SearchAndDestroy.gd::GDScript::3711756043037318235::1781013250::0::1::::<>Node<><>0<>0<><>::
+::res://scripts/modes/::1781040855
+SearchAndDestroy.gd::GDScript::3711756043037318235::1781040855::0::1::::<>Node<><>0<>0<><>::
 ::res://shaders/::1777234919
 grid.gdshader::Shader::3566797187140224592::1776653496::0::1::::<><><>0<>0<><>::
 ::res://textures/::1778878455
