@@ -455,10 +455,9 @@ func _show_quit_dialog() -> void:
 func _on_mode_clicked(event: InputEvent, mode: Mode) -> void:
 	if not event is InputEventMouseButton: return
 	if not event.pressed or event.button_index != MOUSE_BUTTON_LEFT: return
-	if _active_mode != Mode.NONE: return
+	_reset()
 	if mode == Mode.DEATHMATCH:
 		if _lobby_players.size() > 0:
-			# Lobby has players from invite — start match for everyone
 			ClientToServer.start_lobby_match()
 		else:
 			_show_host_join_panel()
@@ -508,7 +507,7 @@ func _load_mode() -> void:
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
-		ClientToServer.request_snd_match()
+		ClientToServer.request_snd_mode()
 		get_tree().change_scene_to_file("res://levels/snd_map_splash.tscn")
 	else:
 		get_tree().change_scene_to_file(GAME_SCENE)
@@ -873,6 +872,7 @@ func _on_deathmatch_connected() -> void:
 
 func _on_lobby_joined() -> void:
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
+		ClientToServer.request_snd_mode()
 		get_tree().change_scene_to_file("res://levels/snd_map_splash.tscn")
 	else:
 		get_tree().change_scene_to_file("res://levels/map_splash.tscn")

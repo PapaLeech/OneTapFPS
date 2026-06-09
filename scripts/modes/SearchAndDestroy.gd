@@ -43,6 +43,18 @@ func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		return  # Server has no UI
 	_build_hud()
+	# Editor solo test — only when not server authority
+	if OS.is_debug_build() and not multiplayer.is_server():
+		_start_solo_test()
+
+func _start_solo_test() -> void:
+	print("[SND] Solo test mode — simulating server locally")
+	var fake_id := 1
+	_ready_players[fake_id] = true
+	_phase = Phase.ROUND_ACTIVE
+	_round_number = 1
+	if _ready_up_panel:
+		_ready_up_panel.visible = false
 
 func _build_hud() -> void:
 	_hud_canvas = CanvasLayer.new()
@@ -56,7 +68,8 @@ func _build_hud() -> void:
 
 # ─── Process ─────────────────────────────────────────────────────────────────
 func _process(delta: float) -> void:
-	if not multiplayer.is_server():
+	var is_solo := OS.is_debug_build() and not multiplayer.is_server()
+	if not is_solo and not multiplayer.is_server():
 		return
 
 	match _phase:

@@ -154,3 +154,12 @@ func lobby_member_added_rpc(host_username: String, accepter_username: String) ->
 @rpc("authority", "call_remote", "reliable")
 func lobby_match_starting_rpc() -> void:
 	lobby_match_starting.emit()
+
+func request_snd_mode() -> void:
+	c_request_snd_mode.rpc_id(1)
+
+@rpc("any_peer", "call_remote", "reliable")
+func c_request_snd_mode() -> void:
+	if not multiplayer.is_server():
+		return
+	MultiplayerManager.set_mode("snd")

@@ -1,20 +1,47 @@
 [gd_scene format=3 uid="uid://duperehx2idex"]
 
 [ext_resource type="Script" uid="uid://c1i5auay6uln3" path="res://levels/snd_map_splash.gd" id="1_et4lx"]
+[ext_resource type="Texture2D" uid="uid://h8g7snil504p" path="res://assets/ui/Dmitrii_Kutsenko-Industrial_Set_v2.png" id="2_jcska"]
 
-[node name="MapSplash" type="Control" unique_id=2012709927]
+[node name="MapSplash" type="Control" unique_id=780211405]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_et4lx")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1438972677]
+[node name="Background" type="TextureRect" parent="." unique_id=128753541]
 layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_jcska")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="BottomOverlay" type="ColorRect" parent="." unique_id=1786242363]
+[node name="BottomOverlay" type="ColorRect" parent="." unique_id=577593928]
 layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+color = Color(0, 0, 0, 1)
 
-[node name="CreditLabel" type="Label" parent="." unique_id=1213090030]
+[node name="CreditLabel" type="Label" parent="." unique_id=1039655624]
 layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+offset_bottom = -28.0
+text = "Dmitrii Kutsenko — Industrial Set v2.0"
+horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1321771173]
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1389873274]
 layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -24.0
+show_percentage = false
