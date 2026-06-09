@@ -16,6 +16,12 @@ var _mode : String = "deathmatch"  # default; switches to "snd" when requested
 func set_mode(mode: String) -> void:
 	_mode = mode
 	print("Server: mode set to %s" % _mode)
+	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
+		var scene := "res://levels/level_001.tscn"
+		if _mode == "snd":
+			scene = "res://levels/snd_level_001.tscn"
+		print("Server reloading scene: ", scene)
+		get_tree().change_scene_to_file.call_deferred(scene)
 
 signal player_connected(peer_id: int)
 signal player_disconnected(peer_id: int)

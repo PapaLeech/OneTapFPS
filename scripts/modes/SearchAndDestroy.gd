@@ -25,6 +25,7 @@ var _ready_players     : Dictionary = {}   # peer_id -> true
 var _ready_up_elapsed  : float  = 0.0
 var _countdown_elapsed : float  = 0.0
 var _round_elapsed     : float  = 0.0
+var _is_solo           : bool   = false
 
 # ─── UI references (built at runtime, client-side only) ──────────────────────
 var _hud_canvas        : CanvasLayer   = null
@@ -42,25 +43,26 @@ const PANEL_SHADOW_COLOR := Color(0.0,  0.0,  0.0,  0.8)
 func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		return  # Server has no UI
+	await get_tree().process_frame
 	_build_hud()
-	# Editor solo test — only when not server authority
-	if OS.is_debug_build() and not multiplayer.is_server():
+	# Editor solo test — only when not connected to any server
+	if OS.is_debug_build() and not multiplayer.has_multiplayer_peer():
 		_start_solo_test()
 
 func _start_solo_test() -> void:
-	print("[SND] Solo test mode — simulating server locally")
-	var fake_id := 1
-	_ready_players[fake_id] = true
-	_phase = Phase.ROUND_ACTIVE
-	_round_number = 1
+	print("[SND] Solo test mode — press F to ready up")
+	_is_solo = true
+	_phase = Phase.READY_UP
+	_ready_players.clear()
 	if _ready_up_panel:
-		_ready_up_panel.visible = false
+		_ready_up_panel.visible = true
 
 func _build_hud() -> void:
 	_hud_canvas = CanvasLayer.new()
 	_hud_canvas.layer = 64
-	get_parent().add_child(_hud_canvas)
-
+	get_parent().add_child.call_deferred(_hud_canvas)
+	await get_parent().child_entered_tree
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_build_ready_up_panel()
 	_build_center_label()
 	_build_round_timer_label()
@@ -68,35 +70,42 @@ func _build_hud() -> void:
 
 # ─── Process ─────────────────────────────────────────────────────────────────
 func _process(delta: float) -> void:
-	var is_solo := OS.is_debug_build() and not multiplayer.is_server()
-	if not is_solo and not multiplayer.is_server():
+	if not _is_solo and not multiplayer.is_server():
 		return
 
 	match _phase:
 		Phase.READY_UP:
 			_ready_up_elapsed += delta
 			var remaining := int(READY_UP_DURATION - _ready_up_elapsed)
-			_sync_ready_up_state.rpc(
-				_ready_up_elapsed >= READY_UP_DURATION,
-				remaining,
-				var_to_bytes(_ready_players)
-			)
+			if _is_solo:
+				_update_ready_up_ui(remaining, _ready_players)
+			else:
+				_sync_ready_up_state.rpc(
+					_ready_up_elapsed >= READY_UP_DURATION,
+					remaining,
+					var_to_bytes(_ready_players)
+				)
 			if _ready_up_elapsed >= READY_UP_DURATION:
 				_begin_countdown(false)
 
 		Phase.COUNTDOWN:
 			_countdown_elapsed += delta
 			var remaining := int(READY_UP_COUNTDOWN - _countdown_elapsed) + 1
-			_sync_countdown.rpc(remaining, _countdown_elapsed >= READY_UP_COUNTDOWN)
+			if _is_solo:
+				_show_center_label("MATCH STARTS IN " + str(remaining))
+			else:
+				_sync_countdown.rpc(remaining, _countdown_elapsed >= READY_UP_COUNTDOWN)
 			if _countdown_elapsed >= READY_UP_COUNTDOWN:
 				_start_round()
 
 		Phase.ROUND_ACTIVE:
 			_round_elapsed += delta
 			var remaining := int(ROUND_TIME - _round_elapsed)
-			_sync_round_timer.rpc(remaining)
+			if _is_solo:
+				_show_round_timer(remaining)
+			else:
+				_sync_round_timer.rpc(remaining)
 			if _round_elapsed >= ROUND_TIME:
-				# Time expired — defenders (Team B) win the round
 				_end_round(2)
 
 # ─── Ready-Up Phase ──────────────────────────────────────────────────────────
@@ -124,15 +133,25 @@ func _client_pressed_ready() -> void:
 func _begin_countdown(all_ready: bool) -> void:
 	_phase = Phase.COUNTDOWN
 	_countdown_elapsed = 0.0
-	_notify_countdown_start.rpc(all_ready)
+	if not _is_solo:
+		_notify_countdown_start.rpc(all_ready)
+	else:
+		_hide_ready_up_panel()
+		_show_center_label("MATCH STARTS IN 5")
 
 # ─── Round Flow ──────────────────────────────────────────────────────────────
 func _start_round() -> void:
 	_phase = Phase.ROUND_ACTIVE
 	_round_elapsed = 0.0
 	_round_number += 1
-	_spawn_teams()
-	_notify_round_start.rpc(_round_number)
+	if not _is_solo:
+		_spawn_teams()
+		_notify_round_start.rpc(_round_number)
+	else:
+		_hide_center_label()
+		_show_center_label("ROUND " + str(_round_number))
+		_show_round_timer(int(ROUND_TIME))
+		get_tree().create_timer(2.0).timeout.connect(func(): _hide_center_label())
 
 func _end_round(winning_team: int) -> void:
 	if _phase != Phase.ROUND_ACTIVE:
@@ -143,6 +162,9 @@ func _end_round(winning_team: int) -> void:
 	else:
 		_team_b_rounds += 1
 	_notify_round_end.rpc(winning_team, _team_a_rounds, _team_b_rounds)
+	if _is_solo:
+		var team_name := "TEAM A" if winning_team == 1 else "TEAM B"
+		_show_center_label("ROUND WON – " + team_name)
 	await get_tree().create_timer(ROUND_END_PAUSE).timeout
 	if _team_a_rounds >= ROUNDS_TO_WIN:
 		_end_match(1)
@@ -151,12 +173,21 @@ func _end_round(winning_team: int) -> void:
 	else:
 		_phase = Phase.COUNTDOWN
 		_countdown_elapsed = 0.0
-		_notify_countdown_start.rpc(false)
+		if not _is_solo:
+			_notify_countdown_start.rpc(false)
+		else:
+			_hide_center_label()
+			_show_center_label("NEXT ROUND IN 5")
 
 func _end_match(winning_team: int) -> void:
 	_phase = Phase.MATCH_END
 	var summary := _build_match_summary()
-	_notify_match_end.rpc(winning_team, var_to_bytes(summary))
+	if not _is_solo:
+		_notify_match_end.rpc(winning_team, var_to_bytes(summary))
+	else:
+		_hide_round_timer()
+		_hide_center_label()
+		_show_end_scoreboard(winning_team == 1, summary)
 
 # ─── Team Spawning ───────────────────────────────────────────────────────────
 func _spawn_teams() -> void:
@@ -255,6 +286,7 @@ func _sync_countdown(seconds_remaining: int, finished: bool) -> void:
 func _notify_round_start(round_num: int) -> void:
 	if multiplayer.is_server():
 		return
+	_set_local_player_frozen(false)
 	_show_center_label("ROUND " + str(round_num))
 	_show_round_timer(int(ROUND_TIME))
 	get_tree().create_timer(2.0).timeout.connect(func(): _hide_center_label())
@@ -304,6 +336,7 @@ func _build_ready_up_panel() -> void:
 	_ready_up_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_ready_up_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
 	_ready_up_panel.custom_minimum_size = Vector2(340, 0)
+	_ready_up_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ready_up_panel.visible = true
 	_hud_canvas.add_child(_ready_up_panel)
 
@@ -593,11 +626,25 @@ func _get_local_team() -> String:
 	var my_id := multiplayer.get_unique_id()
 	return stats.get(my_id, {}).get("team", "A")
 
+func _set_local_player_frozen(frozen: bool) -> void:
+	var level := get_parent()
+	if not level:
+		return
+	var my_id := multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else 1
+	var player := level.get_node_or_null(str(my_id))
+	if player:
+		player.set_physics_process(not frozen)
+		player.set_process_input(not frozen)
+
 # ─── F Key Input ─────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F and _phase == Phase.READY_UP:
-			_client_pressed_ready.rpc_id(1)
+			if _is_solo:
+				_ready_players[1] = true
+				_begin_countdown(true)
+			else:
+				_client_pressed_ready.rpc_id(1)
 			get_viewport().set_input_as_handled()
