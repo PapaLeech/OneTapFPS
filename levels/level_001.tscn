@@ -100,7 +100,9 @@ size_flags_horizontal = 3
 placeholder_text = "Enter = chat    ` = console"
 
 [node name="ResizeHandle" type="Button" parent="HUDLayer" unique_id=532050389]
+visible = false
 custom_minimum_size = Vector2(18, 18)
+rotation = 1.5708
 tooltip_text = "Drag to resize"
 text = "⤢"
 flat = true

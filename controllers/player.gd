@@ -26,6 +26,7 @@ var _camera_rotation : Vector3
 var mouse_input : Vector2
 
 var _is_crouching : bool = false
+var _chat_open    : bool = false
 var crouching : bool = false
 var _crouch_target_height : float = 1.5
 var _crouch_target_shape : float = 2.0
@@ -215,10 +216,10 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor() and not _chat_open:
 		velocity.y = JUMP_VELOCITY
 
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var input_dir := Vector2.ZERO if _chat_open else Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var current_speed = SPEED * 0.6 if _is_crouching else SPEED
 	if Input.is_action_pressed("sprint") and not _is_crouching:

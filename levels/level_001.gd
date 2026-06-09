@@ -216,10 +216,10 @@ func _switch_chat_tab(focus: ChatFocus) -> void:
 	var panel := $HUDLayer/ChatTerminalPanel
 	panel.visible = true
 	panel.modulate.a = 1.0
-	# Freeze player movement and release mouse while typing
+	# Block movement input but keep physics running (preserves idle bobbing)
 	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % str(multiplayer.get_unique_id()))
-	if player and player.has_method("set_physics_process"):
-		player.set_physics_process(false)
+	if player and player.get("_chat_open") != null:
+		player._chat_open = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if focus == ChatFocus.CHAT:
 		_input_line.placeholder_text = "Type message, Enter to send, Esc to exit..."
@@ -231,10 +231,10 @@ func _release_chat_focus() -> void:
 	_input_line.editable = false
 	_input_line.release_focus()
 	_input_line.placeholder_text = "Enter = chat    ` = console"
-	# Restore player movement and recapture mouse
+	# Restore movement input and recapture mouse
 	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % str(multiplayer.get_unique_id()))
-	if player and player.has_method("set_physics_process"):
-		player.set_physics_process(true)
+	if player and player.get("_chat_open") != null:
+		player._chat_open = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	# Fade to faint if messages exist, otherwise hide completely
 	var panel := $HUDLayer/ChatTerminalPanel
