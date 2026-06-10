@@ -27,9 +27,9 @@ var _countdown_elapsed : float  = 0.0
 var _round_elapsed     : float  = 0.0
 
 # ─── UI references (built at runtime, client-side only) ──────────────────────
-var _hud_canvas        : CanvasLayer   = null
+var _hud_canvas        : CanvasLayer    = null
 var _ready_up_panel    : PanelContainer = null
-var _center_label      : Label          = null   # "MATCH STARTS IN X" / "READY IN X" / "ROUND START"
+var _center_label      : Label          = null
 var _round_timer_label : Label          = null
 var _end_scoreboard    : PanelContainer = null
 
@@ -37,6 +37,13 @@ var _end_scoreboard    : PanelContainer = null
 const PANEL_BG_COLOR     := Color(0.12, 0.12, 0.12, 0.97)
 const PANEL_BORDER_COLOR := Color(0.4,  0.4,  0.4,  1.0)
 const PANEL_SHADOW_COLOR := Color(0.0,  0.0,  0.0,  0.8)
+
+# ─── Focus helper ─────────────────────────────────────────────────────────────
+func _disable_focus_recursive(node: Node) -> void:
+	if node is Control:
+		node.focus_mode = Control.FOCUS_NONE
+	for child in node.get_children():
+		_disable_focus_recursive(child)
 
 # ─── Ready ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -54,16 +61,12 @@ func _build_hud() -> void:
 	_build_ready_up_panel()
 	_build_center_label()
 	_build_round_timer_label()
-	# End scoreboard built on demand in _show_end_scoreboard()
-	# Restore chat input focus after HUD rebuild (SND HUD rebuild steals GUI focus from _input_line)
+	_disable_focus_recursive(_ready_up_panel)
+	# Wait two frames to let all SND UI finish building
+	await get_tree().process_frame
+	await get_tree().process_frame
+	# Restore focus to InputLine if chat is open
 	var level := get_tree().get_root().get_node_or_null("Node3D")
-	if level and level.has_node("HUDLayer/ChatTerminalPanel/VBox/InputLine"):
-		var input_line := level.get_node("HUDLayer/ChatTerminalPanel/VBox/InputLine")
-		if input_line.has_focus():
-			input_line.grab_focus()
-	# Wait two frames to let all SND UI finish building before restoring focus
-	await get_tree().process_frame
-	await get_tree().process_frame
 	if level and level.has_node("HUDLayer/ChatTerminalPanel/VBox/InputLine"):
 		var chat_focus = level.get("_chat_focus")
 		if chat_focus != null and chat_focus != 0:  # 0 = ChatFocus.NONE
@@ -167,14 +170,11 @@ func _spawn_teams() -> void:
 	var level := get_parent()
 	if not level:
 		return
-
 	var team_a_spawns := get_tree().get_nodes_in_group("TeamA_Spawn")
 	var team_b_spawns := get_tree().get_nodes_in_group("TeamB_Spawn")
-
 	if team_a_spawns.is_empty() or team_b_spawns.is_empty():
 		push_error("SND: Spawn groups TeamA_Spawn or TeamB_Spawn not found!")
 		return
-
 	var stats : Dictionary = level.get("_stats") if level.get("_stats") != null else {}
 	var team_a_peers : Array = []
 	var team_b_peers : Array = []
@@ -183,18 +183,12 @@ func _spawn_teams() -> void:
 			team_a_peers.append(pid)
 		else:
 			team_b_peers.append(pid)
-
-	# Spawn Team A
 	for i in range(team_a_peers.size()):
 		var spawn_node = team_a_spawns[i % team_a_spawns.size()]
-		var pos : Vector3 = spawn_node.global_position
-		_teleport_peer.rpc(team_a_peers[i], pos)
-
-	# Spawn Team B
+		_teleport_peer.rpc(team_a_peers[i], spawn_node.global_position)
 	for i in range(team_b_peers.size()):
 		var spawn_node = team_b_spawns[i % team_b_spawns.size()]
-		var pos : Vector3 = spawn_node.global_position
-		_teleport_peer.rpc(team_b_peers[i], pos)
+		_teleport_peer.rpc(team_b_peers[i], spawn_node.global_position)
 
 @rpc("authority", "call_local", "reliable")
 func _teleport_peer(peer_id: int, pos: Vector3) -> void:
@@ -211,8 +205,8 @@ func _build_match_summary() -> Dictionary:
 	if not level:
 		return {}
 	var stats : Dictionary = level.get("_stats") if level.get("_stats") != null else {}
-	var top_kills    := {"name": "—", "value": 0}
-	var top_assists  := {"name": "—", "value": 0}
+	var top_kills     := {"name": "—", "value": 0}
+	var top_assists   := {"name": "—", "value": 0}
 	var top_headshots := {"name": "—", "value": 0}
 	for pid in stats.keys():
 		var s : Dictionary = stats[pid]
@@ -316,7 +310,6 @@ func _build_ready_up_panel() -> void:
 	vbox.add_theme_constant_override("separation", 8)
 	_ready_up_panel.add_child(vbox)
 
-	# Title bar
 	var title_bar := ColorRect.new()
 	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
 	title_bar.custom_minimum_size = Vector2(340, 32)
@@ -330,7 +323,6 @@ func _build_ready_up_panel() -> void:
 	title.set_anchors_preset(Control.PRESET_FULL_RECT)
 	title_bar.add_child(title)
 
-	# Instruction
 	var instr := Label.new()
 	instr.name = "InstructionLabel"
 	instr.text = "Press F to Ready Up"
@@ -339,7 +331,6 @@ func _build_ready_up_panel() -> void:
 	instr.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1.0))
 	vbox.add_child(instr)
 
-	# Ready count
 	var count_lbl := Label.new()
 	count_lbl.name = "ReadyCountLabel"
 	count_lbl.text = "Players Ready: 0 / 0"
@@ -348,19 +339,16 @@ func _build_ready_up_panel() -> void:
 	count_lbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1.0))
 	vbox.add_child(count_lbl)
 
-	# Divider
 	var div := ColorRect.new()
 	div.color = Color(0.4, 0.4, 0.4, 0.4)
 	div.custom_minimum_size = Vector2(340, 1)
 	vbox.add_child(div)
 
-	# Player list container
 	var player_list := VBoxContainer.new()
 	player_list.name = "PlayerList"
 	player_list.add_theme_constant_override("separation", 4)
 	vbox.add_child(player_list)
 
-	# Bottom padding
 	var pad := Control.new()
 	pad.custom_minimum_size = Vector2(0, 8)
 	vbox.add_child(pad)
@@ -375,15 +363,9 @@ func _update_ready_up_ui(seconds_remaining: int, ready_dict: Dictionary) -> void
 	var player_list := vbox.get_node_or_null("PlayerList") as VBoxContainer
 	if not count_lbl or not player_list:
 		return
-
 	var level := get_parent()
 	var stats : Dictionary = level.get("_stats") if level and level.get("_stats") != null else {}
-	var total : int = stats.size()
-	var ready_count : int = ready_dict.size()
-
-	count_lbl.text = "Players Ready: %d / %d" % [ready_count, total]
-
-	# Rebuild player list rows
+	count_lbl.text = "Players Ready: %d / %d" % [ready_dict.size(), stats.size()]
 	for child in player_list.get_children():
 		child.queue_free()
 	for pid in stats.keys():
@@ -457,21 +439,19 @@ func _hide_round_timer() -> void:
 func _show_end_scoreboard(won: bool, summary: Dictionary) -> void:
 	if _end_scoreboard:
 		_end_scoreboard.queue_free()
-
 	_end_scoreboard = PanelContainer.new()
 	_end_scoreboard.add_theme_stylebox_override("panel", _make_panel_style())
 	_end_scoreboard.set_anchors_preset(Control.PRESET_CENTER)
 	_end_scoreboard.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_end_scoreboard.grow_vertical   = Control.GROW_DIRECTION_BOTH
 	_end_scoreboard.custom_minimum_size = Vector2(520, 0)
-	_end_scoreboard.modulate.a = 0.0   # Start invisible for fade-in
+	_end_scoreboard.modulate.a = 0.0
 	_hud_canvas.add_child(_end_scoreboard)
 
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 0)
 	_end_scoreboard.add_child(vbox)
 
-	# Title ribbon
 	var title_bar := ColorRect.new()
 	title_bar.custom_minimum_size = Vector2(520, 36)
 	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
@@ -486,16 +466,15 @@ func _show_end_scoreboard(won: bool, summary: Dictionary) -> void:
 	title_lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
 	title_bar.add_child(title_lbl)
 
-	# Match summary section
 	var summary_vbox := VBoxContainer.new()
 	summary_vbox.add_theme_constant_override("separation", 6)
 	var pad_top := Control.new()
 	pad_top.custom_minimum_size = Vector2(0, 10)
 	summary_vbox.add_child(pad_top)
 	for entry in [
-		["Most Kills",      summary.get("top_kills",      {})],
-		["Most Assists",    summary.get("top_assists",     {})],
-		["Most Headshots",  summary.get("top_headshots",  {})],
+		["Most Kills",     summary.get("top_kills",     {})],
+		["Most Assists",   summary.get("top_assists",    {})],
+		["Most Headshots", summary.get("top_headshots", {})],
 	]:
 		var row := Label.new()
 		var data : Dictionary = entry[1]
@@ -509,25 +488,21 @@ func _show_end_scoreboard(won: bool, summary: Dictionary) -> void:
 	summary_vbox.add_child(pad_mid)
 	vbox.add_child(summary_vbox)
 
-	# Divider
 	var div := ColorRect.new()
 	div.color = Color(0.4, 0.4, 0.4, 0.5)
 	div.custom_minimum_size = Vector2(520, 1)
 	vbox.add_child(div)
 
-	# Player table (reuse level_001 stats)
 	var level := get_parent()
 	var stats : Dictionary = level.get("_stats") if level and level.get("_stats") != null else {}
-	var header := _make_score_row("PLAYER", "K", "D", "A", "HS", "PING", true)
-	vbox.add_child(header)
+	vbox.add_child(_make_score_row("PLAYER", "K", "D", "A", "HS", "PING", true))
 	var div2 := ColorRect.new()
 	div2.color = Color(0.4, 0.4, 0.4, 0.5)
 	div2.custom_minimum_size = Vector2(520, 1)
 	vbox.add_child(div2)
 
 	for team_label in ["A", "B"]:
-		var team_header := _make_team_bar("TEAM " + team_label)
-		vbox.add_child(team_header)
+		vbox.add_child(_make_team_bar("TEAM " + team_label))
 		var peers := stats.keys().filter(func(p): return stats[p].get("team", "A") == team_label)
 		peers.sort_custom(func(a, b): return stats[a]["kills"] > stats[b]["kills"])
 		for pid in peers:
@@ -550,7 +525,6 @@ func _show_end_scoreboard(won: bool, summary: Dictionary) -> void:
 	pad_bot.custom_minimum_size = Vector2(0, 8)
 	vbox.add_child(pad_bot)
 
-	# Fade-in animation (0 → 1 over 0.5s)
 	var tween := create_tween()
 	tween.tween_property(_end_scoreboard, "modulate:a", 1.0, 0.5).set_ease(Tween.EASE_OUT)
 
@@ -605,7 +579,6 @@ func _set_local_player_frozen(frozen: bool) -> void:
 	var my_id := multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else 1
 	var player := level.get_node_or_null(str(my_id))
 	if player:
-		# Don't unfreeze if chat is open
 		if not frozen and player.get("_chat_open") == true:
 			return
 		player.set_physics_process(not frozen)

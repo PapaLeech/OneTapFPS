@@ -36,17 +36,24 @@ var _scoreboard_canvas : CanvasLayer    = null
 var _scoreboard_cursor : bool           = false
 var _software_cursor   : Control        = null
 var _cursor_pos        : Vector2        = Vector2(640, 360)
+# stats[peer_id] = {username, kills, deaths, assists, ping}
 var _stats             : Dictionary     = {}
+
+
 
 func _ready() -> void:
 	print("Level _ready, is_server: ", multiplayer.is_server())
+	# Read spawn positions from spawn_points group
 	for point in get_tree().get_nodes_in_group("spawn_points"):
 		spawn_positions.append(point.global_position)
 	print("Spawn positions loaded: ", spawn_positions.size())
+	# Solo play mode - no multiplayer peer at all
 	if not multiplayer.has_multiplayer_peer():
 		_spawn_solo_player()
 		return
+	# Dedicated server or client with peer
 	if multiplayer.is_server() and not OS.has_feature("dedicated_server") and not "--dedicated-server" in OS.get_cmdline_args():
+		# Running as server in editor - treat as solo
 		_spawn_solo_player()
 		return
 	if multiplayer.is_server():
@@ -55,19 +62,23 @@ func _ready() -> void:
 		print("Client level ready, notifying server")
 		await get_tree().create_timer(0.1).timeout
 		_client_ready.rpc_id(1)
+		# Client: listen for peer disconnection to remove stale meshes
 		multiplayer.peer_disconnected.connect(_client_remove_player)
 		_start_ping_timer()
+	# Skip chat setup on dedicated server
 	if not OS.has_feature("dedicated_server") and not "--dedicated-server" in OS.get_cmdline_args():
 		_setup_chat()
 		_setup_scoreboard()
 
+# Client tells server it has loaded the level
 @rpc("any_peer", "reliable")
 func _client_ready() -> void:
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
 	if spawn_index_map.has(peer_id):
-		return
+		return  # Already spawned, ignore
+	# Clean up stale peers not currently connected
 	var connected := multiplayer.get_peers()
 	for stale_id in spawn_index_map.keys().duplicate():
 		if stale_id not in connected:
@@ -79,11 +90,12 @@ func _client_ready() -> void:
 	await get_tree().create_timer(0.5).timeout
 	_on_player_connected(peer_id)
 
+# Server only — assigns spawn position and broadcasts to all peers
 func _on_player_connected(peer_id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	if spawn_index_map.has(peer_id):
-		return
+		return  # Already assigned
 	_on_player_connected_respawn(peer_id, -1)
 
 func _on_player_connected_respawn(peer_id: int, last_index: int) -> void:
@@ -98,15 +110,18 @@ func _on_player_connected_respawn(peer_id: int, last_index: int) -> void:
 			attempts += 1
 	spawn_index_map[peer_id] = pos_index
 	print("Server spawning player: ", peer_id, " at index ", pos_index)
+	# If node exists, teleport. Otherwise spawn fresh.
 	if get_node_or_null(str(peer_id)) != null:
 		_teleport_player.rpc(peer_id, pos_index)
 	else:
 		_do_spawn.rpc(peer_id, pos_index)
+		# Tell the NEW player about all existing players
 		for existing_id in spawn_index_map:
 			if existing_id != peer_id:
 				_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])
 	var username: String = MultiplayerManager.players.get(peer_id, "Unknown")
 	NetworkSyncLogger.log_peer_connected(peer_id, username)
+	# Only initialise stats for new players, preserve existing on respawn
 	if not _stats.has(peer_id):
 		var team_a := _stats.values().filter(func(s): return s["team"] == "A").size()
 		var team_b := _stats.values().filter(func(s): return s["team"] == "B").size()
@@ -117,6 +132,7 @@ func _on_player_connected_respawn(peer_id: int, last_index: int) -> void:
 		var names: Array = MultiplayerManager.players.values()
 		SessionLogger.start_session_rpc.rpc(names[0], names[1])
 
+# Runs on ALL peers via RPC — spawns the player locally
 @rpc("authority", "call_local", "reliable")
 func _do_spawn(peer_id: int, pos_index: int) -> void:
 	if get_node_or_null(str(peer_id)) != null:
@@ -133,13 +149,16 @@ func _do_spawn(peer_id: int, pos_index: int) -> void:
 	add_child(player, true)
 	print("Spawned player ", peer_id, " at ", spawn_positions[pos_index])
 
+# Solo play mode - spawn player without multiplayer
 func _spawn_solo_player() -> void:
 	var player := PLAYER_SCENE.instantiate()
 	player.name = "SoloPlayer"
 	add_child(player)
 	player.global_position = Vector3(0, -1.5, 0)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Add solo player to stats
 	_stats[0] = {"username": PresenceManager.username if PresenceManager.username != "" else "Player", "kills": 0, "deaths": 0, "assists": 0, "ping": 0, "team": "A"}
+	# Zero out velocity so player doesn't fall on spawn
 	await get_tree().process_frame
 	player.velocity = Vector3.ZERO
 
@@ -161,18 +180,22 @@ func _client_remove_player(peer_id: int) -> void:
 		print("Client: removing mesh for disconnected peer ", peer_id)
 		node.queue_free()
 
-# ─── Chat ────────────────────────────────────────────────────────────────────
+# ─── In-game Chat / Terminal ──────────────────────────────────────────────────────────
 func _setup_chat() -> void:
 	_chat_tab_btn.pressed.connect(func(): _switch_chat_tab(ChatFocus.CHAT))
 	_term_tab_btn.pressed.connect(func(): _switch_chat_tab(ChatFocus.TERMINAL))
+	# Use gui_input instead of text_submitted so we control focus
+	_input_line.keep_editing_on_text_submit = true
 	_input_line.gui_input.connect(_on_chat_line_gui_input)
 	_chat_output.visible = true
 	_term_output.visible = false
+	# Start fully hidden — appears on first Enter press
 	var panel := $HUDLayer/ChatTerminalPanel
 	panel.modulate.a = 0.0
 	panel.visible = false
 	_release_chat_focus()
 	_setup_chat_window()
+	# Hook drag on the drag bar ribbon at top
 	_drag_bar.gui_input.connect(_on_tabbar_gui_input)
 
 func set_chat_enabled(enabled: bool) -> void:
@@ -190,11 +213,14 @@ func _switch_chat_tab(focus: ChatFocus) -> void:
 	_chat_focus = focus
 	_chat_output.visible = (focus == ChatFocus.CHAT)
 	_term_output.visible = (focus == ChatFocus.TERMINAL)
-	_input_line.editable = true
-	_input_line.grab_focus()
+	# Make panel visible BEFORE grab_focus so the LineEdit can actually receive focus
 	var panel := $HUDLayer/ChatTerminalPanel
 	panel.visible = true
 	panel.modulate.a = 1.0
+	_input_line.editable = true
+	_input_line.grab_focus()
+	_input_line.call_deferred("grab_focus")
+	# Block movement input but keep physics running (preserves idle bobbing)
 	var my_id := str(multiplayer.get_unique_id()) if multiplayer.has_multiplayer_peer() else "SoloPlayer"
 	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % my_id)
 	if player and player.get("_chat_open") != null:
@@ -210,11 +236,13 @@ func _release_chat_focus() -> void:
 	_input_line.editable = false
 	_input_line.release_focus()
 	_input_line.placeholder_text = "Enter = chat    ` = console"
+	# Restore movement input and recapture mouse
 	var my_id := str(multiplayer.get_unique_id()) if multiplayer.has_multiplayer_peer() else "SoloPlayer"
 	var player := get_tree().get_root().get_node_or_null("Node3D/%s" % my_id)
 	if player and player.get("_chat_open") != null:
 		player._chat_open = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Fade to faint if messages exist, otherwise hide completely
 	var panel := $HUDLayer/ChatTerminalPanel
 	if _chat_output.get_parsed_text().strip_edges() != "":
 		panel.visible = true
@@ -261,17 +289,19 @@ func _execute_chat_command(cmd: String) -> void:
 		_:
 			_term_output.append_text("Unknown command: " + parts[0] + "\n")
 
-# ─── Lock / drag / resize ─────────────────────────────────────────────────────
+# ─── Lock / drag / resize ──────────────────────────────────────────────────────────────
 func _setup_chat_window() -> void:
 	_resize_handle.visible = false
 	_lock_btn.pressed.connect(_toggle_chat_lock)
 	_resize_handle.button_down.connect(_on_resize_start)
 	_drag_bar.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Load saved position/size/lock state using bottom-left anchor system
 	var pos_x  : float = PresenceManager.load_setting("chat_pos_x",  8.0)
 	var pos_y  : float = PresenceManager.load_setting("chat_pos_y",  -212.0)
 	var size_x : float = PresenceManager.load_setting("chat_size_x", 162.0)
 	var size_y : float = PresenceManager.load_setting("chat_size_y", 124.0)
 	_chat_locked = PresenceManager.load_setting("chat_locked", false)
+	# Clamp position to ensure panel is always on screen
 	var vp := get_viewport().get_visible_rect().size
 	pos_x = clamp(pos_x, 0.0, vp.x - size_x)
 	pos_y = clamp(pos_y, -(vp.y - size_y), -size_y)
@@ -307,7 +337,7 @@ func _save_chat_layout() -> void:
 	PresenceManager.save_setting("chat_size_x", _chat_panel.offset_right  - _chat_panel.offset_left)
 	PresenceManager.save_setting("chat_size_y", _chat_panel.offset_bottom - _chat_panel.offset_top)
 
-func _process_chat_drag(_delta: float) -> void:
+func _process_chat_drag(delta: float) -> void:
 	if not (_dragging or _resizing):
 		return
 	var mouse := get_viewport().get_mouse_position()
@@ -315,10 +345,12 @@ func _process_chat_drag(_delta: float) -> void:
 	if _dragging:
 		var w := _chat_panel.offset_right  - _chat_panel.offset_left
 		var h := _chat_panel.offset_bottom - _chat_panel.offset_top
+		# gp is the actual screen top-left of the panel
 		var new_x := clamp(mouse.x - _drag_offset.x, 0.0, vp.x - w)
 		var new_y := clamp(mouse.y - _drag_offset.y, 0.0, vp.y - h)
 		_chat_panel.offset_left   = new_x
 		_chat_panel.offset_right  = new_x + w
+		# Convert screen Y to bottom-anchored offset
 		_chat_panel.offset_top    = new_y - vp.y
 		_chat_panel.offset_bottom = _chat_panel.offset_top + h
 	elif _resizing:
@@ -345,15 +377,37 @@ func _process(delta: float) -> void:
 	if _resizing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		_resizing = false
 		_save_chat_layout()
+	# Keep resize handle pinned to bottom-right corner of chat panel
 	if _resize_handle and _chat_panel and _chat_panel.visible:
 		var gp := _chat_panel.global_position
 		var sz := _chat_panel.size
 		_resize_handle.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		_resize_handle.position = Vector2(gp.x + sz.x - 18, gp.y + sz.y - 18)
+	# Move software cursor using accumulated delta
 	if _software_cursor and _software_cursor.visible:
 		_software_cursor.position = _cursor_pos
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.alt_pressed and _chat_enabled:
+		if event.keycode == KEY_ENTER:
+			if _chat_focus == ChatFocus.CHAT:
+				var text := _input_line.text.strip_edges()
+				_input_line.clear()
+				if text != "":
+					if multiplayer.has_multiplayer_peer():
+						_send_chat_message.rpc(PresenceManager.username, text)
+					else:
+						_send_chat_message(PresenceManager.username, text)
+				get_viewport().set_input_as_handled()
+				return
+			elif _chat_focus == ChatFocus.TERMINAL:
+				var text := _input_line.text.strip_edges()
+				_input_line.clear()
+				if text != "":
+					_term_output.append_text("[color=lime]> " + text + "[/color]\n")
+					_execute_chat_command(text)
+				get_viewport().set_input_as_handled()
+				return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if _scoreboard_panel and _scoreboard_panel.visible:
 			_scoreboard_cursor = not _scoreboard_cursor
@@ -366,6 +420,7 @@ func _input(event: InputEvent) -> void:
 			return
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Right-click while scoreboard open — toggle cursor
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if _scoreboard_panel and _scoreboard_panel.visible:
 			_scoreboard_cursor = not _scoreboard_cursor
@@ -378,6 +433,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 	if not event is InputEventKey:
 		return
+	# Tab — show/hide scoreboard
 	if event.keycode == KEY_TAB:
 		if event.pressed:
 			PresenceManager.scoreboard_open = true
@@ -403,20 +459,22 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event.keycode == KEY_ESCAPE:
+		# Chat consumes Esc first — pause menu only gets it when chat is closed
 		if _chat_focus != ChatFocus.NONE:
 			_release_chat_focus()
 			get_viewport().set_input_as_handled()
 
-# ─── Scoreboard ──────────────────────────────────────────────────────────────
+# ─── Scoreboard ─────────────────────────────────────────────────────────────
 func is_scoreboard_open() -> bool:
 	return _scoreboard_panel != null and _scoreboard_panel.visible
 
 func _setup_scoreboard() -> void:
 	_scoreboard_canvas = CanvasLayer.new()
-	_scoreboard_canvas.layer = 128
+	_scoreboard_canvas.layer = 128  # Above everything including death menu
 	add_child(_scoreboard_canvas)
 	_scoreboard_panel = PanelContainer.new()
 	_scoreboard_panel.visible = false
+	# Style matching pause/death menu
 	var style := StyleBoxFlat.new()
 	style.bg_color     = Color(0.12, 0.12, 0.12, 0.97)
 	style.border_color = Color(0.4, 0.4, 0.4, 1.0)
@@ -426,11 +484,13 @@ func _setup_scoreboard() -> void:
 	style.shadow_size  = 8
 	_scoreboard_panel.add_theme_stylebox_override("panel", style)
 	_scoreboard_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Centre panel dead centre on screen
 	_scoreboard_panel.set_anchors_preset(Control.PRESET_CENTER)
 	_scoreboard_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_scoreboard_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	_scoreboard_panel.custom_minimum_size = Vector2(520, 0)
 	_scoreboard_canvas.add_child(_scoreboard_panel)
+	# Software cursor — arrow label, hidden by default
 	_software_cursor = Label.new()
 	_software_cursor.text = "\u25B6"
 	_software_cursor.add_theme_font_size_override("font_size", 20)
@@ -469,32 +529,38 @@ func _hide_scoreboard() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _rebuild_scoreboard() -> void:
+	# Clear previous content
 	for child in _scoreboard_panel.get_children():
 		child.queue_free()
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 0)
 	_scoreboard_panel.add_child(vbox)
+	# Title bar
 	var title_bar := ColorRect.new()
 	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
 	title_bar.custom_minimum_size = Vector2(520, 32)
 	vbox.add_child(title_bar)
 	var title := Label.new()
-	title.text = "SEARCH & DESTROY"
+	title.text = "DEATHMATCH"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", Color(1, 1, 1, 1))
 	title.set_anchors_preset(Control.PRESET_FULL_RECT)
 	title_bar.add_child(title)
+	# Column header row
 	var header := _make_row("PLAYER", "K", "D", "A", "PING", true)
 	vbox.add_child(header)
+	# Divider
 	var div := ColorRect.new()
 	div.color = Color(0.4, 0.4, 0.4, 0.5)
 	div.custom_minimum_size = Vector2(520, 1)
 	vbox.add_child(div)
+	# Split players into teams sorted by kills
 	var team_a_peers : Array = _stats.keys().filter(func(p): return _stats[p].get("team", "A") == "A")
 	var team_b_peers : Array = _stats.keys().filter(func(p): return _stats[p].get("team", "B") == "B")
 	team_a_peers.sort_custom(func(a, b): return _stats[a]["kills"] > _stats[b]["kills"])
 	team_b_peers.sort_custom(func(a, b): return _stats[a]["kills"] > _stats[b]["kills"])
+	# ─ Team A
 	var team_a_bar := _make_team_header("TEAM A")
 	vbox.add_child(team_a_bar)
 	for pid in team_a_peers:
@@ -510,6 +576,7 @@ func _rebuild_scoreboard() -> void:
 		bdiv.color = Color(0.3, 0.3, 0.3, 0.3)
 		bdiv.custom_minimum_size = Vector2(520, 1)
 		vbox.add_child(bdiv)
+	# ─ Team B
 	var team_b_bar := _make_team_header("TEAM B")
 	vbox.add_child(team_b_bar)
 	for pid in team_b_peers:
@@ -561,11 +628,12 @@ func _make_row(player: String, kills: String, deaths: String, assists: String, p
 		row.add_child(lbl)
 	return row
 
+# Server broadcasts stats to all clients
 @rpc("any_peer", "call_local", "reliable")
 func _sync_stats(data: PackedByteArray) -> void:
 	_stats = bytes_to_var(data)
 
-# ─── Ping ─────────────────────────────────────────────────────────────────────
+# ─── Ping ────────────────────────────────────────────────────────────────────
 var _ping_sent_at : float = 0.0
 
 func _start_ping_timer() -> void:
@@ -608,7 +676,6 @@ func record_kill(killer_id: int, victim_id: int) -> void:
 		_record_kill_rpc.rpc_id(1, killer_id, victim_id)
 		return
 	_do_record_kill(killer_id, victim_id)
-
 @rpc("any_peer", "reliable")
 func _record_kill_rpc(killer_id: int, victim_id: int) -> void:
 	if not multiplayer.is_server():
@@ -640,6 +707,7 @@ func request_respawn() -> void:
 
 @rpc("authority", "call_local", "reliable")
 func _remove_node_for_respawn(peer_id: int) -> void:
+	# Only free remote players - local player is handled by pause_menu._respawn()
 	if not multiplayer.is_server() and peer_id == multiplayer.get_unique_id():
 		return
 	var node := get_node_or_null(str(peer_id))
