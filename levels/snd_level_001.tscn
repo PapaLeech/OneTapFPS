@@ -1,19 +1,120 @@
 [gd_scene format=3 uid="uid://31x0q414m3ll"]
 
 [ext_resource type="Script" uid="uid://bs5acyf5b5x1l" path="res://scripts/modes/SearchAndDestroy.gd" id="1_l4brg"]
-[ext_resource type="PackedScene" uid="uid://b1yleqbb8tc7x" path="res://levels/level_001.tscn" id="2_7udwi"]
 [ext_resource type="Script" uid="uid://cl6f2gy0ffdhv" path="res://levels/snd_level_001.gd" id="2_d62jw"]
+[ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="2_ugcji"]
+[ext_resource type="PackedScene" uid="uid://3kolpk4youf0" path="res://environment/Map_v1.glb" id="3_c135o"]
+[ext_resource type="Script" uid="uid://c2wsttvjfnclt" path="res://environment/map_v_1.gd" id="4_pvn51"]
+[ext_resource type="Script" uid="uid://37k35ornbomj" path="res://scripts/PlayerSpawnPoint.gd" id="5_lx708"]
 
-[node name="Node3D" unique_id=1169815461 instance=ExtResource("2_7udwi")]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_po88e"]
+data = PackedVector3Array(10, 0, 10, -10, 0, -10, 10, 0, -10, -10, 0, -10, 10, 0, 10, -10, 0, 10)
+
+[node name="Node3D" type="Node3D" unique_id=1169815461]
 script = ExtResource("2_d62jw")
 
-[node name="SearchAndDestroyController" type="Node" parent="." index="7" unique_id=314852383]
+[node name="WorldEnvironment" parent="." unique_id=1103224932 instance=ExtResource("2_ugcji")]
+
+[node name="Map_v12" parent="." unique_id=1708034802 instance=ExtResource("3_c135o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1099821, -0.29482675, -1.2630119)
+script = ExtResource("4_pvn51")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor" parent_id_path=PackedInt32Array(1708034802, 600001590) index="0" unique_id=972347735]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map_v12/Map_v1/Static/Road_set_v1_b_floor/StaticBody3D" unique_id=1526372537]
+shape = SubResource("ConcavePolygonShape3D_po88e")
+
+[node name="map_visual_boost" type="Node3D" parent="." unique_id=217151604]
+
+[node name="SpawnPoint1" type="Node3D" parent="." unique_id=120323497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.585, 0, 0)
+script = ExtResource("5_lx708")
+
+[node name="SpawnPoint2" type="Node3D" parent="." unique_id=1176110138 groups=["spawn_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.89, 0, -41.26)
+script = ExtResource("5_lx708")
+
+[node name="SpawnPoint3" type="Node3D" parent="." unique_id=1698304536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 0, -38.39)
+script = ExtResource("5_lx708")
+
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1488801044]
+
+[node name="ChatTerminalPanel" type="PanelContainer" parent="HUDLayer" unique_id=1576192935]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -212.0
+offset_right = 170.0
+offset_bottom = -88.0
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="HUDLayer/ChatTerminalPanel" unique_id=881437390]
+layout_mode = 2
+
+[node name="DragBar" type="Panel" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1811286798]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Drag to move"
+mouse_default_cursor_shape = 13
+
+[node name="TabBar" type="HBoxContainer" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1100182385]
+layout_mode = 2
+
+[node name="ChatTab" type="Button" parent="HUDLayer/ChatTerminalPanel/VBox/TabBar" unique_id=1026734388]
+layout_mode = 2
+text = "Chat"
+flat = true
+
+[node name="TerminalTab" type="Button" parent="HUDLayer/ChatTerminalPanel/VBox/TabBar" unique_id=17061255]
+layout_mode = 2
+text = "Terminal"
+flat = true
+
+[node name="LockBtn" type="Button" parent="HUDLayer/ChatTerminalPanel/VBox/TabBar" unique_id=1800297016]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+tooltip_text = "Lock/unlock position and size"
+text = "☐"
+flat = true
+
+[node name="ChatOutput" type="RichTextLabel" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=704674644]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="TerminalOutput" type="RichTextLabel" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1645832158]
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="InputLine" type="LineEdit" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1364002442]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter = chat    ` = console"
+
+[node name="ResizeHandle" type="Button" parent="HUDLayer" unique_id=532050389]
+visible = false
+custom_minimum_size = Vector2(18, 18)
+rotation = 1.5708
+tooltip_text = "Drag to resize"
+text = "⤢"
+flat = true
+
+[node name="SearchAndDestroyController" type="Node" parent="." unique_id=1554664080]
 script = ExtResource("1_l4brg")
 
-[node name="TeamA_SpawnMarker" type="Node3D" parent="." index="8" unique_id=1535223012 groups=["TeamA_Spawn"]]
+[node name="TeamA_SpawnMarker" type="Node3D" parent="." unique_id=246859903 groups=["TeamA_Spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.046, -19.056, 13.491)
 
-[node name="TeamB_SpawnMarker" type="Node3D" parent="." index="9" unique_id=979831229 groups=["TeamB_Spawn"]]
+[node name="TeamB_SpawnMarker" type="Node3D" parent="." unique_id=1885527699 groups=["TeamB_Spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.953, -17.056, 13.49)
 
 [editable path="Map_v12"]
