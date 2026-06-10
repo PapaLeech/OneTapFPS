@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bs5acyf5b5x1l" path="res://scripts/modes/SearchAndDestroy.gd" id="1_l4brg"]
 [ext_resource type="PackedScene" uid="uid://b1yleqbb8tc7x" path="res://levels/level_001.tscn" id="2_7udwi"]
+[ext_resource type="Script" uid="uid://cl6f2gy0ffdhv" path="res://levels/snd_level_001.gd" id="2_d62jw"]
 
 [node name="Node3D" unique_id=1169815461 instance=ExtResource("2_7udwi")]
+script = ExtResource("2_d62jw")
 
 [node name="SearchAndDestroyController" type="Node" parent="." index="7" unique_id=314852383]
 script = ExtResource("1_l4brg")
