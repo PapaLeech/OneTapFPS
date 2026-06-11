@@ -606,6 +606,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if level and level.get("_chat_focus") != null and level._chat_focus != 0:
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_F and _phase == Phase.READY_UP:
-			_client_pressed_ready.rpc_id(1)
-			get_viewport().set_input_as_handled()
+		if event.keycode == KEY_F:
+			print("F pressed, phase: ", _phase, " is_ready_up: ", _phase == Phase.READY_UP, " has_peer: ", multiplayer.has_multiplayer_peer())
+			if _phase == Phase.READY_UP:
+				_client_pressed_ready.rpc_id(1)
+				get_viewport().set_input_as_handled()
