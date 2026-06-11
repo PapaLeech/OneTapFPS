@@ -9,7 +9,7 @@ signal connected_to_server
 signal lobby_joined
 signal invite_received(from_username: String)
 signal invite_accepted(from_username: String)
-signal lobby_match_starting
+signal lobby_match_starting(mode: String)
 
 func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
