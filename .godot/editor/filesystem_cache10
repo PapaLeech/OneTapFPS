@@ -196,7 +196,7 @@ watermello-rock477138.mp3::AudioStreamMP3::6760230376050413994::1779005404::1779
 ::res://assets/audio/weapons/::1779256902
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1781000547
+::res://assets/scripts/::1781208848
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -206,7 +206,7 @@ health.gd::GDScript::7296623631832556329::1780917753::0::1::::<>Node<><>0<>0<><>
 hitbox.gd::GDScript::1740715284671597839::1780916882::0::1::::Hitbox<>Area3D<><>0<>0<><>::
 hud_ammo.gd::GDScript::9158962113162818995::1779000702::0::1::::<>CanvasLayer<><>0<>0<><>::
 hud_health.gd::GDScript::6942704040356870217::1778517964::0::1::::<>CanvasLayer<><>0<>0<><>::
-main_menu.gd::GDScript::1244827160719643432::1781000547::0::1::::<>Control<><>0<>0<><>::
+main_menu.gd::GDScript::1244827160719643432::1781208848::0::1::::<>Control<><>0<>0<><>::
 main_menu_BACKUP_pre_lobby_flow.gd::GDScript::4222380842014184972::1780658478::0::1::::<>RefCounted<><>0<>0<><>::
 main_menu_BACKUP_pre_snd_splash.gd::GDScript::1460072043743509089::1780953895::0::1::::<>Control<><>0<>0<><>::
 pause_menu.gd::GDScript::4838208590412015204::1780924972::0::1::::<>CanvasLayer<><>0<>0<><>::
@@ -721,10 +721,10 @@ WE_test.tscn::PackedScene::3764880135456822604::1776653496::0::1::::<><><>0<>0<>
 ::res://materials/::1777234919
 grid.tres::ShaderMaterial::5739367904623174735::1776654260::0::1::::<><><>0<>0<><>::uid://ivvpsi314b34::::res://textures/grid.jpg
 player.tres::StandardMaterial3D::4435626134922663587::1776653496::0::1::::<><><>0<>0<><>::
-::res://scripts/::1781041963
+::res://scripts/::1781208843
 boot_splash.gd::GDScript::8887376292968682027::1779037817::0::1::::<>CanvasLayer<><>0<>0<><>::
 ClientPredictionLogger.gd::GDScript::6908745708737179878::1778963071::0::1::::<>Node<><>0<>0<><>::
-ClientToServer.gd::GDScript::5037045650952805643::1780992744::0::1::::<>Node<><>0<>0<><>::
+ClientToServer.gd::GDScript::5037045650952805643::1781208843::0::1::::<>Node<><>0<>0<><>::
 DedicatedServer.gd::GDScript::8774166623148085721::1778953810::0::1::::<>Node<><>0<>0<><>::
 EnemyStateLogger.gd::GDScript::7334284020237050202::1778963090::0::1::::<>Node<><>0<>0<><>::
 FPSCounter.gd::GDScript::4245195192914799653::1780652490::0::1::::<>CanvasLayer<><>0<>0<><>::
@@ -739,8 +739,8 @@ PlayerSpawnPoint.gd::GDScript::2032006480269417937::1779792776::0::1::::PlayerSp
 PresenceManager.gd::GDScript::3317272715576500429::1781041963::0::1::::<>Node<><>0<>0<><>::
 server.gd::GDScript::17452018081795135::1781006237::0::1::::<>Node<><>0<>0<><>::
 SessionLogger.gd::GDScript::3342422228604137525::1780652491::0::1::::<>Node<><>0<>0<><>::
-::res://scripts/modes/::1781158313
-SearchAndDestroy.gd::GDScript::3711756043037318235::1781158313::0::1::::<>Node<><>0<>0<><>::
+::res://scripts/modes/::1781208667
+SearchAndDestroy.gd::GDScript::3711756043037318235::1781208667::0::1::::<>Node<><>0<>0<><>::
 ::res://shaders/::1777234919
 grid.gdshader::Shader::3566797187140224592::1776653496::0::1::::<><><>0<>0<><>::
 ::res://textures/::1778878455

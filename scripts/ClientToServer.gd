@@ -112,8 +112,8 @@ func confirm_lobby_join() -> void:
 func accept_invite(from_username: String) -> void:
 	c_accept_invite.rpc_id(1, PresenceManager.username, from_username)
 
-func start_lobby_match() -> void:
-	c_start_lobby_match.rpc_id(1, PresenceManager.username)
+func start_lobby_match(mode: String = "deathmatch") -> void:
+	c_start_lobby_match.rpc_id(1, PresenceManager.username, mode)
 
 @rpc("any_peer", "call_remote", "reliable")
 func c_accept_invite(accepter: String, host_username: String) -> void:
@@ -134,14 +134,12 @@ func c_accept_invite(accepter: String, host_username: String) -> void:
 	lobby_member_added_rpc.rpc_id(accepter_peer, host_username, accepter)
 
 @rpc("any_peer", "call_remote", "reliable")
-func c_start_lobby_match(host_username: String) -> void:
-	# Tell all members of this pre-lobby to join the match
+func c_start_lobby_match(host_username: String, mode: String) -> void:
 	var host_peer := multiplayer.get_remote_sender_id()
-	print("Server: start_lobby_match from %s" % host_username)
-	# Notify all registered peers that match is starting (simple broadcast for now)
+	print("Server: start_lobby_match from %s mode: %s" % [host_username, mode])
 	for uname in MultiplayerManager.username_to_peer:
 		var pid: int = MultiplayerManager.username_to_peer[uname]
-		lobby_match_starting_rpc.rpc_id(pid)
+		lobby_match_starting_rpc.rpc_id(pid, mode)
 
 @rpc("authority", "call_remote", "reliable")
 func invite_accepted_rpc(accepter_username: String) -> void:
@@ -152,8 +150,8 @@ func lobby_member_added_rpc(host_username: String, accepter_username: String) ->
 	invite_accepted.emit(accepter_username)
 
 @rpc("authority", "call_remote", "reliable")
-func lobby_match_starting_rpc() -> void:
-	lobby_match_starting.emit()
+func lobby_match_starting_rpc(mode: String) -> void:
+	lobby_match_starting.emit(mode)
 
 func request_snd_mode() -> void:
 	c_request_snd_mode.rpc_id(1)

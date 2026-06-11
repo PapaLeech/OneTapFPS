@@ -286,7 +286,12 @@ func _on_friend_accepted_invite(accepter_username: String) -> void:
 	# Tell presence server we're in the lobby
 	PresenceManager.lobby_join()
 
-func _on_lobby_match_starting() -> void:
+func _on_lobby_match_starting(mode: String) -> void:
+	match mode:
+		"snd":
+			_active_mode = Mode.SEARCH_AND_DESTROY
+		_:
+			_active_mode = Mode.DEATHMATCH
 	ClientToServer.try_connect_client_to_lobby()
 
 # ─── Settings ────────────────────────────────────────────────────────────────
@@ -458,11 +463,15 @@ func _on_mode_clicked(event: InputEvent, mode: Mode) -> void:
 	_reset()
 	if mode == Mode.DEATHMATCH:
 		if _lobby_players.size() > 0:
-			ClientToServer.start_lobby_match()
+			ClientToServer.start_lobby_match("deathmatch")
 		else:
 			_show_host_join_panel()
 	else:
-		_start_countdown(mode)
+		_active_mode = Mode.SEARCH_AND_DESTROY
+		if _lobby_players.size() > 0:
+			ClientToServer.start_lobby_match("snd")
+		else:
+			_show_host_join_panel()
 
 func _start_countdown(mode: Mode) -> void:
 	_active_mode = mode

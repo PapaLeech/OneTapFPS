@@ -119,12 +119,16 @@ func _process(delta: float) -> void:
 
 # ─── Ready-Up Phase ──────────────────────────────────────────────────────────
 func player_pressed_ready(peer_id: int) -> void:
-	if not multiplayer.is_server():
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
 		return
 	if _phase != Phase.READY_UP:
 		return
 	_ready_players[peer_id] = true
+	# Solo bypass: no peers means just this player, treat as all ready
 	var all_players := multiplayer.get_peers()
+	if all_players.is_empty():
+		_begin_countdown(true)
+		return
 	var all_ready := true
 	for pid in all_players:
 		if not _ready_players.has(pid):
@@ -607,7 +611,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F:
-			print("F pressed, phase: ", _phase, " is_ready_up: ", _phase == Phase.READY_UP, " has_peer: ", multiplayer.has_multiplayer_peer())
 			if _phase == Phase.READY_UP:
-				_client_pressed_ready.rpc_id(1)
+				if multiplayer.has_multiplayer_peer():
+					_client_pressed_ready.rpc_id(1)
+				else:
+					# Solo editor bypass — simulate server-side ready
+					player_pressed_ready(1)
 				get_viewport().set_input_as_handled()
