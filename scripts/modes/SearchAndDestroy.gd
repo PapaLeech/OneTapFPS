@@ -45,6 +45,12 @@ func _disable_focus_recursive(node: Node) -> void:
 	for child in node.get_children():
 		_disable_focus_recursive(child)
 
+func _set_mouse_filter_recursive(node: Node, filter: int) -> void:
+	if node is Control:
+		node.mouse_filter = filter
+	for child in node.get_children():
+		_set_mouse_filter_recursive(child, filter)
+
 # ─── Ready ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
@@ -62,6 +68,13 @@ func _build_hud() -> void:
 	_build_center_label()
 	_build_round_timer_label()
 	_disable_focus_recursive(_ready_up_panel)
+	# Ensure all SND UI nodes pass mouse events through so HUDLayer chat remains clickable
+	for child in _hud_canvas.get_children():
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_set_mouse_filter_recursive(_ready_up_panel, Control.MOUSE_FILTER_IGNORE)
+	_set_mouse_filter_recursive(_center_label, Control.MOUSE_FILTER_IGNORE)
+	_set_mouse_filter_recursive(_round_timer_label, Control.MOUSE_FILTER_IGNORE)
 	# Wait two frames to let all SND UI finish building
 	await get_tree().process_frame
 	await get_tree().process_frame
