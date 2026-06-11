@@ -310,9 +310,10 @@ func _make_panel_style() -> StyleBoxFlat:
 func _build_ready_up_panel() -> void:
 	_ready_up_panel = PanelContainer.new()
 	_ready_up_panel.add_theme_stylebox_override("panel", _make_panel_style())
-	_ready_up_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_ready_up_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	_ready_up_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_ready_up_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
+	_ready_up_panel.grow_vertical   = Control.GROW_DIRECTION_BEGIN
+	_ready_up_panel.offset_top = -16
 	_ready_up_panel.custom_minimum_size = Vector2(340, 0)
 	_ready_up_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ready_up_panel.focus_mode = Control.FOCUS_NONE
