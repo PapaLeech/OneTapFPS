@@ -50,7 +50,6 @@ func _ready() -> void:
 	# Solo play mode - no multiplayer peer at all
 	if not multiplayer.has_multiplayer_peer():
 		_spawn_solo_player()
-		return
 	# Dedicated server or client with peer
 	if multiplayer.is_server() and not OS.has_feature("dedicated_server") and not "--dedicated-server" in OS.get_cmdline_args():
 		# Running as server in editor - treat as solo
@@ -292,8 +291,10 @@ func _execute_chat_command(cmd: String) -> void:
 # ─── Lock / drag / resize ──────────────────────────────────────────────────────────────
 func _setup_chat_window() -> void:
 	_resize_handle.visible = false
+	_lock_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	_lock_btn.pressed.connect(_toggle_chat_lock)
 	_resize_handle.button_down.connect(_on_resize_start)
+	_drag_bar.custom_minimum_size = Vector2(0, 8)
 	_drag_bar.mouse_filter = Control.MOUSE_FILTER_STOP
 	# Load saved position/size/lock state using bottom-left anchor system
 	var pos_x  : float = PresenceManager.load_setting("chat_pos_x",  8.0)

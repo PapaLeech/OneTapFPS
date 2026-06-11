@@ -39,7 +39,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.54, 0, -38.39)
 script = ExtResource("5_lx708")
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1488801044]
-layer = 128
 
 [node name="ChatTerminalPanel" type="PanelContainer" parent="HUDLayer" unique_id=1576192935]
 anchors_preset = 2
@@ -55,7 +54,7 @@ grow_vertical = 0
 layout_mode = 2
 
 [node name="DragBar" type="Panel" parent="HUDLayer/ChatTerminalPanel/VBox" unique_id=1811286798]
-custom_minimum_size = Vector2(0, 4)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Drag to move"
