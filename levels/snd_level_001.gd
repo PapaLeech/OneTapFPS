@@ -114,7 +114,8 @@ func _on_player_connected_respawn(peer_id: int, last_index: int) -> void:
 		_teleport_player.rpc(peer_id, pos_index)
 	else:
 		_do_spawn.rpc(peer_id, pos_index)
-		# Tell the NEW player about all existing players
+		# Wait for new player's scene to be ready before sending existing players
+		await get_tree().create_timer(1.0).timeout
 		for existing_id in spawn_index_map:
 			if existing_id != peer_id:
 				_do_spawn.rpc_id(peer_id, existing_id, spawn_index_map[existing_id])

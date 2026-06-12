@@ -111,9 +111,9 @@ flat = true
 script = ExtResource("1_l4brg")
 
 [node name="TeamA_SpawnMarker" type="Node3D" parent="." unique_id=246859903 groups=["TeamA_Spawn"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.046, -19.056, 13.491)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.046, 1, 13.491)
 
 [node name="TeamB_SpawnMarker" type="Node3D" parent="." unique_id=1885527699 groups=["TeamB_Spawn"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.953, -17.056, 13.49)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.953, 1, 13.49)
 
 [editable path="Map_v12"]
