@@ -205,9 +205,6 @@ bones/61/rotation = Quaternion(-0.7540553, -0.040417, 0.014355401, 0.65540916)
 bones/62/rotation = Quaternion(0.6658061, 0.042513277, -0.049360797, 0.74327546)
 bones/63/rotation = Quaternion(0.352787, 0.017335972, -0.00017157296, 0.9355431)
 
-[node name="Ch15" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="0" unique_id=1482228820]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
-
 [node name="HitboxHead" type="BoneAttachment3D" parent="CollisionShape3D/PlayerModel/Armature/Skeleton3D" index="1" unique_id=762075296]
 transform = Transform3D(0.95974463, -0.27851915, -0.03629376, 0.14162357, 0.36828184, 0.91886413, -0.2425549, -0.887015, 0.3929015, -14.799058, 32.443577, -112.53471)
 bone_name = "mixamorig_Head"
