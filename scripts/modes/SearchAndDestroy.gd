@@ -431,15 +431,24 @@ func _hide_center_label() -> void:
 
 # ─── UI: Round Timer ──────────────────────────────────────────────────────────
 func _build_round_timer_label() -> void:
+	var timer_panel := PanelContainer.new()
+	timer_panel.add_theme_stylebox_override("panel", _make_panel_style())
+	timer_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	timer_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	timer_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
+	timer_panel.offset_top = 12
+	timer_panel.visible = false
+	_hud_canvas.add_child(timer_panel)
 	_round_timer_label = Label.new()
-	_round_timer_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	_round_timer_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_round_timer_label.offset_top = 12
 	_round_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_round_timer_label.add_theme_font_size_override("font_size", 20)
 	_round_timer_label.add_theme_color_override("font_color", Color.WHITE)
-	_round_timer_label.visible = false
-	_hud_canvas.add_child(_round_timer_label)
+	_round_timer_label.add_theme_constant_override("margin_left", 12)
+	_round_timer_label.add_theme_constant_override("margin_right", 12)
+	_round_timer_label.add_theme_constant_override("margin_top", 6)
+	_round_timer_label.add_theme_constant_override("margin_bottom", 6)
+	timer_panel.add_child(_round_timer_label)
+	_round_timer_label.visible = true
 
 func _show_round_timer(seconds: int) -> void:
 	if not _round_timer_label:
