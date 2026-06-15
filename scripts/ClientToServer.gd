@@ -137,6 +137,9 @@ func c_accept_invite(accepter: String, host_username: String) -> void:
 func c_start_lobby_match(host_username: String, mode: String) -> void:
 	var host_peer := multiplayer.get_remote_sender_id()
 	print("Server: start_lobby_match from %s mode: %s" % [host_username, mode])
+	if not multiplayer.is_server():
+		return
+	MultiplayerManager.set_mode(mode)
 	for uname in MultiplayerManager.username_to_peer:
 		var pid: int = MultiplayerManager.username_to_peer[uname]
 		lobby_match_starting_rpc.rpc_id(pid, mode)

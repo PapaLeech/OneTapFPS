@@ -4,7 +4,7 @@ const SERVER_URL_V6 = "http://[2a03:b0c0:1:e0:0:1:7a5e:2001]:8000"
 const SERVER_URL_V4 = "http://161.35.41.206:8000"
 const SERVER_URL   = "http://161.35.41.206:8000"
 
-var _active_url: String = SERVER_URL_V6
+var _active_url: String = SERVER_URL_V4
 const CONFIG_PATH  = "user://config.cfg"
 const HEARTBEAT_INTERVAL := 2.0
 

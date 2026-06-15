@@ -415,6 +415,7 @@ func _build_center_label() -> void:
 	center_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	center_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
 	center_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center_panel.focus_mode = Control.FOCUS_NONE
 	center_panel.visible = false
 	_hud_canvas.add_child(center_panel)
 	_center_label = Label.new()
@@ -427,6 +428,7 @@ func _build_center_label() -> void:
 	_center_label.add_theme_constant_override("margin_top", 12)
 	_center_label.add_theme_constant_override("margin_bottom", 12)
 	_center_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_center_label.focus_mode = Control.FOCUS_NONE
 	center_panel.add_child(_center_label)
 	_center_label.set_meta("panel", center_panel)
 
@@ -451,6 +453,8 @@ func _build_round_timer_label() -> void:
 	timer_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	timer_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	timer_panel.offset_top = 12
+	timer_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	timer_panel.focus_mode = Control.FOCUS_NONE
 	timer_panel.visible = false
 	_hud_canvas.add_child(timer_panel)
 	_round_timer_label = Label.new()
@@ -639,6 +643,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F:
+			print("[SND] F pressed, phase=", _phase, " has_peer=", multiplayer.has_multiplayer_peer())
 			if _phase == Phase.READY_UP:
 				if multiplayer.has_multiplayer_peer():
 					_client_pressed_ready.rpc_id(1)

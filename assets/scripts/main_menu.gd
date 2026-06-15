@@ -290,6 +290,7 @@ func _on_lobby_match_starting(mode: String) -> void:
 	match mode:
 		"snd":
 			_active_mode = Mode.SEARCH_AND_DESTROY
+			await get_tree().create_timer(2.0).timeout
 		_:
 			_active_mode = Mode.DEATHMATCH
 	ClientToServer.try_connect_client_to_lobby()
@@ -513,9 +514,6 @@ func _reset() -> void:
 	_sd_countdown.visible = false
 
 func _load_mode() -> void:
-	if _active_mode == Mode.SEARCH_AND_DESTROY:
-		ClientToServer.request_snd_mode()
-		await get_tree().create_timer(0.2).timeout
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
