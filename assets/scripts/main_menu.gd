@@ -515,6 +515,7 @@ func _reset() -> void:
 func _load_mode() -> void:
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
 		ClientToServer.request_snd_mode()
+		await get_tree().create_timer(0.2).timeout
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
@@ -882,7 +883,6 @@ func _on_deathmatch_connected() -> void:
 
 func _on_lobby_joined() -> void:
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
-		ClientToServer.request_snd_mode()
 		get_tree().change_scene_to_file("res://levels/snd_map_splash.tscn")
 	else:
 		get_tree().change_scene_to_file("res://levels/map_splash.tscn")
