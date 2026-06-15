@@ -409,24 +409,38 @@ func _hide_ready_up_panel() -> void:
 
 # ─── UI: Center Label ─────────────────────────────────────────────────────────
 func _build_center_label() -> void:
+	var center_panel := PanelContainer.new()
+	center_panel.add_theme_stylebox_override("panel", _make_panel_style())
+	center_panel.set_anchors_preset(Control.PRESET_CENTER)
+	center_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	center_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
+	center_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center_panel.visible = false
+	_hud_canvas.add_child(center_panel)
 	_center_label = Label.new()
-	_center_label.set_anchors_preset(Control.PRESET_CENTER)
-	_center_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_center_label.grow_vertical   = Control.GROW_DIRECTION_BOTH
 	_center_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_center_label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	_center_label.add_theme_font_size_override("font_size", 32)
 	_center_label.add_theme_color_override("font_color", Color.WHITE)
-	_center_label.visible = false
-	_hud_canvas.add_child(_center_label)
+	_center_label.add_theme_constant_override("margin_left", 24)
+	_center_label.add_theme_constant_override("margin_right", 24)
+	_center_label.add_theme_constant_override("margin_top", 12)
+	_center_label.add_theme_constant_override("margin_bottom", 12)
+	_center_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center_panel.add_child(_center_label)
+	_center_label.set_meta("panel", center_panel)
 
 func _show_center_label(text: String) -> void:
 	if _center_label:
 		_center_label.text = text
+		if _center_label.has_meta("panel"):
+			_center_label.get_meta("panel").visible = true
 		_center_label.visible = true
 
 func _hide_center_label() -> void:
 	if _center_label:
+		if _center_label.has_meta("panel"):
+			_center_label.get_meta("panel").visible = false
 		_center_label.visible = false
 
 # ─── UI: Round Timer ──────────────────────────────────────────────────────────
@@ -449,6 +463,7 @@ func _build_round_timer_label() -> void:
 	_round_timer_label.add_theme_constant_override("margin_bottom", 6)
 	timer_panel.add_child(_round_timer_label)
 	_round_timer_label.visible = true
+	_round_timer_label.set_meta("panel", timer_panel)
 
 func _show_round_timer(seconds: int) -> void:
 	if not _round_timer_label:
@@ -456,10 +471,14 @@ func _show_round_timer(seconds: int) -> void:
 	var mins := seconds / 60
 	var secs := seconds % 60
 	_round_timer_label.text = "%d:%02d" % [mins, secs]
+	if _round_timer_label.has_meta("panel"):
+		_round_timer_label.get_meta("panel").visible = true
 	_round_timer_label.visible = true
 
 func _hide_round_timer() -> void:
 	if _round_timer_label:
+		if _round_timer_label.has_meta("panel"):
+			_round_timer_label.get_meta("panel").visible = false
 		_round_timer_label.visible = false
 
 # ─── UI: End Scoreboard (Victory / Defeat) ───────────────────────────────────
