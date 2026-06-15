@@ -4,7 +4,9 @@ const SERVER_URL_V6 = "http://[2a03:b0c0:1:e0:0:1:7a5e:2001]:8000"
 const SERVER_URL_V4 = "http://161.35.41.206:8000"
 const SERVER_URL   = "http://161.35.41.206:8000"
 
-var _active_url: String = SERVER_URL_V4
+var _active_url: String = SERVER_URL_V6
+var _url_detected: bool = false
+signal server_url_ready
 const CONFIG_PATH  = "user://config.cfg"
 const HEARTBEAT_INTERVAL := 2.0
 
@@ -28,6 +30,8 @@ func _detect_server_url() -> void:
 		else:
 			print("[Presence] IPv6 failed, falling back to IPv4")
 			_active_url = SERVER_URL_V4
+		_url_detected = true
+		server_url_ready.emit()
 		http.queue_free()
 	)
 	http.request(SERVER_URL_V6 + "/version")

@@ -484,6 +484,7 @@ func _start_countdown(mode: Mode) -> void:
 	else:
 		_sd_desc.visible = false
 		_sd_countdown.visible = true
+		ClientToServer.request_snd_match()
 	_tick()
 
 func _tick() -> void:
@@ -795,6 +796,9 @@ func _go_online_and_fetch_friends() -> void:
 	print("[Main] _go_online_and_fetch_friends called")
 	PresenceManager.go_online(PresenceManager.username)
 	GraphicsManager.load_and_apply()
+	# Wait for IPv6 detection before first fetch
+	if not PresenceManager._url_detected:
+		await PresenceManager.server_url_ready
 	_refresh_friends()
 	var refresh_timer := Timer.new()
 	add_child(refresh_timer)

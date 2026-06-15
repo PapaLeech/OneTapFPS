@@ -25,6 +25,8 @@ var _ready_players     : Dictionary = {}   # peer_id -> true
 var _ready_up_elapsed  : float  = 0.0
 var _countdown_elapsed : float  = 0.0
 var _round_elapsed     : float  = 0.0
+var _alive_a           : Dictionary = {}   # peer_id -> true (server only)
+var _alive_b           : Dictionary = {}   # peer_id -> true (server only)
 
 # ─── UI references (built at runtime, client-side only) ──────────────────────
 var _hud_canvas        : CanvasLayer    = null
@@ -153,8 +155,35 @@ func _start_round() -> void:
 	_phase = Phase.ROUND_ACTIVE
 	_round_elapsed = 0.0
 	_round_number += 1
+	_alive_a.clear()
+	_alive_b.clear()
 	_spawn_teams()
+	# Connect death signals for all players (server only)
+	if multiplayer.is_server():
+		var level := get_parent()
+		var stats : Dictionary = level.get("_stats") if level and level.get("_stats") != null else {}
+		for pid in stats.keys():
+			var team : String = stats[pid].get("team", "A")
+			if team == "A":
+				_alive_a[pid] = true
+			else:
+				_alive_b[pid] = true
+			var player := level.get_node_or_null(str(pid))
+			if player:
+				var health := player.get_node_or_null("Health")
+				if health and not health.died.is_connected(_on_player_died.bind(pid)):
+					health.died.connect(_on_player_died.bind(pid))
 	_notify_round_start.rpc(_round_number)
+
+func _on_player_died(peer_id: int) -> void:
+	if _phase != Phase.ROUND_ACTIVE:
+		return
+	_alive_a.erase(peer_id)
+	_alive_b.erase(peer_id)
+	if _alive_a.is_empty():
+		_end_round(2)  # Team B wins
+	elif _alive_b.is_empty():
+		_end_round(1)  # Team A wins
 
 func _end_round(winning_team: int) -> void:
 	if _phase != Phase.ROUND_ACTIVE:
@@ -171,6 +200,8 @@ func _end_round(winning_team: int) -> void:
 	elif _team_b_rounds >= ROUNDS_TO_WIN:
 		_end_match(2)
 	else:
+		# Reset health for all players before next round
+		_reset_all_health()
 		_phase = Phase.COUNTDOWN
 		_countdown_elapsed = 0.0
 		_notify_countdown_start.rpc(false)
@@ -179,6 +210,21 @@ func _end_match(winning_team: int) -> void:
 	_phase = Phase.MATCH_END
 	var summary := _build_match_summary()
 	_notify_match_end.rpc(winning_team, var_to_bytes(summary))
+
+func _reset_all_health() -> void:
+	if not multiplayer.is_server():
+		return
+	var level := get_parent()
+	if not level:
+		return
+	var stats : Dictionary = level.get("_stats") if level.get("_stats") != null else {}
+	for pid in stats.keys():
+		var player := level.get_node_or_null(str(pid))
+		if player:
+			var health := player.get_node_or_null("Health")
+			if health:
+				health.current_health = health.max_health
+				health.emit_signal("health_changed", health.current_health, health.max_health)
 
 # ─── Team Spawning ───────────────────────────────────────────────────────────
 func _spawn_teams() -> void:
@@ -298,6 +344,11 @@ func _notify_match_end(winning_team: int, summary_bytes: PackedByteArray) -> voi
 	var my_team := _get_local_team()
 	var won := (winning_team == 1 and my_team == "A") or (winning_team == 2 and my_team == "B")
 	_show_end_scoreboard(won, summary)
+	# Return to lobby after 5 seconds
+	await get_tree().create_timer(5.0).timeout
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
+	get_tree().change_scene_to_file("res://assets/ui/main_menu.tscn")
 
 # ─── UI: Helpers ─────────────────────────────────────────────────────────────
 func _make_panel_style() -> StyleBoxFlat:
