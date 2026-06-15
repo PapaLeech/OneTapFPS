@@ -889,7 +889,7 @@ func _on_lobby_joined() -> void:
 
 func _show_host_join_panel() -> void:
 	var dialog := Window.new()
-	dialog.title = "Deathmatch"
+	dialog.title = "Search and Destroy" if _active_mode == Mode.SEARCH_AND_DESTROY else "Deathmatch"
 	dialog.size = Vector2i(340, 140)
 	dialog.unresizable = true
 	dialog.exclusive = false
