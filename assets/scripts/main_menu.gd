@@ -513,10 +513,11 @@ func _reset() -> void:
 	_sd_countdown.visible = false
 
 func _load_mode() -> void:
+	if _active_mode == Mode.SEARCH_AND_DESTROY:
+		ClientToServer.request_snd_mode()
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 	if _active_mode == Mode.SEARCH_AND_DESTROY:
-		ClientToServer.request_snd_mode()
 		get_tree().change_scene_to_file("res://levels/snd_map_splash.tscn")
 	else:
 		get_tree().change_scene_to_file(GAME_SCENE)
