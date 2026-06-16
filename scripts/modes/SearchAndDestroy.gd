@@ -335,6 +335,14 @@ func _notify_round_end(winning_team: int, a_rounds: int, b_rounds: int) -> void:
 	if multiplayer.is_server():
 		return
 	_hide_round_timer()
+	# Close death menu if open so round message is visible
+	var level := get_parent()
+	if level:
+		var player_node := level.get_node_or_null(str(multiplayer.get_unique_id()))
+		if player_node:
+			var pause_menu := player_node.get_node_or_null("PauseMenu")
+			if pause_menu and pause_menu.has_method("_close_death_for_round_end"):
+				pause_menu._close_death_for_round_end()
 	var team_name := "TEAM A" if winning_team == 1 else "TEAM B"
 	_show_center_label("ROUND WON – " + team_name)
 	get_tree().create_timer(ROUND_END_PAUSE - 0.5).timeout.connect(func(): _hide_center_label())

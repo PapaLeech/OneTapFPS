@@ -205,6 +205,16 @@ func _open_settings() -> void:
 func _close_settings() -> void:
 	_open()
 
+func _close_death_for_round_end() -> void:
+	# Hide death panel so round end message is visible
+	_death_panel.visible = false
+	_screen = Screen.NONE
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Re-enable chat
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if level and level.has_method("set_chat_enabled"):
+		level.set_chat_enabled(true)
+
 func _show_keybindings() -> void:
 	_settings_panel.visible = false
 	var win := Window.new()
