@@ -23,6 +23,9 @@ func set_mode(mode: String) -> void:
 		print("Server reloading scene: ", scene)
 		get_tree().change_scene_to_file.call_deferred(scene)
 
+func get_mode() -> String:
+	return _mode
+
 signal player_connected(peer_id: int)
 signal player_disconnected(peer_id: int)
 signal connection_failed

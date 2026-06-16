@@ -85,7 +85,9 @@ func c_register_username(username: String) -> void:
 func c_try_connect_client_to_lobby(mode: String = "deathmatch") -> void:
 	var client_id := multiplayer.get_remote_sender_id()
 	print("Server: lobby join RPC received from %d mode=%s" % [client_id, mode])
-	MultiplayerManager.set_mode(mode)
+	if mode == "snd" and MultiplayerManager.get_mode() != "snd":
+		MultiplayerManager.set_mode(mode)
+		await get_tree().create_timer(2.0).timeout
 	MultiplayerManager.handle_lobby_join(client_id)
 
 @rpc("any_peer", "call_remote", "reliable")
