@@ -293,9 +293,9 @@ func _on_lobby_match_starting(mode: String) -> void:
 			await get_tree().create_timer(2.0).timeout
 		_:
 			_active_mode = Mode.DEATHMATCH
-	ClientToServer.try_connect_client_to_lobby()
+	ClientToServer.try_connect_client_to_lobby(mode)
 
-# ─── Settings ────────────────────────────────────────────────────────────────
+# ─── Settings ──────────────────────────────────────────────────────────────
 
 func _show_settings() -> void:
 	var dialog := Window.new()
@@ -881,7 +881,8 @@ func _refresh_pending_requests() -> void:
 # ─── Multiplayer Host/Join ────────────────────────────────────────────────────
 
 func _on_deathmatch_connected() -> void:
-	ClientToServer.try_connect_client_to_lobby()
+	var mode := "snd" if _active_mode == Mode.SEARCH_AND_DESTROY else "deathmatch"
+	ClientToServer.try_connect_client_to_lobby(mode)
 
 func _on_lobby_joined() -> void:
 	if _active_mode == Mode.SEARCH_AND_DESTROY:

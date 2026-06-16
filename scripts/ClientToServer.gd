@@ -52,9 +52,9 @@ func reconnect() -> void:
 		multiplayer.multiplayer_peer = null
 	connect_to_game_server()
 
-func try_connect_client_to_lobby() -> void:
+func try_connect_client_to_lobby(mode: String = "deathmatch") -> void:
 	print("Client: trying to join lobby")
-	c_try_connect_client_to_lobby.rpc_id(1)
+	c_try_connect_client_to_lobby.rpc_id(1, mode)
 
 func request_snd_match() -> void:
 	c_request_snd_match.rpc_id(1)
@@ -82,9 +82,10 @@ func c_register_username(username: String) -> void:
 	print("registered %s as peer %d" % [username, sender])
 
 @rpc("any_peer", "call_remote", "reliable")
-func c_try_connect_client_to_lobby() -> void:
+func c_try_connect_client_to_lobby(mode: String = "deathmatch") -> void:
 	var client_id := multiplayer.get_remote_sender_id()
-	print("Server: lobby join RPC received from %d" % client_id)
+	print("Server: lobby join RPC received from %d mode=%s" % [client_id, mode])
+	MultiplayerManager.set_mode(mode)
 	MultiplayerManager.handle_lobby_join(client_id)
 
 @rpc("any_peer", "call_remote", "reliable")
