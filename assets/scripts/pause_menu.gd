@@ -38,6 +38,13 @@ func _ready() -> void:
 	_ads_sens_slider.value_changed.connect(func(v): PresenceManager.save_setting("ads_sensitivity", v))
 	_build_graphics_presets()
 	_style_panels()
+	# Add Keyboard / Mouse button to settings panel
+	var kb_btn := Button.new()
+	kb_btn.text = "Keyboard / Mouse"
+	var vbox := $SettingsPanel/VBox
+	vbox.add_child_at_position(kb_btn, vbox.get_child_count() - 1) if vbox.has_method("add_child_at_position") else vbox.add_child(kb_btn)
+	vbox.move_child(kb_btn, vbox.get_child_count() - 2)
+	kb_btn.pressed.connect(func(): _show_keybindings())
 
 func _build_death_panel() -> void:
 	var vbox := VBoxContainer.new()
@@ -197,6 +204,135 @@ func _open_settings() -> void:
 
 func _close_settings() -> void:
 	_open()
+
+func _show_keybindings() -> void:
+	_settings_panel.visible = false
+	var win := Window.new()
+	win.title = "Keyboard / Mouse"
+	win.size = Vector2i(820, 640)
+	win.unresizable = true
+	win.close_requested.connect(func(): win.queue_free(); _settings_panel.visible = true)
+	win.window_input.connect(func(e):
+		if e.is_action_pressed("ui_cancel"):
+			win.queue_free(); _settings_panel.visible = true)
+	var bindings := [
+		["Movement", [
+			["Move Forward", "move_forward"],
+			["Move Backward", "move_backward"],
+			["Strafe Left", "move_left"],
+			["Strafe Right", "move_right"],
+			["Jump", "jump"],
+			["Crouch", "CROUCH"],
+			["Sprint", "sprint"],
+			["Lean Left", "lean_left"],
+			["Lean Right", "lean_right"],
+		]],
+		["Weapons", [
+			["Weapon Next", "weapon_next"],
+			["Weapon Previous", "weapon_prev"],
+		]],
+		["Combat", [
+			["Fire", "fire"],
+			["Aim Down Sights", "aim"],
+			["Reload", "reload"],
+			["Knife / Melee", "melee"],
+		]],
+		["Interface", [
+			["Pause / Menu", "exit"],
+		]],
+	]
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 24)
+	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(hbox)
+	var left_vbox := VBoxContainer.new()
+	left_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left_vbox.add_theme_constant_override("separation", 4)
+	var right_vbox := VBoxContainer.new()
+	right_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_vbox.add_theme_constant_override("separation", 4)
+	hbox.add_child(left_vbox)
+	hbox.add_child(right_vbox)
+	var left_groups := ["Movement", "Weapons"]
+	for group in bindings:
+		var group_name : String = group[0]
+		var actions : Array = group[1]
+		var target_vbox := left_vbox if group_name in left_groups else right_vbox
+		var section_label := Label.new()
+		section_label.text = group_name.to_upper()
+		section_label.add_theme_font_size_override("font_size", 11)
+		section_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+		target_vbox.add_child(section_label)
+		var sep := HSeparator.new()
+		target_vbox.add_child(sep)
+		for action_pair in actions:
+			var label_text : String = action_pair[0]
+			var action_name : String = action_pair[1]
+			var row := HBoxContainer.new()
+			row.add_theme_constant_override("separation", 8)
+			var lbl := Label.new()
+			lbl.text = label_text
+			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			lbl.add_theme_font_size_override("font_size", 13)
+			row.add_child(lbl)
+			var btn := Button.new()
+			btn.custom_minimum_size = Vector2(120, 0)
+			var events := InputMap.action_get_events(action_name)
+			var saved : String = PresenceManager.load_setting("keybind_" + action_name, "")
+			if saved != "":
+				btn.text = saved
+			elif events.size() > 0:
+				btn.text = events[0].as_text().split(" (")[0]
+			else:
+				btn.text = "Unbound"
+			var aname := action_name
+			var capturing_btn := btn
+			btn.pressed.connect(func():
+				capturing_btn.text = "Press a key..."
+				var capture := func(e: InputEvent):
+					if e is InputEventKey and e.pressed:
+						if e.keycode == KEY_ESCAPE:
+							var orig_events := InputMap.action_get_events(aname)
+							capturing_btn.text = orig_events[0].as_text().split(" (")[0] if orig_events.size() > 0 else "Unbound"
+						else:
+							InputMap.action_erase_events(aname)
+							InputMap.action_add_event(aname, e)
+							capturing_btn.text = e.as_text().split(" (")[0]
+							PresenceManager.save_setting("keybind_" + aname, capturing_btn.text)
+						win.set_input_as_handled()
+				win.window_input.connect(capture, CONNECT_ONE_SHOT)
+			)
+			row.add_child(btn)
+			target_vbox.add_child(row)
+		var spacer := Control.new()
+		spacer.custom_minimum_size = Vector2(0, 8)
+		target_vbox.add_child(spacer)
+	var bottom := HBoxContainer.new()
+	bottom.add_theme_constant_override("separation", 8)
+	var reset_btn := Button.new()
+	reset_btn.text = "Reset to defaults"
+	reset_btn.pressed.connect(func():
+		win.queue_free()
+		_settings_panel.visible = true
+	)
+	bottom.add_child(reset_btn)
+	var spacer2 := Control.new()
+	spacer2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom.add_child(spacer2)
+	var done_btn := Button.new()
+	done_btn.text = "Done"
+	done_btn.pressed.connect(func(): win.queue_free(); _settings_panel.visible = true)
+	bottom.add_child(done_btn)
+	var main_vbox := VBoxContainer.new()
+	main_vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	main_vbox.add_theme_constant_override("separation", 8)
+	main_vbox.add_child(scroll)
+	main_vbox.add_child(bottom)
+	win.add_child(main_vbox)
+	add_child(win)
+	win.popup_centered()
 
 func open_death_menu() -> void:
 	_open_death_menu()
