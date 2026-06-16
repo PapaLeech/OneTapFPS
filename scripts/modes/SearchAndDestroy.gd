@@ -126,6 +126,7 @@ func player_pressed_ready(peer_id: int) -> void:
 	if _phase != Phase.READY_UP:
 		return
 	_ready_players[peer_id] = true
+	print("[SND] player_pressed_ready: peer_id=", peer_id, " ready_players=", _ready_players, " all_peers=", multiplayer.get_peers())
 	# Solo bypass: no peers means just this player, treat as all ready
 	var all_players := multiplayer.get_peers()
 	if all_players.is_empty():
@@ -143,6 +144,7 @@ func player_pressed_ready(peer_id: int) -> void:
 func _client_pressed_ready() -> void:
 	if not multiplayer.is_server():
 		return
+	print("[SND] Server received ready from peer ", multiplayer.get_remote_sender_id())
 	player_pressed_ready(multiplayer.get_remote_sender_id())
 
 func _begin_countdown(all_ready: bool) -> void:
@@ -335,14 +337,6 @@ func _notify_round_end(winning_team: int, a_rounds: int, b_rounds: int) -> void:
 	if multiplayer.is_server():
 		return
 	_hide_round_timer()
-	# Close death menu if open so round message is visible
-	var level := get_parent()
-	if level:
-		var player_node := level.get_node_or_null(str(multiplayer.get_unique_id()))
-		if player_node:
-			var pause_menu := player_node.get_node_or_null("PauseMenu")
-			if pause_menu and pause_menu.has_method("_close_death_for_round_end"):
-				pause_menu._close_death_for_round_end()
 	var team_name := "TEAM A" if winning_team == 1 else "TEAM B"
 	_show_center_label("ROUND WON – " + team_name)
 	get_tree().create_timer(ROUND_END_PAUSE - 0.5).timeout.connect(func(): _hide_center_label())
