@@ -173,9 +173,14 @@ func _start_round() -> void:
 				var health := player.get_node_or_null("Health")
 				if health and not health.died.is_connected(_on_player_died.bind(pid)):
 					health.died.connect(_on_player_died.bind(pid))
+					print("[SND] Connected death signal for peer ", pid, " team=", team)
+			else:
+				print("[SND] WARNING: player node not found for peer ", pid)
+		print("[SND] _start_round alive_a=", _alive_a, " alive_b=", _alive_b)
 	_notify_round_start.rpc(_round_number)
 
 func _on_player_died(peer_id: int) -> void:
+	print("[SND] _on_player_died: peer_id=", peer_id, " alive_a=", _alive_a, " alive_b=", _alive_b)
 	if _phase != Phase.ROUND_ACTIVE:
 		return
 	_alive_a.erase(peer_id)

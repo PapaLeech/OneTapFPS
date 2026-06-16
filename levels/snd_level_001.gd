@@ -692,6 +692,10 @@ func _do_record_kill(killer_id: int, victim_id: int) -> void:
 	if _stats.has(victim_id):
 		_stats[victim_id]["deaths"] += 1
 	_sync_stats.rpc(var_to_bytes(_stats))
+	# Notify SND controller of player death
+	var snd := get_node_or_null("SearchAndDestroyController")
+	if snd and snd.has_method("_on_player_died"):
+		snd._on_player_died(victim_id)
 
 func record_assist(assister_id: int) -> void:
 	if not multiplayer.is_server():
