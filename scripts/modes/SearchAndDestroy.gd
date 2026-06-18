@@ -246,7 +246,6 @@ func _reset_all_health() -> void:
 			var health := player.get_node_or_null("Health")
 			if health:
 				health.current_health = health.max_health
-				health.set("_is_dead", false)
 				health.emit_signal("health_changed", health.current_health, health.max_health)
 
 # ─── Team Spawning ───────────────────────────────────────────────────────────
