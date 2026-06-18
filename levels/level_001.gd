@@ -275,13 +275,15 @@ func _execute_chat_command(cmd: String) -> void:
 		return
 	match parts[0].to_lower():
 		"help":
-			_term_output.append_text("Commands: help, clear, version, ping\n")
+			_term_output.append_text("Commands: help, clear, version, ping, quit\n")
 		"clear":
 			_term_output.clear()
 		"version":
 			_term_output.append_text("OneTapFPS v0.1-dev\n")
 		"ping":
 			_term_output.append_text("Ping: (coming soon)\n")
+		"quit":
+			get_tree().quit()
 		_:
 			_term_output.append_text("Unknown command: " + parts[0] + "\n")
 

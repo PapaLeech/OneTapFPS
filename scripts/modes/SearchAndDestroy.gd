@@ -33,6 +33,21 @@ var _hud_canvas        : CanvasLayer    = null
 var _ready_up_panel    : PanelContainer = null
 var _center_label      : Label          = null
 var _round_timer_label : Label          = null
+
+# Reset all match state to default. Called by server.gd when the server
+# becomes completely empty, so the next session starts fresh.
+# Purely additive function - does not modify any existing logic.
+func reset_state() -> void:
+	_phase = Phase.READY_UP
+	_team_a_rounds = 0
+	_team_b_rounds = 0
+	_round_number = 0
+	_ready_players.clear()
+	_ready_up_elapsed = 0.0
+	_countdown_elapsed = 0.0
+	_round_elapsed = 0.0
+	_alive_a.clear()
+	_alive_b.clear()
 var _end_scoreboard    : PanelContainer = null
 
 # Pause-menu style shared across all SND UI panels
