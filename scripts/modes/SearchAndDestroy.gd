@@ -16,7 +16,7 @@ const ROUND_TIME         : float = 120.0 # 2-minute round timer
 const ROUND_END_PAUSE    : float = 3.0   # Brief pause after round win announcement
 
 # ─── State ───────────────────────────────────────────────────────────────────
-enum Phase { READY_UP, COUNTDOWN, ROUND_ACTIVE, ROUND_END, MATCH_END }
+enum Phase { READY_UP, COUNTDOWN, SPAWN_COUNTDOWN, ROUND_ACTIVE, ROUND_END, MATCH_END }
 
 var _phase             : Phase  = Phase.READY_UP
 var _team_a_rounds     : int    = 0
@@ -25,6 +25,7 @@ var _round_number      : int    = 0
 var _ready_players     : Dictionary = {}   # peer_id -> true
 var _ready_up_elapsed  : float  = 0.0
 var _countdown_elapsed : float  = 0.0
+var _spawn_countdown_elapsed : float = 0.0   # "Ready in 5.." countdown, runs after teleport-to-spawn
 var _round_elapsed     : float  = 0.0
 var _alive_a           : Dictionary = {}   # peer_id -> true (server only)
 var _alive_b           : Dictionary = {}   # peer_id -> true (server only)
@@ -46,6 +47,7 @@ func reset_state() -> void:
 	_ready_players.clear()
 	_ready_up_elapsed = 0.0
 	_countdown_elapsed = 0.0
+	_spawn_countdown_elapsed = 0.0
 	_round_elapsed = 0.0
 	_alive_a.clear()
 	_alive_b.clear()
@@ -135,6 +137,13 @@ func _process(delta: float) -> void:
 			var remaining := int(READY_UP_COUNTDOWN - _countdown_elapsed) + 1
 			_sync_countdown.rpc(remaining, _countdown_elapsed >= READY_UP_COUNTDOWN)
 			if _countdown_elapsed >= READY_UP_COUNTDOWN:
+				_begin_spawn_countdown()
+
+		Phase.SPAWN_COUNTDOWN:
+			_spawn_countdown_elapsed += delta
+			var remaining := int(READY_UP_COUNTDOWN - _spawn_countdown_elapsed) + 1
+			_sync_spawn_countdown.rpc(remaining, _spawn_countdown_elapsed >= READY_UP_COUNTDOWN)
+			if _spawn_countdown_elapsed >= READY_UP_COUNTDOWN:
 				_start_round()
 
 		Phase.ROUND_ACTIVE:
@@ -177,6 +186,15 @@ func _begin_countdown(all_ready: bool) -> void:
 	_countdown_elapsed = 0.0
 	_notify_countdown_start.rpc(all_ready)
 
+# Teleport players to spawn, freeze them, and start the "Ready in 5.." countdown.
+# Called after the "Match starting" countdown (round 1) or directly after
+# Round Won/Loss (round 2+, which has no "Match starting" countdown).
+func _begin_spawn_countdown() -> void:
+	_phase = Phase.SPAWN_COUNTDOWN
+	_spawn_countdown_elapsed = 0.0
+	_spawn_teams()
+	_notify_spawn_countdown_start.rpc()
+
 # ─── Round Flow ──────────────────────────────────────────────────────────────
 func _start_round() -> void:
 	_phase = Phase.ROUND_ACTIVE
@@ -184,7 +202,6 @@ func _start_round() -> void:
 	_round_number += 1
 	_alive_a.clear()
 	_alive_b.clear()
-	_spawn_teams()
 	# Connect death signals for all players (server only)
 	if multiplayer.is_server():
 		var level := get_parent()
@@ -243,9 +260,9 @@ func _end_round(winning_team: int) -> void:
 	else:
 		# Reset health for all players before next round
 		_reset_all_health()
-		_phase = Phase.COUNTDOWN
-		_countdown_elapsed = 0.0
-		_notify_countdown_start.rpc(false)
+		# Round 2+ has no "Match starting" countdown - go straight to
+		# teleport + "Ready in 5.." countdown.
+		_begin_spawn_countdown()
 
 func _end_match(winning_team: int) -> void:
 	_phase = Phase.MATCH_END
@@ -346,7 +363,8 @@ func _notify_countdown_start(all_ready: bool) -> void:
 	if multiplayer.is_server():
 		return
 	_hide_ready_up_panel()
-	_show_center_label("MATCH STARTS IN 5" if all_ready else "READY IN 5")
+	# This is the round-1-only "Match starting" countdown - players can move.
+	_show_center_label("MATCH STARTS IN 5")
 
 @rpc("authority", "call_local", "reliable")
 func _sync_countdown(seconds_remaining: int, finished: bool) -> void:
@@ -355,8 +373,24 @@ func _sync_countdown(seconds_remaining: int, finished: bool) -> void:
 	if finished:
 		_hide_center_label()
 		return
-	var prefix := "MATCH STARTS IN " if _phase == Phase.COUNTDOWN else "READY IN "
-	_show_center_label(prefix + str(seconds_remaining))
+	_show_center_label("MATCH STARTS IN " + str(seconds_remaining))
+
+@rpc("authority", "call_local", "reliable")
+func _notify_spawn_countdown_start() -> void:
+	if multiplayer.is_server():
+		return
+	# Players have just been teleported to spawn - freeze movement, camera stays free.
+	_set_local_player_frozen(true)
+	_show_center_label("READY IN 5")
+
+@rpc("authority", "call_local", "reliable")
+func _sync_spawn_countdown(seconds_remaining: int, finished: bool) -> void:
+	if multiplayer.is_server():
+		return
+	if finished:
+		_hide_center_label()
+		return
+	_show_center_label("READY IN " + str(seconds_remaining))
 
 @rpc("authority", "call_local", "reliable")
 func _notify_round_start(round_num: int) -> void:
@@ -747,9 +781,10 @@ func _set_local_player_frozen(frozen: bool) -> void:
 	var my_id := multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else 1
 	var player := level.get_node_or_null(str(my_id))
 	if player:
-		if not frozen and player.get("_chat_open") == true:
-			return
-		player.set_physics_process(not frozen)
+		# Use _movement_frozen (not set_physics_process) so the camera/mouse-look,
+		# which runs inside _physics_process via _update_camera(), keeps working
+		# while only movement/jump are blocked.
+		player.set("_movement_frozen", frozen)
 
 # ─── F Key Input ─────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
