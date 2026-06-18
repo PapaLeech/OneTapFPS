@@ -188,7 +188,13 @@ func _start_round() -> void:
 			var player := level.get_node_or_null(str(pid))
 			if player:
 				var health := player.get_node_or_null("Health")
-				if health and not health.died.is_connected(_on_player_died.bind(pid)):
+				if health:
+					# Disconnect ALL existing connections to _on_player_died first,
+					# since .bind() creates a new Callable each time and
+					# is_connected() can never match a previous bound call.
+					for conn in health.died.get_connections():
+						if conn["callable"].get_method() == "_on_player_died":
+							health.died.disconnect(conn["callable"])
 					health.died.connect(_on_player_died.bind(pid))
 					print("[SND] Connected death signal for peer ", pid, " team=", team)
 			else:
