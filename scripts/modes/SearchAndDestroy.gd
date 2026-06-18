@@ -242,6 +242,13 @@ func _end_match(winning_team: int) -> void:
 func _reset_all_health() -> void:
 	if not multiplayer.is_server():
 		return
+	_reset_all_health_rpc.rpc()
+
+@rpc("authority", "call_local", "reliable")
+func _reset_all_health_rpc() -> void:
+	_reset_all_health_local()
+
+func _reset_all_health_local() -> void:
 	var level := get_parent()
 	if not level:
 		return
