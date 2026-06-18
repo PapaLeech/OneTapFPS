@@ -39,9 +39,10 @@ func _process(delta: float) -> void:
 	if not snd:
 		return
 	var phase = snd.get("_phase")
-	# Phase 0 = READY_UP, 2 = ROUND_ACTIVE. If we're dead and phase is no
-	# longer ROUND_ACTIVE (round ended, match ended, etc.), close death screen.
-	if phase != null and phase != 2:
+	# Phase 3 = ROUND_ACTIVE (READY_UP=0, COUNTDOWN=1, SPAWN_COUNTDOWN=2,
+	# ROUND_ACTIVE=3). If we're dead and phase is no longer ROUND_ACTIVE
+	# (round ended, match ended, etc.), close death screen.
+	if phase != null and phase != 3:
 		_death_panel.visible = false
 		_screen = Screen.NONE
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

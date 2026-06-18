@@ -209,6 +209,16 @@ func _on_died() -> void:
 	if pause_menu:
 		pause_menu.open_death_menu()
 
+# Undo everything _on_died() did, without re-enabling movement or chat -
+# used by SND's spawn countdown, which keeps the player frozen via
+# _movement_frozen until the "Ready in" countdown finishes.
+func revive() -> void:
+	set_physics_process(true)
+	_set_anim_state(AnimState.IDLE)
+	if CAMERA_CONTROLLER:
+		CAMERA_CONTROLLER.rotation_degrees = Vector3(CAMERA_CONTROLLER.rotation_degrees.x, CAMERA_CONTROLLER.rotation_degrees.y, 0.0)
+		CAMERA_CONTROLLER.position.y = 1.5
+
 func _physics_process(delta):
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
 		return

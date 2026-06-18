@@ -379,6 +379,14 @@ func _sync_countdown(seconds_remaining: int, finished: bool) -> void:
 func _notify_spawn_countdown_start() -> void:
 	if multiplayer.is_server():
 		return
+	# Undo death visuals/state (camera tilt, dead animation, disabled physics)
+	# for the local player before freezing them for the "Ready in" countdown.
+	var level := get_parent()
+	if level:
+		var my_id := multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else 1
+		var player := level.get_node_or_null(str(my_id))
+		if player and player.has_method("revive"):
+			player.revive()
 	# Players have just been teleported to spawn - freeze movement, camera stays free.
 	_set_local_player_frozen(true)
 	_show_center_label("READY IN 5")
