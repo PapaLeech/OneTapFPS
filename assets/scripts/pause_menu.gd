@@ -421,6 +421,7 @@ func _respawn() -> void:
 	var health := player.get_node_or_null("Health")
 	if health:
 		health.current_health = health.max_health
+		health.set("_is_dead", false)
 		health.emit_signal("health_changed", health.current_health, health.max_health)
 	player.set_physics_process(true)
 	var cam := player.get_node_or_null("CameraController")

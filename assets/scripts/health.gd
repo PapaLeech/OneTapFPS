@@ -5,6 +5,7 @@ extends Node
 var current_health: float = max_health
 var last_attacker: String = "unknown"
 var last_attacker_id: int = -1
+var _is_dead: bool = false
 
 signal died
 signal health_changed(new_health: float, max_health: float)
@@ -28,12 +29,15 @@ func _take_damage_rpc(amount: float, attacker: String, attacker_id: int) -> void
 	_apply_damage(amount)
 
 func _apply_damage(amount: float) -> void:
+	if _is_dead:
+		return
 	var old_hp := current_health
 	current_health -= amount
 	current_health = max(current_health, 0.0)
 	emit_signal("health_changed", current_health, max_health)
 	EnemyStateLogger.log_health_change(str(get_parent().name) if get_parent() else "unknown", old_hp, current_health)
 	if current_health <= 0.0:
+		_is_dead = true
 		var victim := str(get_parent().name) if get_parent() else "unknown"
 		EnemyStateLogger.log_death(victim, get_parent().global_position if get_parent() else Vector3.ZERO)
 		HitDetectionLogger.log_kill(last_attacker, victim, "unknown", "unknown")

@@ -64,6 +64,7 @@ func _ready() -> void:
 	# Skip all UI on dedicated server
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		return
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_window().mode = Window.MODE_FULLSCREEN
 	_bg_texture.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_style_mission_panel()
