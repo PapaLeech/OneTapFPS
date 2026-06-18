@@ -8,6 +8,7 @@ extends Node
 
 # ─── Tuneable constants (change these manually as needed) ────────────────────
 const ROUNDS_TO_WIN      : int   = 3    # First team to reach this wins the match (change to 13 later)
+const MAX_ROUNDS         : int   = 4    # If both teams are tied after this many rounds with neither reaching ROUNDS_TO_WIN, match is a draw (CS2-style)
 const TEAM_SIZE          : int   = 3    # Players per team (change to 5 for 5v5)
 const READY_UP_DURATION  : float = 120.0 # 2-minute ready-up window
 const READY_UP_COUNTDOWN : float = 5.0   # Seconds between "all ready" and spawn
@@ -141,7 +142,7 @@ func _process(delta: float) -> void:
 			var remaining := int(ROUND_TIME - _round_elapsed)
 			_sync_round_timer.rpc(remaining)
 			if _round_elapsed >= ROUND_TIME:
-				_end_round(2)
+				_end_round(0)  # 0 = round draw, nobody died before timer expired
 
 # ─── Ready-Up Phase ──────────────────────────────────────────────────────────
 func player_pressed_ready(peer_id: int) -> void:
@@ -228,14 +229,17 @@ func _end_round(winning_team: int) -> void:
 	_phase = Phase.ROUND_END
 	if winning_team == 1:
 		_team_a_rounds += 1
-	else:
+	elif winning_team == 2:
 		_team_b_rounds += 1
+	# winning_team == 0 means a round draw (timer expired, nobody died) - no score change
 	_notify_round_end.rpc(winning_team, _team_a_rounds, _team_b_rounds)
 	await get_tree().create_timer(ROUND_END_PAUSE).timeout
 	if _team_a_rounds >= ROUNDS_TO_WIN:
 		_end_match(1)
 	elif _team_b_rounds >= ROUNDS_TO_WIN:
 		_end_match(2)
+	elif _round_number >= MAX_ROUNDS:
+		_end_match(0)  # 0 = draw
 	else:
 		# Reset health for all players before next round
 		_reset_all_health()
@@ -381,7 +385,9 @@ func _notify_round_end(winning_team: int, a_rounds: int, b_rounds: int) -> void:
 		if stats and stats.has(multiplayer.get_unique_id()):
 			my_team = stats[multiplayer.get_unique_id()].get("team", "A")
 	var my_team_num := 1 if my_team == "A" else 2
-	if winning_team == my_team_num:
+	if winning_team == 0:
+		_show_center_label("ROUND DRAW")
+	elif winning_team == my_team_num:
 		_show_center_label("ROUND WON")
 	else:
 		_show_center_label("ROUND LOSS")
@@ -395,8 +401,12 @@ func _notify_match_end(winning_team: int, summary_bytes: PackedByteArray) -> voi
 	_hide_center_label()
 	var summary : Dictionary = bytes_to_var(summary_bytes)
 	var my_team := _get_local_team()
-	var won := (winning_team == 1 and my_team == "A") or (winning_team == 2 and my_team == "B")
-	_show_end_scoreboard(won, summary)
+	var result_state := "DRAW"
+	if winning_team == 1:
+		result_state = "WIN" if my_team == "A" else "LOSS"
+	elif winning_team == 2:
+		result_state = "WIN" if my_team == "B" else "LOSS"
+	_show_end_scoreboard(result_state, summary)
 	# Return to lobby after 5 seconds
 	await get_tree().create_timer(5.0).timeout
 	if multiplayer.has_multiplayer_peer():
@@ -590,7 +600,7 @@ func _hide_round_timer() -> void:
 		_round_timer_label.visible = false
 
 # ─── UI: End Scoreboard (Victory / Defeat) ───────────────────────────────────
-func _show_end_scoreboard(won: bool, summary: Dictionary) -> void:
+func _show_end_scoreboard(result_state: String, summary: Dictionary) -> void:
 	if _end_scoreboard:
 		_end_scoreboard.queue_free()
 	_end_scoreboard = PanelContainer.new()
@@ -611,12 +621,16 @@ func _show_end_scoreboard(won: bool, summary: Dictionary) -> void:
 	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
 	vbox.add_child(title_bar)
 	var title_lbl := Label.new()
-	title_lbl.text = "VICTORY" if won else "DEFEAT"
+	title_lbl.text = "VICTORY" if result_state == "WIN" else ("DRAW" if result_state == "DRAW" else "DEFEAT")
 	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	title_lbl.add_theme_font_size_override("font_size", 18)
-	title_lbl.add_theme_color_override("font_color",
-		Color(0.2, 1.0, 0.2, 1.0) if won else Color(1.0, 0.2, 0.2, 1.0))
+	var title_color := Color(1.0, 0.2, 0.2, 1.0)
+	if result_state == "WIN":
+		title_color = Color(0.2, 1.0, 0.2, 1.0)
+	elif result_state == "DRAW":
+		title_color = Color(0.9, 0.9, 0.3, 1.0)
+	title_lbl.add_theme_color_override("font_color", title_color)
 	title_lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
 	title_bar.add_child(title_lbl)
 
