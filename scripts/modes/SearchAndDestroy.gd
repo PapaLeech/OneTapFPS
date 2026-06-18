@@ -632,7 +632,12 @@ func _show_round_timer(seconds: int) -> void:
 	var secs := seconds % 60
 	_round_timer_label.text = "%d:%02d" % [mins, secs]
 	if _round_timer_label.has_meta("panel"):
-		_round_timer_label.get_meta("panel").visible = true
+		var panel : PanelContainer = _round_timer_label.get_meta("panel")
+		# Re-apply the StyleBox override every time the panel is shown, in case
+		# the original override doesn't survive repeated hide/show cycles
+		# (observed: black background missing from round 3 onward).
+		panel.add_theme_stylebox_override("panel", _make_panel_style())
+		panel.visible = true
 	_round_timer_label.visible = true
 
 func _hide_round_timer() -> void:
