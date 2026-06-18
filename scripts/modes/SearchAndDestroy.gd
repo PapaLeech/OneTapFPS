@@ -48,6 +48,15 @@ func reset_state() -> void:
 	_round_elapsed = 0.0
 	_alive_a.clear()
 	_alive_b.clear()
+	# Tell any still-connected clients to clear leftover round UI
+	# (e.g. stuck round timer) so the next match starts with a clean screen.
+	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
+		_clear_round_ui_rpc.rpc()
+
+@rpc("authority", "call_local", "reliable")
+func _clear_round_ui_rpc() -> void:
+	_hide_round_timer()
+	_hide_center_label()
 var _end_scoreboard    : PanelContainer = null
 
 # Pause-menu style shared across all SND UI panels
