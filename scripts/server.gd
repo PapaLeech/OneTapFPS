@@ -81,7 +81,7 @@ func _on_peer_disconnected(id: int) -> void:
 
 	# If the server is now completely empty, reset SND controller state
 	# so the next session starts fresh (fixes stale ready-up phase).
-	if players.is_empty():
+	if multiplayer.get_peers().is_empty():
 		var tree : SceneTree = Engine.get_main_loop()
 		if tree:
 			var root : Node = tree.root
