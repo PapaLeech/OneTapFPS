@@ -21,6 +21,32 @@ var _master_vol_slider : HSlider = null
 
 enum Screen { NONE, PAUSE, SETTINGS, DEATH, DEATH_SETTINGS }
 var _screen : Screen = Screen.NONE
+var _snd_check_timer : float = 0.0
+
+func _process(delta: float) -> void:
+	# Safety net: if death screen is open and SND round has moved on, close it.
+	# Purely additive - does not touch SearchAndDestroy.gd or snd_level_001.gd.
+	if _screen != Screen.DEATH:
+		return
+	_snd_check_timer += delta
+	if _snd_check_timer < 0.3:
+		return
+	_snd_check_timer = 0.0
+	var level := get_tree().get_root().get_node_or_null("Node3D")
+	if not level:
+		return
+	var snd := level.get_node_or_null("SearchAndDestroyController")
+	if not snd:
+		return
+	var phase = snd.get("_phase")
+	# Phase 0 = READY_UP, 2 = ROUND_ACTIVE. If we're dead and phase is no
+	# longer ROUND_ACTIVE (round ended, match ended, etc.), close death screen.
+	if phase != null and phase != 2:
+		_death_panel.visible = false
+		_screen = Screen.NONE
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		if level.has_method("set_chat_enabled"):
+			level.set_chat_enabled(true)
 
 func _ready() -> void:
 	_panel.visible = false
