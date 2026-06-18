@@ -88,6 +88,21 @@ func c_try_connect_client_to_lobby(mode: String = "deathmatch") -> void:
 	if mode == "snd" and MultiplayerManager.get_mode() != "snd":
 		MultiplayerManager.set_mode(mode)
 		await get_tree().create_timer(2.0).timeout
+	elif mode == "snd":
+		# Already in SND mode (no scene reload happens) - if the previous
+		# match finished (controller stuck past ROUND_ACTIVE) treat this
+		# join as the start of a fresh session.
+		var level := get_tree().get_root().get_node_or_null("Node3D")
+		if level:
+			var snd := level.get_node_or_null("SearchAndDestroyController")
+			if snd and snd.has_method("reset_state"):
+				var phase = snd.get("_phase")
+				# Phase 0 = READY_UP, 1 = COUNTDOWN. Anything else (round
+				# active/ended/match ended) from a finished previous match
+				# means this is effectively a new session.
+				if phase != null and phase > 1:
+					snd.reset_state()
+					print("Server: SND controller state reset (new session, was mid/post-match)")
 	MultiplayerManager.handle_lobby_join(client_id)
 
 @rpc("any_peer", "call_remote", "reliable")
