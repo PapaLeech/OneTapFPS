@@ -337,8 +337,17 @@ func _notify_round_end(winning_team: int, a_rounds: int, b_rounds: int) -> void:
 	if multiplayer.is_server():
 		return
 	_hide_round_timer()
-	var team_name := "TEAM A" if winning_team == 1 else "TEAM B"
-	_show_center_label("ROUND WON – " + team_name)
+	var my_team := "A"
+	var level := get_parent()
+	if level:
+		var stats = level.get("_stats")
+		if stats and stats.has(multiplayer.get_unique_id()):
+			my_team = stats[multiplayer.get_unique_id()].get("team", "A")
+	var my_team_num := 1 if my_team == "A" else 2
+	if winning_team == my_team_num:
+		_show_center_label("ROUND WON")
+	else:
+		_show_center_label("ROUND LOSS")
 	get_tree().create_timer(ROUND_END_PAUSE - 0.5).timeout.connect(func(): _hide_center_label())
 
 @rpc("authority", "call_local", "reliable")
