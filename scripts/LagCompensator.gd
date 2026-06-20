@@ -26,8 +26,10 @@ func _physics_process(_delta: float) -> void:
 	record_snapshot()
 
 func _now() -> float:
-	# High-resolution, monotonic time in seconds
-	return Time.get_ticks_usec() / 1_000_000.0
+	# Unix epoch time in seconds — must match the clock basis the client
+	# sends as shot_time (Time.get_unix_time_from_system()), otherwise
+	# rewind target times never line up with the recorded history.
+	return Time.get_unix_time_from_system()
 
 ## Snapshot all player positions + hitboxes
 func record_snapshot() -> void:
@@ -74,7 +76,7 @@ func _snapshot_hitboxes(player: Node) -> Array:
 		var node: Node = stack.pop_back()
 		for child in node.get_children():
 			stack.append(child)
-			if child.is_in_group("hitbox") and child is Node3D:
+			if child is Hitbox:
 				result.append({
 					"path": child.get_path(),
 					"transform": child.global_transform

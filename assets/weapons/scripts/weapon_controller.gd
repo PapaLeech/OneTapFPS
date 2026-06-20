@@ -342,7 +342,9 @@ func fire():
 					break
 				check = check.get_parent()
 			if hitbox:
-				hitbox.take_damage(current_weapon.damage)
+				# Visual feedback only — damage is applied exclusively by the
+				# server via _server_shot/LagCompensator below, so this doesn't
+				# double-apply or let a client RPC damage directly to a peer.
 				if _crosshair and _crosshair.has_method("hit_flash"):
 					_crosshair.hit_flash()
 			else:

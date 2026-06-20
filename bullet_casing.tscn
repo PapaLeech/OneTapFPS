@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dfndmbifcahm2"]
+
+[ext_resource type="PackedScene" uid="uid://bn5g65lma4ell" path="res://assets/weapons/resources/ak47/bullet_casing.glb" id="1_4qlof"]
+
+[node name="Sketchfab_Scene" unique_id=2005756389 instance=ExtResource("1_4qlof")]
+transform = Transform3D(59.635918, 0.8526889, -0.5970654, -5.1657116e-06, -34.21096, -48.85833, -1.0409446, 48.850887, -34.205753, 61.783012, -5.794735, -22.056475)
