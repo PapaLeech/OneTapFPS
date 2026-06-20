@@ -17,7 +17,7 @@ func eject() -> void:
 	print("casing loaded: ", casing_packed)
 	if casing_packed:
 		var casing: Node3D = (casing_packed as PackedScene).instantiate()
-		casing.scale = Vector3(0.05, 0.05, 0.05)
+		casing.scale = Vector3(0.0375, 0.0375, 0.0375)
 		shell.add_child(casing)
 	else:
 		var mesh_inst := MeshInstance3D.new()

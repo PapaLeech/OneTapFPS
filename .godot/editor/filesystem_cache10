@@ -312,12 +312,11 @@ pistol_weapon.tscn::PackedScene::7653765552167299423::1778445375::0::1::::<><><>
 recoil_position_z.tres::Curve::-1::1777919846::0::1::::<><><>0<>0<><>::
 recoil_rotation_x.tres::Curve::-1::1777919839::0::1::::<><><>0<>0<><>::
 recoil_rotation_z.tres::Curve::-1::1777919843::0::1::::<><><>0<>0<><>::
-::res://assets/weapons/resources/ak47/::1781965122
+::res://assets/weapons/resources/ak47/::1781965131
 bullet_casing.glb::PackedScene::3361228238416688697::1781889606::1781889912::1::::<><><>0<>0<>6d8bb530049a933dd5179e1a8b27768a<>res://.godot/imported/bullet_casing.glb-de0aaa0fd5378de3dd7abdb26fb84927.scn::uid://crdxfjrw682mj::::res://assets/weapons/resources/ak47/bullet_casing_0.jpg
 bullet_casing_0.jpg::CompressedTexture2D::5973650762312245893::1781889909::1781889912::1::::<><><>0<>0<>c296264686432993d887f797612f3a99<>res://.godot/imported/bullet_casing_0.jpg-9ba519e7e733bb24f206eb4faddec209.s3tc.ctex<*>res://.godot/imported/bullet_casing_0.jpg-9ba519e7e733bb24f206eb4faddec209.etc2.ctex::
 bullet_casing_trimmed.tscn::PackedScene::2430079447833605013::1781964845::0::1::::<><><>0<>0<><>::res://assets/weapons/resources/ak47/bullet_trimmed_mesh.tres
-bullet_mesh_extracted.tres::ArrayMesh::2043158153106266719::1781964526::0::1::::<><><>0<>0<><>::uid://cfpplsu4kfdao::::res://assets/weapons/resources/ak47/realistic_ak-47_bullet_3d_model_0.jpg
-bullet_trimmed_mesh.tres::ArrayMesh::-1::1781964671::0::1::::<><><>0<>0<><>::
+bullet_trimmed_mesh.tres::ArrayMesh::-1::1781964671::0::1::::<><><>0<>0<><>::res://assets/weapons/resources/ak47/realistic_ak-47_bullet_3d_model_0.jpg
 realistic_ak-47_bullet_3d_model.glb::PackedScene::2844162401754017204::1778422826::1778422915::1::::<><><>0<>0<>7182e14d673cffc843b15bd75669ba33<>res://.godot/imported/realistic_ak-47_bullet_3d_model.glb-c9f18ac2c75deecc3e81bdf99d9b443f.scn::uid://cfpplsu4kfdao::::res://assets/weapons/resources/ak47/realistic_ak-47_bullet_3d_model_0.jpg
 realistic_ak-47_bullet_3d_model_0.jpg::CompressedTexture2D::5155682628159293058::1778422914::1778878434::1::::<><><>0<>0<>c6836bf606729d99d6819ef5d0e70e3a<>res://.godot/imported/realistic_ak-47_bullet_3d_model_0.jpg-4b45ae31ad8169357d19157b590a2716.s3tc.ctex<*>res://.godot/imported/realistic_ak-47_bullet_3d_model_0.jpg-4b45ae31ad8169357d19157b590a2716.etc2.ctex::
 ::res://assets/weapons/resources/knife/::1778878434
