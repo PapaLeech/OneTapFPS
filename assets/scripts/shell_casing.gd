@@ -17,7 +17,7 @@ func eject() -> void:
 	print("casing loaded: ", casing_packed)
 	if casing_packed:
 		var casing: Node3D = (casing_packed as PackedScene).instantiate()
-		casing.scale = Vector3(0.0375, 0.0375, 0.0375)
+		casing.scale = Vector3(0.028125, 0.028125, 0.028125)
 		casing.rotation_degrees = Vector3(0, 0, -90)
 		shell.add_child(casing)
 	else:
@@ -28,15 +28,20 @@ func eject() -> void:
 		shell.add_child(mesh_inst)
 
 	var spawn_pos := global_position
-	var right := global_transform.basis.x
+	var cam := get_viewport().get_camera_3d()
+	var right := (cam.global_transform.basis.x.normalized() * 0.05) if cam else global_transform.basis.x
 	var up := global_transform.basis.y
 
 	get_tree().current_scene.add_child(shell)
 	shell.global_position = spawn_pos
 
+	var player := get_tree().get_first_node_in_group("player")
+	if player and player is CharacterBody3D:
+		shell.linear_velocity = player.velocity
+
 	# Apply impulse on next frame so RigidBody is fully in the scene tree
 	await get_tree().process_frame
-	shell.apply_central_impulse((right * 3.0 - up * 1.0) * randf_range(1.0, 1.5))
+	shell.apply_central_impulse((right * 0.5 - up * 0.3) * randf_range(1.0, 1.5))
 	shell.apply_torque_impulse(-global_transform.basis.y * randf_range(0.08, 0.12))
 
 	get_tree().create_timer(3.0).timeout.connect(func(): if is_instance_valid(shell): shell.queue_free())
