@@ -1,0 +1,60 @@
+extends Node3D
+
+func _ready() -> void:
+	var original_mesh: ArrayMesh = load("res://assets/weapons/resources/ak47/bullet_mesh_extracted.tres")
+	var cut_y := 5.0
+
+	var arrays := original_mesh.surface_get_arrays(0)
+	var verts: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+	var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+	var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
+	var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+
+	var new_verts := PackedVector3Array()
+	var new_normals := PackedVector3Array()
+	var new_uvs := PackedVector2Array()
+	var new_indices := PackedInt32Array()
+
+	var tri_count := indices.size() / 3
+	for t in range(tri_count):
+		var i0 := indices[t * 3]
+		var i1 := indices[t * 3 + 1]
+		var i2 := indices[t * 3 + 2]
+		var v0 := verts[i0]
+		var v1 := verts[i1]
+		var v2 := verts[i2]
+		if v0.y <= cut_y and v1.y <= cut_y and v2.y <= cut_y:
+			var base := new_verts.size()
+			new_verts.append(v0)
+			new_verts.append(v1)
+			new_verts.append(v2)
+			if normals.size() > 0:
+				new_normals.append(normals[i0])
+				new_normals.append(normals[i1])
+				new_normals.append(normals[i2])
+			if uvs.size() > 0:
+				new_uvs.append(uvs[i0])
+				new_uvs.append(uvs[i1])
+				new_uvs.append(uvs[i2])
+			new_indices.append(base)
+			new_indices.append(base + 1)
+			new_indices.append(base + 2)
+
+	var new_arrays := []
+	new_arrays.resize(Mesh.ARRAY_MAX)
+	new_arrays[Mesh.ARRAY_VERTEX] = new_verts
+	if new_normals.size() > 0:
+		new_arrays[Mesh.ARRAY_NORMAL] = new_normals
+	if new_uvs.size() > 0:
+		new_arrays[Mesh.ARRAY_TEX_UV] = new_uvs
+	new_arrays[Mesh.ARRAY_INDEX] = new_indices
+
+	var new_mesh := ArrayMesh.new()
+	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, new_arrays)
+
+	var mat := original_mesh.surface_get_material(0)
+	if mat:
+		new_mesh.surface_set_material(0, mat)
+
+	var err := ResourceSaver.save(new_mesh, "res://assets/weapons/resources/ak47/bullet_trimmed_mesh.tres")
+	print("TRIM_RESULT err=", err, " verts=", new_verts.size(), " tris=", new_indices.size() / 3, " original_tris=", tri_count)

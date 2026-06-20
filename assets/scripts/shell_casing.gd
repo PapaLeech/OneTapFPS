@@ -13,7 +13,7 @@ func eject() -> void:
 	col.shape = shape
 	shell.add_child(col)
 
-	var casing_packed = ResourceLoader.load("res://assets/weapons/resources/ak47/realistic_ak-47_bullet_3d_model.glb")
+	var casing_packed = ResourceLoader.load("res://assets/weapons/resources/ak47/bullet_casing_trimmed.tscn")
 	print("casing loaded: ", casing_packed)
 	if casing_packed:
 		var casing: Node3D = (casing_packed as PackedScene).instantiate()

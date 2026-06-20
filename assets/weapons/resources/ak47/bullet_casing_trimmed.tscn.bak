@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dsdad6p61jx6q"]
+
+[node name="TrimmedCasing" type="Node3D" unique_id=136596292]
+
+[node name="Combiner" type="CSGCombiner3D" parent="." unique_id=1076021178]
+
+[node name="BulletMesh" type="CSGMesh3D" parent="Combiner" unique_id=951361960]
+
+[node name="TipCutter" type="CSGBox3D" parent="Combiner" unique_id=145600676]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+operation = 2
+size = Vector3(3, 5, 3)

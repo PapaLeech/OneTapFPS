@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bavfb22ptkumn"]
+
+[ext_resource type="ArrayMesh" path="res://assets/weapons/resources/ak47/bullet_trimmed_mesh.tres" id="1_80yx6"]
+
+[node name="TrimmedCasing" type="Node3D" unique_id=931074734]
+
+[node name="TrimmedMesh" type="MeshInstance3D" parent="." unique_id=1150927426]
+mesh = ExtResource("1_80yx6")
