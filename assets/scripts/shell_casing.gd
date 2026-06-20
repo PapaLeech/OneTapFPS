@@ -41,6 +41,8 @@ func eject() -> void:
 
 	# Apply impulse on next frame so RigidBody is fully in the scene tree
 	await get_tree().process_frame
+	if not is_inside_tree() or not is_instance_valid(shell):
+		return
 	shell.apply_central_impulse((right * 0.5 - up * 0.3) * randf_range(1.0, 1.5))
 	shell.apply_torque_impulse(-global_transform.basis.y * randf_range(0.08, 0.12))
 
