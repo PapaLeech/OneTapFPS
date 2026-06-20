@@ -1,7 +1,7 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1781934093
+::res://::1781936225
 bullet_casing.tscn::PackedScene::7537246825689044111::1781896644::0::1::::<><><>0<>0<><>::uid://bn5g65lma4ell::::res://assets/weapons/resources/ak47/bullet_casing.glb
-default_bus_layout.tres::AudioBusLayout::1707560426491841929::1781934096::0::1::::<><><>0<>0<><>::
+default_bus_layout.tres::AudioBusLayout::1707560426491841929::1781935987::0::1::::<><><>0<>0<><>::
 export_presets.cfg::TextFile::-1::1781758032::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::8444505666706689092::1776653496::1778014846::1::::<><><>0<>0<>a668b572b9d9da47f66dae191fd36e26<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 pistol_weapon.tscn::PackedScene::1513820733565089692::1777800054::0::1::::<><><>0<>0<><>::
@@ -158,7 +158,7 @@ variant_codec.gd::GDScript::5092192140260904954::1777308917::0::1::::VariantCode
 map_layer.gd::GDScript::2091471774470444174::1776657068::0::1::::MapLayer<>Resource<><>0<>1<><>::
 plugin.cfg::TextFile::-1::1776657068::0::1::::<><><>0<>0<><>::
 plugin.gd::GDScript::2298844960284934325::1776657068::0::1::::<>EditorPlugin<><>0<>1<><>::
-province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<><>0<>1<><>::
+province_map.gd::GDScript::3996214264507866914::1776657068::0::1::::ProvinceMap<>Resource<>res://addons/province_map_builder/province_map_icon.svg<>0<>1<><>::
 province_map_2d.gd::GDScript::1935316412070808543::1776657068::0::1::::ProvinceMap2D<>Node2D<><>0<>1<><>::
 province_map_2d_icon.svg::CompressedTexture2D::7957415187477906130::1776657068::1778014846::1::::<><><>0<>0<>a575f52ec57a377c68291777a289a5e9<>res://.godot/imported/province_map_2d_icon.svg-04ccf4d1edcc2217b0510931de0e2731.ctex::
 province_map_icon.svg::CompressedTexture2D::984921518039840142::1776657068::1778014846::1::::<><><>0<>0<>48b19fcbc18795db4647a19cea704fdc<>res://.godot/imported/province_map_icon.svg-06ecac28de4deae36d888e2aa428dfe8.ctex::
@@ -198,7 +198,7 @@ watermello-rock477138.mp3::AudioStreamMP3::6760230376050413994::1779005404::1779
 ::res://assets/audio/weapons/::1779256902
 desert-eagle-free.mp3::AudioStreamMP3::5257131794624388391::1778015563::1778014846::1::::<><><>0<>0<>fa43072dfa8d171161fd99d194314261<>res://.godot/imported/desert-eagle-free.mp3-fd56deb6300c9176a5afbd1fbd1f4605.mp3str::
 ::res://assets/editor/::1777753844
-::res://assets/scripts/::1781898806
+::res://assets/scripts/::1781936200
 bullet_hole.gd::GDScript::3439494811145990956::1778506877::0::1::::<>Node<><>0<>0<><>::
 crosshair.gd::GDScript::7463116874032595543::1778514250::0::1::::<>CanvasLayer<><>0<>0<><>::
 crosshair.tscn::PackedScene::552007084150992529::1778421256::0::1::::<><><>0<>0<><>::uid://delgpd5hg2t40::::res://assets/scripts/crosshair.gd<>uid://cwgry3rb52kkq::::res://assets/scripts/crosshair_draw.gd
@@ -212,7 +212,7 @@ main_menu.gd::GDScript::1244827160719643432::1781769931::0::1::::<>Control<><>0<
 main_menu_BACKUP_pre_lobby_flow.gd::GDScript::4222380842014184972::1780658478::0::1::::<>RefCounted<><>0<>0<><>::
 main_menu_BACKUP_pre_snd_splash.gd::GDScript::1460072043743509089::1780953895::0::1::::<>Control<><>0<>0<><>::
 pause_menu.gd::GDScript::4838208590412015204::1781801131::0::1::::<>CanvasLayer<><>0<>0<><>::
-shell_casing.gd::GDScript::2976939828175094723::1781898806::0::1::::<>Node3D<><>0<>0<><>::
+shell_casing.gd::GDScript::2976939828175094723::1781936200::0::1::::<>Node3D<><>0<>0<><>::
 ::res://assets/scripts/player/::1777820126
 ::res://assets/scripts/player/states/::1777960436
 idle_state.gd::GDScript::3912665408476420042::1777960248::0::1::::IdlePlayerState<>PlayerMovementState<><>0<>0<><>::
@@ -260,7 +260,7 @@ OneTapLogoV2.png::CompressedTexture2D::8751939387882385641::1778835945::17788365
 OneTapLogoV3.png::CompressedTexture2D::409928142435838512::1778836132::1778836523::1::::<><><>0<>0<>683602fc61c10a0d50549d975b4b1c82<>res://.godot/imported/OneTapLogoV3.png-010ccb49d9c6a558a4acabd4625a72c3.ctex::
 pause_menu.tscn::PackedScene::782842706023587659::1778998706::0::1::::<><><>0<>0<><>::uid://ca6wuao3xuvd1::::res://assets/scripts/pause_menu.gd
 ::res://assets/weapons/::1777755727
-::res://assets/weapons/resources/::1781897818
+::res://assets/weapons/resources/::1781936213
 ak47.tres::Resource/Weapon::8530783632837750338::1779432021::0::1::::<><><>0<>0<><>::uid://bll06bdvoptuv::::res://assets/weapons/scripts/weapon.gd<>uid://jov1iiovtcha::::res://assets/weapons/resources/ak47_weapon.tscn<>uid://c5r6rjywwnekw::::res://assets/weapons/resources/sounds/ak-74-auto-inside.mp3<>uid://d2boptfjk83cg::::res://assets/weapons/resources/sounds/akreload.wav
 ak47_animation.glb::PackedScene::2633954157507458332::1778014062::1778017689::1::::<><><>0<>0<>5e0749b6fcc988b5e920a97d6cb0541e<>res://.godot/imported/ak47_animation.glb-70ceaf1f0605b9b2c0f89e34efc46d2d.scn::uid://dqbitcxary1wx::::res://assets/weapons/resources/ak47_animation_0.png<>uid://cdd2fup8guind::::res://assets/weapons/resources/ak47_animation_1.png<>uid://jj2sqi7v33h0::::res://assets/weapons/resources/ak47_animation_2.png<>uid://bexq0obrlb4qt::::res://assets/weapons/resources/ak47_animation_3.png<>uid://c8sbf0wlr0bus::::res://assets/weapons/resources/ak47_animation_4.png<>uid://72idfmfhr11w::::res://assets/weapons/resources/ak47_animation_5.png<>uid://dpqsax28r70i6::::res://assets/weapons/resources/ak47_animation_6.png
 ak47_animation_0.png::CompressedTexture2D::8284867733669099515::1778017681::1778878448::1::::<><><>0<>0<>a1d876417bcc1340d9e743160924f6fd<>res://.godot/imported/ak47_animation_0.png-2e62bf534e61ad3bb2cde8ae8b57f06a.s3tc.ctex<*>res://.godot/imported/ak47_animation_0.png-2e62bf534e61ad3bb2cde8ae8b57f06a.etc2.ctex::
@@ -270,7 +270,7 @@ ak47_animation_3.png::CompressedTexture2D::2715673600979372991::1778017687::1778
 ak47_animation_4.png::CompressedTexture2D::7126303000569580278::1778017687::1778878447::1::::<><><>0<>0<>3c0784ef3e93063259c5be3b8d360b1f<>res://.godot/imported/ak47_animation_4.png-0b6ac55f083910e28a56f7b86a92110b.s3tc.ctex<*>res://.godot/imported/ak47_animation_4.png-0b6ac55f083910e28a56f7b86a92110b.etc2.ctex::
 ak47_animation_5.png::CompressedTexture2D::2302272570492130954::1778017687::1778878447::1::::<><><>0<>0<>4cf6af5efa6f3e606f36dbc051f0f9e8<>res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.s3tc.ctex<*>res://.godot/imported/ak47_animation_5.png-de73235625fc1cc73d5672d4dc213edc.etc2.ctex::
 ak47_animation_6.png::CompressedTexture2D::8246218906854687875::1778017688::1778878447::1::::<><><>0<>0<>fa3f70100131c52cf4cc3e8128a4b13c<>res://.godot/imported/ak47_animation_6.png-80c6f2d8ae92339b837973c596301ad6.s3tc.ctex<*>res://.godot/imported/ak47_animation_6.png-80c6f2d8ae92339b837973c596301ad6.etc2.ctex::
-ak47_weapon.tscn::PackedScene::661922801998896158::1781897818::0::1::::<><><>0<>0<><>::uid://7gsbbr7jrdoq::::res://addons/fps-hands/fps-ak/resources/fps_ak_animated.glb<>uid://ckmsx6n124sth::::res://assets/weapons/resources/sounds/akFire.wav<>uid://biob08htyy5df::::res://assets/scripts/shell_casing.gd<>uid://bn5g65lma4ell::::res://assets/weapons/resources/ak47/bullet_casing.glb
+ak47_weapon.tscn::PackedScene::661922801998896158::1781936213::0::1::::<><><>0<>0<><>::uid://7gsbbr7jrdoq::::res://addons/fps-hands/fps-ak/resources/fps_ak_animated.glb<>uid://ckmsx6n124sth::::res://assets/weapons/resources/sounds/akFire.wav<>uid://biob08htyy5df::::res://assets/scripts/shell_casing.gd
 Cristian-AK47.glb::PackedScene::5921933509134532855::1778014062::1778014864::1::::<><><>0<>0<>88fa9bab9fa403c734745810fd64ef73<>res://.godot/imported/Cristian-AK47.glb-df14c7f670c3d5cc0cbb24ede717671f.scn::uid://crxlk8a0rbl2b::::res://assets/weapons/resources/Cristian-AK47_0.jpg<>uid://b40d3ufhxkoec::::res://assets/weapons/resources/Cristian-AK47_1.png<>uid://jjsquoxhob3e::::res://assets/weapons/resources/Cristian-AK47_2.png<>uid://dmx3tlpm274av::::res://assets/weapons/resources/Cristian-AK47_3.jpg<>uid://uc6lmqduayfh::::res://assets/weapons/resources/Cristian-AK47_4.png<>uid://dmxssxdjfdrqp::::res://assets/weapons/resources/Cristian-AK47_5.png<>uid://b8d4qiwhd8wms::::res://assets/weapons/resources/Cristian-AK47_6.png<>uid://cgsiafycqq3e2::::res://assets/weapons/resources/Cristian-AK47_7.png<>uid://crevu06yeq40u::::res://assets/weapons/resources/Cristian-AK47_8.png<>uid://e1didgdo5pbx::::res://assets/weapons/resources/Cristian-AK47_9.png<>uid://dlweuhxvqjs1::::res://assets/weapons/resources/Cristian-AK47_10.png<>uid://b12kr8lyv36ns::::res://assets/weapons/resources/Cristian-AK47_11.png
 Cristian-AK47_0.jpg::CompressedTexture2D::6014219876864818555::1778015563::1778878448::1::::<><><>0<>0<>9ba12dabda9b32bdeebaa8f2579495b8<>res://.godot/imported/Cristian-AK47_0.jpg-3e2f21948761be41f9a07900768903c4.s3tc.ctex<*>res://.godot/imported/Cristian-AK47_0.jpg-3e2f21948761be41f9a07900768903c4.etc2.ctex::
 Cristian-AK47_1.png::CompressedTexture2D::4473739804795389090::1778015563::1778878447::1::::<><><>0<>0<>aded43f97e52489acc40133a720bfb40<>res://.godot/imported/Cristian-AK47_1.png-325a0a179a757c5940b1055a464c971a.s3tc.ctex<*>res://.godot/imported/Cristian-AK47_1.png-325a0a179a757c5940b1055a464c971a.etc2.ctex::
