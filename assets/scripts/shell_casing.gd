@@ -18,6 +18,7 @@ func eject() -> void:
 	if casing_packed:
 		var casing: Node3D = (casing_packed as PackedScene).instantiate()
 		casing.scale = Vector3(0.0375, 0.0375, 0.0375)
+		casing.rotation_degrees = Vector3(0, 0, -90)
 		shell.add_child(casing)
 	else:
 		var mesh_inst := MeshInstance3D.new()
@@ -35,7 +36,7 @@ func eject() -> void:
 
 	# Apply impulse on next frame so RigidBody is fully in the scene tree
 	await get_tree().process_frame
-	shell.apply_central_impulse((right * 3.0 + up * 1.0) * randf_range(1.0, 1.5))
-	shell.apply_torque_impulse(global_transform.basis.z * randf_range(0.08, 0.12))
+	shell.apply_central_impulse((right * 3.0 - up * 1.0) * randf_range(1.0, 1.5))
+	shell.apply_torque_impulse(-global_transform.basis.y * randf_range(0.08, 0.12))
 
 	get_tree().create_timer(3.0).timeout.connect(func(): if is_instance_valid(shell): shell.queue_free())
