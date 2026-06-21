@@ -26,10 +26,8 @@ func _physics_process(_delta: float) -> void:
 	record_snapshot()
 
 func _now() -> float:
-	# Unix epoch time in seconds — must match the clock basis the client
-	# sends as shot_time (Time.get_unix_time_from_system()), otherwise
-	# rewind target times never line up with the recorded history.
-	return Time.get_unix_time_from_system()
+	# High-resolution, monotonic time in seconds
+	return Time.get_ticks_usec() / 1_000_000.0
 
 ## Snapshot all player positions + hitboxes
 func record_snapshot() -> void:
@@ -40,6 +38,8 @@ func record_snapshot() -> void:
 
 	for child in level.get_children():
 		if not child is CharacterBody3D:
+			continue
+		if not child.is_inside_tree():
 			continue
 
 		var peer_id := child.name.to_int()
@@ -76,7 +76,7 @@ func _snapshot_hitboxes(player: Node) -> Array:
 		var node: Node = stack.pop_back()
 		for child in node.get_children():
 			stack.append(child)
-			if child is Hitbox:
+			if child is Hitbox and child.is_inside_tree():
 				result.append({
 					"path": child.get_path(),
 					"transform": child.global_transform
@@ -97,6 +97,7 @@ func check_hit(
 
 	var now := _now()
 	var latency := now - shot_time
+	print("[LagCompDebug] now=", now, " shot_time=", shot_time, " latency=", latency)
 
 	if latency > MAX_COMPENSATE_MS / 1000.0:
 		push_warning("LagCompensator: shot from %d rejected, latency %.0fms > max %dms" % [
@@ -114,6 +115,8 @@ func check_hit(
 	for child in level.get_children():
 		if not child is CharacterBody3D:
 			continue
+		if not child.is_inside_tree():
+			continue
 
 		var peer_id := child.name.to_int()
 		if peer_id <= 0 or peer_id == shooter_id:
@@ -124,9 +127,13 @@ func check_hit(
 		var rewound := _get_state_at_time(peer_id, shot_time)
 		if not rewound.is_empty():
 			_apply_player_state(child, rewound)
+		var dbg_hitboxes := _snapshot_hitboxes(child)
+		var dbg_hb_pos = dbg_hitboxes[0]["transform"].origin if dbg_hitboxes.size() > 0 else "none"
+		print("[TargetDebug] peer_id=", peer_id, " current_pos=", saved_state[peer_id]["position"], " rewound_pos=", child.global_position, " first_hitbox_pos=", dbg_hb_pos)
 
 	# Raycast in rewound state
 	var result := _do_raycast(shot_origin, shot_direction, max_distance, shooter_id)
+	print("[LagCompDebug] raycast result: ", result)
 
 	# Restore all players
 	for peer_id in saved_state.keys():
@@ -228,10 +235,12 @@ func _do_raycast(origin: Vector3, direction: Vector3, max_dist: float, exclude_i
 			query.exclude = _collect_rids(shooter_node)
 
 	var result := space.intersect_ray(query)
+	print("[RaycastDebug] origin=", origin, " direction=", direction, " raw_result=", result)
 	if not result:
 		return { "hit": false }
 
 	var collider := result["collider"] as Node
+	print("[RaycastDebug] collider=", collider, " collider_path=", collider.get_path() if collider else "null", " layer=", collider.collision_layer if collider and collider.has_method("get") and "collision_layer" in collider else "n/a")
 
 	# Walk up to find Hitbox
 	var hitbox: Node = null

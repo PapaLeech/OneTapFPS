@@ -477,8 +477,13 @@ func _server_shot(origin: Vector3, direction: Vector3, shot_time: float, damage:
 	if not multiplayer.is_server():
 		return
 	var shooter_id := multiplayer.get_remote_sender_id()
+	print("[ShotDebug] _server_shot received from peer ", shooter_id, " shot_time=", shot_time)
 	var result := LagCompensator.check_hit(shooter_id, origin, direction, shot_time, 500.0)
+	print("[ShotDebug] check_hit result: ", result)
 	if result.get("hit", false):
 		var hitbox := result.get("hitbox") as Node
 		if hitbox and hitbox.has_method("take_damage"):
+			print("[ShotDebug] applying damage to hitbox: ", hitbox.get_path())
 			hitbox.take_damage(damage)
+		else:
+			print("[ShotDebug] hit=true but hitbox missing or has no take_damage: ", hitbox)

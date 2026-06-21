@@ -64,9 +64,9 @@ func _ready() -> void:
 		spawn_weapon_model()
 	_scope_overlay = get_parent().get_parent().get_node_or_null("ScopeUI")
 	print("scope overlay: ", _scope_overlay)
-	_camera = get_tree().get_first_node_in_group("camera")
+	_camera = get_parent().get_parent().find_child("Camera3D", true, false)
 	if not _camera:
-		_camera = get_parent().get_parent().find_child("Camera3D", true, false)
+		_camera = get_tree().get_first_node_in_group("camera")
 
 	# Add crosshair
 	var crosshair_scene := load("res://assets/scripts/crosshair.tscn") as PackedScene
@@ -309,6 +309,7 @@ func fire():
 
 	# Bullet hole raycast
 	if _camera and not current_weapon.is_melee and _bullet_hole:
+		print("[CameraDebug] camera_path=", _camera.get_path(), " camera_rotation_deg=", _camera.rotation_degrees, " camera_global_rotation_deg=", _camera.global_rotation_degrees, " camera_global_pos=", _camera.global_position)
 		var space := _camera.get_world_3d().direct_space_state
 		var ray_origin := _camera.global_position
 		var aim_dir := -_camera.global_transform.basis.z
@@ -342,9 +343,11 @@ func fire():
 					break
 				check = check.get_parent()
 			if hitbox:
-				# Visual feedback only — damage is applied exclusively by the
-				# server via _server_shot/LagCompensator below, so this doesn't
-				# double-apply or let a client RPC damage directly to a peer.
+				# TEMP TEST (2026-06-20): reverted to client-confirmed damage for
+				# A/B comparison against server-authoritative reg. REVERT BEFORE
+				# SHIPPING — see weapon_controller.gd in git history (this exact
+				# block) to restore the secure, server-only version.
+				hitbox.take_damage(current_weapon.damage)
 				if _crosshair and _crosshair.has_method("hit_flash"):
 					_crosshair.hit_flash()
 			else:
