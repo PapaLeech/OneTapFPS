@@ -343,11 +343,9 @@ func fire():
 					break
 				check = check.get_parent()
 			if hitbox:
-				# TEMP TEST (2026-06-20): reverted to client-confirmed damage for
-				# A/B comparison against server-authoritative reg. REVERT BEFORE
-				# SHIPPING — see weapon_controller.gd in git history (this exact
-				# block) to restore the secure, server-only version.
-				hitbox.take_damage(current_weapon.damage)
+				# Visual feedback only — damage is applied exclusively by the
+				# server via _server_shot/LagCompensator below, so this doesn't
+				# double-apply or let a client RPC damage directly to a peer.
 				if _crosshair and _crosshair.has_method("hit_flash"):
 					_crosshair.hit_flash()
 			else:
