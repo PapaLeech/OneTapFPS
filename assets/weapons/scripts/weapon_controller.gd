@@ -310,6 +310,9 @@ func fire():
 	# Bullet hole raycast
 	if _camera and not current_weapon.is_melee and _bullet_hole:
 		print("[CameraDebug] camera_path=", _camera.get_path(), " camera_rotation_deg=", _camera.rotation_degrees, " camera_global_rotation_deg=", _camera.global_rotation_degrees, " camera_global_pos=", _camera.global_position)
+		var _pitch_player := get_parent().get_parent()
+		if _pitch_player and "_mouse_rotation" in _pitch_player:
+			print("[PitchDebug] mouse_rotation_x_rad=", _pitch_player._mouse_rotation.x, " mouse_rotation_x_deg=", rad_to_deg(_pitch_player._mouse_rotation.x), " CAMERA_CONTROLLER_rotation_deg=", (_pitch_player.CAMERA_CONTROLLER.rotation_degrees if _pitch_player.CAMERA_CONTROLLER else "null"))
 		var space := _camera.get_world_3d().direct_space_state
 		var ray_origin := _camera.global_position
 		var aim_dir := -_camera.global_transform.basis.z

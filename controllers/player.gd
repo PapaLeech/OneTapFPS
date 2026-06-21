@@ -53,7 +53,7 @@ var _last_sync_position: Vector3 = Vector3.ZERO
 var _last_received_positions: Dictionary = {}
 var _target_position: Vector3 = Vector3.ZERO
 var _target_rot_y: float = 0.0
-const INTERP_SPEED: float = 15.0
+const INTERP_SPEED: float = 28.0
 
 const ANIM_IDLE := "walk/Armature|mixamo_com|Layer0_002"
 const ANIM_WALK := "walk/Armature|mixamo_com|Layer0_004"
@@ -273,7 +273,7 @@ func _physics_process(delta):
 	move_and_slide()
 	weapon_bob(velocity.length(), delta)
 	_sync_counter += 1
-	if _sync_counter >= 3:
+	if _sync_counter >= 1:
 		_sync_counter = 0
 		if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
 			is_moving = global_position.distance_to(_last_sync_position) > 0.01
