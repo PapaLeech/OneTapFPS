@@ -151,9 +151,6 @@ func check_hit(
 	return result if result else { "hit": false }
 
 func _save_player_state(player: CharacterBody3D) -> Dictionary:
-	player.set_physics_process(false)
-	player.set_process(false)
-
 	var hitboxes := _snapshot_hitboxes(player)
 
 	return {
@@ -175,8 +172,6 @@ func _apply_player_state(player: CharacterBody3D, state: Dictionary) -> void:
 
 func _restore_player_state(player: CharacterBody3D, state: Dictionary) -> void:
 	_apply_player_state(player, state)
-	player.set_physics_process(true)
-	player.set_process(true)
 
 ## Interpolated state at a given time
 func _get_state_at_time(peer_id: int, target_time: float) -> Dictionary:

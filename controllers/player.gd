@@ -219,7 +219,7 @@ func revive() -> void:
 	_set_anim_state(AnimState.IDLE)
 	if CAMERA_CONTROLLER:
 		CAMERA_CONTROLLER.rotation_degrees = Vector3(CAMERA_CONTROLLER.rotation_degrees.x, CAMERA_CONTROLLER.rotation_degrees.y, 0.0)
-		CAMERA_CONTROLLER.position.y = 1.5
+		CAMERA_CONTROLLER.position.y = 2.5
 
 func _physics_process(delta):
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
