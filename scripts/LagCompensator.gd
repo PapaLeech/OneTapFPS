@@ -90,6 +90,15 @@ func clear_history() -> void:
 	_history.clear()
 	print("[LagComp] history cleared")
 
+func _get_peer_latency(peer_id: int) -> float:
+	var enet := get_tree().get_multiplayer().multiplayer_peer as ENetMultiplayerPeer
+	if enet:
+		var peer := enet.get_peer(peer_id)
+		if peer:
+			var rtt_ms := peer.get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)
+			return rtt_ms / 2000.0  # one-way latency in seconds
+	return 0.05  # default 50ms fallback
+
 ## Main hit check — call from shot RPC on server
 func check_hit(
 	shooter_id: int,
@@ -100,14 +109,9 @@ func check_hit(
 ) -> Dictionary:
 
 	var now := _now()
-	var latency := now - shot_time
-	print("[LagCompDebug] now=", now, " shot_time=", shot_time, " latency=", latency)
-
-	if latency > MAX_COMPENSATE_MS / 1000.0:
-		push_warning("LagCompensator: shot from %d rejected, latency %.0fms > max %dms" % [
-			shooter_id, latency * 1000.0, MAX_COMPENSATE_MS
-		])
-		return { "hit": false }
+	var latency := _get_peer_latency(shooter_id)
+	var target_time := now - latency
+	print("[LagCompDebug] now=", now, " latency=", latency, " target_time=", target_time)
 
 	var level := _get_level()
 	if not level:
@@ -128,7 +132,7 @@ func check_hit(
 
 		saved_state[peer_id] = _save_player_state(child)
 
-		var rewound := _get_state_at_time(peer_id, shot_time)
+		var rewound := _get_state_at_time(peer_id, target_time)
 		if not rewound.is_empty():
 			_apply_player_state(child, rewound)
 		var dbg_hitboxes := _snapshot_hitboxes(child)
@@ -151,6 +155,9 @@ func check_hit(
 	return result if result else { "hit": false }
 
 func _save_player_state(player: CharacterBody3D) -> Dictionary:
+	player.set_physics_process(false)
+	player.set_process(false)
+
 	var hitboxes := _snapshot_hitboxes(player)
 
 	return {
@@ -172,6 +179,8 @@ func _apply_player_state(player: CharacterBody3D, state: Dictionary) -> void:
 
 func _restore_player_state(player: CharacterBody3D, state: Dictionary) -> void:
 	_apply_player_state(player, state)
+	player.set_physics_process(true)
+	player.set_process(true)
 
 ## Interpolated state at a given time
 func _get_state_at_time(peer_id: int, target_time: float) -> Dictionary:
@@ -225,6 +234,7 @@ func _do_raycast(origin: Vector3, direction: Vector3, max_dist: float, exclude_i
 	var space := get_tree().root.get_world_3d().direct_space_state
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * max_dist)
 	query.collide_with_areas = true
+	query.collide_with_bodies = false
 	query.collision_mask = 1
 
 	var level := _get_level()

@@ -325,7 +325,7 @@ func _teleport_peer(peer_id: int, pos: Vector3) -> void:
 		return
 	var player := level.get_node_or_null(str(peer_id))
 	if player:
-		player.global_position = pos + Vector3(0, 1.0, 0)
+		player.global_position = pos
 
 # ─── Match Summary ───────────────────────────────────────────────────────────
 func _build_match_summary() -> Dictionary:

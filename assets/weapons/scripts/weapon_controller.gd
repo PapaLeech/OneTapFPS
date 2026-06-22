@@ -359,7 +359,7 @@ func fire():
 		if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
 			var local_player := get_parent().get_parent()
 			if local_player and local_player.has_method("_server_shot"):
-				local_player._server_shot.rpc_id(1, ray_origin, aim_dir, Time.get_unix_time_from_system(), current_weapon.damage)
+				local_player._server_shot.rpc_id(1, ray_origin, aim_dir, Time.get_ticks_usec() / 1_000_000.0, current_weapon.damage)
 	if _anim_player and _anim_player.has_animation("fire_lib/fire") and _current_ammo > 0:
 		_anim_player.stop()
 		_anim_player.play("fire_lib/fire")

@@ -112,6 +112,13 @@ func _ready():
 	MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
 	# Skip local setup on dedicated server
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
+		# Force skeleton bone transforms to update every physics tick on the
+		# headless server. Without this, Godot disables skeleton processing
+		# in headless mode, leaving all BoneAttachment3D hitboxes frozen at
+		# their rest/T-pose positions instead of following the animation.
+		var skeleton := get_node_or_null("CollisionShape3D/PlayerModel/Armature/Skeleton3D") as Skeleton3D
+		if skeleton:
+			skeleton.modifier_callback_mode_process = Skeleton3D.MODIFIER_CALLBACK_MODE_PROCESS_PHYSICS
 		set_physics_process(false)
 		set_process_unhandled_input(false)
 		return
@@ -219,7 +226,7 @@ func revive() -> void:
 	_set_anim_state(AnimState.IDLE)
 	if CAMERA_CONTROLLER:
 		CAMERA_CONTROLLER.rotation_degrees = Vector3(CAMERA_CONTROLLER.rotation_degrees.x, CAMERA_CONTROLLER.rotation_degrees.y, 0.0)
-		CAMERA_CONTROLLER.position.y = 2.5
+		CAMERA_CONTROLLER.position.y = 1.5
 
 func _physics_process(delta):
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
@@ -285,7 +292,7 @@ func _physics_process(delta):
 			is_moving = global_position.distance_to(_last_sync_position) > 0.01
 			is_sprinting = Input.is_action_pressed("sprint") and is_moving
 			_last_sync_position = global_position
-			_send_state.rpc_id(1, global_position, global_rotation.y, is_moving, is_sprinting)
+			_send_state.rpc_id(1, global_position, global_rotation.y, is_moving, is_sprinting, _get_anim_time())
 			# Log ping estimate every 60 frames using ENet peer stats
 			if Engine.get_physics_frames() % 60 == 0:
 				var peer := multiplayer.multiplayer_peer
@@ -327,14 +334,14 @@ func _process(delta: float) -> void:
 
 # Client -> Server: send my position and rotation
 @rpc("any_peer", "unreliable_ordered")
-func _send_state(pos: Vector3, rot_y: float, is_moving: bool, is_sprinting: bool) -> void:
+func _send_state(pos: Vector3, rot_y: float, is_moving: bool, is_sprinting: bool, anim_time: float) -> void:
 	if not multiplayer.is_server():
 		return
 	var sender := multiplayer.get_remote_sender_id()
-	_receive_state.rpc(sender, pos, rot_y, is_moving, is_sprinting)
+	_receive_state.rpc(sender, pos, rot_y, is_moving, is_sprinting, anim_time)
 
-@rpc("any_peer", "unreliable_ordered")
-func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, is_sprinting: bool) -> void:
+@rpc("any_peer", "call_local", "unreliable_ordered")
+func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, is_sprinting: bool, anim_time: float) -> void:
 	if peer_id == multiplayer.get_unique_id():
 		return
 	var player := get_parent().get_node_or_null(str(peer_id))
@@ -345,18 +352,17 @@ func _receive_state(peer_id: int, pos: Vector3, rot_y: float, _is_moving: bool, 
 		_last_received_positions[peer_id] = pos
 		player._target_position = pos
 		player._target_rot_y = rot_y
-		player._update_remote_animation(detected_moving, detected_sprinting)
+		player._update_remote_animation(detected_moving, detected_sprinting, anim_time)
 		NetworkSyncLogger.log_position_received(str(peer_id), pos, Engine.get_physics_frames())
 		if Engine.get_physics_frames() % 60 == 0 and SessionLogger.session_active:
 			EnemyStateLogger.log_position_update(str(peer_id), pos, Vector3.ZERO)
 
-func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
+func _update_remote_animation(is_moving: bool, is_sprinting: bool, anim_time: float) -> void:
 	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
 	if not anim_player:
 		return
 	var target_anim := ANIM_IDLE
 	if anim_player.current_animation == ANIM_CROUCH_IDLE or anim_player.current_animation == ANIM_CROUCH_WALK:
-		# Already in crouch — switch between idle and walk based on movement
 		target_anim = ANIM_CROUCH_WALK if is_moving else ANIM_CROUCH_IDLE
 	elif is_sprinting:
 		target_anim = ANIM_RUN
@@ -368,8 +374,17 @@ func _update_remote_animation(is_moving: bool, is_sprinting: bool) -> void:
 			var anim: Animation = anim_player.get_animation(ANIM_CROUCH_WALK)
 			if anim:
 				anim.loop_mode = Animation.LOOP_LINEAR
+	# Sync animation time so server bones match client exactly
+	if anim_player.current_animation != "" and anim_time >= 0.0:
+		anim_player.seek(anim_time, true)
 
 var _last_anim_state := -1
+
+func _get_anim_time() -> float:
+	var anim_player := get_node_or_null("CollisionShape3D/PlayerModel/AnimationPlayer") as AnimationPlayer
+	if anim_player and anim_player.current_animation != "":
+		return anim_player.current_animation_position
+	return 0.0
 
 func _set_anim_state(new_state: int) -> void:
 	if new_state == _last_anim_state:
