@@ -86,6 +86,10 @@ func _snapshot_hitboxes(player: Node) -> Array:
 func remove_player(peer_id: int) -> void:
 	_history.erase(peer_id)
 
+func clear_history() -> void:
+	_history.clear()
+	print("[LagComp] history cleared")
+
 ## Main hit check — call from shot RPC on server
 func check_hit(
 	shooter_id: int,

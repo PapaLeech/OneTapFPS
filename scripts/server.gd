@@ -91,6 +91,9 @@ func _on_peer_disconnected(id: int) -> void:
 				if snd and snd.has_method("reset_state"):
 					snd.reset_state()
 					print("Server: SND controller state reset (lobby empty)")
+				var lag_comp : Node = level.get_node_or_null("LagCompensator")
+				if lag_comp and lag_comp.has_method("clear_history"):
+					lag_comp.clear_history()
 
 func _on_connection_failed() -> void:
 	print("failed to connect to server")
