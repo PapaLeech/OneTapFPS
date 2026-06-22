@@ -137,6 +137,11 @@ func check_hit(
 			_apply_player_state(child, rewound)
 		var dbg_hitboxes := _snapshot_hitboxes(child)
 		var dbg_hb_pos = dbg_hitboxes[0]["transform"].origin if dbg_hitboxes.size() > 0 else "none"
+		# Print ALL hitbox positions so we can see where head/spine actually are
+		for hb in dbg_hitboxes:
+			var hb_node := get_tree().root.get_node_or_null(hb["path"])
+			var hb_name := hb_node.get_parent().name if hb_node else "unknown"
+			print("[HitboxDebug] ", hb_name, " world_Y=", hb["transform"].origin.y)
 		print("[TargetDebug] peer_id=", peer_id, " current_pos=", saved_state[peer_id]["position"], " rewound_pos=", child.global_position, " first_hitbox_pos=", dbg_hb_pos)
 
 	# Raycast in rewound state
