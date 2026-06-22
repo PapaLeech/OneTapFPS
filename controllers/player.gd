@@ -14,6 +14,8 @@ extends CharacterBody3D
 @export var lean_tilt : float = 0.08
 @export var lean_speed : float = 10.0
 
+var _scale_debug_printed := false
+
 
 var _mouse_input : bool = false
 var _rotation_input : float
@@ -93,6 +95,9 @@ func _update_camera(delta):
 	_camera_rotation = Vector3(_mouse_rotation.x, 0.0, 0.0)
 	CAMERA_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)
 	global_transform.basis = Basis.from_euler(_player_rotation)
+	if not _scale_debug_printed:
+		_scale_debug_printed = true
+		print("[ScaleDebug] AFTER basis overwrite name=", name, " scale=", scale, " global_transform=", global_transform)
 	_rotation_input = 0.0
 	_tilt_input = 0.0
 
@@ -103,6 +108,7 @@ func _enter_tree() -> void:
 		set_multiplayer_authority(peer_id, true)
 
 func _ready():
+	print("[ScaleDebug] name=", name, " scale=", scale, " global_transform=", global_transform, " global_position=", global_position)
 	MOUSE_SENSITIVITY = PresenceManager.load_setting("mouse_sensitivity", MOUSE_SENSITIVITY)
 	# Skip local setup on dedicated server
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
