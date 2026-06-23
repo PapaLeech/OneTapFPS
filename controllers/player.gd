@@ -31,7 +31,7 @@ var _is_crouching : bool = false
 var _chat_open    : bool = false
 var _movement_frozen : bool = false   # SND spawn countdown - blocks movement/jump/shoot, camera stays free
 var crouching : bool = false
-var _crouch_target_height : float = 1.5
+var _crouch_target_height : float = 1.2
 var _crouch_target_shape : float = 2.0
 const CROUCH_SPEED : float = 10.0
 
@@ -226,7 +226,7 @@ func revive() -> void:
 	_set_anim_state(AnimState.IDLE)
 	if CAMERA_CONTROLLER:
 		CAMERA_CONTROLLER.rotation_degrees = Vector3(CAMERA_CONTROLLER.rotation_degrees.x, CAMERA_CONTROLLER.rotation_degrees.y, 0.0)
-		CAMERA_CONTROLLER.position.y = 1.5
+		CAMERA_CONTROLLER.position.y = 1.2
 
 func _physics_process(delta):
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
@@ -416,7 +416,7 @@ func _play_anim_state(state: int) -> void:
 
 func toggle_crouch():
 	if _is_crouching:
-		_crouch_target_height = 1.5
+		_crouch_target_height = 1.2
 		_crouch_target_shape = 2.0
 		$CollisionShape3D.position.y = 1.5
 	else:
