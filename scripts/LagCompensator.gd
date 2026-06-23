@@ -88,7 +88,22 @@ func remove_player(peer_id: int) -> void:
 
 func clear_history() -> void:
 	_history.clear()
+	_camera_offsets.clear()
 	print("[LagComp] history cleared")
+
+var _camera_offsets: Dictionary = {}
+
+func set_camera_offset(peer_id: int, client_camera_y: float) -> void:
+	# Store the client's actual camera world Y for this peer
+	_camera_offsets[peer_id] = client_camera_y
+
+func apply_camera_offset(peer_id: int, origin: Vector3) -> Vector3:
+	if not _camera_offsets.has(peer_id):
+		return origin
+	var corrected := origin
+	corrected.y = _camera_offsets[peer_id]
+	print("[CalibDebug] corrected origin Y from ", origin.y, " to ", corrected.y)
+	return corrected
 
 func _get_peer_latency(peer_id: int) -> float:
 	var enet := get_tree().get_multiplayer().multiplayer_peer as ENetMultiplayerPeer

@@ -227,6 +227,19 @@ func revive() -> void:
 	if CAMERA_CONTROLLER:
 		CAMERA_CONTROLLER.rotation_degrees = Vector3(CAMERA_CONTROLLER.rotation_degrees.x, CAMERA_CONTROLLER.rotation_degrees.y, 0.0)
 		CAMERA_CONTROLLER.position.y = 1.2
+	# Send camera calibration to server after one physics frame so position is settled
+	if multiplayer.has_multiplayer_peer() and is_multiplayer_authority():
+		await get_tree().physics_frame
+		if is_inside_tree() and CAMERA_CONTROLLER:
+			_send_camera_calibration.rpc_id(1, CAMERA_CONTROLLER.global_position.y)
+
+@rpc("any_peer", "reliable")
+func _send_camera_calibration(camera_world_y: float) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender_id := multiplayer.get_remote_sender_id()
+	LagCompensator.set_camera_offset(sender_id, camera_world_y)
+	print("[CalibDebug] peer ", sender_id, " camera_world_Y=", camera_world_y)
 
 func _physics_process(delta):
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
@@ -499,7 +512,9 @@ func _server_shot(origin: Vector3, direction: Vector3, shot_time: float, damage:
 		return
 	var shooter_id := multiplayer.get_remote_sender_id()
 	print("[ShotDebug] _server_shot received from peer ", shooter_id, " shot_time=", shot_time)
-	var result := LagCompensator.check_hit(shooter_id, origin, direction, shot_time, 500.0)
+	# Apply camera calibration offset so server ray origin matches client's actual camera Y
+	var corrected_origin := LagCompensator.apply_camera_offset(shooter_id, origin)
+	var result := LagCompensator.check_hit(shooter_id, corrected_origin, direction, shot_time, 500.0)
 	print("[ShotDebug] check_hit result: ", result)
 	if result.get("hit", false):
 		var hitbox := result.get("hitbox") as Node
