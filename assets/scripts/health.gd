@@ -17,9 +17,11 @@ func _ready() -> void:
 
 func take_damage(amount: float) -> void:
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
-		# Send damage to the authority (the player who owns this node)
+		# Send damage to the authority (client) for HUD update
 		var authority_id := get_multiplayer_authority()
 		_take_damage_rpc.rpc_id(authority_id, amount, "unknown", -1)
+		# Also apply locally so server tracks health and emits died for SND
+		_apply_damage(amount)
 		return
 	_apply_damage(amount)
 
