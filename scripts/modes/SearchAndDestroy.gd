@@ -578,7 +578,7 @@ func _build_loadout_panel() -> void:
 
 func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 	var btn := PanelContainer.new()
-	btn.custom_minimum_size = Vector2(200, 140)
+	btn.custom_minimum_size = Vector2(210, 180)
 	btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	btn.add_theme_stylebox_override("panel", _make_loadout_btn_style(false))
 	btn.gui_input.connect(func(event: InputEvent):
@@ -586,12 +586,13 @@ func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 			_on_loadout_selected(label_text.to_lower())
 	)
 	var inner := VBoxContainer.new()
-	inner.add_theme_constant_override("separation", 6)
+	inner.add_theme_constant_override("separation", 4)
 	inner.set_anchors_preset(Control.PRESET_FULL_RECT)
 	btn.add_child(inner)
-	var pad := Control.new()
-	pad.custom_minimum_size = Vector2(0, 6)
-	inner.add_child(pad)
+	var pad_top := Control.new()
+	pad_top.custom_minimum_size = Vector2(0, 6)
+	inner.add_child(pad_top)
+	# Class name
 	var name_lbl := Label.new()
 	name_lbl.text = label_text
 	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -601,17 +602,50 @@ func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 	inner.add_child(name_lbl)
 	var div := ColorRect.new()
 	div.color = Color(0.35, 0.35, 0.35, 0.6)
-	div.custom_minimum_size = Vector2(180, 1)
+	div.custom_minimum_size = Vector2(190, 1)
 	div.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inner.add_child(div)
-	for w in weapons:
+	# Rifle silhouette (top, full width)
+	var rifle_name := "ak47" if label_text == "Assault" else "sniper"
+	var rifle_path := "res://assets/weapons/resources/silhouettes/%s_silhouette.svg" % rifle_name
+	var rifle_tex := load(rifle_path) as Texture2D
+	if rifle_tex:
+		var rifle_img := TextureRect.new()
+		rifle_img.texture = rifle_tex
+		rifle_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		rifle_img.custom_minimum_size = Vector2(190, 44)
+		rifle_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inner.add_child(rifle_img)
+	# Bottom row: Deagle left, Knife right
+	var bottom_row := HBoxContainer.new()
+	bottom_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	bottom_row.add_theme_constant_override("separation", 8)
+	bottom_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner.add_child(bottom_row)
+	for sil in [["deagle", "Deagle"], ["knife", "Knife"]]:
+		var col := VBoxContainer.new()
+		col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		col.add_theme_constant_override("separation", 2)
+		bottom_row.add_child(col)
+		var sil_path := "res://assets/weapons/resources/silhouettes/%s_silhouette.svg" % sil[0]
+		var sil_tex := load(sil_path) as Texture2D
+		if sil_tex:
+			var sil_img := TextureRect.new()
+			sil_img.texture = sil_tex
+			sil_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			sil_img.custom_minimum_size = Vector2(88, 36)
+			sil_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			col.add_child(sil_img)
 		var wlbl := Label.new()
-		wlbl.text = w
+		wlbl.text = sil[1]
 		wlbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		wlbl.add_theme_font_size_override("font_size", 12)
-		wlbl.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
+		wlbl.add_theme_font_size_override("font_size", 10)
+		wlbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1.0))
 		wlbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		inner.add_child(wlbl)
+		col.add_child(wlbl)
+	var pad_bot := Control.new()
+	pad_bot.custom_minimum_size = Vector2(0, 4)
+	inner.add_child(pad_bot)
 	return btn
 
 func _make_loadout_btn_style(selected: bool) -> StyleBoxFlat:
