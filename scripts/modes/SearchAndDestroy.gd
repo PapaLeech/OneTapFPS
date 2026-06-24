@@ -43,6 +43,14 @@ var _spectate_panel    : PanelContainer = null
 var _spectate_label    : Label          = null
 var _is_spectating     : bool           = false
 
+# ─── Loadout state (client-side + server-side) ──────────────────────────────────
+var _peer_loadouts       : Dictionary     = {}        # server: peer_id -> "assault"/"recon"
+var _local_loadout       : String         = "assault" # client: current choice
+var _loadout_locked      : bool           = false     # true once "Match starting in..." fires
+var _loadout_panel       : PanelContainer = null
+var _loadout_assault_btn : PanelContainer = null
+var _loadout_recon_btn   : PanelContainer = null
+
 # Reset all match state to default. Called by server.gd when the server
 # becomes completely empty, so the next session starts fresh.
 # Purely additive function - does not modify any existing logic.
@@ -58,6 +66,9 @@ func reset_state() -> void:
 	_round_elapsed = 0.0
 	_alive_a.clear()
 	_alive_b.clear()
+	_peer_loadouts.clear()
+	_local_loadout   = "assault"
+	_loadout_locked  = false
 	# Tell any still-connected clients to clear leftover round UI
 	# (e.g. stuck round timer) so the next match starts with a clean screen.
 	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
@@ -103,6 +114,7 @@ func _build_hud() -> void:
 	_build_ready_up_panel()
 	_build_center_label()
 	_build_round_timer_label()
+	_build_loadout_panel()
 	_disable_focus_recursive(_ready_up_panel)
 	# Ensure all SND UI nodes pass mouse events through so HUDLayer chat remains clickable
 	for child in _hud_canvas.get_children():
@@ -188,6 +200,14 @@ func _client_pressed_ready() -> void:
 	print("[SND] Server received ready from peer ", multiplayer.get_remote_sender_id())
 	player_pressed_ready(multiplayer.get_remote_sender_id())
 
+@rpc("any_peer", "reliable")
+func _client_chose_loadout(loadout: String) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	_peer_loadouts[sender] = loadout
+	print("[SND] Loadout chosen: peer=", sender, " loadout=", loadout)
+
 func _begin_countdown(all_ready: bool) -> void:
 	_phase = Phase.COUNTDOWN
 	_countdown_elapsed = 0.0
@@ -234,6 +254,14 @@ func _start_round() -> void:
 			else:
 				print("[SND] WARNING: player node not found for peer ", pid)
 		print("[SND] _start_round alive_a=", _alive_a, " alive_b=", _alive_b)
+	# Broadcast each peer's chosen loadout so clients apply weapon restrictions
+	if multiplayer.is_server():
+		for pid in multiplayer.get_peers():
+			var chosen : String = _peer_loadouts.get(pid, "assault")
+			_apply_loadout_rpc.rpc_id(pid, chosen)
+		# Apply server player's own loadout locally (solo/host)
+		var my_chosen : String = _peer_loadouts.get(1, "assault")
+		_apply_loadout_rpc.rpc_id(1, my_chosen)
 	_notify_round_start.rpc(_round_number)
 
 func _on_player_died(peer_id: int) -> void:
@@ -383,6 +411,8 @@ func _notify_countdown_start(all_ready: bool) -> void:
 	if multiplayer.is_server():
 		return
 	_hide_ready_up_panel()
+	_loadout_locked = true
+	_hide_loadout_panel()
 	# This is the round-1-only "Match starting" countdown - players can move.
 	_show_center_label("MATCH STARTS IN 5")
 
@@ -430,6 +460,21 @@ func _notify_round_start(round_num: int) -> void:
 	_show_round_timer(int(ROUND_TIME))
 	get_tree().create_timer(2.0).timeout.connect(func(): _hide_center_label())
 
+@rpc("authority", "reliable")
+func _apply_loadout_rpc(loadout: String) -> void:
+	if multiplayer.is_server():
+		return
+	_local_loadout = loadout
+	var level := get_parent()
+	if not level:
+		return
+	var my_id := multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else 1
+	var player := level.get_node_or_null(str(my_id))
+	if player:
+		var wc := player.get_node_or_null("Components/WeaponController")
+		if wc and wc.has_method("apply_loadout"):
+			wc.apply_loadout(loadout)
+
 @rpc("authority", "call_local", "reliable")
 func _sync_round_timer(seconds_remaining: int) -> void:
 	if multiplayer.is_server():
@@ -476,6 +521,134 @@ func _notify_match_end(winning_team: int, summary_bytes: PackedByteArray) -> voi
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 	get_tree().change_scene_to_file("res://assets/ui/main_menu.tscn")
+
+func _build_loadout_panel() -> void:
+	if not _hud_canvas:
+		return
+	_loadout_panel = PanelContainer.new()
+	_loadout_panel.add_theme_stylebox_override("panel", _make_panel_style())
+	_loadout_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_loadout_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_loadout_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
+	_loadout_panel.custom_minimum_size = Vector2(460, 0)
+	_loadout_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_loadout_panel.focus_mode = Control.FOCUS_NONE
+	_loadout_panel.visible = true
+	_hud_canvas.add_child(_loadout_panel)
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 0)
+	_loadout_panel.add_child(vbox)
+	var title_bar := ColorRect.new()
+	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
+	title_bar.custom_minimum_size = Vector2(460, 32)
+	vbox.add_child(title_bar)
+	var title := Label.new()
+	title.text = "Select Loadout"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", Color.WHITE)
+	title.set_anchors_preset(Control.PRESET_FULL_RECT)
+	title_bar.add_child(title)
+	var pad_top := Control.new()
+	pad_top.custom_minimum_size = Vector2(0, 10)
+	vbox.add_child(pad_top)
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 12)
+	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_child(hbox)
+	_loadout_assault_btn = _make_loadout_button("Assault", ["AK47", "Deagle", "Knife"])
+	hbox.add_child(_loadout_assault_btn)
+	_loadout_recon_btn = _make_loadout_button("Recon", ["Sniper", "Deagle", "Knife"])
+	hbox.add_child(_loadout_recon_btn)
+	var pad_mid := Control.new()
+	pad_mid.custom_minimum_size = Vector2(0, 8)
+	vbox.add_child(pad_mid)
+	var hint := Label.new()
+	hint.text = "Press B to open  ·  Locks when \"Match starting in...\" begins"
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55, 1.0))
+	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(hint)
+	var pad_bot := Control.new()
+	pad_bot.custom_minimum_size = Vector2(0, 10)
+	vbox.add_child(pad_bot)
+	_update_loadout_buttons()
+
+func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
+	var btn := PanelContainer.new()
+	btn.custom_minimum_size = Vector2(200, 140)
+	btn.mouse_filter = Control.MOUSE_FILTER_STOP
+	btn.add_theme_stylebox_override("panel", _make_loadout_btn_style(false))
+	btn.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_on_loadout_selected(label_text.to_lower())
+	)
+	var inner := VBoxContainer.new()
+	inner.add_theme_constant_override("separation", 6)
+	inner.set_anchors_preset(Control.PRESET_FULL_RECT)
+	btn.add_child(inner)
+	var pad := Control.new()
+	pad.custom_minimum_size = Vector2(0, 6)
+	inner.add_child(pad)
+	var name_lbl := Label.new()
+	name_lbl.text = label_text
+	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_lbl.add_theme_font_size_override("font_size", 13)
+	name_lbl.add_theme_color_override("font_color", Color.WHITE)
+	name_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner.add_child(name_lbl)
+	var div := ColorRect.new()
+	div.color = Color(0.35, 0.35, 0.35, 0.6)
+	div.custom_minimum_size = Vector2(180, 1)
+	div.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner.add_child(div)
+	for w in weapons:
+		var wlbl := Label.new()
+		wlbl.text = w
+		wlbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		wlbl.add_theme_font_size_override("font_size", 12)
+		wlbl.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
+		wlbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inner.add_child(wlbl)
+	return btn
+
+func _make_loadout_btn_style(selected: bool) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color     = Color(0.18, 0.25, 0.18, 1.0) if selected else Color(0.14, 0.14, 0.14, 1.0)
+	style.border_color = Color(0.3, 0.85, 0.3, 1.0) if selected else Color(0.35, 0.35, 0.35, 1.0)
+	style.set_border_width_all(2 if selected else 1)
+	style.set_corner_radius_all(4)
+	return style
+
+func _update_loadout_buttons() -> void:
+	if _loadout_assault_btn and is_instance_valid(_loadout_assault_btn):
+		_loadout_assault_btn.add_theme_stylebox_override("panel", _make_loadout_btn_style(_local_loadout == "assault"))
+	if _loadout_recon_btn and is_instance_valid(_loadout_recon_btn):
+		_loadout_recon_btn.add_theme_stylebox_override("panel", _make_loadout_btn_style(_local_loadout == "recon"))
+
+func _on_loadout_selected(loadout: String) -> void:
+	if _loadout_locked:
+		return
+	_local_loadout = loadout
+	_update_loadout_buttons()
+	if multiplayer.has_multiplayer_peer():
+		_client_chose_loadout.rpc_id(1, loadout)
+	else:
+		_peer_loadouts[1] = loadout
+	_hide_loadout_panel()
+
+func _show_loadout_panel() -> void:
+	if _loadout_locked:
+		return
+	if _loadout_panel and is_instance_valid(_loadout_panel):
+		_update_loadout_buttons()
+		_loadout_panel.visible = true
+
+func _hide_loadout_panel() -> void:
+	if _loadout_panel and is_instance_valid(_loadout_panel):
+		_loadout_panel.visible = false
 
 # ─── Spectate ─────────────────────────────────────────────────────────────────
 @rpc("authority", "reliable")
@@ -932,4 +1105,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				else:
 					# Solo editor bypass — simulate server-side ready
 					player_pressed_ready(1)
+				get_viewport().set_input_as_handled()
+		if event.keycode == KEY_B:
+			if _phase == Phase.READY_UP and not _loadout_locked:
+				if _loadout_panel and is_instance_valid(_loadout_panel) and _loadout_panel.visible:
+					_hide_loadout_panel()
+				else:
+					_show_loadout_panel()
 				get_viewport().set_input_as_handled()

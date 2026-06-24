@@ -47,6 +47,29 @@ var _crosshair: CanvasLayer
 var _bullet_hole: Node
 var _spread: float = 0.0
 
+# ─── Loadout filtering (SND only) ────────────────────────────────────────────
+# Full weapon list as set in Inspector — restored between rounds.
+var _all_weapons: Array[Weapon] = []
+
+# Assault: AK47 + Deagle + Knife   |   Recon: Sniper + Deagle + Knife
+const LOADOUT_ASSAULT : Array[String] = ["AK47", "Deagle", "Knife"]
+const LOADOUT_RECON   : Array[String] = ["Sniper", "Deagle", "Knife"]
+
+func apply_loadout(loadout: String) -> void:
+	# Snapshot full list on first call
+	if _all_weapons.is_empty():
+		_all_weapons = weapons.duplicate()
+	var allowed : Array[String] = LOADOUT_ASSAULT if loadout == "assault" else LOADOUT_RECON
+	var filtered : Array[Weapon] = []
+	for w in _all_weapons:
+		if w and allowed.has(w.weapon_name):
+			filtered.append(w)
+	weapons = filtered
+	_current_index = 0
+	if weapons.size() > 0:
+		current_weapon = weapons[0]
+		spawn_weapon_model()
+
 func _ready() -> void:
 	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
 		# On remote clients, we still want the initial weapon model for visuals,
