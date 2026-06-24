@@ -1,5 +1,5 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1782319356
+::res://::1782319359
 1Deag_Serverside_ShotReg_Architecture.md::TextFile::-1::1782244826::0::1::::<><><>0<>0<><>::
 bullet_casing.tscn::PackedScene::7537246825689044111::1781896644::0::1::::<><><>0<>0<><>::uid://bn5g65lma4ell::::res://assets/weapons/resources/ak47/bullet_casing.glb
 default_bus_layout.tres::AudioBusLayout::1707560426491841929::1782319359::0::1::::<><><>0<>0<><>::
@@ -742,7 +742,7 @@ WE_test.tscn::PackedScene::3764880135456822604::1776653496::0::1::::<><><>0<>0<>
 ::res://materials/::1777234919
 grid.tres::ShaderMaterial::5739367904623174735::1776654260::0::1::::<><><>0<>0<><>::uid://ivvpsi314b34::::res://textures/grid.jpg
 player.tres::StandardMaterial3D::4435626134922663587::1776653496::0::1::::<><><>0<>0<><>::
-::res://scripts/::1782304648
+::res://scripts/::1782319524
 boot_splash.gd::GDScript::8887376292968682027::1779037817::0::1::::<>CanvasLayer<><>0<>0<><>::
 ClientPredictionLogger.gd::GDScript::6908745708737179878::1778963071::0::1::::<>Node<><>0<>0<><>::
 ClientToServer.gd::GDScript::5037045650952805643::1781786991::0::1::::<>Node<><>0<>0<><>::
@@ -759,7 +759,7 @@ NetworkSyncLogger.gd::GDScript::5404236672490161014::1778963083::0::1::::<>Node<
 PlayerSpawnPoint.gd::GDScript::2032006480269417937::1779792776::0::1::::PlayerSpawnPoint<>Node3D<><>0<>1<><>::
 PresenceManager.gd::GDScript::3317272715576500429::1782304648::0::1::::<>Node<><>0<>0<><>::
 server.gd::GDScript::17452018081795135::1782108322::0::1::::<>Node<><>0<>0<><>::
-SessionLogger.gd::GDScript::3342422228604137525::1780652491::0::1::::<>Node<><>0<>0<><>::
+SessionLogger.gd::GDScript::3342422228604137525::1782319524::0::1::::<>Node<><>0<>0<><>::
 ::res://scripts/modes/::1782146175
 SearchAndDestroy.gd::GDScript::3711756043037318235::1782146175::0::1::::<>Node<><>0<>0<><>::
 ::res://shaders/::1777234919

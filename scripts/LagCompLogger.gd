@@ -5,7 +5,7 @@
 
 extends Node
 
-const LOG_DIR := "/home/onetap/reports/"
+const LOG_DIR := "/home/1deag/reports/"
 const LOG_PREFIX := "lagcomp_"
 
 var _log_file: FileAccess = null
