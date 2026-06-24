@@ -765,8 +765,8 @@ PlayerSpawnPoint.gd::GDScript::2032006480269417937::1779792776::0::1::::PlayerSp
 PresenceManager.gd::GDScript::3317272715576500429::1782304648::0::1::::<>Node<><>0<>0<><>::
 server.gd::GDScript::17452018081795135::1782108322::0::1::::<>Node<><>0<>0<><>::
 SessionLogger.gd::GDScript::3342422228604137525::1782319524::0::1::::<>Node<><>0<>0<><>::
-::res://scripts/modes/::1782340558
-SearchAndDestroy.gd::GDScript::3711756043037318235::1782340558::0::1::::<>Node<><>0<>0<><>::
+::res://scripts/modes/::1782340820
+SearchAndDestroy.gd::GDScript::3711756043037318235::1782340820::0::1::::<>Node<><>0<>0<><>::
 ::res://shaders/::1777234919
 grid.gdshader::Shader::3566797187140224592::1776653496::0::1::::<><><>0<>0<><>::
 ::res://textures/::1778878455

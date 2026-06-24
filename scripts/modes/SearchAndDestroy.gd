@@ -531,7 +531,7 @@ func _build_loadout_panel() -> void:
 	_loadout_panel.set_anchors_preset(Control.PRESET_CENTER)
 	_loadout_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_loadout_panel.grow_vertical   = Control.GROW_DIRECTION_BOTH
-	_loadout_panel.custom_minimum_size = Vector2(460, 0)
+	_loadout_panel.custom_minimum_size = Vector2(690, 0)
 	_loadout_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_loadout_panel.focus_mode = Control.FOCUS_NONE
 	_loadout_panel.visible = true
@@ -541,7 +541,7 @@ func _build_loadout_panel() -> void:
 	_loadout_panel.add_child(vbox)
 	var title_bar := ColorRect.new()
 	title_bar.color = Color(0.08, 0.08, 0.08, 1.0)
-	title_bar.custom_minimum_size = Vector2(460, 32)
+	title_bar.custom_minimum_size = Vector2(690, 32)
 	vbox.add_child(title_bar)
 	var title := Label.new()
 	title.text = "Select Loadout"
@@ -580,7 +580,7 @@ func _build_loadout_panel() -> void:
 
 func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 	var btn := PanelContainer.new()
-	btn.custom_minimum_size = Vector2(210, 180)
+	btn.custom_minimum_size = Vector2(315, 270)
 	btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	btn.add_theme_stylebox_override("panel", _make_loadout_btn_style(false))
 	btn.gui_input.connect(func(event: InputEvent):
@@ -615,7 +615,7 @@ func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 		var rifle_img := TextureRect.new()
 		rifle_img.texture = rifle_tex
 		rifle_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		rifle_img.custom_minimum_size = Vector2(190, 44)
+		rifle_img.custom_minimum_size = Vector2(285, 66)
 		rifle_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		inner.add_child(rifle_img)
 	# Bottom row: Deagle left, Knife right
@@ -635,7 +635,7 @@ func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 			var sil_img := TextureRect.new()
 			sil_img.texture = sil_tex
 			sil_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			sil_img.custom_minimum_size = Vector2(88, 36)
+			sil_img.custom_minimum_size = Vector2(132, 54)
 			sil_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			col.add_child(sil_img)
 		var wlbl := Label.new()
