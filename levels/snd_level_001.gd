@@ -60,7 +60,7 @@ func _ready() -> void:
 	else:
 		print("Client level ready, notifying server")
 		await get_tree().create_timer(0.1).timeout
-		_client_ready.rpc_id(1)
+		_client_ready.rpc_id(1, PresenceManager.firebase_token)
 		# Client: listen for peer disconnection to remove stale meshes
 		multiplayer.peer_disconnected.connect(_client_remove_player)
 		_start_ping_timer()
@@ -71,23 +71,36 @@ func _ready() -> void:
 
 # Client tells server it has loaded the level
 @rpc("any_peer", "reliable")
-func _client_ready() -> void:
+func _client_ready(token: String = "") -> void:
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
 	if spawn_index_map.has(peer_id):
 		return  # Already spawned, ignore
-	# Clean up stale peers not currently connected
-	var connected := multiplayer.get_peers()
-	for stale_id in spawn_index_map.keys().duplicate():
-		if stale_id not in connected:
-			print("Removing stale peer: ", stale_id)
-			spawn_index_map.erase(stale_id)
-			var node := get_node_or_null(str(stale_id))
-			if node: node.queue_free()
-	print("Server: client ", peer_id, " ready")
-	await get_tree().create_timer(0.5).timeout
-	_on_player_connected(peer_id)
+	# Validate Firebase token
+	var http := HTTPRequest.new()
+	add_child(http)
+	var body := JSON.stringify({"token": token})
+	var headers := ["Content-Type: application/json"]
+	http.request_completed.connect(func(_result, code, _headers, _body):
+		http.queue_free()
+		if code != 200:
+			print("Server: peer ", peer_id, " failed token validation, kicking")
+			multiplayer.multiplayer_peer.disconnect_peer(peer_id)
+			return
+		# Token valid — proceed with spawn
+		# Clean up stale peers not currently connected
+		var connected := multiplayer.get_peers()
+		for stale_id in spawn_index_map.keys().duplicate():
+			if stale_id not in connected:
+				print("Removing stale peer: ", stale_id)
+				spawn_index_map.erase(stale_id)
+				var node := get_node_or_null(str(stale_id))
+				if node: node.queue_free()
+		print("Server: client ", peer_id, " authenticated and ready")
+		_on_player_connected.call_deferred(peer_id)
+	)
+	http.request(PresenceManager.SERVER_URL + "/verify-token", headers, HTTPClient.METHOD_POST, body)
 
 # Server only — assigns spawn position and broadcasts to all peers
 func _on_player_connected(peer_id: int) -> void:

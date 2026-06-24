@@ -1,16 +1,17 @@
 extends Node
 
-const SERVER_URL_V6 = "http://[2a03:b0c0:1:e0:0:1:7a5e:2001]:8000"
-const SERVER_URL_V4 = "http://161.35.41.206:8000"
-const SERVER_URL   = "http://161.35.41.206:8000"
+const SERVER_URL_V6 = "https://api.1deagfps.com"
+const SERVER_URL_V4 = "https://api.1deagfps.com"
+const SERVER_URL   = "https://api.1deagfps.com"
 
-var _active_url: String = SERVER_URL_V6
+var _active_url: String = SERVER_URL_V4
 var _url_detected: bool = false
 signal server_url_ready
 const CONFIG_PATH  = "user://config.cfg"
 const HEARTBEAT_INTERVAL := 2.0
 
 var username: String = ""
+var firebase_token: String = ""
 var scoreboard_open: bool = false
 
 var _heartbeat_timer: Timer = null
@@ -52,7 +53,10 @@ func _load_username() -> void:
 		if name_from_launcher != "":
 			username = name_from_launcher
 			print("[PresenceManager] Username loaded from launcher: ", username)
-			return
+		firebase_token = config.get_value("player", "firebase_token", "")
+		if firebase_token != "":
+			print("[PresenceManager] Firebase token loaded from launcher")
+		return
 	# Fallback to user://config.cfg
 	if config.load(CONFIG_PATH) == OK:
 		username = config.get_value("player", "username", "")
