@@ -1,6 +1,6 @@
 extends Node
 
-const SERVER_URL := "http://161.35.41.206:8000"
+const SERVER_URL := "https://api.1deagfps.com"
 
 var session_active := false
 var session_start_time := ""
