@@ -413,6 +413,7 @@ func _notify_countdown_start(all_ready: bool) -> void:
 	_hide_ready_up_panel()
 	_loadout_locked = true
 	_hide_loadout_panel()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	# This is the round-1-only "Match starting" countdown - players can move.
 	_show_center_label("MATCH STARTS IN 5")
 
@@ -575,6 +576,7 @@ func _build_loadout_panel() -> void:
 	pad_bot.custom_minimum_size = Vector2(0, 10)
 	vbox.add_child(pad_bot)
 	_update_loadout_buttons()
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 	var btn := PanelContainer.new()
@@ -679,10 +681,12 @@ func _show_loadout_panel() -> void:
 	if _loadout_panel and is_instance_valid(_loadout_panel):
 		_update_loadout_buttons()
 		_loadout_panel.visible = true
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _hide_loadout_panel() -> void:
 	if _loadout_panel and is_instance_valid(_loadout_panel):
 		_loadout_panel.visible = false
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 # ─── Spectate ─────────────────────────────────────────────────────────────────
 @rpc("authority", "reliable")
