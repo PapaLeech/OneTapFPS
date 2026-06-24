@@ -36,6 +36,13 @@ var _ready_up_panel    : PanelContainer = null
 var _center_label      : Label          = null
 var _round_timer_label : Label          = null
 
+# ─── Spectate state (client-side only) ───────────────────────────────────────
+var _spectate_targets  : Array          = []   # peer IDs of living teammates
+var _spectate_index    : int            = 0
+var _spectate_panel    : PanelContainer = null
+var _spectate_label    : Label          = null
+var _is_spectating     : bool           = false
+
 # Reset all match state to default. Called by server.gd when the server
 # becomes completely empty, so the next session starts fresh.
 # Purely additive function - does not modify any existing logic.
@@ -233,8 +240,21 @@ func _on_player_died(peer_id: int) -> void:
 	print("[SND] _on_player_died: peer_id=", peer_id, " alive_a=", _alive_a, " alive_b=", _alive_b)
 	if _phase != Phase.ROUND_ACTIVE:
 		return
+	# Determine which team the dead player was on, then send them the living teammates
+	var was_on_a := _alive_a.has(peer_id)
 	_alive_a.erase(peer_id)
 	_alive_b.erase(peer_id)
+	# Build list of living teammates for spectate cycling
+	var living_team : Array = []
+	if was_on_a:
+		for pid in _alive_a:
+			living_team.append(pid)
+	else:
+		for pid in _alive_b:
+			living_team.append(pid)
+	# Notify the dead player's client to enter spectate mode
+	if not living_team.is_empty() and multiplayer.get_peers().has(peer_id):
+		_enter_spectate_rpc.rpc_id(peer_id, living_team)
 	if _alive_a.is_empty():
 		_end_round(2)  # Team B wins
 	elif _alive_b.is_empty():
@@ -404,6 +424,7 @@ func _sync_spawn_countdown(seconds_remaining: int, finished: bool) -> void:
 func _notify_round_start(round_num: int) -> void:
 	if multiplayer.is_server():
 		return
+	_exit_spectate()
 	_set_local_player_frozen(false)
 	_show_center_label("ROUND " + str(round_num))
 	_show_round_timer(int(ROUND_TIME))
@@ -439,6 +460,7 @@ func _notify_round_end(winning_team: int, a_rounds: int, b_rounds: int) -> void:
 func _notify_match_end(winning_team: int, summary_bytes: PackedByteArray) -> void:
 	if multiplayer.is_server():
 		return
+	_exit_spectate()
 	_hide_round_timer()
 	_hide_center_label()
 	var summary : Dictionary = bytes_to_var(summary_bytes)
@@ -454,6 +476,98 @@ func _notify_match_end(winning_team: int, summary_bytes: PackedByteArray) -> voi
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 	get_tree().change_scene_to_file("res://assets/ui/main_menu.tscn")
+
+# ─── Spectate ─────────────────────────────────────────────────────────────────
+@rpc("authority", "reliable")
+func _enter_spectate_rpc(teammate_ids: Array) -> void:
+	if multiplayer.is_server():
+		return
+	_spectate_targets = teammate_ids
+	_spectate_index   = 0
+	_is_spectating    = true
+	_build_spectate_panel()
+	_switch_spectate_camera()
+
+func _exit_spectate() -> void:
+	if not _is_spectating:
+		return
+	_is_spectating = false
+	_spectate_targets.clear()
+	if _spectate_panel and is_instance_valid(_spectate_panel):
+		_spectate_panel.queue_free()
+	_spectate_panel = null
+	_spectate_label = null
+	var my_id := multiplayer.get_unique_id()
+	var level  := get_parent()
+	if level:
+		var my_player := level.get_node_or_null(str(my_id))
+		if my_player and my_player.has_method("_activate_camera"):
+			my_player._activate_camera()
+
+func _switch_spectate_camera() -> void:
+	if _spectate_targets.is_empty():
+		return
+	var target_id : int = _spectate_targets[_spectate_index]
+	var level := get_parent()
+	if not level:
+		return
+	var target_player := level.get_node_or_null(str(target_id))
+	if not target_player:
+		return
+	var cam := target_player.get_node_or_null("CameraController/Camera3D") as Camera3D
+	if cam:
+		cam.current = true
+	var stats = level.get("_stats")
+	if stats and stats.has(target_id) and _spectate_label and is_instance_valid(_spectate_label):
+		_spectate_label.text = "Spectating  " + stats[target_id].get("username", "Teammate")
+
+func _build_spectate_panel() -> void:
+	if not _hud_canvas:
+		return
+	if _spectate_panel and is_instance_valid(_spectate_panel):
+		_spectate_panel.queue_free()
+	_spectate_panel = PanelContainer.new()
+	_spectate_panel.add_theme_stylebox_override("panel", _make_panel_style())
+	_spectate_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_spectate_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_spectate_panel.grow_vertical   = Control.GROW_DIRECTION_BEGIN
+	_spectate_panel.offset_top      = -56
+	_spectate_panel.custom_minimum_size = Vector2(300, 0)
+	_spectate_panel.mouse_filter    = Control.MOUSE_FILTER_IGNORE
+	_spectate_panel.focus_mode      = Control.FOCUS_NONE
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_spectate_panel.add_child(vbox)
+	_spectate_label = Label.new()
+	_spectate_label.text = "Spectating ..."
+	_spectate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_spectate_label.add_theme_color_override("font_color", Color.WHITE)
+	_spectate_label.add_theme_font_size_override("font_size", 14)
+	_spectate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(_spectate_label)
+	var hint := Label.new()
+	hint.text = "[LMB] Next   [RMB] Previous"
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1.0))
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(hint)
+	_hud_canvas.add_child(_spectate_panel)
+
+func _spectate_unhandled_input(event: InputEvent) -> void:
+	if not _is_spectating or _spectate_targets.is_empty():
+		return
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+	if event.button_index == MOUSE_BUTTON_LEFT:
+		_spectate_index = (_spectate_index + 1) % _spectate_targets.size()
+		_switch_spectate_camera()
+		get_viewport().set_input_as_handled()
+	elif event.button_index == MOUSE_BUTTON_RIGHT:
+		_spectate_index = (_spectate_index - 1 + _spectate_targets.size()) % _spectate_targets.size()
+		_switch_spectate_camera()
+		get_viewport().set_input_as_handled()
 
 # ─── UI: Helpers ─────────────────────────────────────────────────────────────
 func _make_panel_style() -> StyleBoxFlat:
@@ -803,6 +917,8 @@ func _set_local_player_frozen(frozen: bool) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if OS.has_feature("dedicated_server") or "--dedicated-server" in OS.get_cmdline_args():
 		return
+	# Route mouse clicks to spectate handler when spectating
+	_spectate_unhandled_input(event)
 	# Don't handle SND input when chat is open
 	var level := get_parent()
 	if level and level.get("_chat_focus") != null and level._chat_focus != 0:
