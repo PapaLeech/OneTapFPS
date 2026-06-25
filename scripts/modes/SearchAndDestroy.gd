@@ -464,6 +464,7 @@ func _notify_round_start(round_num: int) -> void:
 	get_tree().create_timer(2.0).timeout.connect(func(): _hide_center_label())
 
 @rpc("authority", "reliable")
+@rpc("authority", "reliable")
 func _apply_loadout_rpc(loadout: String) -> void:
 	if multiplayer.is_server():
 		return
@@ -579,7 +580,7 @@ func _build_loadout_panel() -> void:
 	vbox.add_child(pad_bot)
 	_update_loadout_buttons()
 	# Defer so engine mouse capture on scene load doesn't override us
-	get_tree().create_timer(0.1).timeout.connect(func():
+	get_tree().create_timer(0.3).timeout.connect(func():
 		if _loadout_panel and is_instance_valid(_loadout_panel) and _loadout_panel.visible:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	)
