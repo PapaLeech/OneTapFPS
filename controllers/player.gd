@@ -257,6 +257,8 @@ func _physics_process(delta):
 	var current_speed = SPEED * 0.6 if _is_crouching else SPEED
 	if Input.is_action_pressed("sprint") and not _is_crouching:
 		current_speed = SPEED * 1.6
+	if Input.is_key_pressed(KEY_SHIFT) and not _is_crouching:
+		current_speed = SPEED * 0.5
 
 	if direction:
 		velocity.x = direction.x * current_speed
