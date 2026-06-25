@@ -430,7 +430,8 @@ func _sync_countdown(seconds_remaining: int, finished: bool) -> void:
 func _notify_spawn_countdown_start() -> void:
 	if multiplayer.is_server():
 		return
-	# Undo death visuals/state (camera tilt, dead animation, disabled physics)
+	_loadout_locked = true
+	_hide_loadout_panel()
 	# for the local player before freezing them for the "Ready in" countdown.
 	var level := get_parent()
 	if level:
@@ -455,6 +456,7 @@ func _sync_spawn_countdown(seconds_remaining: int, finished: bool) -> void:
 func _notify_round_start(round_num: int) -> void:
 	if multiplayer.is_server():
 		return
+	_loadout_locked = false
 	_exit_spectate()
 	_set_local_player_frozen(false)
 	_show_center_label("ROUND " + str(round_num))
@@ -576,7 +578,11 @@ func _build_loadout_panel() -> void:
 	pad_bot.custom_minimum_size = Vector2(0, 10)
 	vbox.add_child(pad_bot)
 	_update_loadout_buttons()
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Defer so engine mouse capture on scene load doesn't override us
+	get_tree().create_timer(0.1).timeout.connect(func():
+		if _loadout_panel and is_instance_valid(_loadout_panel) and _loadout_panel.visible:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	)
 
 func _make_loadout_button(label_text: String, weapons: Array) -> PanelContainer:
 	var btn := PanelContainer.new()
@@ -1145,7 +1151,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					player_pressed_ready(1)
 				get_viewport().set_input_as_handled()
 		if event.keycode == KEY_B:
-			if _phase == Phase.READY_UP and not _loadout_locked:
+			if _phase != Phase.SPAWN_COUNTDOWN and not _loadout_locked:
 				if _loadout_panel and is_instance_valid(_loadout_panel) and _loadout_panel.visible:
 					_hide_loadout_panel()
 				else:
